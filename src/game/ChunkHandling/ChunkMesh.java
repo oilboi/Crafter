@@ -21,50 +21,53 @@ public class ChunkMesh {
         ArrayList indexArray = new ArrayList();
 
 
+        //why yes, this is a terrible way to do this
+        //if you know a better way, feel free to make a pr
+
+        //create the mesh
+
         //front
         positions.add(0.5f);  positions.add(0.5f);  positions.add(0.5f);
         positions.add(-0.5f); positions.add(0.5f);  positions.add(0.5f);
         positions.add(-0.5f); positions.add(-0.5f); positions.add(0.5f);
         positions.add(0.5f);  positions.add(-0.5f); positions.add( 0.5f);
+        //back
+        positions.add(-0.5f); positions.add(0.5f);  positions.add(-0.5f);
+        positions.add(0.5f);  positions.add(0.5f);  positions.add(-0.5f);
+        positions.add(0.5f);  positions.add(-0.5f); positions.add(-0.5f);
+        positions.add(-0.5f); positions.add(-0.5f); positions.add(-0.5f);
+        //right
+        positions.add(0.5f);  positions.add(0.5f);  positions.add(-0.5f);
+        positions.add(0.5f);  positions.add(0.5f);  positions.add(0.5f);
+        positions.add(0.5f);  positions.add(-0.5f); positions.add(0.5f);
+        positions.add(0.5f);  positions.add(-0.5f); positions.add(-0.5f);
 
+        //left
+        positions.add(-0.5f); positions.add(0.5f);  positions.add(0.5f);
+        positions.add(-0.5f); positions.add(0.5f);  positions.add(-0.5f);
+        positions.add(-0.5f); positions.add(-0.5f); positions.add(-0.5f);
+        positions.add(-0.5f); positions.add(-0.5f); positions.add(0.5f);
+
+        //top
+        positions.add(-0.5f); positions.add(0.5f);  positions.add(-0.5f);
+        positions.add(-0.5f); positions.add(0.5f);  positions.add(0.5f);
+        positions.add(0.5f);  positions.add(0.5f);  positions.add(0.5f);
+        positions.add(0.5f);  positions.add(0.5f);  positions.add(-0.5f);
+
+        //bottom
+        positions.add(-0.5f);positions.add(-0.5f);positions.add(0.5f);
+        positions.add(-0.5f);positions.add(-0.5f);positions.add(-0.5f);
+        positions.add(0.5f);positions.add(-0.5f);positions.add(-0.5f);
+        positions.add(0.5f);positions.add(-0.5f);positions.add(0.5f);
+
+        //convert the positions into usable array
         float[] positionsArray = new float[positions.size()];
-
         for (int i = 0; i < positions.size(); i++) {
             System.out.println(positions.get(i));
             positionsArray[i] = (float)positions.get(i);
-
-            //floatArray[i++] = (f != null ? f : Float.NaN); // Or whatever default you want.
         }
 
 
-//        // Create the Mesh
-//        float[] positions = new float[] {
-//                //back
-//                -0.5f,  0.5f, -0.5f,
-//                0.5f,  0.5f, -0.5f,
-//                0.5f, -0.5f, -0.5f,
-//                -0.5f, -0.5f, -0.5f,
-//                //right
-//                0.5f,  0.5f, -0.5f,
-//                0.5f,  0.5f,  0.5f,
-//                0.5f, -0.5f,  0.5f,
-//                0.5f, -0.5f, -0.5f,
-//                //left
-//                -0.5f,  0.5f,  0.5f,
-//                -0.5f,  0.5f, -0.5f,
-//                -0.5f, -0.5f, -0.5f,
-//                -0.5f, -0.5f,  0.5f,
-//                //top
-//                -0.5f,  0.5f, -0.5f,
-//                -0.5f,  0.5f,  0.5f,
-//                0.5f,  0.5f,  0.5f,
-//                0.5f,  0.5f, -0.5f,
-//                //bottom
-//                -0.5f, -0.5f,  0.5f,
-//                -0.5f, -0.5f, -0.5f,
-//                0.5f, -0.5f, -0.5f,
-//                0.5f, -0.5f,  0.5f,
-//        };
         float frontLight  = 0.6f;
         float backLight   = 1.0f;
         float rightLight  = 0.3f;

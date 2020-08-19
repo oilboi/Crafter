@@ -88,6 +88,9 @@ public class Window {
         //enable backface culling
         glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK);
+
+        glfwSetInputMode(this.windowHandle, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+
     }
 
     public long getWindowHandle(){

@@ -59,7 +59,7 @@ public class Texture {
         //tell openGL how to unpack the RGBA bytes. Each component is 1 byte in size
         glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-        //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
         //upload the texture data

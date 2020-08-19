@@ -15,7 +15,7 @@ import static org.lwjgl.glfw.GLFW.*;
 
 public class DummyGame implements IGameLogic {
 
-    private static final float MOUSE_SENSITIVITY = 0.2f;
+    private static final float MOUSE_SENSITIVITY = 0.1f;
 
     private final Vector3f cameraInc;
 
@@ -78,11 +78,11 @@ public class DummyGame implements IGameLogic {
         };
 
 
-        float frontLight  = 1.0f;
+        float frontLight  = 0.6f;
         float backLight   = 1.0f;
-        float rightLight  = 1.0f;
+        float rightLight  = 0.3f;
         float leftLight   = 1.0f;
-        float topLight    = 1.0f;
+        float topLight    = 0.1f;
         float bottomLight = 1.0f;
         float[] colors = new float[]{
                 //front
@@ -218,10 +218,10 @@ public class DummyGame implements IGameLogic {
                 cameraInc.z * CAMERA_POS_STEP);
 
         //update camera based on mouse
-        if (mouseInput.isRightButtonPressed()){
+//        if (mouseInput.isRightButtonPressed()){
             Vector2f rotVec = mouseInput.getDisplVec();
             camera.moveRotation(rotVec.x * MOUSE_SENSITIVITY, rotVec.y * MOUSE_SENSITIVITY, 0);
-        }
+//        }
 
         for (GameItem gameItem : gameItems){
             //update position

@@ -3,43 +3,68 @@ package game.ChunkHandling;
 import engine.graph.Mesh;
 import engine.graph.Texture;
 
+import java.util.ArrayList;
+
 public class ChunkMesh {
     private Mesh mesh;
     private Texture texture;
     public ChunkMesh() throws Exception {
-        // Create the Mesh
-        float[] positions = new float[] {
-                //front
-                0.5f,  0.5f, 0.5f,
-                -0.5f,  0.5f, 0.5f,
-                -0.5f, -0.5f, 0.5f,
-                0.5f, -0.5f, 0.5f,
-                //back
-                -0.5f,  0.5f, -0.5f,
-                0.5f,  0.5f, -0.5f,
-                0.5f, -0.5f, -0.5f,
-                -0.5f, -0.5f, -0.5f,
-                //right
-                0.5f,  0.5f, -0.5f,
-                0.5f,  0.5f,  0.5f,
-                0.5f, -0.5f,  0.5f,
-                0.5f, -0.5f, -0.5f,
-                //left
-                -0.5f,  0.5f,  0.5f,
-                -0.5f,  0.5f, -0.5f,
-                -0.5f, -0.5f, -0.5f,
-                -0.5f, -0.5f,  0.5f,
-                //top
-                -0.5f,  0.5f, -0.5f,
-                -0.5f,  0.5f,  0.5f,
-                0.5f,  0.5f,  0.5f,
-                0.5f,  0.5f, -0.5f,
-                //bottom
-                -0.5f, -0.5f,  0.5f,
-                -0.5f, -0.5f, -0.5f,
-                0.5f, -0.5f, -0.5f,
-                0.5f, -0.5f,  0.5f,
-        };
+
+        int x = 0;
+        int y = 0;
+        int z = 0;
+
+        int count = 0;
+
+        ArrayList positions = new ArrayList();
+        ArrayList texCoord = new ArrayList();
+        ArrayList indexArray = new ArrayList();
+
+
+        //front
+        positions.add(0.5f);  positions.add(0.5f);  positions.add(0.5f);
+        positions.add(-0.5f); positions.add(0.5f);  positions.add(0.5f);
+        positions.add(-0.5f); positions.add(-0.5f); positions.add(0.5f);
+        positions.add(0.5f);  positions.add(-0.5f); positions.add( 0.5f);
+
+        float[] positionsArray = new float[positions.size()];
+
+        for (int i = 0; i < positions.size(); i++) {
+            System.out.println(positions.get(i));
+            positionsArray[i] = (float)positions.get(i);
+
+            //floatArray[i++] = (f != null ? f : Float.NaN); // Or whatever default you want.
+        }
+
+
+//        // Create the Mesh
+//        float[] positions = new float[] {
+//                //back
+//                -0.5f,  0.5f, -0.5f,
+//                0.5f,  0.5f, -0.5f,
+//                0.5f, -0.5f, -0.5f,
+//                -0.5f, -0.5f, -0.5f,
+//                //right
+//                0.5f,  0.5f, -0.5f,
+//                0.5f,  0.5f,  0.5f,
+//                0.5f, -0.5f,  0.5f,
+//                0.5f, -0.5f, -0.5f,
+//                //left
+//                -0.5f,  0.5f,  0.5f,
+//                -0.5f,  0.5f, -0.5f,
+//                -0.5f, -0.5f, -0.5f,
+//                -0.5f, -0.5f,  0.5f,
+//                //top
+//                -0.5f,  0.5f, -0.5f,
+//                -0.5f,  0.5f,  0.5f,
+//                0.5f,  0.5f,  0.5f,
+//                0.5f,  0.5f, -0.5f,
+//                //bottom
+//                -0.5f, -0.5f,  0.5f,
+//                -0.5f, -0.5f, -0.5f,
+//                0.5f, -0.5f, -0.5f,
+//                0.5f, -0.5f,  0.5f,
+//        };
         float frontLight  = 0.6f;
         float backLight   = 1.0f;
         float rightLight  = 0.3f;
@@ -132,7 +157,7 @@ public class ChunkMesh {
         };
 
         texture = new Texture("textures/grassblock.png");
-        mesh = new Mesh(positions, colors, indices, textCoords, texture);
+        mesh = new Mesh(positionsArray, colors, indices, textCoords, texture);
     }
 
     public Mesh getMesh(){

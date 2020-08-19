@@ -40,22 +40,22 @@ public class DummyGame implements IGameLogic {
 
         // Create the Mesh
         float[] positions = new float[] {
-                // VO
-                -0.5f,  0.5f,  0.5f,
-                // V1
-                -0.5f, -0.5f,  0.5f,
-                // V2
-                0.5f, -0.5f,  0.5f,
-                // V3
-                0.5f,  0.5f,  0.5f,
-                // V4
+
+                //front
+                 0.5f,  0.5f, 0.5f,
+                -0.5f,  0.5f, 0.5f,
+                -0.5f, -0.5f, 0.5f,
+                 0.5f, -0.5f, 0.5f,
+
+
+                //back
                 -0.5f,  0.5f, -0.5f,
-                // V5
-                0.5f,  0.5f, -0.5f,
-                // V6
+                 0.5f,  0.5f, -0.5f,
+                 0.5f, -0.5f, -0.5f,
                 -0.5f, -0.5f, -0.5f,
-                // V7
-                0.5f, -0.5f, -0.5f,
+
+
+
         };
 
 
@@ -71,46 +71,36 @@ public class DummyGame implements IGameLogic {
                 this0, this0, this0,
                 this0, this0, this0,
                 this0, this0, this0,
-                //right
-                this1, this1, this1,
-                this1, this1, this1,
-                this1, this1, this1,
-                this1, this1, this1,
-//                //top
-                this2, this2, this2,
-                this2, this2, this2,
-                this2, this2, this2,
-                this2, this2, this2,
-//
-//                this3, this3, this3,
-//                this3, this3, this3,
-//                this3, this3, this3,
-//                this3, this3, this3,
-//
-//                0.0f, 0.5f, 0.5f,
-//                0.5f, 0.0f, 0.0f,
-//
-//                0.0f, 0.5f, 0.0f,
-//                0.0f, 0.0f, 0.5f,
+
+                //back
+                this1,this1, this1,
+                this1,this1, this1,
+                this1,this1, this1,
+                this1,this1, this1,
+
         };
         float[] textCoords = new float[]{
                 //front
+                0.5f, 0.0f,
                 0.0f, 0.0f,
                 0.0f, 0.5f,
                 0.5f, 0.5f,
-                0.5f, 0.0f,
 
-                //back
-                0.5f, 0.0f,
+//                //back
                 0.0f, 0.0f,
+                0.5f, 0.0f,
                 0.5f, 0.5f,
                 0.0f, 0.5f,
 
-                //top
-                0.0f, 0.5f,
-                0.0f, 0.5f,
-                0.0f, 0.5f,
-                0.0f, 0.5f,
+
+
+
+//
+//                //top
+//                0.0f, 0.5f,
+//                0.0f, 0.5f,
+//                0.0f, 0.5f,
+//                0.0f, 0.5f,
 
                 //4, 0, 3, 5, 4, 3,
 
@@ -126,17 +116,21 @@ public class DummyGame implements IGameLogic {
 
         int[] indices = new int[] {
 //                Front face
-                0, 1, 3, 3, 1, 2,
+                0, 1, 2, 0, 2, 3,
+//                Back face
+                0+4, 1+4, 2+4, 0+4, 2+4, 3+4,
+
+
 //                Right face
-                3, 2, 7, 5, 3, 7,
-//                // Top Face
-                4, 0, 3, 5, 4, 3,
-//                // Left face
-                6, 1, 0, 6, 0, 4,
-//                // Bottom face
-                2, 1, 6, 2, 6, 7,
-                // Back face
-                7, 6, 4, 7, 4, 5,
+//                3, 2, 7, 5, 3, 7,
+////                // Top Face
+//                4, 0, 3, 5, 4, 3,
+////                // Left face
+//                6, 1, 0, 6, 0, 4,
+////                // Bottom face
+//                2, 1, 6, 2, 6, 7,
+//                // Back face
+//                7, 6, 4, 7, 4, 5,
         };
 
         Texture texture = new Texture("textures/grassblock.png");

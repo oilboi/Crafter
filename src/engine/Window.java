@@ -84,6 +84,10 @@ public class Window {
 
         //set depth testing
         glEnable(GL_DEPTH_TEST);
+
+        //enable backface culling
+        glEnable(GL_CULL_FACE);
+        glCullFace(GL_BACK);
     }
 
     public void setClearColor(float r, float g, float b, float alpha){

@@ -90,6 +90,10 @@ public class Window {
         glCullFace(GL_BACK);
     }
 
+    public long getWindowHandle(){
+        return windowHandle;
+    }
+
     public void setClearColor(float r, float g, float b, float alpha){
         glClearColor(r, g, b, alpha);
     }

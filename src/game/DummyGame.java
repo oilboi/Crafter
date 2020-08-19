@@ -2,17 +2,20 @@ package game;
 
 import engine.GameItem;
 import engine.IGameLogic;
+import engine.MouseInput;
 import engine.Window;
 import engine.graph.Camera;
 import engine.graph.Mesh;
 import engine.graph.Texture;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.system.CallbackI;
 
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_DOWN;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_UP;
+import static org.lwjgl.glfw.GLFW.*;
 
 public class DummyGame implements IGameLogic {
+
+    private static final float MOUSE_SENSITIVITY = 0.2f;
 
     private final Vector3f cameraInc;
 
@@ -173,22 +176,52 @@ public class DummyGame implements IGameLogic {
         };
 
         Texture texture = new Texture("textures/grassblock.png");
-
         Mesh mesh = new Mesh(positions, colors, indices, textCoords, texture);
 
         GameItem gameItem = new GameItem(mesh);
-
         gameItem.setPosition(0,0,-2);
 
-        gameItems = new GameItem[] {gameItem};
+        GameItem gameItem2 = new GameItem(mesh);
+        gameItem2.setPosition(1,0,-1);
+
+        gameItems = new GameItem[] {gameItem, gameItem2};
     }
 
     @Override
-    public void input(Window window){
+    public void input(Window window, MouseInput input){
+        cameraInc.set(0,0,0);
+        if (window.isKeyPressed(GLFW_KEY_W)){
+            cameraInc.z = -1;
+        } else if (window.isKeyPressed(GLFW_KEY_S)){
+            cameraInc.z = 1;
+        }
+
+        if (window.isKeyPressed(GLFW_KEY_A)){
+            cameraInc.x = -1;
+        } else if (window.isKeyPressed(GLFW_KEY_D)){
+            cameraInc.x = 1;
+        }
+
+        if (window.isKeyPressed(GLFW_KEY_LEFT_SHIFT)){
+            cameraInc.y = -1;
+        } else if (window.isKeyPressed(GLFW_KEY_SPACE)){
+            cameraInc.y = 1;
+        }
     }
 
     @Override
-    public void update(float interval){
+    public void update(float interval, MouseInput mouseInput){
+
+        //update camera position
+        camera.movePosition(cameraInc.x * CAMERA_POS_STEP,
+                cameraInc.y * CAMERA_POS_STEP,
+                cameraInc.z * CAMERA_POS_STEP);
+
+        //update camera based on mouse
+        if (mouseInput.isRightButtonPressed()){
+            Vector2f rotVec = mouseInput.getDisplVec();
+            camera.moveRotation(rotVec.x * MOUSE_SENSITIVITY, rotVec.y * MOUSE_SENSITIVITY, 0);
+        }
 
         for (GameItem gameItem : gameItems){
             //update position

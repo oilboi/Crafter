@@ -27,53 +27,49 @@ public class ChunkMesh {
         //create the mesh
 
         //front
-        positions.add(0.5f);  positions.add(0.5f);  positions.add(0.5f);
-        positions.add(-0.5f); positions.add(0.5f);  positions.add(0.5f);
-        positions.add(-0.5f); positions.add(-0.5f); positions.add(0.5f);
-        positions.add(0.5f);  positions.add(-0.5f); positions.add( 0.5f);
+        positions.add(1f); positions.add(1f); positions.add(1f);
+        positions.add(0f); positions.add(1f); positions.add(1f);
+        positions.add(0f); positions.add(0f); positions.add(1f);
+        positions.add(1f); positions.add(0f); positions.add( 1f);
         //back
-        positions.add(-0.5f); positions.add(0.5f);  positions.add(-0.5f);
-        positions.add(0.5f);  positions.add(0.5f);  positions.add(-0.5f);
-        positions.add(0.5f);  positions.add(-0.5f); positions.add(-0.5f);
-        positions.add(-0.5f); positions.add(-0.5f); positions.add(-0.5f);
+        positions.add(0f); positions.add(1f); positions.add(0f);
+        positions.add(1f); positions.add(1f); positions.add(0f);
+        positions.add(1f); positions.add(0f); positions.add(0f);
+        positions.add(0f); positions.add(0f); positions.add(0f);
         //right
-        positions.add(0.5f);  positions.add(0.5f);  positions.add(-0.5f);
-        positions.add(0.5f);  positions.add(0.5f);  positions.add(0.5f);
-        positions.add(0.5f);  positions.add(-0.5f); positions.add(0.5f);
-        positions.add(0.5f);  positions.add(-0.5f); positions.add(-0.5f);
+        positions.add(1f); positions.add(1f); positions.add(0f);
+        positions.add(1f); positions.add(1f); positions.add(1f);
+        positions.add(1f); positions.add(0f); positions.add(1f);
+        positions.add(1f); positions.add(0f); positions.add(0f);
 
         //left
-        positions.add(-0.5f); positions.add(0.5f);  positions.add(0.5f);
-        positions.add(-0.5f); positions.add(0.5f);  positions.add(-0.5f);
-        positions.add(-0.5f); positions.add(-0.5f); positions.add(-0.5f);
-        positions.add(-0.5f); positions.add(-0.5f); positions.add(0.5f);
+        positions.add(0f); positions.add(1f); positions.add(1f);
+        positions.add(0f); positions.add(1f); positions.add(0f);
+        positions.add(0f); positions.add(0f); positions.add(0f);
+        positions.add(0f); positions.add(0f); positions.add(1f);
 
         //top
-        positions.add(-0.5f); positions.add(0.5f);  positions.add(-0.5f);
-        positions.add(-0.5f); positions.add(0.5f);  positions.add(0.5f);
-        positions.add(0.5f);  positions.add(0.5f);  positions.add(0.5f);
-        positions.add(0.5f);  positions.add(0.5f);  positions.add(-0.5f);
+        positions.add(0f); positions.add(1f);  positions.add(0f);
+        positions.add(0f); positions.add(1f);  positions.add(1f);
+        positions.add(1f);  positions.add(1f);  positions.add(1f);
+        positions.add(1f);  positions.add(1f);  positions.add(0f);
 
         //bottom
-        positions.add(-0.5f);positions.add(-0.5f);positions.add(0.5f);
-        positions.add(-0.5f);positions.add(-0.5f);positions.add(-0.5f);
-        positions.add(0.5f);positions.add(-0.5f);positions.add(-0.5f);
-        positions.add(0.5f);positions.add(-0.5f);positions.add(0.5f);
-
-        //convert the positions into usable array
-        float[] positionsArray = new float[positions.size()];
-        for (int i = 0; i < positions.size(); i++) {
-            System.out.println(positions.get(i));
-            positionsArray[i] = (float)positions.get(i);
-        }
+        positions.add(0f);positions.add(0f);positions.add(1f);
+        positions.add(0f);positions.add(0f);positions.add(0f);
+        positions.add(1f);positions.add(0f);positions.add(0f);
+        positions.add(1f);positions.add(0f);positions.add(1f);
 
 
-        float frontLight  = 0.6f;
+
+
+        float frontLight  = 1.0f;
         float backLight   = 1.0f;
-        float rightLight  = 0.3f;
+        float rightLight  = 1.0f;
         float leftLight   = 1.0f;
-        float topLight    = 0.1f;
+        float topLight    = 1.0f;
         float bottomLight = 1.0f;
+
         float[] colors = new float[]{
                 //front
                 frontLight,frontLight,frontLight,
@@ -158,6 +154,14 @@ public class ChunkMesh {
                 //Bottom Face
                 0+20, 1+20, 2+20, 0+20, 2+20, 3+20,
         };
+
+
+        //convert the position objects into usable array
+        float[] positionsArray = new float[positions.size()];
+        for (int i = 0; i < positions.size(); i++) {
+            System.out.println(positions.get(i));
+            positionsArray[i] = (float)positions.get(i);
+        }
 
         texture = new Texture("textures/grassblock.png");
         mesh = new Mesh(positionsArray, colors, indices, textCoords, texture);

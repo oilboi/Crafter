@@ -13,7 +13,7 @@ import org.lwjgl.system.CallbackI;
 
 import static org.lwjgl.glfw.GLFW.*;
 
-public class DummyGame implements IGameLogic {
+public class Crafter implements IGameLogic {
 
     private static final float MOUSE_SENSITIVITY = 0.1f;
 
@@ -27,7 +27,7 @@ public class DummyGame implements IGameLogic {
 
     private static final float CAMERA_POS_STEP = 0.05f;
 
-    public DummyGame(){
+    public Crafter(){
         renderer = new Renderer();
         camera = new Camera();
         cameraInc = new Vector3f();

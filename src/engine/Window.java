@@ -1,10 +1,19 @@
 package engine;
 
-import org.joml.Matrix4f;
+import engine.graph.Importer;
 import org.lwjgl.glfw.GLFWErrorCallback;
+import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.opengl.GL;
+import org.lwjgl.system.MemoryStack;
+
+import javax.swing.*;
+import java.awt.*;
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
+
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.stb.STBImage.stbi_load;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Window {
@@ -28,7 +37,7 @@ public class Window {
         this.resized = false;
     }
 
-    public void init(){
+    public void init() throws Exception {
         // setup an error callback. The default implementation
         // will print the error message in System.err.
         GLFWErrorCallback.createPrint(System.err).set();
@@ -74,6 +83,11 @@ public class Window {
             glfwSwapInterval(1);
         }
 
+        //center window
+        Toolkit tk = Toolkit.getDefaultToolkit();
+        Dimension d = tk.getScreenSize();
+        glfwSetWindowPos(windowHandle, (d.width - this.width) / 2, (d.height - this.height) / 2);
+
         //make the window visible
         glfwShowWindow(windowHandle);
 
@@ -89,7 +103,22 @@ public class Window {
         glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK);
 
+        //hide cursor
         glfwSetInputMode(this.windowHandle, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+
+        //load icon todo: needs to be it's own class
+        MemoryStack stack = MemoryStack.stackPush();
+        IntBuffer w = stack.mallocInt(1);
+        IntBuffer h = stack.mallocInt(1);
+        IntBuffer channels = stack.mallocInt(1);
+        ByteBuffer buf = stbi_load("textures/icon.png", w, h, channels, 4);
+        GLFWImage image = GLFWImage.malloc();
+        image.set(32,32, buf);
+        GLFWImage.Buffer images = GLFWImage.malloc(1);
+        images.put(0, image);
+
+        //set icon
+        glfwSetWindowIcon(windowHandle, images);
 
     }
 

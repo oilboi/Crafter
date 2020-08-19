@@ -36,7 +36,7 @@ j  org.lwjgl.opengl.GL30C.nglDeleteVertexArrays(IJ)V+0
 j  org.lwjgl.opengl.GL30C.glDeleteVertexArrays(I)V+20
 j  org.lwjgl.opengl.GL30.glDeleteVertexArrays(I)V+1
 j  engine.graph.Mesh.cleanUp()V+39
-j  game.DummyGame.cleanup()V+11
+j  game.Crafter.cleanup()V+11
 j  engine.GameEngine.cleanup()V+4
 j  engine.GameEngine.run()V+9
 j  game.Main.main([Ljava/lang/String;)V+29

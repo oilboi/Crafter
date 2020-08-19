@@ -3,35 +3,31 @@ package game;
 import engine.GameItem;
 import engine.IGameLogic;
 import engine.Window;
+import engine.graph.Camera;
 import engine.graph.Mesh;
 import engine.graph.Texture;
 import org.joml.Vector3f;
+import org.lwjgl.system.CallbackI;
 
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_DOWN;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_UP;
 
 public class DummyGame implements IGameLogic {
 
-    private int displxInc = 0;
-
-    private int displyInc = 0;
-
-    private int displzInc = 0;
-
-    private int scaleInc = 0;
-
-    private int direction = 0;
-
-    private float color = 0.0f;
+    private final Vector3f cameraInc;
 
     private final Renderer renderer;
 
-    Mesh mesh;
+    private final Camera camera;
 
     private GameItem[] gameItems;
 
+    private static final float CAMERA_POS_STEP = 0.05f;
+
     public DummyGame(){
         renderer = new Renderer();
+        camera = new Camera();
+        cameraInc = new Vector3f();
     }
 
     @Override
@@ -79,12 +75,12 @@ public class DummyGame implements IGameLogic {
         };
 
 
-        float frontLight = 1.0f;
-        float backLight  = 1.0f;
-        float rightLight = 1.0f;
-        float leftLight  = 1.0f;
-        float topLight   = 1.0f;
-        float this5 = 1.0f;
+        float frontLight  = 1.0f;
+        float backLight   = 1.0f;
+        float rightLight  = 1.0f;
+        float leftLight   = 1.0f;
+        float topLight    = 1.0f;
+        float bottomLight = 1.0f;
         float[] colors = new float[]{
                 //front
                 frontLight,frontLight,frontLight,
@@ -117,10 +113,10 @@ public class DummyGame implements IGameLogic {
                 topLight,topLight,topLight,
 
                 //bottom
-                this5,this5,this5,
-                this5,this5,this5,
-                this5,this5,this5,
-                this5,this5,this5,
+                bottomLight,bottomLight,bottomLight,
+                bottomLight,bottomLight,bottomLight,
+                bottomLight,bottomLight,bottomLight,
+                bottomLight,bottomLight,bottomLight,
 
         };
         float[] textCoords = new float[]{
@@ -159,24 +155,6 @@ public class DummyGame implements IGameLogic {
                 0.5f, 0.0f,
                 0.5f, 0.5f,
                 1.0f, 0.5f,
-
-//
-//                //top
-//                0.0f, 0.5f,
-//                0.0f, 0.5f,
-//                0.0f, 0.5f,
-//                0.0f, 0.5f,
-
-                //4, 0, 3, 5, 4, 3,
-
-//                //left
-//                0.5f, 0.5f,
-//                0.5f, 0.5f,
-//                0.5f, 0.5f,
-//                0.0f, 0.5f,
-
-
-
         };
 
         int[] indices = new int[] {
@@ -196,7 +174,7 @@ public class DummyGame implements IGameLogic {
 
         Texture texture = new Texture("textures/grassblock.png");
 
-        mesh = new Mesh(positions, colors, indices, textCoords, texture);
+        Mesh mesh = new Mesh(positions, colors, indices, textCoords, texture);
 
         GameItem gameItem = new GameItem(mesh);
 
@@ -207,59 +185,52 @@ public class DummyGame implements IGameLogic {
 
     @Override
     public void input(Window window){
-        if ( window.isKeyPressed(GLFW_KEY_UP) ){
-            direction = 1;
-        } else if ( window.isKeyPressed(GLFW_KEY_DOWN)){
-            direction = -1;
-        } else {
-            direction = 0;
-        }
     }
 
     @Override
     public void update(float interval){
-        color += direction * 0.01f;
-        if ( color > 1){
-            color = 1.0f;
-        } else if ( color < 0 ){
-            color = 0.0f;
-        }
 
         for (GameItem gameItem : gameItems){
             //update position
-            Vector3f itemPos = gameItem.getPosition();
-            float posx = itemPos.x + displxInc * 0.01f;
-            float posy = itemPos.y + displyInc * 0.01f;
-            float posz = itemPos.z + displzInc * 0.01f;
-            gameItem.setPosition(posx, posy, posz);
+//            Vector3f itemPos = gameItem.getPosition();
+//            float posx = itemPos.x + displxInc * 0.01f;
+//            float posy = itemPos.y + displyInc * 0.01f;
+//            float posz = itemPos.z + displzInc * 0.01f;
+
+//            gameItem.setPosition(posx, posy, posz);
 
             //Update scale
-            float scale = gameItem.getScale();
-            scale += scaleInc * 0.05f;
-            if (scale < 0) {
-                scale = 0;
-            }
-            gameItem.setScale(scale);
+//            float scale = gameItem.getScale();
+//            scale += scaleInc * 0.05f;
+//            if (scale < 0) {
+//                scale = 0;
+//            }
+//            gameItem.setScale(scale);
+
+            //gameItem.setPosition((float)Math.random()-0.5f,(float)Math.random()-0.5f,-2f);
 
             //update rotation angle
-            float rotation = gameItem.getRotation().y - 1.5f;
-
-            if (rotation > 360) {
-                rotation -= 360;
-            }
-
-            gameItem.setRotation(-30, rotation, 0);
+//            float rotation = gameItem.getRotation().y - 1.5f;
+//
+//
+//            if (rotation > 360) {
+//                rotation -= 360;
+//            }
+//
+//            gameItem.setRotation(rotation, rotation, rotation);
         }
     }
 
     @Override
     public void render(Window window){
-        renderer.render(window, gameItems);
+        renderer.render(window, camera, gameItems);
     }
 
     @Override
     public void cleanup(){
         renderer.cleanup();
-        mesh.cleanUp();
+        for (GameItem gameItem : gameItems){
+            gameItem.getMesh().cleanUp();
+        }
     }
 }

@@ -99,11 +99,20 @@ public class Crafter implements IGameLogic {
         //update camera based on mouse
         Vector2f rotVec = mouseInput.getDisplVec();
         camera.moveRotation(rotVec.x * MOUSE_SENSITIVITY, rotVec.y * MOUSE_SENSITIVITY, 0);
+        //limit camera pitch
         if (camera.getRotation().x < -90f) {
             camera.moveRotation((90f + camera.getRotation().x) * -1f, 0, 0);
         }
         if (camera.getRotation().x > 90f){
             camera.moveRotation((camera.getRotation().x - 90f) * -1f , 0, 0);
+        }
+
+        //loop camera yaw
+        if (camera.getRotation().y < -180f){
+            camera.moveRotation(0,360, 0);
+        }
+        if (camera.getRotation().y > 180f){
+            camera.moveRotation(0,-360, 0);
         }
 
         for (GameItem gameItem : gameItems){

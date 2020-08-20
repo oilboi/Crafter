@@ -75,13 +75,17 @@ public class Crafter implements IGameLogic {
 
         //prototype toggle locking mouse
         if (window.isKeyPressed(GLFW_KEY_F)) {
-            if (input.isMouseLocked() && !buttonPushed) {
+            if (!buttonPushed) {
                 input.setMouseLocked(!input.isMouseLocked());
                 buttonPushed = true;
+                if(!input.isMouseLocked()) {
+                    glfwSetInputMode(window.getWindowHandle(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+                } else{
+                    glfwSetInputMode(window.getWindowHandle(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+                }
             }
-        } else if (buttonPushed) {
+        } else if (!window.isKeyPressed(GLFW_KEY_F)){
             buttonPushed = false;
-            input.setMouseLocked(!input.isMouseLocked());
         }
     }
 

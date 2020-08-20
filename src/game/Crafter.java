@@ -16,7 +16,7 @@ import static org.lwjgl.glfw.GLFW.*;
 
 public class Crafter implements IGameLogic {
 
-    private static final float MOUSE_SENSITIVITY = 0.1f;
+    private static final float MOUSE_SENSITIVITY = 0.05f;
 
     private final Vector3f cameraInc;
 
@@ -26,7 +26,7 @@ public class Crafter implements IGameLogic {
 
     private GameItem[] gameItems;
 
-    private static final float CAMERA_POS_STEP = 0.15f;
+    private static final float CAMERA_POS_STEP = 0.01f;
 
     private boolean buttonPushed = false;
 
@@ -72,8 +72,7 @@ public class Crafter implements IGameLogic {
             cameraInc.y = 1;
         }
 
-
-        //prototype toggle locking mouse
+        //prototype toggle locking mouse - F KEY
         if (window.isKeyPressed(GLFW_KEY_F)) {
             if (!buttonPushed) {
                 input.setMouseLocked(!input.isMouseLocked());
@@ -98,10 +97,14 @@ public class Crafter implements IGameLogic {
                 cameraInc.z * CAMERA_POS_STEP);
 
         //update camera based on mouse
-//        if (mouseInput.isRightButtonPressed()){
-            Vector2f rotVec = mouseInput.getDisplVec();
-            camera.moveRotation(rotVec.x * MOUSE_SENSITIVITY, rotVec.y * MOUSE_SENSITIVITY, 0);
-//        }
+        Vector2f rotVec = mouseInput.getDisplVec();
+        camera.moveRotation(rotVec.x * MOUSE_SENSITIVITY, rotVec.y * MOUSE_SENSITIVITY, 0);
+        if (camera.getRotation().x < -90f) {
+            camera.moveRotation((90f + camera.getRotation().x) * -1f, 0, 0);
+        }
+        if (camera.getRotation().x > 90f){
+            camera.moveRotation((camera.getRotation().x - 90f) * -1f , 0, 0);
+        }
 
         for (GameItem gameItem : gameItems){
             //update position

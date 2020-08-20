@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class ChunkMesh {
     private Mesh mesh;
     private Texture texture;
-    public ChunkMesh() throws Exception {
+    public ChunkMesh(Chunk chunk) throws Exception {
 
         //why yes, this is a terrible way to do this
         //if you know a better way, feel free to make a pr
@@ -24,128 +24,160 @@ public class ChunkMesh {
         ArrayList indices       = new ArrayList();
         ArrayList light         = new ArrayList();
 
-        //here for debug right now
-        float frontLight  = 1.0f;
-        float backLight   = 1.0f;
-        float rightLight  = 1.0f;
-        float leftLight   = 1.0f;
-        float topLight    = 1.0f;
-        float bottomLight = 1.0f;
+
+
+        short neighborBlock;
 
         //create the mesh
+        for (int w = 0; w < (16 * 128 * 16); w++) {
+            short blockID = chunk.getBlock(x,y,z, 0, 0);
 
-        //front
-        positions.add(1f); positions.add(1f); positions.add(1f);
-        positions.add(0f); positions.add(1f); positions.add(1f);
-        positions.add(0f); positions.add(0f); positions.add(1f);
-        positions.add(1f); positions.add(0f); positions.add( 1f);
-        //back
-        positions.add(0f); positions.add(1f); positions.add(0f);
-        positions.add(1f); positions.add(1f); positions.add(0f);
-        positions.add(1f); positions.add(0f); positions.add(0f);
-        positions.add(0f); positions.add(0f); positions.add(0f);
-        //right
-        positions.add(1f); positions.add(1f); positions.add(0f);
-        positions.add(1f); positions.add(1f); positions.add(1f);
-        positions.add(1f); positions.add(0f); positions.add(1f);
-        positions.add(1f); positions.add(0f); positions.add(0f);
+            if (blockID != 0) {
+                //here for debug right now
+                float frontLight  = (float)Math.random();//1.0f;
+                float backLight   = (float)Math.random();//1.0f;
+                float rightLight  = (float)Math.random();//1.0f;
+                float leftLight   = (float)Math.random();//1.0f;
+                float topLight    = (float)Math.random();//1.0f;
+                float bottomLight = (float)Math.random();//1.0f;
 
-        //left
-        positions.add(0f); positions.add(1f); positions.add(1f);
-        positions.add(0f); positions.add(1f); positions.add(0f);
-        positions.add(0f); positions.add(0f); positions.add(0f);
-        positions.add(0f); positions.add(0f); positions.add(1f);
+                neighborBlock = chunk.getBlock(x, y, z+1, 0, 0);
+                if (neighborBlock == 0) {
+                    //front
+                    positions.add(1f + x); positions.add(1f + y); positions.add(1f + z);
+                    positions.add(0f + x); positions.add(1f + y); positions.add(1f + z);
+                    positions.add(0f + x); positions.add(0f + y); positions.add(1f + z);
+                    positions.add(1f + x); positions.add(0f + y); positions.add(1f + z);
+                    //front
+                    for (int i = 0; i < 12; i++){
+                        light.add(frontLight);
+                    }
+                    //front
+                    indices.add(0+indicesCount); indices.add(1+indicesCount); indices.add(2+indicesCount); indices.add(0+indicesCount); indices.add(2+indicesCount); indices.add(3+indicesCount);
+                    indicesCount += 4;
+                    //front
+                    textureCoord.add(0.5f);textureCoord.add(0.0f);
+                    textureCoord.add(0.0f);textureCoord.add(0.0f);
+                    textureCoord.add(0.0f);textureCoord.add(0.5f);
+                    textureCoord.add(0.5f);textureCoord.add(0.5f);
+                }
 
-        //top
-        positions.add(0f); positions.add(1f); positions.add(0f);
-        positions.add(0f); positions.add(1f); positions.add(1f);
-        positions.add(1f); positions.add(1f); positions.add(1f);
-        positions.add(1f); positions.add(1f); positions.add(0f);
 
-        //bottom
-        positions.add(0f);positions.add(0f);positions.add(1f);
-        positions.add(0f);positions.add(0f);positions.add(0f);
-        positions.add(1f);positions.add(0f);positions.add(0f);
-        positions.add(1f);positions.add(0f);positions.add(1f);
+                neighborBlock = chunk.getBlock(x, y, z-1, 0, 0);
+                if (neighborBlock == 0) {
+                    //back
+                    positions.add(0f + x); positions.add(1f + y); positions.add(0f + z);
+                    positions.add(1f + x); positions.add(1f + y); positions.add(0f + z);
+                    positions.add(1f + x); positions.add(0f + y); positions.add(0f + z);
+                    positions.add(0f + x); positions.add(0f + y); positions.add(0f + z);
+                    //back
+                    for (int i = 0; i < 12; i++){
+                        light.add(backLight);
+                    }
+                    //back
+                    indices.add(0+indicesCount); indices.add(1+indicesCount); indices.add(2+indicesCount); indices.add(0+indicesCount); indices.add(2+indicesCount); indices.add(3+indicesCount);
+                    indicesCount += 4;
+                    //back
+                    textureCoord.add(0.5f);textureCoord.add(0.0f);
+                    textureCoord.add(0.0f);textureCoord.add(0.0f);
+                    textureCoord.add(0.0f);textureCoord.add(0.5f);
+                    textureCoord.add(0.5f);textureCoord.add(0.5f);
+                }
 
-        //front
-        for (int i = 0; i < 12; i++){
-            light.add(frontLight);
+                neighborBlock = chunk.getBlock(x+1, y, z, 0, 0);
+                if (neighborBlock == 0) {
+                    //right
+                    positions.add(1f + x); positions.add(1f + y); positions.add(0f + z);
+                    positions.add(1f + x); positions.add(1f + y); positions.add(1f + z);
+                    positions.add(1f + x); positions.add(0f + y); positions.add(1f + z);
+                    positions.add(1f + x); positions.add(0f + y); positions.add(0f + z);
+                    //right
+                    for (int i = 0; i < 12; i++){
+                        light.add(rightLight);
+                    }
+                    //right
+                    indices.add(0+indicesCount); indices.add(1+indicesCount); indices.add(2+indicesCount); indices.add(0+indicesCount); indices.add(2+indicesCount); indices.add(3+indicesCount);
+                    indicesCount += 4;
+                    //right
+                    textureCoord.add(0.5f);textureCoord.add(0.0f);
+                    textureCoord.add(0.0f);textureCoord.add(0.0f);
+                    textureCoord.add(0.0f);textureCoord.add(0.5f);
+                    textureCoord.add(0.5f);textureCoord.add(0.5f);
+                }
+
+                neighborBlock = chunk.getBlock(x-1, y, z, 0, 0);
+                if (neighborBlock == 0) {
+                    //left
+                    positions.add(0f + x); positions.add(1f + y); positions.add(1f + z);
+                    positions.add(0f + x); positions.add(1f + y); positions.add(0f + z);
+                    positions.add(0f + x); positions.add(0f + y); positions.add(0f + z);
+                    positions.add(0f + x); positions.add(0f + y); positions.add(1f + z);
+                    //left
+                    for (int i = 0; i < 12; i++){
+                        light.add(leftLight);
+                    }
+                    //left
+                    indices.add(0+indicesCount); indices.add(1+indicesCount); indices.add(2+indicesCount); indices.add(0+indicesCount); indices.add(2+indicesCount); indices.add(3+indicesCount);
+                    indicesCount += 4;
+                    //left
+                    textureCoord.add(0.5f);textureCoord.add(0.0f);
+                    textureCoord.add(0.0f);textureCoord.add(0.0f);
+                    textureCoord.add(0.0f);textureCoord.add(0.5f);
+                    textureCoord.add(0.5f);textureCoord.add(0.5f);
+                }
+
+                neighborBlock = chunk.getBlock(x, y+1, z, 0, 0);
+                if (neighborBlock == 0) {
+                    //top
+                    positions.add(0f + x); positions.add(1f + y); positions.add(0f + z);
+                    positions.add(0f + x); positions.add(1f + y); positions.add(1f + z);
+                    positions.add(1f + x); positions.add(1f + y); positions.add(1f + z);
+                    positions.add(1f + x); positions.add(1f + y); positions.add(0f + z);
+                    //top
+                    for (int i = 0; i < 12; i++){
+                        light.add(topLight);
+                    }
+                    //top
+                    indices.add(0+indicesCount); indices.add(1+indicesCount); indices.add(2+indicesCount); indices.add(0+indicesCount); indices.add(2+indicesCount); indices.add(3+indicesCount);
+                    indicesCount += 4;
+                    //top
+                    textureCoord.add(0.5f);textureCoord.add(0.5f);
+                    textureCoord.add(0.0f);textureCoord.add(0.5f);
+                    textureCoord.add(0.0f);textureCoord.add(1.0f);
+                    textureCoord.add(0.5f);textureCoord.add(1.0f);
+                }
+
+                neighborBlock = chunk.getBlock(x, y-1, z, 0, 0);
+                if (neighborBlock == 0) {
+                    //bottom
+                    positions.add(0f + x); positions.add(0f + y);positions.add(1f + z);
+                    positions.add(0f + x); positions.add(0f + y);positions.add(0f + z);
+                    positions.add(1f + x); positions.add(0f + y);positions.add(0f + z);
+                    positions.add(1f + x); positions.add(0f + y);positions.add(1f + z);
+                    //bottom
+                    for (int i = 0; i < 12; i++){
+                        light.add(bottomLight);
+                    }
+                    //bottom
+                    indices.add(0+indicesCount); indices.add(1+indicesCount); indices.add(2+indicesCount); indices.add(0+indicesCount); indices.add(2+indicesCount); indices.add(3+indicesCount);
+                    indicesCount += 4;
+                    //bottom
+                    textureCoord.add(1.0f);textureCoord.add(0.0f);
+                    textureCoord.add(0.5f);textureCoord.add(0.0f);
+                    textureCoord.add(0.5f);textureCoord.add(0.5f);
+                    textureCoord.add(1.0f);textureCoord.add(0.5f);
+                }
+            }
+            y++;
+            if( y > 128 - 1 ){
+                y = 0;
+                x++;
+                if( x > 16 - 1 ){
+                    x = 0;
+                    z++;
+                }
+            }
         }
-        //back
-        for (int i = 0; i < 12; i++){
-            light.add(backLight);
-        }
-        //right
-        for (int i = 0; i < 12; i++){
-            light.add(rightLight);
-        }
-        //left
-        for (int i = 0; i < 12; i++){
-            light.add(leftLight);
-        }
-        //top
-        for (int i = 0; i < 12; i++){
-            light.add(topLight);
-        }
-        //bottom
-        for (int i = 0; i < 12; i++){
-            light.add(bottomLight);
-        }
-
-        //this is horrible
-
-        //front
-        indices.add(0+indicesCount); indices.add(1+indicesCount); indices.add(2+indicesCount); indices.add(0+indicesCount); indices.add(2+indicesCount); indices.add(3+indicesCount);
-        indicesCount += 4;
-        //back
-        indices.add(0+indicesCount); indices.add(1+indicesCount); indices.add(2+indicesCount); indices.add(0+indicesCount); indices.add(2+indicesCount); indices.add(3+indicesCount);
-        indicesCount += 4;
-        //right
-        indices.add(0+indicesCount); indices.add(1+indicesCount); indices.add(2+indicesCount); indices.add(0+indicesCount); indices.add(2+indicesCount); indices.add(3+indicesCount);
-        indicesCount += 4;
-        //left
-        indices.add(0+indicesCount); indices.add(1+indicesCount); indices.add(2+indicesCount); indices.add(0+indicesCount); indices.add(2+indicesCount); indices.add(3+indicesCount);
-        indicesCount += 4;
-        //top
-        indices.add(0+indicesCount); indices.add(1+indicesCount); indices.add(2+indicesCount); indices.add(0+indicesCount); indices.add(2+indicesCount); indices.add(3+indicesCount);
-        indicesCount += 4;
-        //bottom
-        indices.add(0+indicesCount); indices.add(1+indicesCount); indices.add(2+indicesCount); indices.add(0+indicesCount); indices.add(2+indicesCount); indices.add(3+indicesCount);
-        indicesCount += 4;
-
-
-        //front
-        textureCoord.add(0.5f);textureCoord.add(0.0f);
-        textureCoord.add(0.0f);textureCoord.add(0.0f);
-        textureCoord.add(0.0f);textureCoord.add(0.5f);
-        textureCoord.add(0.5f);textureCoord.add(0.5f);
-        //back
-        textureCoord.add(0.5f);textureCoord.add(0.0f);
-        textureCoord.add(0.0f);textureCoord.add(0.0f);
-        textureCoord.add(0.0f);textureCoord.add(0.5f);
-        textureCoord.add(0.5f);textureCoord.add(0.5f);
-        //right
-        textureCoord.add(0.5f);textureCoord.add(0.0f);
-        textureCoord.add(0.0f);textureCoord.add(0.0f);
-        textureCoord.add(0.0f);textureCoord.add(0.5f);
-        textureCoord.add(0.5f);textureCoord.add(0.5f);
-        //left
-        textureCoord.add(0.5f);textureCoord.add(0.0f);
-        textureCoord.add(0.0f);textureCoord.add(0.0f);
-        textureCoord.add(0.0f);textureCoord.add(0.5f);
-        textureCoord.add(0.5f);textureCoord.add(0.5f);
-        //top
-        textureCoord.add(0.5f);textureCoord.add(0.5f);
-        textureCoord.add(0.0f);textureCoord.add(0.5f);
-        textureCoord.add(0.0f);textureCoord.add(1.0f);
-        textureCoord.add(0.5f);textureCoord.add(1.0f);
-        //bottom
-        textureCoord.add(1.0f);textureCoord.add(0.0f);
-        textureCoord.add(0.5f);textureCoord.add(0.0f);
-        textureCoord.add(0.5f);textureCoord.add(0.5f);
-        textureCoord.add(1.0f);textureCoord.add(0.5f);
-
 
         //convert the position objects into usable array
         float[] positionsArray = new float[positions.size()];

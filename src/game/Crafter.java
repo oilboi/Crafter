@@ -7,6 +7,8 @@ import engine.Window;
 import engine.graph.Camera;
 import engine.graph.Mesh;
 import engine.graph.Texture;
+import game.ChunkHandling.Chunk;
+import game.ChunkHandling.ChunkData;
 import game.ChunkHandling.ChunkMesh;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
@@ -26,7 +28,7 @@ public class Crafter implements IGameLogic {
 
     private GameItem[] gameItems;
 
-    private static final float CAMERA_POS_STEP = 0.05f;
+    private static final float CAMERA_POS_STEP = 0.15f;
 
     public Crafter(){
         renderer = new Renderer();
@@ -38,7 +40,11 @@ public class Crafter implements IGameLogic {
     public void init(Window window) throws Exception{
         renderer.init(window);
 
-        Mesh mesh = new ChunkMesh().getMesh();
+        Chunk chunk = new Chunk(0,0);
+
+        ChunkData.storeChunk(0,0, chunk);
+
+        Mesh mesh = new ChunkMesh(chunk).getMesh();
 
         GameItem gameItem = new GameItem(mesh);
 

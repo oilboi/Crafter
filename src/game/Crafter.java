@@ -6,13 +6,11 @@ import engine.MouseInput;
 import engine.Window;
 import engine.graph.Camera;
 import engine.graph.Mesh;
-import engine.graph.Texture;
 import game.ChunkHandling.Chunk;
 import game.ChunkHandling.ChunkData;
 import game.ChunkHandling.ChunkMesh;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
-import org.lwjgl.system.CallbackI;
 
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -29,6 +27,8 @@ public class Crafter implements IGameLogic {
     private GameItem[] gameItems;
 
     private static final float CAMERA_POS_STEP = 0.15f;
+
+    private boolean buttonPushed = false;
 
     public Crafter(){
         renderer = new Renderer();
@@ -72,10 +72,16 @@ public class Crafter implements IGameLogic {
             cameraInc.y = 1;
         }
 
-        if (input.isRightButtonPressed() && input.isMouseLocked()){
-            input.setMouseLocked(false);
-        } else if ( input.isRightButtonPressed()){
-            input.setMouseLocked(true);
+
+        //prototype toggle locking mouse
+        if (window.isKeyPressed(GLFW_KEY_F)) {
+            if (input.isMouseLocked() && !buttonPushed) {
+                input.setMouseLocked(!input.isMouseLocked());
+                buttonPushed = true;
+            }
+        } else if (buttonPushed) {
+            buttonPushed = false;
+            input.setMouseLocked(!input.isMouseLocked());
         }
     }
 

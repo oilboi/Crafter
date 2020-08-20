@@ -87,7 +87,6 @@ public class MouseInput {
 
     public void setMouseLocked(boolean lock){
         mouseLocked = lock;
-        System.out.println(lock);
     }
 
     public boolean isMouseLocked(){

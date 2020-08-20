@@ -71,6 +71,12 @@ public class Crafter implements IGameLogic {
         } else if (window.isKeyPressed(GLFW_KEY_SPACE)){
             cameraInc.y = 1;
         }
+
+        if (input.isRightButtonPressed() && input.isMouseLocked()){
+            input.setMouseLocked(false);
+        } else if ( input.isRightButtonPressed()){
+            input.setMouseLocked(true);
+        }
     }
 
     @Override

@@ -19,6 +19,8 @@ public class MouseInput {
 
     private boolean rightButtonPressed = false;
 
+    private boolean mouseLocked = true;
+
     public MouseInput(){
         previousPos = new Vector2d(-1,-1);
         currentPos = new Vector2d(0,0);
@@ -50,21 +52,24 @@ public class MouseInput {
         displVec.x = 0;
         displVec.y = 0;
 
-        glfwSetCursorPos(window.getWindowHandle(), window.getWidth()/2, window.getHeight()/2);
+        if (mouseLocked) {
+            glfwSetCursorPos(window.getWindowHandle(), window.getWidth() / 2, window.getHeight() / 2);
 
-        if(previousPos.x > 0 && previousPos.y > 0 && inWindow){
-            double deltax = currentPos.x - window.getWidth()/2;//previousPos.x;
-            double deltay = currentPos.y - window.getHeight()/2;//previousPos.y;
 
-            boolean rotateX = deltax != 0;
-            boolean rotateY = deltay != 0;
+            if (previousPos.x > 0 && previousPos.y > 0 && inWindow) {
+                double deltax = currentPos.x - window.getWidth() / 2;//previousPos.x;
+                double deltay = currentPos.y - window.getHeight() / 2;//previousPos.y;
 
-            if (rotateX){
-                displVec.y = (float) deltax;
-            }
+                boolean rotateX = deltax != 0;
+                boolean rotateY = deltay != 0;
 
-            if (rotateY){
-                displVec.x = (float) deltay;
+                if (rotateX) {
+                    displVec.y = (float) deltax;
+                }
+
+                if (rotateY) {
+                    displVec.x = (float) deltay;
+                }
             }
         }
 
@@ -78,6 +83,15 @@ public class MouseInput {
 
     public boolean isRightButtonPressed(){
         return rightButtonPressed;
+    }
+
+    public void setMouseLocked(boolean lock){
+        mouseLocked = lock;
+        System.out.println(lock);
+    }
+
+    public boolean isMouseLocked(){
+        return mouseLocked;
     }
 
 }

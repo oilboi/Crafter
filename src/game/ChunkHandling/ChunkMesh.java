@@ -10,19 +10,27 @@ public class ChunkMesh {
     private Texture texture;
     public ChunkMesh() throws Exception {
 
+        //why yes, this is a terrible way to do this
+        //if you know a better way, feel free to make a pr
+
         int x = 0;
         int y = 0;
         int z = 0;
 
-        int count = 0;
+        int indicesCount = 0;
 
-        ArrayList positions = new ArrayList();
-        ArrayList texCoord = new ArrayList();
-        ArrayList indexArray = new ArrayList();
+        ArrayList positions     = new ArrayList();
+        ArrayList textureCoord  = new ArrayList();
+        ArrayList indices       = new ArrayList();
+        ArrayList light         = new ArrayList();
 
-
-        //why yes, this is a terrible way to do this
-        //if you know a better way, feel free to make a pr
+        //here for debug right now
+        float frontLight  = 1.0f;
+        float backLight   = 1.0f;
+        float rightLight  = 1.0f;
+        float leftLight   = 1.0f;
+        float topLight    = 1.0f;
+        float bottomLight = 1.0f;
 
         //create the mesh
 
@@ -49,10 +57,10 @@ public class ChunkMesh {
         positions.add(0f); positions.add(0f); positions.add(1f);
 
         //top
-        positions.add(0f); positions.add(1f);  positions.add(0f);
-        positions.add(0f); positions.add(1f);  positions.add(1f);
-        positions.add(1f);  positions.add(1f);  positions.add(1f);
-        positions.add(1f);  positions.add(1f);  positions.add(0f);
+        positions.add(0f); positions.add(1f); positions.add(0f);
+        positions.add(0f); positions.add(1f); positions.add(1f);
+        positions.add(1f); positions.add(1f); positions.add(1f);
+        positions.add(1f); positions.add(1f); positions.add(0f);
 
         //bottom
         positions.add(0f);positions.add(0f);positions.add(1f);
@@ -60,111 +68,112 @@ public class ChunkMesh {
         positions.add(1f);positions.add(0f);positions.add(0f);
         positions.add(1f);positions.add(0f);positions.add(1f);
 
+        //front
+        for (int i = 0; i < 12; i++){
+            light.add(frontLight);
+        }
+        //back
+        for (int i = 0; i < 12; i++){
+            light.add(backLight);
+        }
+        //right
+        for (int i = 0; i < 12; i++){
+            light.add(rightLight);
+        }
+        //left
+        for (int i = 0; i < 12; i++){
+            light.add(leftLight);
+        }
+        //top
+        for (int i = 0; i < 12; i++){
+            light.add(topLight);
+        }
+        //bottom
+        for (int i = 0; i < 12; i++){
+            light.add(bottomLight);
+        }
+
+        //this is horrible
+
+        //front
+        indices.add(0+indicesCount); indices.add(1+indicesCount); indices.add(2+indicesCount); indices.add(0+indicesCount); indices.add(2+indicesCount); indices.add(3+indicesCount);
+        indicesCount += 4;
+        //back
+        indices.add(0+indicesCount); indices.add(1+indicesCount); indices.add(2+indicesCount); indices.add(0+indicesCount); indices.add(2+indicesCount); indices.add(3+indicesCount);
+        indicesCount += 4;
+        //right
+        indices.add(0+indicesCount); indices.add(1+indicesCount); indices.add(2+indicesCount); indices.add(0+indicesCount); indices.add(2+indicesCount); indices.add(3+indicesCount);
+        indicesCount += 4;
+        //left
+        indices.add(0+indicesCount); indices.add(1+indicesCount); indices.add(2+indicesCount); indices.add(0+indicesCount); indices.add(2+indicesCount); indices.add(3+indicesCount);
+        indicesCount += 4;
+        //top
+        indices.add(0+indicesCount); indices.add(1+indicesCount); indices.add(2+indicesCount); indices.add(0+indicesCount); indices.add(2+indicesCount); indices.add(3+indicesCount);
+        indicesCount += 4;
+        //bottom
+        indices.add(0+indicesCount); indices.add(1+indicesCount); indices.add(2+indicesCount); indices.add(0+indicesCount); indices.add(2+indicesCount); indices.add(3+indicesCount);
+        indicesCount += 4;
 
 
-
-        float frontLight  = 1.0f;
-        float backLight   = 1.0f;
-        float rightLight  = 1.0f;
-        float leftLight   = 1.0f;
-        float topLight    = 1.0f;
-        float bottomLight = 1.0f;
-
-        float[] colors = new float[]{
-                //front
-                frontLight,frontLight,frontLight,
-                frontLight,frontLight,frontLight,
-                frontLight,frontLight,frontLight,
-                frontLight,frontLight,frontLight,
-
-                //back
-                backLight,backLight, backLight,
-                backLight,backLight, backLight,
-                backLight,backLight, backLight,
-                backLight,backLight, backLight,
-
-                //right
-                rightLight,rightLight,rightLight,
-                rightLight,rightLight,rightLight,
-                rightLight,rightLight,rightLight,
-                rightLight,rightLight,rightLight,
-
-                //left
-                leftLight,leftLight,leftLight,
-                leftLight,leftLight,leftLight,
-                leftLight,leftLight,leftLight,
-                leftLight,leftLight,leftLight,
-
-                //top
-                topLight,topLight,topLight,
-                topLight,topLight,topLight,
-                topLight,topLight,topLight,
-                topLight,topLight,topLight,
-
-                //bottom
-                bottomLight,bottomLight,bottomLight,
-                bottomLight,bottomLight,bottomLight,
-                bottomLight,bottomLight,bottomLight,
-                bottomLight,bottomLight,bottomLight,
-
-        };
-        float[] textCoords = new float[]{
-                //front
-                0.5f, 0.0f,
-                0.0f, 0.0f,
-                0.0f, 0.5f,
-                0.5f, 0.5f,
-                //back
-                0.5f, 0.0f,
-                0.0f, 0.0f,
-                0.0f, 0.5f,
-                0.5f, 0.5f,
-                //right
-                0.5f, 0.0f,
-                0.0f, 0.0f,
-                0.0f, 0.5f,
-                0.5f, 0.5f,
-                //left
-                0.5f, 0.0f,
-                0.0f, 0.0f,
-                0.0f, 0.5f,
-                0.5f, 0.5f,
-                //top
-                0.5f, 0.5f,
-                0.0f, 0.5f,
-                0.0f, 1.0f,
-                0.5f, 1.0f,
-                //bottom
-                1.0f, 0.0f,
-                0.5f, 0.0f,
-                0.5f, 0.5f,
-                1.0f, 0.5f,
-        };
-        int[] indices = new int[] {
-                //Front face
-                0, 1, 2, 0, 2, 3,
-                //Back face
-                0+4, 1+4, 2+4, 0+4, 2+4, 3+4,
-                //Right face
-                0+8, 1+8, 2+8, 0+8, 2+8, 3+8,
-                //Left face
-                0+12, 1+12, 2+12, 0+12, 2+12, 3+12,
-                //Top Face
-                0+16, 1+16, 2+16, 0+16, 2+16, 3+16,
-                //Bottom Face
-                0+20, 1+20, 2+20, 0+20, 2+20, 3+20,
-        };
+        //front
+        textureCoord.add(0.5f);textureCoord.add(0.0f);
+        textureCoord.add(0.0f);textureCoord.add(0.0f);
+        textureCoord.add(0.0f);textureCoord.add(0.5f);
+        textureCoord.add(0.5f);textureCoord.add(0.5f);
+        //back
+        textureCoord.add(0.5f);textureCoord.add(0.0f);
+        textureCoord.add(0.0f);textureCoord.add(0.0f);
+        textureCoord.add(0.0f);textureCoord.add(0.5f);
+        textureCoord.add(0.5f);textureCoord.add(0.5f);
+        //right
+        textureCoord.add(0.5f);textureCoord.add(0.0f);
+        textureCoord.add(0.0f);textureCoord.add(0.0f);
+        textureCoord.add(0.0f);textureCoord.add(0.5f);
+        textureCoord.add(0.5f);textureCoord.add(0.5f);
+        //left
+        textureCoord.add(0.5f);textureCoord.add(0.0f);
+        textureCoord.add(0.0f);textureCoord.add(0.0f);
+        textureCoord.add(0.0f);textureCoord.add(0.5f);
+        textureCoord.add(0.5f);textureCoord.add(0.5f);
+        //top
+        textureCoord.add(0.5f);textureCoord.add(0.5f);
+        textureCoord.add(0.0f);textureCoord.add(0.5f);
+        textureCoord.add(0.0f);textureCoord.add(1.0f);
+        textureCoord.add(0.5f);textureCoord.add(1.0f);
+        //bottom
+        textureCoord.add(1.0f);textureCoord.add(0.0f);
+        textureCoord.add(0.5f);textureCoord.add(0.0f);
+        textureCoord.add(0.5f);textureCoord.add(0.5f);
+        textureCoord.add(1.0f);textureCoord.add(0.5f);
 
 
         //convert the position objects into usable array
         float[] positionsArray = new float[positions.size()];
         for (int i = 0; i < positions.size(); i++) {
-            System.out.println(positions.get(i));
             positionsArray[i] = (float)positions.get(i);
         }
 
+        //convert the light objects into usable array
+        float[] lightArray = new float[light.size()];
+        for (int i = 0; i < light.size(); i++) {
+            lightArray[i] = (float)light.get(i);
+        }
+
+        //convert the indices objects into usable array
+        int[] indicesArray = new int[indices.size()];
+        for (int i = 0; i < indices.size(); i++) {
+            indicesArray[i] = (int)indices.get(i);
+        }
+
+        //convert the textureCoord objects into usable array
+        float[] textureCoordArray = new float[textureCoord.size()];
+        for (int i = 0; i < textureCoord.size(); i++) {
+            textureCoordArray[i] = (float)textureCoord.get(i);
+        }
+
+
         texture = new Texture("textures/grassblock.png");
-        mesh = new Mesh(positionsArray, colors, indices, textCoords, texture);
+        mesh = new Mesh(positionsArray, lightArray, indicesArray, textureCoordArray, texture);
     }
 
     public Mesh getMesh(){

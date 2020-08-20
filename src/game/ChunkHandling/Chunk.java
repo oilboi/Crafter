@@ -19,8 +19,8 @@ public class Chunk {
 //        genDebug();
 //        }
 //        genDebug();
-//        genRandom();
-        genBiome(chunkX,chunkZ);
+        genRandom();
+//        genBiome(chunkX,chunkZ);
 //        genFlat();
     }
     public short[] getBlocks(){

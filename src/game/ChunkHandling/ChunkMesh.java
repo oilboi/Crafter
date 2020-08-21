@@ -33,7 +33,7 @@ public class ChunkMesh {
         //create the mesh
         for (int w = 0; w < (16 * 128 * 16); w++) {
             short blockID = chunk.getBlock(x,y,z, chunkX, chunkZ);
-
+            System.out.println(blockID);
             if (blockID != 0) {
                 //here for debug right now
                 float frontLight  = (float)Math.random();//1.0f;

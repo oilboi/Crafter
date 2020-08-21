@@ -5,7 +5,7 @@ import static game.Crafter.chunkRenderDistance;
 public class ChunkData {
     private static Chunk chunkArray[][] = new Chunk[(chunkRenderDistance *2)+1][(chunkRenderDistance *2)+1];
 
-    private static int[] currentChunk = {0,0};
+//    private static int[] currentChunk = {0,0};
 
     public static void storeChunk(int x, int z, Chunk chunk){
 //        System.out.println();

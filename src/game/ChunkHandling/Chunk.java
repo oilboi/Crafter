@@ -7,7 +7,8 @@ import static game.Crafter.chunkRenderDistance;
 public class Chunk {
     //y x z - longest used for memory efficiency
     private static short chunkSizeX = 16;
-    private static short chunkSizeY = 128;private static short chunkSizeZ = 16;
+    private static short chunkSizeY = 128;
+    private static short chunkSizeZ = 16;
 
     private short[] block    = new short[chunkSizeX * chunkSizeY * chunkSizeZ];
     private byte[]  rotation = new byte[chunkSizeX * chunkSizeY * chunkSizeZ];

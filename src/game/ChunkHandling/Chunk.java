@@ -11,6 +11,7 @@ public class Chunk {
     private final static short chunkSizeZ = 16;
 
     private short[] block    = new short[chunkSizeX * chunkSizeY * chunkSizeZ];
+    private byte[]  light    = new byte[chunkSizeX * chunkSizeY * chunkSizeZ];
     private byte[]  rotation = new byte[chunkSizeX * chunkSizeY * chunkSizeZ];
 
     public Chunk(int chunkX,int chunkZ){
@@ -29,6 +30,10 @@ public class Chunk {
         return block;
     }
 
+    public byte[] getLights(){
+        return light;
+    }
+
     //randomly assign block ids
     public void genRandom(){
         int x = 0;
@@ -36,6 +41,7 @@ public class Chunk {
         int z = 0;
         for ( int i = 0; i < (chunkSizeX * chunkSizeY * chunkSizeZ); i++){
             block[ChunkMath.genHash(x, y, z)] = (short)(Math.random() * 5);
+            light[ChunkMath.genHash(x, y, z)] = (byte)(Math.random()*16);
             y++;
             if( y > chunkSizeY - 1){
                 y = 0;
@@ -59,6 +65,7 @@ public class Chunk {
             }else{
                 block[ChunkMath.genHash(x, y, z)] = 0;
             }
+            light[ChunkMath.genHash(x, y, z)] = (byte)(Math.random()*16);
             y++;
             if( y > chunkSizeY - 1){
                 y = 0;
@@ -105,6 +112,8 @@ public class Chunk {
             } else if (y < height - dirtHeight){
                 block[ChunkMath.genHash(x, y, z)] = 2;
             }
+
+            light[ChunkMath.genHash(x, y, z)] = (byte)(Math.random()*16f);
 
             y++;
             if( y > chunkSizeY - 1){

@@ -53,6 +53,32 @@ public class ChunkData {
     }
 
 
+    public static byte getLight(int x, int y, int z, int chunkX, int chunkZ){
+        chunkX += chunkRenderDistance;
+        chunkZ += chunkRenderDistance;
+
+        //System.out.println(x + " " + y + " " + z + " " + chunkX + " " + chunkZ);
+        //System.out.println(Arrays.deepToString(chunkArray));
+        if (chunkX < 0 || chunkX > chunkRenderDistance *2 || chunkZ < 0 || chunkZ > chunkRenderDistance *2 || y < 0 || y >= 128){
+            return 0;
+        }
+
+        Chunk piece = chunkArray[chunkX][chunkZ];
+
+        if (piece == null){
+            return 0;
+        }
+
+        //System.out.println("x " + x + " | y: " + y + " | z:" + z);
+        int hashy = ChunkMath.genHash(x, y, z);
+
+        //System.out.println();
+        byte[] lightsYo = piece.getLights();
+
+        return lightsYo[hashy];
+    }
+
+
     public static Chunk getChunk(int chunkX, int chunkZ){
 
         chunkX += chunkRenderDistance;

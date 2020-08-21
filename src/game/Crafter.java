@@ -20,7 +20,7 @@ import static org.lwjgl.glfw.GLFW.*;
 
 public class Crafter implements IGameLogic {
 
-    public final static int chunkRenderDistance = 10;
+    public final static int chunkRenderDistance = 6;
 
     private static final float MOUSE_SENSITIVITY = 0.05f;
 
@@ -61,6 +61,7 @@ public class Crafter implements IGameLogic {
                 ChunkData.storeChunk(x, z, chunk);
                 generateChunkMesh(chunk, x, z, items, names, false);
                 names.add(x + " " + z);
+                System.out.println(x + " " + z);
             }
         }
 

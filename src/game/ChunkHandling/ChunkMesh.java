@@ -31,13 +31,15 @@ public class ChunkMesh {
         //create the mesh
         for (int w = 0; w < (16 * 128 * 16); w++) {
             if (getBlockInChunk(x,y,z, chunkX, chunkZ) != 0) {
+                byte thisLight = 16;//getLight(x,y,z,chunkX,chunkZ);
+
                 //here for debug right now
-                float frontLight  = 1.0f;//(float)Math.random();//1.0f;
-                float backLight   = 1.0f;//(float)Math.random();//1.0f;
-                float rightLight  = 1.0f;//(float)Math.random();//1.0f;
-                float leftLight   = 1.0f;//(float)Math.random();//1.0f;
-                float topLight    = 1.0f;//(float)Math.random();//1.0f;
-                float bottomLight = 1.0f;//(float)Math.random();//1.0f;
+                float frontLight  = thisLight/16f;//1.0f;//(float)Math.random();//1.0f;
+                float backLight   = thisLight/16f;//1.0f;//(float)Math.random();//1.0f;
+                float rightLight  = thisLight/16f;//1.0f;//(float)Math.random();//1.0f;
+                float leftLight   = thisLight/16f;//1.0f;//(float)Math.random();//1.0f;
+                float topLight    = thisLight/16f;//1.0f;//(float)Math.random();//1.0f;
+                float bottomLight = thisLight/16f;//1.0f;//(float)Math.random();//1.0f;
 
                 short neighborBlock = getBlockInChunk(x, y, z+1, chunkX, chunkZ);
                 if (neighborBlock == 0) {

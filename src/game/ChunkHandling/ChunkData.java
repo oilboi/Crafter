@@ -1,8 +1,9 @@
 package game.ChunkHandling;
 
+import static game.Crafter.chunkRenderDistance;
+
 public class ChunkData {
-    private static int renderDistance = 3;
-    private static Chunk chunkArray[][] = new Chunk[(renderDistance*2)+1][(renderDistance*2)+1];
+    private static Chunk chunkArray[][] = new Chunk[(chunkRenderDistance *2)+1][(chunkRenderDistance *2)+1];
 
     private static int[] currentChunk = {0,0};
 
@@ -12,13 +13,13 @@ public class ChunkData {
 //        System.out.println("max:" + ((renderDistance*2)+1));
 //        System.out.println(x + renderDistance);
 
-        chunkArray[x + renderDistance][z + renderDistance] = chunk;
+        chunkArray[x + chunkRenderDistance][z + chunkRenderDistance] = chunk;
 
 //        System.out.println(Arrays.deepToString(chunkArray));
     }
 
     public static Chunk getChunkData(int x, int z){
-        Chunk test = chunkArray[x + renderDistance][z + renderDistance];
+        Chunk test = chunkArray[x + chunkRenderDistance][z + chunkRenderDistance];
 
         if (test != null){
             return test;
@@ -30,7 +31,7 @@ public class ChunkData {
     public static short getBlock(int x, int y, int z, int chunkX, int chunkZ){
         //System.out.println(x + " " + y + " " + z + " " + chunkX + " " + chunkZ);
         //System.out.println(Arrays.deepToString(chunkArray));
-        if (chunkX < 0 || chunkX > renderDistance*2 || chunkZ < 0 || chunkZ > renderDistance*2 || y < 0 || y >= 128){
+        if (chunkX < 0 || chunkX > chunkRenderDistance *2 || chunkZ < 0 || chunkZ > chunkRenderDistance *2 || y < 0 || y >= 128){
             return 0;
         }
 
@@ -53,7 +54,7 @@ public class ChunkData {
     public static Chunk getChunk(int chunkX, int chunkZ){
         //System.out.println(x + " " + y + " " + z + " " + chunkX + " " + chunkZ);
         //System.out.println(Arrays.deepToString(chunkArray));
-        if (chunkX < 0 || chunkX > renderDistance*2 || chunkZ < 0 || chunkZ > renderDistance*2 ){
+        if (chunkX < 0 || chunkX > chunkRenderDistance *2 || chunkZ < 0 || chunkZ > chunkRenderDistance *2 ){
             return null;
         }
 
@@ -68,7 +69,7 @@ public class ChunkData {
 
 
     public static void setBlock(int x, int y, int z, int chunkX, int chunkZ, short newBlock){
-        if (chunkX < 0 || chunkX > renderDistance*2 || chunkZ < 0 || chunkZ > renderDistance*2 || y < 0 || y >= 128){
+        if (chunkX < 0 || chunkX > chunkRenderDistance *2 || chunkZ < 0 || chunkZ > chunkRenderDistance *2 || y < 0 || y >= 128){
             return;
         }
         Chunk piece = chunkArray[chunkX][chunkZ];

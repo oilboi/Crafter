@@ -70,6 +70,10 @@ public class Renderer {
 
         //render each gameItem
         for(GameItem gameItem : gameItems){
+
+            if (gameItem == null){
+                continue;
+            }
             //set model view matrix for this item
             Matrix4f modelViewMatrix = transformation.getModelViewMatrix(gameItem, viewMatrix);
             shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);

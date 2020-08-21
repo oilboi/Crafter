@@ -2,12 +2,12 @@ package game.ChunkHandling;
 
 import engine.FastNoise;
 
+import static game.Crafter.chunkRenderDistance;
+
 public class Chunk {
     //y x z - longest used for memory efficiency
     private static short chunkSizeX = 16;
-    private static short chunkSizeY = 128;
-    private static short chunkSizeZ = 16;
-    private static int renderDistance = 3;
+    private static short chunkSizeY = 128;private static short chunkSizeZ = 16;
 
     private short[] block    = new short[chunkSizeX * chunkSizeY * chunkSizeZ];
     private byte[]  rotation = new byte[chunkSizeX * chunkSizeY * chunkSizeZ];
@@ -122,8 +122,8 @@ public class Chunk {
     //this is full of magic numbers TODO: turn this into functions in ChunkMath
     //+ render distance is getting it to base count 0
     public static short getBlock(int x,int y,int z, int chunkX, int chunkZ){
-        chunkX += renderDistance;
-        chunkZ += renderDistance;
+        chunkX += chunkRenderDistance;
+        chunkZ += chunkRenderDistance;
         //neighbor checking
         if(x < 0) {
             if (chunkX - 1 >= 0) {
@@ -131,7 +131,7 @@ public class Chunk {
             }
             return 0;
         } else if (x >= chunkSizeX) {
-            if ( chunkX + 1 <= renderDistance*2){
+            if ( chunkX + 1 <= chunkRenderDistance *2){
                 return ChunkData.getBlock(x-16,y,z,chunkX+1,chunkZ);
             }
             return 0;
@@ -146,7 +146,7 @@ public class Chunk {
             return 0;
 
         } else if (z >= chunkSizeZ) {
-            if (chunkZ + 1 <= renderDistance*2){
+            if (chunkZ + 1 <= chunkRenderDistance *2){
                 return ChunkData.getBlock(x,y,z-16,chunkX,chunkZ+1);
             }
             return 0;

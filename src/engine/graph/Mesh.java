@@ -1,7 +1,6 @@
 package engine.graph;
 
 import org.lwjgl.system.MemoryUtil;
-import org.w3c.dom.Text;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -36,6 +35,8 @@ public class Mesh {
             this.texture = texture;
 
             vertexCount = indices.length;
+
+            System.out.println("vertex count:" + vertexCount);
 
             vaoId = glGenVertexArrays();
             glBindVertexArray(vaoId);

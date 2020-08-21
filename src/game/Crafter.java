@@ -12,9 +12,13 @@ import game.ChunkHandling.ChunkMesh;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
+import java.util.ArrayList;
+
 import static org.lwjgl.glfw.GLFW.*;
 
 public class Crafter implements IGameLogic {
+
+    public final static int chunkRenderDistance = 10;
 
     private static final float MOUSE_SENSITIVITY = 0.05f;
 
@@ -26,7 +30,7 @@ public class Crafter implements IGameLogic {
 
     private GameItem[] gameItems;
 
-    private static final float CAMERA_POS_STEP = 0.01f;
+    private static final float CAMERA_POS_STEP = 0.1f;
 
     private boolean buttonPushed = false;
 
@@ -40,15 +44,33 @@ public class Crafter implements IGameLogic {
     public void init(Window window) throws Exception{
         renderer.init(window);
 
-        Chunk chunk = new Chunk(0,0);
+        ArrayList items = new ArrayList();
+        for (int x = -chunkRenderDistance; x <= chunkRenderDistance; x++){
+        for (int z = -chunkRenderDistance; z <= chunkRenderDistance; z++) {
 
-        ChunkData.storeChunk(0,0, chunk);
+        Chunk chunk = new Chunk(x, z);
 
-        Mesh mesh = new ChunkMesh(chunk).getMesh();
+        System.out.println(chunk);
 
-        GameItem gameItem = new GameItem(mesh);
+        ChunkData.storeChunk(x, z, chunk);
 
-        gameItems = new GameItem[] {gameItem};
+        Mesh mesh = new ChunkMesh(chunk, x, z).getMesh();
+
+        System.out.println(mesh);
+
+        GameItem test = new GameItem(mesh);
+        items.add(test);
+        }
+        }
+
+        //convert the position objects into usable array
+        GameItem[] itemsArray = new GameItem[items.size()];
+        for (int i = 0; i < items.size(); i++) {
+            itemsArray[i] = (GameItem)items.get(i);
+        }
+
+        gameItems = itemsArray;
+
     }
 
     @Override
@@ -115,6 +137,8 @@ public class Crafter implements IGameLogic {
             camera.moveRotation(0,-360, 0);
         }
 
+
+        //this is the game item loop
         for (GameItem gameItem : gameItems){
             //update position
 //            Vector3f itemPos = gameItem.getPosition();

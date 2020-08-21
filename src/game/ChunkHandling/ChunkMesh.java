@@ -6,7 +6,7 @@ import engine.graph.Texture;
 
 import java.util.ArrayList;
 
-import static game.ChunkHandling.ChunkData.getBlockInChunk;
+import static game.ChunkHandling.ChunkData.*;
 
 public class ChunkMesh {
 
@@ -206,13 +206,32 @@ public class ChunkMesh {
         Mesh mesh = new Mesh(positionsArray, lightArray, indicesArray, textureCoordArray, texture);
 
 
-        if (updating) {
+        if (!updating){
+            items.add(new GameItem(mesh));
+            updateNeighbors(chunkX,chunkZ,items,names);
+        } else {
             for (int i = 0; i < names.size(); i++) {
                 if (names.get(i).equals(chunkX + " " + chunkZ)){
-                    System.out.println("remove this");
+                    GameItem thisItem = (GameItem)items.get(i);
+                    thisItem.getMesh().cleanUp();
+                    items.set(i, new GameItem(mesh));
                 }
             }
         }
-        items.add(new GameItem(mesh));
     }
+
+    public static void updateNeighbors(int chunkX, int chunkZ, ArrayList items, ArrayList names) throws Exception {
+        for (int x = -1; x <= 1; x++) {
+            for (int z = -1; z <= 1; z++) {
+                if (Math.abs(x) + Math.abs(z) == 1) {
+                    if(chunkExists(chunkX + x, chunkZ + z)){
+                        Chunk thisChunk = getChunkData(chunkX + x, chunkZ + z);
+                        //System.out.println("wow that chunk certainly exists");
+                        generateChunkMesh(thisChunk, chunkX + x, chunkZ + z, items, names, true);
+                    }
+                }
+            }
+        }
+    }
+
 }

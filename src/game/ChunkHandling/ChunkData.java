@@ -85,6 +85,10 @@ public class ChunkData {
     }
 
     public static boolean chunkExists(int chunkX, int chunkZ){
+
+        chunkX += chunkRenderDistance;
+        chunkZ += chunkRenderDistance;
+
         //safety checks
         if(chunkX >= chunkArray.length || chunkX < 0){
             return false;

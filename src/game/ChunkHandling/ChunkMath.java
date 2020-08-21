@@ -1,9 +1,9 @@
 package game.ChunkHandling;
 
 public class ChunkMath {
-    private static short chunkSizeX = 16;
-    private static short chunkSizeY = 128;
-    private static short chunkSizeZ = 16;
+    private final static short chunkSizeX = 16;
+    private final static short chunkSizeY = 128;
+    private final static short chunkSizeZ = 16;
 
     public static int genHash(int x, int y, int z){
         return((x*chunkSizeY) + y + (z*(chunkSizeX * chunkSizeY)));

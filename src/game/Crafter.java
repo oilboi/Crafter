@@ -13,12 +13,14 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
+import static game.ChunkHandling.ChunkMesh.generateChunkMesh;
 import static org.lwjgl.glfw.GLFW.*;
 
 public class Crafter implements IGameLogic {
 
-    public final static int chunkRenderDistance = 2;
+    public final static int chunkRenderDistance = 55;
 
     private static final float MOUSE_SENSITIVITY = 0.05f;
 
@@ -34,6 +36,10 @@ public class Crafter implements IGameLogic {
 
     private boolean buttonPushed = false;
 
+    public static int getChunkRenderDistance(){
+        return chunkRenderDistance;
+    }
+
     public Crafter(){
         renderer = new Renderer();
         camera = new Camera();
@@ -44,23 +50,22 @@ public class Crafter implements IGameLogic {
     public void init(Window window) throws Exception{
         renderer.init(window);
 
+
+//        int x = 0;
+//        int z = 1;
         ArrayList items = new ArrayList();
         for (int x = -chunkRenderDistance; x <= chunkRenderDistance; x++){
-        for (int z = -chunkRenderDistance; z <= chunkRenderDistance; z++) {
+            for (int z = -chunkRenderDistance; z <= chunkRenderDistance; z++) {
+                System.out.println(x + " " + z);
+                Chunk chunk = new Chunk(x, z);
 
-        Chunk chunk = new Chunk(x, z);
+                ChunkData.storeChunk(x, z, chunk);
 
-        System.out.println(chunk);
+//                System.out.println(Arrays.toString(ChunkData.getChunk(x,z).getBlocks()));
 
-        ChunkData.storeChunk(x, z, chunk);
-
-        Mesh mesh = new ChunkMesh(chunk, x, z).getMesh();
-
-//        System.out.println(mesh);
-
-        GameItem test = new GameItem(mesh);
-        items.add(test);
-        }
+                GameItem test = new GameItem(generateChunkMesh(chunk, x, z));
+                items.add(test);
+            }
         }
 
         //convert the position objects into usable array

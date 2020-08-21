@@ -36,7 +36,7 @@ public class Mesh {
 
             vertexCount = indices.length;
 
-            System.out.println("vertex count:" + vertexCount);
+//            System.out.println("vertex count:" + vertexCount);
 
             vaoId = glGenVertexArrays();
             glBindVertexArray(vaoId);

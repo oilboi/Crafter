@@ -5,10 +5,11 @@ import engine.graph.Texture;
 
 import java.util.ArrayList;
 
+import static game.ChunkHandling.ChunkData.getBlockInChunk;
+
 public class ChunkMesh {
-    private Mesh mesh;
-    private Texture texture;
-    public ChunkMesh(Chunk chunk, int chunkX, int chunkZ) throws Exception {
+
+    public static Mesh generateChunkMesh(Chunk chunk, int chunkX, int chunkZ) throws Exception {
 
         //why yes, this is a terrible way to do this
         //if you know a better way, feel free to make a pr
@@ -28,22 +29,18 @@ public class ChunkMesh {
         int offsetX = chunkX * 16;
         int offsetZ = chunkZ * 16;
 
-        short neighborBlock;
-
         //create the mesh
         for (int w = 0; w < (16 * 128 * 16); w++) {
-            short blockID = chunk.getBlock(x,y,z, chunkX, chunkZ);
-            System.out.println(blockID);
-            if (blockID != 0) {
+            if (getBlockInChunk(x,y,z, chunkX, chunkZ) != 0) {
                 //here for debug right now
-                float frontLight  = (float)Math.random();//1.0f;
-                float backLight   = (float)Math.random();//1.0f;
-                float rightLight  = (float)Math.random();//1.0f;
-                float leftLight   = (float)Math.random();//1.0f;
-                float topLight    = (float)Math.random();//1.0f;
-                float bottomLight = (float)Math.random();//1.0f;
+                float frontLight  = 1.0f;//(float)Math.random();//1.0f;
+                float backLight   = 1.0f;//(float)Math.random();//1.0f;
+                float rightLight  = 1.0f;//(float)Math.random();//1.0f;
+                float leftLight   = 1.0f;//(float)Math.random();//1.0f;
+                float topLight    = 1.0f;//(float)Math.random();//1.0f;
+                float bottomLight = 1.0f;//(float)Math.random();//1.0f;
 
-                neighborBlock = chunk.getBlock(x, y, z+1, 0, 0);
+                short neighborBlock = getBlockInChunk(x, y, z+1, chunkX, chunkZ);
                 if (neighborBlock == 0) {
                     //front
                     positions.add(1f + x + offsetX); positions.add(1f + y); positions.add(1f + z + offsetZ);
@@ -65,7 +62,7 @@ public class ChunkMesh {
                 }
 
 
-                neighborBlock = chunk.getBlock(x, y, z-1, 0, 0);
+                neighborBlock = getBlockInChunk(x, y, z-1, chunkX, chunkZ);
                 if (neighborBlock == 0) {
                     //back
                     positions.add(0f + x + offsetX); positions.add(1f + y); positions.add(0f + z + offsetZ);
@@ -86,7 +83,7 @@ public class ChunkMesh {
                     textureCoord.add(0.5f);textureCoord.add(0.5f);
                 }
 
-                neighborBlock = chunk.getBlock(x+1, y, z, 0, 0);
+                neighborBlock = getBlockInChunk(x+1, y, z, chunkX, chunkZ);
                 if (neighborBlock == 0) {
                     //right
                     positions.add(1f + x + offsetX); positions.add(1f + y); positions.add(0f + z + offsetZ);
@@ -107,7 +104,7 @@ public class ChunkMesh {
                     textureCoord.add(0.5f);textureCoord.add(0.5f);
                 }
 
-                neighborBlock = chunk.getBlock(x-1, y, z, 0, 0);
+                neighborBlock = getBlockInChunk(x-1, y, z, chunkX, chunkZ);
                 if (neighborBlock == 0) {
                     //left
                     positions.add(0f + x + offsetX); positions.add(1f + y); positions.add(1f + z + offsetZ);
@@ -128,7 +125,7 @@ public class ChunkMesh {
                     textureCoord.add(0.5f);textureCoord.add(0.5f);
                 }
 
-                neighborBlock = chunk.getBlock(x, y+1, z, 0, 0);
+                neighborBlock = getBlockInChunk(x, y+1, z, chunkX, chunkZ);
                 if (neighborBlock == 0) {
                     //top
                     positions.add(0f + x + offsetX); positions.add(1f + y); positions.add(0f + z + offsetZ);
@@ -149,7 +146,7 @@ public class ChunkMesh {
                     textureCoord.add(0.5f);textureCoord.add(1.0f);
                 }
 
-                neighborBlock = chunk.getBlock(x, y-1, z, 0, 0);
+                neighborBlock = getBlockInChunk(x, y-1, z, chunkX, chunkZ);
                 if (neighborBlock == 0) {
                     //bottom
                     positions.add(0f + x + offsetX); positions.add(0f + y);positions.add(1f + z + offsetZ);
@@ -206,12 +203,9 @@ public class ChunkMesh {
         }
 
 
-        texture = new Texture("textures/grassblock.png");
-        mesh = new Mesh(positionsArray, lightArray, indicesArray, textureCoordArray, texture);
-    }
+        Texture texture = new Texture("textures/grassblock.png");
+        Mesh mesh = new Mesh(positionsArray, lightArray, indicesArray, textureCoordArray, texture);
 
-    public Mesh getMesh(){
         return mesh;
     }
-
 }

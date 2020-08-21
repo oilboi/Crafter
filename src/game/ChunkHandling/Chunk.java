@@ -2,13 +2,13 @@ package game.ChunkHandling;
 
 import engine.FastNoise;
 
-import static game.Crafter.chunkRenderDistance;
+import java.util.Arrays;
 
 public class Chunk {
     //y x z - longest used for memory efficiency
-    private static short chunkSizeX = 16;
-    private static short chunkSizeY = 128;
-    private static short chunkSizeZ = 16;
+    private final static short chunkSizeX = 16;
+    private final static short chunkSizeY = 128;
+    private final static short chunkSizeZ = 16;
 
     private short[] block    = new short[chunkSizeX * chunkSizeY * chunkSizeZ];
     private byte[]  rotation = new byte[chunkSizeX * chunkSizeY * chunkSizeZ];
@@ -20,9 +20,10 @@ public class Chunk {
 //        genDebug();
 //        }
 //        genDebug();
-        genRandom();
+//        genRandom();
 //        genBiome(chunkX,chunkZ);
-//        genFlat();
+        genFlat();
+//        System.out.println(Arrays.toString(block));
     }
     public short[] getBlocks(){
         return block;
@@ -120,44 +121,7 @@ public class Chunk {
         }
     }
 
-    //this is full of magic numbers TODO: turn this into functions in ChunkMath
-    //+ render distance is getting it to base count 0
-    public static short getBlock(int x,int y,int z, int chunkX, int chunkZ){
-        chunkX += chunkRenderDistance;
-        chunkZ += chunkRenderDistance;
-        //neighbor checking
-        if(x < 0) {
-            if (chunkX - 1 >= 0) {
-                return ChunkData.getBlock(x+16,y,z,chunkX-1,chunkZ);
-            }
-            return 0;
-        } else if (x >= chunkSizeX) {
-            if ( chunkX + 1 <= chunkRenderDistance *2){
-                return ChunkData.getBlock(x-16,y,z,chunkX+1,chunkZ);
-            }
-            return 0;
 
-        } else if (y < 0 || y >= chunkSizeY) { //Y is caught regardless in the else clause if in bounds
-            return 0;
-
-        } else if (z < 0) {
-            if (chunkZ - 1 >= 0) {
-                return ChunkData.getBlock(x,y,z+16,chunkX,chunkZ-1);
-            }
-            return 0;
-
-        } else if (z >= chunkSizeZ) {
-            if (chunkZ + 1 <= chunkRenderDistance *2){
-                return ChunkData.getBlock(x,y,z-16,chunkX,chunkZ+1);
-            }
-            return 0;
-
-        }
-        //self chunk checking
-         else {
-            return ChunkData.getBlock(x,y,z,chunkX,chunkZ);
-        }
-    }
 
     public void setBlock(int hash, short newBlock){
         block[hash] = newBlock;

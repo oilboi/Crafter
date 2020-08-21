@@ -21,8 +21,8 @@ public class Chunk {
 //        }
 //        genDebug();
 //        genRandom();
-//        genBiome(chunkX,chunkZ);
-        genFlat();
+        genBiome(chunkX,chunkZ);
+//        genFlat();
 //        System.out.println(Arrays.toString(block));
     }
     public short[] getBlocks(){

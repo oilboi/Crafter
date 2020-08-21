@@ -20,7 +20,7 @@ import static org.lwjgl.glfw.GLFW.*;
 
 public class Crafter implements IGameLogic {
 
-    public final static int chunkRenderDistance = 55;
+    public final static int chunkRenderDistance = 10;
 
     private static final float MOUSE_SENSITIVITY = 0.05f;
 
@@ -32,9 +32,11 @@ public class Crafter implements IGameLogic {
 
     private GameItem[] gameItems;
 
-    private static final float CAMERA_POS_STEP = 0.1f;
+    private static final float CAMERA_POS_STEP = 0.5f;
 
     private boolean buttonPushed = false;
+
+    private String[] chunkNames;
 
     public static int getChunkRenderDistance(){
         return chunkRenderDistance;
@@ -51,27 +53,23 @@ public class Crafter implements IGameLogic {
         renderer.init(window);
 
 
-//        int x = 0;
-//        int z = 1;
         ArrayList items = new ArrayList();
+        ArrayList names = new ArrayList();
         for (int x = -chunkRenderDistance; x <= chunkRenderDistance; x++){
             for (int z = -chunkRenderDistance; z <= chunkRenderDistance; z++) {
-                System.out.println(x + " " + z);
                 Chunk chunk = new Chunk(x, z);
-
                 ChunkData.storeChunk(x, z, chunk);
-
-//                System.out.println(Arrays.toString(ChunkData.getChunk(x,z).getBlocks()));
-
-                GameItem test = new GameItem(generateChunkMesh(chunk, x, z));
-                items.add(test);
+                generateChunkMesh(chunk, x, z, items, names, false);
+                names.add(x + " " + z);
             }
         }
 
         //convert the position objects into usable array
         GameItem[] itemsArray = new GameItem[items.size()];
+        chunkNames = new String[names.size()];
         for (int i = 0; i < items.size(); i++) {
             itemsArray[i] = (GameItem)items.get(i);
+            chunkNames[i] = (String)names.get(i);
         }
 
         gameItems = itemsArray;
@@ -142,6 +140,13 @@ public class Crafter implements IGameLogic {
             camera.moveRotation(0,-360, 0);
         }
 
+//        for (int i = 0; i < chunkNames.length; i++){
+//            if (chunkNames[i].equals("5 1")){
+//                System.out.println(gameItems[i]);
+//                gameItems[i].setPosition(0,gameItems[i].getPosition().y + 0.001f, 0);
+//                break;
+//            }
+//        }
 
         //this is the game item loop
         for (GameItem gameItem : gameItems){

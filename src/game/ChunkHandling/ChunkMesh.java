@@ -1,5 +1,6 @@
 package game.ChunkHandling;
 
+import engine.GameItem;
 import engine.graph.Mesh;
 import engine.graph.Texture;
 
@@ -9,11 +10,7 @@ import static game.ChunkHandling.ChunkData.getBlockInChunk;
 
 public class ChunkMesh {
 
-    public static Mesh generateChunkMesh(Chunk chunk, int chunkX, int chunkZ) throws Exception {
-
-        //why yes, this is a terrible way to do this
-        //if you know a better way, feel free to make a pr
-
+    public static void generateChunkMesh(Chunk chunk, int chunkX, int chunkZ, ArrayList items, ArrayList names, boolean updating) throws Exception {
         int x = 0;
         int y = 0;
         int z = 0;
@@ -28,6 +25,8 @@ public class ChunkMesh {
 
         int offsetX = chunkX * 16;
         int offsetZ = chunkZ * 16;
+
+
 
         //create the mesh
         for (int w = 0; w < (16 * 128 * 16); w++) {
@@ -147,7 +146,7 @@ public class ChunkMesh {
                 }
 
                 neighborBlock = getBlockInChunk(x, y-1, z, chunkX, chunkZ);
-                if (neighborBlock == 0) {
+                if (neighborBlock == 0 && y != 0) {
                     //bottom
                     positions.add(0f + x + offsetX); positions.add(0f + y);positions.add(1f + z + offsetZ);
                     positions.add(0f + x + offsetX); positions.add(0f + y);positions.add(0f + z + offsetZ);
@@ -206,6 +205,14 @@ public class ChunkMesh {
         Texture texture = new Texture("textures/grassblock.png");
         Mesh mesh = new Mesh(positionsArray, lightArray, indicesArray, textureCoordArray, texture);
 
-        return mesh;
+
+        if (updating) {
+            for (int i = 0; i < names.size(); i++) {
+                if (names.get(i).equals(chunkX + " " + chunkZ)){
+                    System.out.println("remove this");
+                }
+            }
+        }
+        items.add(new GameItem(mesh));
     }
 }

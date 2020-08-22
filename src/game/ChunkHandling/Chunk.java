@@ -47,8 +47,8 @@ public class Chunk {
 
             light[ChunkMath.genHash(x, y, z)] = lightLevel;//(byte)(Math.random()*16);
 
-            if (currblock != 0 ){
-                lightLevel = 0;
+            if (currblock != 0 && lightLevel > 0){
+                lightLevel --;
             }
             y--;
 

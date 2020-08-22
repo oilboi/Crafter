@@ -1,6 +1,7 @@
 package game.collision;
 
 import org.joml.Vector3f;
+import org.lwjgl.system.CallbackI;
 
 import static game.ChunkHandling.ChunkData.getBlockInChunk;
 import static game.Crafter.getChunkRenderDistance;
@@ -8,7 +9,7 @@ import static game.Crafter.getChunkRenderDistance;
 public class Collision {
     private static int renderDistance = getChunkRenderDistance();
     final private static float gameSpeed = 0.001f;
-    public static void applyInertia(Vector3f pos, Vector3f inertia, boolean onGround, float width, float height, boolean gravity){
+    public static boolean applyInertia(Vector3f pos, Vector3f inertia, boolean onGround, float width, float height, boolean gravity){
         if(gravity) {
             inertia.y -= 50f * gameSpeed; //gravity
         }
@@ -24,7 +25,7 @@ public class Collision {
         pos.y += inertia.y * gameSpeed;
         pos.z += inertia.z * gameSpeed;
 
-        collisionDetect(pos, inertia, onGround, width, height);
+        onGround = collisionDetect(pos, inertia, onGround, width, height);
 
         //apply friction
         inertia.x += -inertia.x * gameSpeed * 10; // do (10 - 9.5f) for slippery!
@@ -35,9 +36,11 @@ public class Collision {
             pos.y += 100f;
             pos.z = 0;
         }
+
+        return onGround;
     }
 
-    private static void collisionDetect(Vector3f pos, Vector3f inertia, boolean onGround, float width, float height){
+    private static boolean collisionDetect(Vector3f pos, Vector3f inertia, boolean onGround, float width, float height){
         onGround = false;
 
         //get the real positions of the blocks
@@ -67,13 +70,14 @@ public class Collision {
         for(int i = 0; i < index; i++) {
             //virtualBlock[i]; //this is the block object
             CustomAABB us = new CustomAABB(pos.x, pos.y, pos.z, width, height);
-            collide(us, virtualBlock[i], pos, inertia, width, height, onGround);
+            onGround = collide(us, virtualBlock[i], pos, inertia, width, height, onGround);
         }
+        return onGround;
     }
 
 
     //this is where actual collision events occur!
-    public static void collide(CustomAABB us, CustomBlockBox block, Vector3f pos, Vector3f inertia, float width, float height, boolean onGround){
+    public static boolean collide(CustomAABB us, CustomBlockBox block, Vector3f pos, Vector3f inertia, float width, float height, boolean onGround){
         boolean xWithin = !(us.getLeft()   > block.getRight() || us.getRight() < block.getLeft());
         boolean yWithin = !(us.getBottom() > block.getTop()   || us.getTop()   < block.getBottom());
         boolean zWithin = !(us.getFront()  > block.getBack()  || us.getBack()  < block.getFront());
@@ -170,6 +174,7 @@ public class Collision {
                 }
             }
         }
+        return onGround;
     }
 
     private static boolean detectBlock(Vector3f flooredPos){

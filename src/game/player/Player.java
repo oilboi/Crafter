@@ -9,14 +9,14 @@ import static game.collision.Collision.applyInertia;
 
 public class Player {
     private static int renderDistance = getChunkRenderDistance();
-
     private Vector3f pos = new Vector3f(0,50,0);
     private float eyeHeight = 1.5f;
     private Vector3f inertia = new Vector3f(0,0,0);
     private float height = 1.9f;
     private float width = 0.3f;
     private int[] currentChunk = {0,0};
-    private boolean onGround = false;
+
+    private Boolean onGround =  new Boolean(false);
     private boolean jumpBuffer = false;
     private boolean mining = false;
     private float mineTimer = 0;
@@ -126,8 +126,8 @@ public class Player {
 //            }
 //        }
 
-        applyInertia(pos, inertia, onGround, width, height,true);
-
+        onGround = applyInertia(pos, inertia, onGround, width, height,true);
+        
 //        int[] current = new int[2];
 //        Vector3f flooredPos = pos;
 //        flooredPos.x = (float)Math.floor(flooredPos.x);
@@ -154,7 +154,7 @@ public class Player {
     }
 
 
-    public boolean isOnGround(){
+    public Boolean isOnGround(){
         return onGround;
     }
 

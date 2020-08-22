@@ -112,8 +112,9 @@ public class Crafter implements IGameLogic {
 
         if (window.isKeyPressed(GLFW_KEY_LEFT_SHIFT)){
             //cameraInc.y = -1;
-        } else if (window.isKeyPressed(GLFW_KEY_SPACE)){
-            //cameraInc.y = 1;
+        }
+        if (window.isKeyPressed(GLFW_KEY_SPACE) && player.isOnGround()){
+            player.addInertia(0,12f,0);
         }
 
         //prototype toggle locking mouse - F KEY

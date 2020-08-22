@@ -21,8 +21,8 @@ public class Chunk {
 //        genDebug();
 //        }
 //        genDebug();
-//        genRandom();
-        genBiome(chunkX,chunkZ);
+        genRandom();
+//        genBiome(chunkX,chunkZ);
 //        genFlat();
 //        System.out.println(Arrays.toString(block));
     }
@@ -37,14 +37,24 @@ public class Chunk {
     //randomly assign block ids
     public void genRandom(){
         int x = 0;
-        int y = 0;
+        int y = 127;
         int z = 0;
+        byte lightLevel = 16;
         for ( int i = 0; i < (chunkSizeX * chunkSizeY * chunkSizeZ); i++){
-            block[ChunkMath.genHash(x, y, z)] = (short)(Math.random() * 5);
-            light[ChunkMath.genHash(x, y, z)] = (byte)(Math.random()*16);
-            y++;
-            if( y > chunkSizeY - 1){
-                y = 0;
+            short currblock = (short)(Math.random() * 2);
+
+            block[ChunkMath.genHash(x, y, z)] = currblock;
+
+            light[ChunkMath.genHash(x, y, z)] = lightLevel;//(byte)(Math.random()*16);
+
+            if (currblock != 0 ){
+                lightLevel = 0;
+            }
+            y--;
+
+            if( y < 0){
+                y = 127;
+                lightLevel = 16;
                 x++;
                 if( x > chunkSizeX - 1 ){
                     x = 0;

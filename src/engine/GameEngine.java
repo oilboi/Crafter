@@ -53,9 +53,9 @@ public class GameEngine implements Runnable{
 
             input();
 
-            while (accumulator >= 10_000_000){
+            while (accumulator >= 1_000_000){
                 update(0f);
-                accumulator -= 10_000_000;
+                accumulator -= 1_000_000;
             }
 
             render();

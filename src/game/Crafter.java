@@ -5,24 +5,22 @@ import engine.IGameLogic;
 import engine.MouseInput;
 import engine.Window;
 import engine.graph.Camera;
-import engine.graph.Mesh;
 import game.ChunkHandling.Chunk;
 import game.ChunkHandling.ChunkData;
-import game.ChunkHandling.ChunkMesh;
+import game.player.Player;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import static game.ChunkHandling.ChunkMesh.generateChunkMesh;
 import static org.lwjgl.glfw.GLFW.*;
 
 public class Crafter implements IGameLogic {
 
-    public final static int chunkRenderDistance = 6;
+    public final static int chunkRenderDistance = 2;
 
-    private static final float MOUSE_SENSITIVITY = 0.05f;
+    private static final float MOUSE_SENSITIVITY = 0.01f;
 
     private final Vector3f cameraInc;
 
@@ -37,6 +35,8 @@ public class Crafter implements IGameLogic {
     private boolean buttonPushed = false;
 
     private String[] chunkNames;
+
+    private Player player;
 
     public static int getChunkRenderDistance(){
         return chunkRenderDistance;
@@ -75,27 +75,45 @@ public class Crafter implements IGameLogic {
 
         gameItems = itemsArray;
 
+        player = new Player();
     }
 
     @Override
     public void input(Window window, MouseInput input){
-        cameraInc.set(0,0,0);
+        boolean keyIsPressed = false;
         if (window.isKeyPressed(GLFW_KEY_W)){
-            cameraInc.z = -1;
-        } else if (window.isKeyPressed(GLFW_KEY_S)){
-            cameraInc.z = 1;
+            float yaw = (float)Math.toRadians(camera.getRotation().y) + (float)Math.PI;
+            float x = (float)Math.sin(-yaw);
+            float z = (float)Math.cos(yaw);
+            player.addInertia(x,0,z);
+        }
+        if (window.isKeyPressed(GLFW_KEY_S)){
+            //no mod needed
+            float yaw = (float)Math.toRadians(camera.getRotation().y);
+            float x = (float)Math.sin(-yaw);
+            float z = (float)Math.cos(yaw);
+            player.addInertia(x,0,z);
         }
 
         if (window.isKeyPressed(GLFW_KEY_A)){
-            cameraInc.x = -1;
-        } else if (window.isKeyPressed(GLFW_KEY_D)){
-            cameraInc.x = 1;
+            float yaw = (float)Math.toRadians(camera.getRotation().y) + (float)(Math.PI /2);
+            float x = (float)Math.sin(-yaw);
+            float z = (float)Math.cos(yaw);
+            player.addInertia(x,0,z);
+        }
+        if (window.isKeyPressed(GLFW_KEY_D)){
+            float yaw = (float)Math.toRadians(camera.getRotation().y) - (float)(Math.PI /2);
+            float x = (float)Math.sin(-yaw);
+            float z = (float)Math.cos(yaw);
+            player.addInertia(x,0,z);
         }
 
+
+
         if (window.isKeyPressed(GLFW_KEY_LEFT_SHIFT)){
-            cameraInc.y = -1;
+            //cameraInc.y = -1;
         } else if (window.isKeyPressed(GLFW_KEY_SPACE)){
-            cameraInc.y = 1;
+            //cameraInc.y = 1;
         }
 
         //prototype toggle locking mouse - F KEY
@@ -118,9 +136,11 @@ public class Crafter implements IGameLogic {
     public void update(float interval, MouseInput mouseInput){
 
         //update camera position
-        camera.movePosition(cameraInc.x * CAMERA_POS_STEP,
-                cameraInc.y * CAMERA_POS_STEP,
-                cameraInc.z * CAMERA_POS_STEP);
+//        camera.movePosition(cameraInc.x * CAMERA_POS_STEP,
+//                cameraInc.y * CAMERA_POS_STEP,
+//                cameraInc.z * CAMERA_POS_STEP);
+
+        camera.setPosition(player.getPosWithEyeHeight().x, player.getPosWithEyeHeight().y, player.getPosWithEyeHeight().z);
 
         //update camera based on mouse
         Vector2f rotVec = mouseInput.getDisplVec();
@@ -140,6 +160,10 @@ public class Crafter implements IGameLogic {
         if (camera.getRotation().y > 180f){
             camera.moveRotation(0,-360, 0);
         }
+
+        player.onTick();
+
+//        System.out.println(Player.getPos().y);
 
 //        for (int i = 0; i < chunkNames.length; i++){
 //            if (chunkNames[i].equals("5 1")){

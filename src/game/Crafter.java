@@ -18,7 +18,7 @@ import static org.lwjgl.glfw.GLFW.*;
 
 public class Crafter implements IGameLogic {
 
-    public final static int chunkRenderDistance = 2;
+    public final static int chunkRenderDistance = 4;
 
     private static final float MOUSE_SENSITIVITY = 0.01f;
 
@@ -32,7 +32,9 @@ public class Crafter implements IGameLogic {
 
     private static final float CAMERA_POS_STEP = 0.5f;
 
-    private boolean buttonPushed = false;
+    private boolean fButtonPushed = false;
+
+    private boolean rButtonPushed = false;
 
     private String[] chunkNames;
 
@@ -51,7 +53,6 @@ public class Crafter implements IGameLogic {
     @Override
     public void init(Window window) throws Exception{
         renderer.init(window);
-
 
         ArrayList items = new ArrayList();
         ArrayList names = new ArrayList();
@@ -119,9 +120,9 @@ public class Crafter implements IGameLogic {
 
         //prototype toggle locking mouse - F KEY
         if (window.isKeyPressed(GLFW_KEY_F)) {
-            if (!buttonPushed) {
+            if (!fButtonPushed) {
                 input.setMouseLocked(!input.isMouseLocked());
-                buttonPushed = true;
+                fButtonPushed = true;
                 if(!input.isMouseLocked()) {
                     glfwSetInputMode(window.getWindowHandle(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
                 } else{
@@ -129,17 +130,22 @@ public class Crafter implements IGameLogic {
                 }
             }
         } else if (!window.isKeyPressed(GLFW_KEY_F)){
-            buttonPushed = false;
+            fButtonPushed = false;
+        }
+
+        //prototype reset position - R KEY
+        if (window.isKeyPressed(GLFW_KEY_R)) {
+            if (!rButtonPushed) {
+                rButtonPushed = true;
+                player.setPos(new Vector3f(0,129,0));
+            }
+        } else if (!window.isKeyPressed(GLFW_KEY_R)){
+            rButtonPushed = false;
         }
     }
 
     @Override
     public void update(float interval, MouseInput mouseInput){
-
-        //update camera position
-//        camera.movePosition(cameraInc.x * CAMERA_POS_STEP,
-//                cameraInc.y * CAMERA_POS_STEP,
-//                cameraInc.z * CAMERA_POS_STEP);
 
         camera.setPosition(player.getPosWithEyeHeight().x, player.getPosWithEyeHeight().y, player.getPosWithEyeHeight().z);
 

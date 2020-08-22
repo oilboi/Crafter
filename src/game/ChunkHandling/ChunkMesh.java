@@ -31,7 +31,7 @@ public class ChunkMesh {
         //create the mesh
         for (int w = 0; w < (16 * 128 * 16); w++) {
             if (getBlockInChunk(x,y,z, chunkX, chunkZ) != 0) {
-                byte thisLight = 16;//getLight(x,y,z,chunkX,chunkZ);
+                byte thisLight = getLight(x,y,z,chunkX,chunkZ);
 
                 //here for debug right now
                 float frontLight  = thisLight/16f;//1.0f;//(float)Math.random();//1.0f;

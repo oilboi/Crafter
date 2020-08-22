@@ -9,7 +9,7 @@ import static game.collision.Collision.applyInertia;
 
 public class Player {
     private static int renderDistance = getChunkRenderDistance();
-    private Vector3f pos = new Vector3f(0,50,0);
+    private Vector3f pos = new Vector3f(0,129,0);
     private float eyeHeight = 1.5f;
     private Vector3f inertia = new Vector3f(0,0,0);
     private float height = 1.9f;
@@ -127,7 +127,7 @@ public class Player {
 //        }
 
         onGround = applyInertia(pos, inertia, onGround, width, height,true);
-        
+
 //        int[] current = new int[2];
 //        Vector3f flooredPos = pos;
 //        flooredPos.x = (float)Math.floor(flooredPos.x);

@@ -18,6 +18,8 @@ import static org.lwjgl.glfw.GLFW.*;
 
 public class Crafter implements IGameLogic {
 
+    public int test = 5;
+
     public final static int chunkRenderDistance = 2;
 
     private static final float MOUSE_SENSITIVITY = 0.01f;

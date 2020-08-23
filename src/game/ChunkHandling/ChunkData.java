@@ -1,8 +1,13 @@
 package game.ChunkHandling;
 
 
+import engine.GameItem;
 import game.Crafter;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import static game.ChunkHandling.ChunkMesh.generateChunkMesh;
 import static game.Crafter.getChunkRenderDistance;
 
 public class ChunkData {
@@ -145,5 +150,64 @@ public class ChunkData {
                 lightLevel --;
             }
         }
+    }
+
+    public static void floodFillTest(int posX, int posY, int posZ, GameItem[] gameItems, String[] chunkNames) throws Exception {
+        ArrayList<int[]> chunkBuffer = new ArrayList();
+
+        //System.out.println(posX + " " + posY + " " + posZ);
+
+        for (int x = posX-16; x < posX + 16; x++){
+            for (int y = posY - 16; y < posY + 16; y++) {
+                for (int z = posZ - 16; z < posZ + 16; z++) {
+                    int currentChunkX = (int) (Math.floor((float) x / 16f));
+                    int currentChunkZ = (int) (Math.floor((float) z / 16f));
+
+
+                    int currentPosX = x - (16*currentChunkX);
+                    int currentPosZ = z - (16*currentChunkZ);
+
+                    if (currentChunkX >= -chunkRenderDistance && currentChunkX <= chunkRenderDistance && currentChunkZ >= -chunkRenderDistance && currentChunkZ <= chunkRenderDistance){
+                        if(y >= 0 && y <= 127) {
+
+
+                            byte lightLevel = (byte)(16 - getDistance(posX, posY, posZ, x, y, z));
+                            if(lightLevel < 0){
+                                lightLevel = 0;
+                            }
+
+
+                            getChunk(currentChunkX, currentChunkZ).setLight(ChunkMath.genHash(currentPosX, y, currentPosZ), lightLevel);
+
+                            //add chunks to chunk generation buffer ID: 555
+                            boolean found = false;
+                            if (chunkBuffer.size() > 0) {
+                                for (int[] index : chunkBuffer) {
+                                    if (index[0] == currentChunkX && index[1] == currentChunkZ) {
+                                        found = true;
+                                    }
+                                }
+                            }
+                            if (!found) {
+                                chunkBuffer.add(new int[]{currentChunkX, currentChunkZ});
+                            }
+                            //end: ID: 555
+                        }
+                    }
+                }
+            }
+        }
+
+        for (int[] index : chunkBuffer) {
+//            System.out.println(index[0]);
+            generateChunkMesh(getChunk(index[0],index[1]), index[0], index[1], gameItems, chunkNames, true);
+        }
+    }
+
+    private static float getDistance(float x1, float y1, float z1, float x2, float y2, float z2){
+        float x = x1 - x2;
+        float y = y1 - y2;
+        float z = z1 - z2;
+        return (float)Math.hypot(x, Math.hypot(y,z));
     }
 }

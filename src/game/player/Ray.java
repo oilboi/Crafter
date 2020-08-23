@@ -64,7 +64,7 @@ public class Ray {
 
 //        short thisBlock = getBlockInChunk((int)realPos.x, (int)realPos.y, (int)realPos.z, current[0], current[1]);
         setBlock((int)realPos.x, (int)realPos.y, (int)realPos.z, currentChunkX, currentChunkZ, (short) 0);
-        
+
         updateLightColumn((int)realPos.x, (int)realPos.z, currentChunkX, currentChunkZ);
 
         generateChunkMesh(getChunk(currentChunkX,currentChunkZ), currentChunkX, currentChunkZ, gameItems, chunkNames, true);

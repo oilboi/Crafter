@@ -5,6 +5,9 @@ import engine.graph.Camera;
 import org.joml.Vector3f;
 import org.lwjgl.system.CallbackI;
 
+import java.util.Arrays;
+
+import static game.ChunkHandling.ChunkData.floodFillTest;
 import static game.ChunkHandling.ChunkData.getBlockInChunk;
 import static game.Crafter.getChunkRenderDistance;
 import static game.collision.Collision.applyInertia;
@@ -13,6 +16,11 @@ import static game.player.Ray.rayCast;
 public class Player {
     private static int renderDistance = getChunkRenderDistance();
     private Vector3f pos = new Vector3f(0,129,0);
+
+    private int[] blockPos = {0,129,0};
+    private int[] oldBlockPos = {0,129,0};
+
+
     private float eyeHeight = 1.5f;
     private Vector3f inertia = new Vector3f(0,0,0);
     private float height = 1.9f;
@@ -104,7 +112,29 @@ public class Player {
         }
     }
 
+    private short getBlock(float x, float y, float z){
+        Vector3f flooredPos = pos;
+        flooredPos.x = (float)Math.floor(flooredPos.x + x);
+        flooredPos.y = (float)Math.floor(flooredPos.y + y);
+        flooredPos.z = (float)Math.floor(flooredPos.z + z);
 
+        int[] current = new int[2];
+        current[0] = (int)(Math.floor(flooredPos.x / 16f));
+        current[1] = (int)(Math.floor(flooredPos.z / 16f));
+
+        Vector3f realPos = new Vector3f(flooredPos.x - (16*current[0]), flooredPos.y, flooredPos.z - (16*current[1]));
+
+        return getBlockInChunk((int)realPos.x, (int)realPos.y, (int)realPos.z, current[0]+renderDistance, current[1]+renderDistance);
+    }
+
+
+    public Boolean isOnGround(){
+        return onGround;
+    }
+
+    public void setJumpBuffer(){
+        jumpBuffer = true;
+    }
 
     public void onTick(Camera camera, GameItem[] gameItems, String[] chunkNames) throws Exception {
 
@@ -131,37 +161,14 @@ public class Player {
             rayCast(camera.getPosition(), camera.getRotationVector(), 4f, gameItems, chunkNames, false, true, this);
             placeTimer = 0.5f;
         }
-//        int[] current = new int[2];
-//        Vector3f flooredPos = pos;
-//        flooredPos.x = (float)Math.floor(flooredPos.x);
-//        flooredPos.z = (float)Math.floor(flooredPos.z);
-//        current[0] = (int)(Math.floor(flooredPos.x / 16f));
-//        current[1] = (int)(Math.floor(flooredPos.z / 16f));
-//        currentChunk = current;
 
-    }
+        blockPos = new int[]{(int)Math.floor(pos.x), (int)Math.floor(pos.y),(int)Math.floor(pos.z)};
 
-    private short getBlock(float x, float y, float z){
-        Vector3f flooredPos = pos;
-        flooredPos.x = (float)Math.floor(flooredPos.x + x);
-        flooredPos.y = (float)Math.floor(flooredPos.y + y);
-        flooredPos.z = (float)Math.floor(flooredPos.z + z);
+        if(blockPos[0] != oldBlockPos[0] || blockPos[1] != oldBlockPos[1] || blockPos[2] != oldBlockPos[2]){
 
-        int[] current = new int[2];
-        current[0] = (int)(Math.floor(flooredPos.x / 16f));
-        current[1] = (int)(Math.floor(flooredPos.z / 16f));
+            floodFillTest(blockPos[0], blockPos[1], blockPos[2], gameItems, chunkNames);
+        }
 
-        Vector3f realPos = new Vector3f(flooredPos.x - (16*current[0]), flooredPos.y, flooredPos.z - (16*current[1]));
-
-        return getBlockInChunk((int)realPos.x, (int)realPos.y, (int)realPos.z, current[0]+renderDistance, current[1]+renderDistance);
-    }
-
-
-    public Boolean isOnGround(){
-        return onGround;
-    }
-
-    public void setJumpBuffer(){
-        jumpBuffer = true;
+        oldBlockPos = blockPos.clone();
     }
 }

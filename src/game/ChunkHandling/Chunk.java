@@ -67,18 +67,30 @@ public class Chunk {
     //generate flat
     public void genFlat(){
         int x = 0;
-        int y = 0;
+        int y = 127;
         int z = 0;
+        byte lightLevel = 16;
         for ( int i = 0; i < (chunkSizeX * chunkSizeY * chunkSizeZ); i++){
+
+            short currBlock;
+
             if (y < 20) {
-                block[ChunkMath.genHash(x, y, z)] = 1;
+                currBlock = 1;
             }else{
-                block[ChunkMath.genHash(x, y, z)] = 0;
+                currBlock = 0;
             }
-            light[ChunkMath.genHash(x, y, z)] = (byte)(Math.random()*16);
-            y++;
-            if( y > chunkSizeY - 1){
-                y = 0;
+
+            block[ChunkMath.genHash(x, y, z)] = currBlock;
+            light[ChunkMath.genHash(x, y, z)] = lightLevel;
+
+            if (currBlock != 0 && lightLevel > 0){
+                lightLevel --;
+            }
+
+            y--;
+            if( y < 0){
+                y = 127;
+                lightLevel = 16;
                 x++;
                 if( x > chunkSizeX - 1 ){
                     x = 0;

@@ -107,7 +107,7 @@ public class Player {
 
 
     public void onTick(Camera camera, GameItem[] gameItems, String[] chunkNames) throws Exception {
-        
+
         if(placeTimer > 0){
             placeTimer -= 0.003f;
             if (placeTimer < 0.1){

@@ -156,6 +156,13 @@ public class Crafter implements IGameLogic {
         } else {
             player.setMining(false);
         }
+
+        //mouse right button input
+        if(input.isRightButtonPressed()){
+            player.setPlacing(true);
+        } else {
+            player.setPlacing(false);
+        }
     }
 
     @Override

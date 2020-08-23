@@ -48,11 +48,13 @@ public class Player {
     }
 
 
-    public void setPlacing() {
-        if (placeTimer == 0) {
-            placing = true;
-            placeTimer = 20;
-        }
+    public void setPlacing( boolean placing) {
+//        if (placeTimer == 0) {
+//            placing = true;
+//            placeTimer = 20;
+//        }
+
+        this.placing = placing;
     }
 
     public float getHeight(){
@@ -116,28 +118,28 @@ public class Player {
 //            placing = false;
 //        }
 //
-//        if(placeTimer > 0){
-//            placeTimer -= 0.1f;
-//            if (placeTimer < 0.1){
-//                placeTimer = 0;
-//            }
-//        }
+        if(placeTimer > 0){
+            placeTimer -= 0.003f;
+            if (placeTimer < 0.1){
+                placeTimer = 0;
+            }
+        }
 
-//        if(mineTimer > 0){
-//            mineTimer -= 0.1f;
-//            if (mineTimer < 0.1){
-//                mineTimer = 0;
-//            }
-//        }
+        if(mineTimer > 0){
+            mineTimer -= 0.003f;
+            if (mineTimer < 0.1){
+                mineTimer = 0;
+            }
+        }
 
         onGround = applyInertia(pos, inertia, onGround, width, height,true);
 
-
-//        System.out.println(camera.getRotationVector().x + " " + camera.getRotationVector().y + " " + camera.getRotationVector().z);
-
-//        System.out.println(mining);
-        if(mining) {
-            rayCast(camera.getPosition(), camera.getRotationVector(), 4f, gameItems, chunkNames);
+        if(mining && mineTimer <= 0) {
+            rayCast(camera.getPosition(), camera.getRotationVector(), 4f, gameItems, chunkNames, true, false, this);
+            mineTimer = 0.5f;
+        } else if (placing && placeTimer <= 0){
+            rayCast(camera.getPosition(), camera.getRotationVector(), 4f, gameItems, chunkNames, false, true, this);
+            placeTimer = 0.5f;
         }
 //        int[] current = new int[2];
 //        Vector3f flooredPos = pos;

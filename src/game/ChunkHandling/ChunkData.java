@@ -152,14 +152,15 @@ public class ChunkData {
         }
     }
 
+    private static final byte torchDistance = 10;
     public static void floodFillTest(int posX, int posY, int posZ, GameItem[] gameItems, String[] chunkNames) throws Exception {
         ArrayList<int[]> chunkBuffer = new ArrayList();
 
         //System.out.println(posX + " " + posY + " " + posZ);
-
-        for (int x = posX-16; x < posX + 16; x++){
-            for (int y = posY - 16; y < posY + 16; y++) {
-                for (int z = posZ - 16; z < posZ + 16; z++) {
+        byte lightLevel;
+        for (int x = posX-torchDistance; x < posX + torchDistance; x++){
+            for (int y = posY - torchDistance; y < posY + torchDistance; y++) {
+                for (int z = posZ - torchDistance; z < posZ + torchDistance; z++) {
                     int currentChunkX = (int) (Math.floor((float) x / 16f));
                     int currentChunkZ = (int) (Math.floor((float) z / 16f));
 
@@ -171,9 +172,11 @@ public class ChunkData {
                         if(y >= 0 && y <= 127) {
 
 
-                            byte lightLevel = (byte)(16 - getDistance(posX, posY, posZ, x, y, z));
+                            lightLevel = (byte)(torchDistance - getDistance(posX, posY, posZ, x, y, z));
                             if(lightLevel < 0){
                                 lightLevel = 0;
+                            } else if (lightLevel > 16){
+                                lightLevel = 16;
                             }
 
 

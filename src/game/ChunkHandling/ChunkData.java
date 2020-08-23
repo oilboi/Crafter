@@ -127,4 +127,23 @@ public class ChunkData {
             return ChunkData.getBlock(x,y,z,chunkX,chunkZ);
         }
     }
+    public static void updateLightColumn(int x,int z, int chunkX, int chunkZ){
+        chunkX += chunkRenderDistance;
+        chunkZ += chunkRenderDistance;
+        if (chunkX < 0 || chunkX > chunkRenderDistance *2 || chunkZ < 0 || chunkZ > chunkRenderDistance *2){
+            return;
+        }
+        Chunk thisChunk = chunkArray[chunkX][chunkZ];
+        if (thisChunk == null) {
+            return;
+        }
+
+        byte lightLevel = 16;
+        for (int y = 127; y >= 0; y--) {
+            thisChunk.setLight(ChunkMath.genHash(x, y, z), lightLevel);
+            if (getBlock(x,y,z,chunkX,chunkZ) != 0 && lightLevel > 0){
+                lightLevel --;
+            }
+        }
+    }
 }

@@ -103,7 +103,6 @@ public class Chunk {
 
 
     private FastNoise noisey = new FastNoise();
-
     private int heightAdder = 40;
     private byte dirtHeight = 4;
     //a basic biome test for terrain generation
@@ -156,6 +155,10 @@ public class Chunk {
 
     public void setBlock(int hash, short newBlock){
         block[hash] = newBlock;
+    }
+
+    public void setLight(int hash, byte light){
+        this.light[hash] = light;
     }
 
     //debug testing for now

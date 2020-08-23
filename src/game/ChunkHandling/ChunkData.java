@@ -131,7 +131,7 @@ public class ChunkData {
     }
 
     //+ render distance is getting it to base count 0
-    public static short getLightInChunk(int x,int y,int z, int chunkX, int chunkZ){
+    public static byte getLightInChunk(int x,int y,int z, int chunkX, int chunkZ){
         chunkX += chunkRenderDistance;
         chunkZ += chunkRenderDistance;
 
@@ -203,31 +203,34 @@ public class ChunkData {
     }
 
     public static void updateLighting(int x, int y, int z, int chunkX, int chunkZ) {
-//        System.out.println("this is a new block:");
-//        System.out.println(x);
-//        System.out.println(y);
-//        System.out.println(z);
-//        System.out.println(chunkX);
-//        System.out.println(chunkZ);
         //get max local lighting
-        byte maxLight = 0;
         if(underSunlight(x,y,z, chunkX,chunkZ)){
             System.out.println("this is actually under sunlight");
-//            getChunk(chunkX-chunkRenderDistance, chunkZ-chunkRenderDistance).setLight(ChunkMath.genHash(x, y, z), (byte)16);
+            getChunk(chunkX-chunkRenderDistance, chunkZ-chunkRenderDistance).setLight(ChunkMath.genHash(x, y, z), (byte)16);
             return;//set the light to max and don't run the loop
         }
 
-        System.out.println("this is not under direct sunlight");
+        byte maxLight = 0;
         //index the local light area
         for (int xx = -1; xx <= 1; xx++) {
             for (int yy = -1; yy <= 1; yy++) {
                 for (int zz = -1; zz <= 1; zz++) {
                     if (Math.abs(xx) + Math.abs(yy) + Math.abs(zz) == 1) {
                         //System.out.println(xx + " " + yy + " " + zz);
+                        byte indexedLight = getLightInChunk(x+xx, y+yy, z+zz, chunkX-chunkRenderDistance, chunkZ-chunkRenderDistance);
+                        if (indexedLight > maxLight){
+                            maxLight = indexedLight;
+                        }
                     }
                 }
             }
         }
+        //fade light off
+        if (maxLight > 0){
+            maxLight -= 1;
+        }
+
+        getChunk(chunkX-chunkRenderDistance, chunkZ-chunkRenderDistance).setLight(ChunkMath.genHash(x, y, z), maxLight);
     }
 
     private static final byte torchDistance = 10;

@@ -18,7 +18,7 @@ import static org.lwjgl.glfw.GLFW.*;
 
 public class Crafter implements IGameLogic {
 
-    public final static int chunkRenderDistance = 4;
+    public final static int chunkRenderDistance = 3;
 
     private static final float MOUSE_SENSITIVITY = 0.01f;
 
@@ -53,35 +53,41 @@ public class Crafter implements IGameLogic {
     @Override
     public void init(Window window) throws Exception{
         renderer.init(window);
-
-        ArrayList items = new ArrayList();
-        ArrayList names = new ArrayList();
-        for (int x = -chunkRenderDistance; x <= chunkRenderDistance; x++){
+        //this is a lazy way to deduce the amount of chunks there are in the map
+        int index = 0;
+        for (int x = -chunkRenderDistance; x <= chunkRenderDistance; x++) {
             for (int z = -chunkRenderDistance; z <= chunkRenderDistance; z++) {
-                Chunk chunk = new Chunk(x, z);
-                ChunkData.storeChunk(x, z, chunk);
-                generateChunkMesh(chunk, x, z, items, names, false);
-                names.add(x + " " + z);
-                System.out.println(x + " " + z);
+                index++;
             }
         }
 
-        //convert the position objects into usable array
-        GameItem[] itemsArray = new GameItem[items.size()];
-        chunkNames = new String[names.size()];
-        for (int i = 0; i < items.size(); i++) {
-            itemsArray[i] = (GameItem)items.get(i);
-            chunkNames[i] = (String)names.get(i);
+        gameItems = new GameItem[index];
+        chunkNames = new String[index];
+
+        index = 0;
+        //build an index of names for assignment/access
+        for (int x = -chunkRenderDistance; x <= chunkRenderDistance; x++) {
+            for (int z = -chunkRenderDistance; z <= chunkRenderDistance; z++) {
+                chunkNames[index] = x + " " + z;
+                index++;
+            }
         }
 
-        gameItems = itemsArray;
-
+        //create the initial map
+        for (int x = -chunkRenderDistance; x <= chunkRenderDistance; x++) {
+            for (int z = -chunkRenderDistance; z <= chunkRenderDistance; z++) {
+                Chunk chunk = new Chunk(x, z);
+                ChunkData.storeChunk(x, z, chunk);
+                generateChunkMesh(chunk, x, z, gameItems, chunkNames, false);
+                System.out.println(x + " " + z);
+            }
+        }
+        System.out.println("Wow! It's done!");
         player = new Player();
     }
 
     @Override
     public void input(Window window, MouseInput input){
-        boolean keyIsPressed = false;
         if (window.isKeyPressed(GLFW_KEY_W)){
             float yaw = (float)Math.toRadians(camera.getRotation().y) + (float)Math.PI;
             float x = (float)Math.sin(-yaw);
@@ -142,10 +148,18 @@ public class Crafter implements IGameLogic {
         } else if (!window.isKeyPressed(GLFW_KEY_R)){
             rButtonPushed = false;
         }
+
+
+        //mouse left button input
+        if(input.isLeftButtonPressed()){
+            player.setMining(true);
+        } else {
+            player.setMining(false);
+        }
     }
 
     @Override
-    public void update(float interval, MouseInput mouseInput){
+    public void update(float interval, MouseInput mouseInput) throws Exception {
 
         camera.setPosition(player.getPosWithEyeHeight().x, player.getPosWithEyeHeight().y, player.getPosWithEyeHeight().z);
 
@@ -168,17 +182,8 @@ public class Crafter implements IGameLogic {
             camera.moveRotation(0,-360, 0);
         }
 
-        player.onTick();
+        player.onTick(camera, gameItems, chunkNames);
 
-//        System.out.println(Player.getPos().y);
-
-//        for (int i = 0; i < chunkNames.length; i++){
-//            if (chunkNames[i].equals("5 1")){
-//                System.out.println(gameItems[i]);
-//                gameItems[i].setPosition(0,gameItems[i].getPosition().y + 0.001f, 0);
-//                break;
-//            }
-//        }
 
         //this is the game item loop
         for (GameItem gameItem : gameItems){

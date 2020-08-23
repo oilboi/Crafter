@@ -10,7 +10,7 @@ import static game.ChunkHandling.ChunkData.*;
 
 public class ChunkMesh {
 
-    public static void generateChunkMesh(Chunk chunk, int chunkX, int chunkZ, ArrayList items, ArrayList names, boolean updating) throws Exception {
+    public static void generateChunkMesh(Chunk chunk, int chunkX, int chunkZ, GameItem[] items, String[] names, boolean updating) throws Exception {
         int x = 0;
         int y = 0;
         int z = 0;
@@ -209,20 +209,26 @@ public class ChunkMesh {
 
 
         if (!updating){
-            items.add(new GameItem(mesh));
-            updateNeighbors(chunkX,chunkZ,items,names);
+
+            for(int i = 0; i < names.length; i++) {
+                if(names[i].equals(chunkX + " " + chunkZ)) {
+                    items[i] = new GameItem(mesh);
+                    updateNeighbors(chunkX, chunkZ, items, names);
+                }
+            }
+
         } else {
-            for (int i = 0; i < names.size(); i++) {
-                if (names.get(i).equals(chunkX + " " + chunkZ)){
-                    GameItem thisItem = (GameItem)items.get(i);
+            for (int i = 0; i < names.length; i++) {
+                if (names[i].equals(chunkX + " " + chunkZ)){
+                    GameItem thisItem = (GameItem)items[i];
                     thisItem.getMesh().cleanUp();
-                    items.set(i, new GameItem(mesh));
+                    items[i] = new GameItem(mesh);
                 }
             }
         }
     }
 
-    public static void updateNeighbors(int chunkX, int chunkZ, ArrayList items, ArrayList names) throws Exception {
+    public static void updateNeighbors(int chunkX, int chunkZ, GameItem[] items, String[] names) throws Exception {
         for (int x = -1; x <= 1; x++) {
             for (int z = -1; z <= 1; z++) {
                 if (Math.abs(x) + Math.abs(z) == 1) {

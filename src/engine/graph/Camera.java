@@ -57,4 +57,14 @@ public class Camera {
         rotation.y += offsetY;
         rotation.z += offsetZ;
     }
+
+    public Vector3f getRotationVector(){
+        Vector3f rotationVector = new Vector3f();
+        float xzLen = (float)Math.cos(Math.toRadians(rotation.x + 180));
+        rotationVector.z = xzLen * (float)Math.cos(Math.toRadians(rotation.y));
+        rotationVector.y = (float)Math.sin(Math.toRadians(rotation.x + 180));
+        rotationVector.x = xzLen * (float)Math.sin(Math.toRadians(-rotation.y));
+
+        return rotationVector;
+    }
 }

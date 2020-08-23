@@ -1,11 +1,14 @@
 package game.player;
 
+import engine.GameItem;
+import engine.graph.Camera;
 import org.joml.Vector3f;
 import org.lwjgl.system.CallbackI;
 
 import static game.ChunkHandling.ChunkData.getBlockInChunk;
 import static game.Crafter.getChunkRenderDistance;
 import static game.collision.Collision.applyInertia;
+import static game.player.Ray.rayCast;
 
 public class Player {
     private static int renderDistance = getChunkRenderDistance();
@@ -32,11 +35,12 @@ public class Player {
         selectedItem = newItem;
     }
 
-    public void setMining(){
-        if (mineTimer == 0) {
-            mining = true;
-            mineTimer = 20;
-        }
+    public void setMining( boolean mining){
+//        if (mineTimer == 0) {
+//            mining = true;
+//            mineTimer = 20;
+//        }
+        this.mining = mining;
     }
 
     public boolean getMining(){
@@ -100,7 +104,7 @@ public class Player {
 
 
 
-    public void onTick(){
+    public void onTick(Camera camera, GameItem[] gameItems, String[] chunkNames) throws Exception {
 //        if(jumpBuffer){
 //            inertia.y += 12f;
 //            jumpBuffer = false;
@@ -128,6 +132,13 @@ public class Player {
 
         onGround = applyInertia(pos, inertia, onGround, width, height,true);
 
+
+//        System.out.println(camera.getRotationVector().x + " " + camera.getRotationVector().y + " " + camera.getRotationVector().z);
+
+//        System.out.println(mining);
+        if(mining) {
+            rayCast(camera.getPosition(), camera.getRotationVector(), 4f, gameItems, chunkNames);
+        }
 //        int[] current = new int[2];
 //        Vector3f flooredPos = pos;
 //        flooredPos.x = (float)Math.floor(flooredPos.x);

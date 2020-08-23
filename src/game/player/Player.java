@@ -107,17 +107,7 @@ public class Player {
 
 
     public void onTick(Camera camera, GameItem[] gameItems, String[] chunkNames) throws Exception {
-//        if(jumpBuffer){
-//            inertia.y += 12f;
-//            jumpBuffer = false;
-//        }
-//        if(mining){
-//            mining = false;
-//        }
-//        if(placing){
-//            placing = false;
-//        }
-//
+        
         if(placeTimer > 0){
             placeTimer -= 0.003f;
             if (placeTimer < 0.1){

@@ -11,8 +11,6 @@ import game.player.Player;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
-import java.util.ArrayList;
-
 import static game.ChunkHandling.ChunkMesh.generateChunkMesh;
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -76,13 +74,13 @@ public class Crafter implements IGameLogic {
         //create the initial map
         for (int x = -chunkRenderDistance; x <= chunkRenderDistance; x++) {
             for (int z = -chunkRenderDistance; z <= chunkRenderDistance; z++) {
-                Chunk chunk = new Chunk(x, z);
-                ChunkData.storeChunk(x, z, chunk);
-                generateChunkMesh(chunk, x, z, gameItems, chunkNames, false);
-                System.out.println(x + " " + z);
+
+                ChunkData.storeChunk(x, z, new Chunk(x, z));
+                generateChunkMesh(x, z, gameItems, chunkNames, false);
+//                System.out.println(x + " " + z);
             }
         }
-        System.out.println("Wow! It's done!");
+//        System.out.println("Wow! It's done!");
         player = new Player();
     }
 

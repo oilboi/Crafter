@@ -2,10 +2,8 @@ package game.ChunkHandling;
 
 
 import engine.GameItem;
-import game.Crafter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import static game.ChunkHandling.ChunkMesh.generateChunkMesh;
 import static game.Crafter.getChunkRenderDistance;
@@ -21,11 +19,29 @@ public class ChunkData {
     }
 
     public static Chunk getChunkData(int x, int z){
-        Chunk test = chunkArray[x + chunkRenderDistance][z + chunkRenderDistance];
-        if (test != null){
-            return test;
+        Chunk thisChunk = chunkArray[x + chunkRenderDistance][z + chunkRenderDistance];
+        if (thisChunk != null){
+            return thisChunk;
         }
         return null;
+    }
+
+    public static boolean chunkExists(int chunkX, int chunkZ){
+        chunkX += chunkRenderDistance;
+        chunkZ += chunkRenderDistance;
+        //safety checks
+        if(chunkX >= chunkArray.length || chunkX < 0){
+            return false;
+        }
+        if(chunkZ >= chunkArray.length || chunkZ < 0){
+            return false;
+        }
+        //check if chunk exists
+        if ( chunkArray[chunkX][chunkZ] == null){
+            return false;
+        }
+        //all checks pass
+        return true;
     }
 
     public static short getBlock(int x, int y, int z, int chunkX, int chunkZ){
@@ -39,10 +55,7 @@ public class ChunkData {
         return thisChunk.getBlocks()[ChunkMath.genHash(x, y, z)];
     }
 
-
     public static byte getLight(int x, int y, int z, int chunkX, int chunkZ){
-        chunkX += chunkRenderDistance;
-        chunkZ += chunkRenderDistance;
         if (chunkX < 0 || chunkX > chunkRenderDistance *2 || chunkZ < 0 || chunkZ > chunkRenderDistance *2 || y < 0 || y >= 128){
             return 0;
         }
@@ -52,7 +65,6 @@ public class ChunkData {
         }
         return thisChunk.getLights()[ChunkMath.genHash(x, y, z)];
     }
-
 
     public static Chunk getChunk(int chunkX, int chunkZ){
         chunkX += chunkRenderDistance;
@@ -78,24 +90,9 @@ public class ChunkData {
             return;
         }
         thisChunk.setBlock(ChunkMath.genHash(x, y, z), newBlock);
-    }
 
-    public static boolean chunkExists(int chunkX, int chunkZ){
-        chunkX += chunkRenderDistance;
-        chunkZ += chunkRenderDistance;
-        //safety checks
-        if(chunkX >= chunkArray.length || chunkX < 0){
-            return false;
-        }
-        if(chunkZ >= chunkArray.length || chunkZ < 0){
-            return false;
-        }
-        //check if chunk exists
-        if ( chunkArray[chunkX][chunkZ] == null){
-            return false;
-        }
-        //all checks pass
-        return true;
+//        updateLightColumn(x,z,chunkX-chunkRenderDistance, chunkZ-chunkRenderDistance);
+        updateLighting(x,y,z,chunkX,chunkZ);
     }
 
     //+ render distance is getting it to base count 0
@@ -129,9 +126,46 @@ public class ChunkData {
         }
         //self chunk checking
         else {
-            return ChunkData.getBlock(x,y,z,chunkX,chunkZ);
+            return getBlock(x,y,z,chunkX,chunkZ);
         }
     }
+
+    //+ render distance is getting it to base count 0
+    public static short getLightInChunk(int x,int y,int z, int chunkX, int chunkZ){
+        chunkX += chunkRenderDistance;
+        chunkZ += chunkRenderDistance;
+
+        //neighbor checking
+        if(x < 0) {
+            if (chunkX - 1 >= 0) {
+                return getLight(x+16,y,z,chunkX-1,chunkZ);
+            }
+            return 0;
+        } else if (x >= 16) {
+            if ( chunkX + 1 <= chunkRenderDistance *2){
+                return getLight(x-16,y,z,chunkX+1,chunkZ);
+            }
+            return 0;
+        } else if (y < 0 || y >= 128) { //Y is caught regardless in the else clause if in bounds
+            return 0;
+        } else if (z < 0) {
+            if (chunkZ - 1 >= 0) {
+                return getLight(x,y,z+16,chunkX,chunkZ-1);
+            }
+            return 0;
+
+        } else if (z >= 16) {
+            if (chunkZ + 1 <= chunkRenderDistance *2){
+                return getLight(x,y,z-16,chunkX,chunkZ+1);
+            }
+            return 0;
+        }
+        //self chunk checking
+        else {
+            return getLight(x,y,z,chunkX,chunkZ);
+        }
+    }
+
     public static void updateLightColumn(int x,int z, int chunkX, int chunkZ){
         chunkX += chunkRenderDistance;
         chunkZ += chunkRenderDistance;
@@ -148,6 +182,50 @@ public class ChunkData {
             thisChunk.setLight(ChunkMath.genHash(x, y, z), lightLevel);
             if (getBlock(x,y,z,chunkX,chunkZ) != 0 && lightLevel > 0){
                 lightLevel --;
+            }
+        }
+    }
+
+    public static boolean underSunlight(int x, int y, int z, int chunkX, int chunkZ){
+        if (chunkX < 0 || chunkX > chunkRenderDistance *2 || chunkZ < 0 || chunkZ > chunkRenderDistance *2){
+            return false;
+        }
+        Chunk thisChunk = chunkArray[chunkX][chunkZ];
+        if (thisChunk == null) {
+            return false;
+        }
+        for (int indexY = 127; indexY > y; indexY--) {
+            if (getBlock(x,indexY,z,chunkX,chunkZ) != 0){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static void updateLighting(int x, int y, int z, int chunkX, int chunkZ) {
+//        System.out.println("this is a new block:");
+//        System.out.println(x);
+//        System.out.println(y);
+//        System.out.println(z);
+//        System.out.println(chunkX);
+//        System.out.println(chunkZ);
+        //get max local lighting
+        byte maxLight = 0;
+        if(underSunlight(x,y,z, chunkX,chunkZ)){
+            System.out.println("this is actually under sunlight");
+//            getChunk(chunkX-chunkRenderDistance, chunkZ-chunkRenderDistance).setLight(ChunkMath.genHash(x, y, z), (byte)16);
+            return;//set the light to max and don't run the loop
+        }
+
+        System.out.println("this is not under direct sunlight");
+        //index the local light area
+        for (int xx = -1; xx <= 1; xx++) {
+            for (int yy = -1; yy <= 1; yy++) {
+                for (int zz = -1; zz <= 1; zz++) {
+                    if (Math.abs(xx) + Math.abs(yy) + Math.abs(zz) == 1) {
+                        //System.out.println(xx + " " + yy + " " + zz);
+                    }
+                }
             }
         }
     }
@@ -203,7 +281,7 @@ public class ChunkData {
 
         for (int[] index : chunkBuffer) {
 //            System.out.println(index[0]);
-            generateChunkMesh(getChunk(index[0],index[1]), index[0], index[1], gameItems, chunkNames, true);
+            generateChunkMesh(index[0], index[1], gameItems, chunkNames, true);
         }
     }
 
@@ -213,4 +291,6 @@ public class ChunkData {
         float z = z1 - z2;
         return (float)Math.hypot(x, Math.hypot(y,z));
     }
+
+
 }

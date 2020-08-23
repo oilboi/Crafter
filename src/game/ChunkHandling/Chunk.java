@@ -3,6 +3,9 @@ package game.ChunkHandling;
 import engine.FastNoise;
 
 public class Chunk {
+
+    private final byte debugLightLevel = 16;
+
     //y x z - longest used for memory efficiency
     private final static short chunkSizeX = 16;
     private final static short chunkSizeY = 128;
@@ -44,16 +47,16 @@ public class Chunk {
 
             block[ChunkMath.genHash(x, y, z)] = currblock;
 
-            naturalLight[ChunkMath.genHash(x, y, z)] = lightLevel;//(byte)(Math.random()*16);
+            naturalLight[ChunkMath.genHash(x, y, z)] = debugLightLevel;//lightLevel;//(byte)(Math.random()*16);
 
-            if (currblock != 0 && lightLevel > 0){
-                lightLevel --;
-            }
+//            if (currblock != 0 && lightLevel > 0){
+//                lightLevel --;
+//            }
             y--;
 
             if( y < 0){
                 y = 127;
-                lightLevel = 16;
+//                lightLevel = 16;
                 x++;
                 if( x > chunkSizeX - 1 ){
                     x = 0;
@@ -99,9 +102,7 @@ public class Chunk {
         }
     }
 
-
-
-    private FastNoise noisey = new FastNoise();
+    private FastNoise noise = new FastNoise();
     private int heightAdder = 40;
     private byte dirtHeight = 4;
     //a basic biome test for terrain generation
@@ -111,7 +112,6 @@ public class Chunk {
         int y = 127;
         int z = 0;
         byte lightLevel = 16;
-        FastNoise noise = new FastNoise();
         byte height = (byte)(Math.abs(noise.GetCubicFractal((chunkX*16)+x,(chunkZ*16)+z))*127+heightAdder);
 
         for ( int i = 0; i < (chunkSizeX * chunkSizeY * chunkSizeZ); i++){
@@ -130,16 +130,16 @@ public class Chunk {
 
             block[ChunkMath.genHash(x, y, z)] = currBlock;
 
-            naturalLight[ChunkMath.genHash(x, y, z)] = 0;
+            if (currBlock == 0) {
+                naturalLight[ChunkMath.genHash(x, y, z)] = debugLightLevel;//0;
+            }else{
+                naturalLight[ChunkMath.genHash(x, y, z)] = 0;
+            }
 
-//            if (currBlock != 0 && lightLevel > 0){
-//                lightLevel --;
-//            }
             y--;
             if( y < 0){
                 y = 127;
                 x++;
-//                lightLevel = 16;
                 height = (byte)(Math.abs(noise.GetCubicFractal((chunkX*16)+x,(chunkZ*16)+z))*127+heightAdder);
                 if( x > chunkSizeX - 1 ){
                     x = 0;

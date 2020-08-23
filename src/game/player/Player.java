@@ -27,7 +27,7 @@ public class Player {
     private float width = 0.3f;
     private int[] currentChunk = {0,0};
 
-    private Boolean onGround =  new Boolean(false);
+    private boolean onGround =  false;
     private boolean jumpBuffer = false;
     private boolean mining = false;
     private float mineTimer = 0;
@@ -121,7 +121,6 @@ public class Player {
         int[] current = new int[2];
         current[0] = (int)(Math.floor(flooredPos.x / 16f));
         current[1] = (int)(Math.floor(flooredPos.z / 16f));
-
         Vector3f realPos = new Vector3f(flooredPos.x - (16*current[0]), flooredPos.y, flooredPos.z - (16*current[1]));
 
         return getBlockInChunk((int)realPos.x, (int)realPos.y, (int)realPos.z, current[0]+renderDistance, current[1]+renderDistance);
@@ -162,13 +161,13 @@ public class Player {
             placeTimer = 0.5f;
         }
 
-        blockPos = new int[]{(int)Math.floor(pos.x), (int)Math.floor(pos.y),(int)Math.floor(pos.z)};
-
-        if(blockPos[0] != oldBlockPos[0] || blockPos[1] != oldBlockPos[1] || blockPos[2] != oldBlockPos[2]){
-
-            floodFillTest(blockPos[0], blockPos[1], blockPos[2], gameItems, chunkNames);
-        }
-
-        oldBlockPos = blockPos.clone();
+//        blockPos = new int[]{(int)Math.floor(pos.x), (int)Math.floor(pos.y),(int)Math.floor(pos.z)};
+//
+//        if(blockPos[0] != oldBlockPos[0] || blockPos[1] != oldBlockPos[1] || blockPos[2] != oldBlockPos[2]){
+//
+//            floodFillTest(blockPos[0], blockPos[1], blockPos[2], gameItems, chunkNames);
+//        }
+//
+//        oldBlockPos = blockPos.clone();
     }
 }

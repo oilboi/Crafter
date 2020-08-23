@@ -10,7 +10,7 @@ import static game.ChunkHandling.ChunkData.*;
 
 public class ChunkMesh {
 
-    public static void generateChunkMesh(Chunk chunk, int chunkX, int chunkZ, GameItem[] items, String[] names, boolean updating) throws Exception {
+    public static void generateChunkMesh(int chunkX, int chunkZ, GameItem[] items, String[] names, boolean updating) throws Exception {
         int x = 0;
         int y = 0;
         int z = 0;
@@ -22,25 +22,12 @@ public class ChunkMesh {
         ArrayList indices       = new ArrayList();
         ArrayList light         = new ArrayList();
 
-
         int offsetX = chunkX * 16;
         int offsetZ = chunkZ * 16;
-
-
 
         //create the mesh
         for (int w = 0; w < (16 * 128 * 16); w++) {
             if (getBlockInChunk(x,y,z, chunkX, chunkZ) != 0) {
-                byte thisLight = getLight(x,y,z,chunkX,chunkZ);
-
-                //here for debug right now
-                float frontLight  = thisLight/16f;//1.0f;//(float)Math.random();//1.0f;
-                float backLight   = thisLight/16f;//1.0f;//(float)Math.random();//1.0f;
-                float rightLight  = thisLight/16f;//1.0f;//(float)Math.random();//1.0f;
-                float leftLight   = thisLight/16f;//1.0f;//(float)Math.random();//1.0f;
-                float topLight    = thisLight/16f;//1.0f;//(float)Math.random();//1.0f;
-                float bottomLight = thisLight/16f;//1.0f;//(float)Math.random();//1.0f;
-
                 short neighborBlock = getBlockInChunk(x, y, z+1, chunkX, chunkZ);
                 if (neighborBlock == 0) {
                     //front
@@ -48,6 +35,8 @@ public class ChunkMesh {
                     positions.add(0f + x + offsetX); positions.add(1f + y); positions.add(1f + z + offsetZ);
                     positions.add(0f + x + offsetX); positions.add(0f + y); positions.add(1f + z + offsetZ);
                     positions.add(1f + x + offsetX); positions.add(0f + y); positions.add(1f + z + offsetZ);
+                    //front
+                    float frontLight = getLightInChunk(x,y,z+1, chunkX, chunkZ)/16f;
                     //front
                     for (int i = 0; i < 12; i++){
                         light.add(frontLight);
@@ -71,6 +60,8 @@ public class ChunkMesh {
                     positions.add(1f + x + offsetX); positions.add(0f + y); positions.add(0f + z + offsetZ);
                     positions.add(0f + x + offsetX); positions.add(0f + y); positions.add(0f + z + offsetZ);
                     //back
+                    float backLight = getLightInChunk(x,y,z-1, chunkX, chunkZ)/16f;
+                    //back
                     for (int i = 0; i < 12; i++){
                         light.add(backLight);
                     }
@@ -91,6 +82,8 @@ public class ChunkMesh {
                     positions.add(1f + x + offsetX); positions.add(1f + y); positions.add(1f + z + offsetZ);
                     positions.add(1f + x + offsetX); positions.add(0f + y); positions.add(1f + z + offsetZ);
                     positions.add(1f + x + offsetX); positions.add(0f + y); positions.add(0f + z + offsetZ);
+                    //right
+                    float rightLight = getLightInChunk(x+1,y,z, chunkX, chunkZ)/16f;
                     //right
                     for (int i = 0; i < 12; i++){
                         light.add(rightLight);
@@ -113,6 +106,8 @@ public class ChunkMesh {
                     positions.add(0f + x + offsetX); positions.add(0f + y); positions.add(0f + z + offsetZ);
                     positions.add(0f + x + offsetX); positions.add(0f + y); positions.add(1f + z + offsetZ);
                     //left
+                    float leftLight = getLightInChunk(x-1,y,z, chunkX, chunkZ)/16f;
+                    //left
                     for (int i = 0; i < 12; i++){
                         light.add(leftLight);
                     }
@@ -134,6 +129,9 @@ public class ChunkMesh {
                     positions.add(1f + x + offsetX); positions.add(1f + y); positions.add(1f + z + offsetZ);
                     positions.add(1f + x + offsetX); positions.add(1f + y); positions.add(0f + z + offsetZ);
                     //top
+                    float topLight = getLightInChunk(x,y+1,z, chunkX, chunkZ)/16f;
+//                    System.out.println(topLight);
+                    //top
                     for (int i = 0; i < 12; i++){
                         light.add(topLight);
                     }
@@ -154,6 +152,8 @@ public class ChunkMesh {
                     positions.add(0f + x + offsetX); positions.add(0f + y);positions.add(0f + z + offsetZ);
                     positions.add(1f + x + offsetX); positions.add(0f + y);positions.add(0f + z + offsetZ);
                     positions.add(1f + x + offsetX); positions.add(0f + y);positions.add(1f + z + offsetZ);
+                    //bottom
+                    float bottomLight = getLightInChunk(x,y-1,z, chunkX, chunkZ)/16f;
                     //bottom
                     for (int i = 0; i < 12; i++){
                         light.add(bottomLight);
@@ -235,7 +235,7 @@ public class ChunkMesh {
                     if(chunkExists(chunkX + x, chunkZ + z)){
                         Chunk thisChunk = getChunkData(chunkX + x, chunkZ + z);
                         //System.out.println("wow that chunk certainly exists");
-                        generateChunkMesh(thisChunk, chunkX + x, chunkZ + z, items, names, true);
+                        generateChunkMesh(chunkX + x, chunkZ + z, items, names, true);
                     }
                 }
             }

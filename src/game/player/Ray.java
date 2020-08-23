@@ -7,7 +7,6 @@ import org.joml.Vector3f;
 
 import static game.ChunkHandling.ChunkData.*;
 import static game.ChunkHandling.ChunkMesh.generateChunkMesh;
-import static game.Crafter.getChunkRenderDistance;
 import static game.collision.Collision.wouldCollide;
 
 public class Ray {
@@ -67,20 +66,20 @@ public class Ray {
 
         //updateLightColumn((int)realPos.x, (int)realPos.z, currentChunkX, currentChunkZ);
 
-        generateChunkMesh(getChunk(currentChunkX,currentChunkZ), currentChunkX, currentChunkZ, gameItems, chunkNames, true);
+        generateChunkMesh(currentChunkX, currentChunkZ, gameItems, chunkNames, true);
 
 
         if (chunkPosX == 15){ //update neighbor
-            generateChunkMesh(getChunk(currentChunkX+1,currentChunkZ), currentChunkX+1, currentChunkZ, gameItems, chunkNames, true);
+            generateChunkMesh(currentChunkX+1, currentChunkZ, gameItems, chunkNames, true);
         }
         if (chunkPosX == 0){
-            generateChunkMesh(getChunk(currentChunkX-1,currentChunkZ), currentChunkX-1, currentChunkZ, gameItems, chunkNames, true);
+            generateChunkMesh(currentChunkX-1, currentChunkZ, gameItems, chunkNames, true);
         }
         if (chunkPosZ == 15){
-            generateChunkMesh(getChunk(currentChunkX,currentChunkZ+1), currentChunkX, currentChunkZ+1, gameItems, chunkNames, true);
+            generateChunkMesh(currentChunkX, currentChunkZ+1, gameItems, chunkNames, true);
         }
         if (chunkPosZ == 0){
-            generateChunkMesh(getChunk(currentChunkX,currentChunkZ-1), currentChunkX, currentChunkZ-1, gameItems, chunkNames, true);
+            generateChunkMesh(currentChunkX, currentChunkZ-1, gameItems, chunkNames, true);
         }
         return 0;
     }
@@ -97,20 +96,20 @@ public class Ray {
 
         //updateLightColumn((int)realPos.x, (int)realPos.z, currentChunkX, currentChunkZ);
 
-        generateChunkMesh(getChunk(currentChunkX,currentChunkZ), currentChunkX, currentChunkZ, gameItems, chunkNames, true);
+        generateChunkMesh(currentChunkX, currentChunkZ, gameItems, chunkNames, true);
 
 
         if (chunkPosX == 15){ //update neighbor
-            generateChunkMesh(getChunk(currentChunkX+1,currentChunkZ), currentChunkX+1, currentChunkZ, gameItems, chunkNames, true);
+            generateChunkMesh(currentChunkX+1, currentChunkZ, gameItems, chunkNames, true);
         }
         if (chunkPosX == 0){
-            generateChunkMesh(getChunk(currentChunkX-1,currentChunkZ), currentChunkX-1, currentChunkZ, gameItems, chunkNames, true);
+            generateChunkMesh(currentChunkX-1, currentChunkZ, gameItems, chunkNames, true);
         }
         if (chunkPosZ == 15){
-            generateChunkMesh(getChunk(currentChunkX,currentChunkZ+1), currentChunkX, currentChunkZ+1, gameItems, chunkNames, true);
+            generateChunkMesh(currentChunkX, currentChunkZ+1, gameItems, chunkNames, true);
         }
         if (chunkPosZ == 0){
-            generateChunkMesh(getChunk(currentChunkX,currentChunkZ-1), currentChunkX, currentChunkZ-1, gameItems, chunkNames, true);
+            generateChunkMesh(currentChunkX, currentChunkZ-1, gameItems, chunkNames, true);
         }
         return 0;
     }

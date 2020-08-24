@@ -7,7 +7,6 @@ import org.lwjgl.system.CallbackI;
 
 import java.util.Arrays;
 
-import static game.ChunkHandling.ChunkData.floodFillTest;
 import static game.ChunkHandling.ChunkData.getBlockInChunk;
 import static game.Crafter.getChunkRenderDistance;
 import static game.collision.Collision.applyInertia;

@@ -142,6 +142,7 @@ public class Crafter implements IGameLogic {
             if (!rButtonPushed) {
                 rButtonPushed = true;
                 player.setPos(new Vector3f(0,129,0));
+                System.out.println("Position reset!");
             }
         } else if (!window.isKeyPressed(GLFW_KEY_R)){
             rButtonPushed = false;

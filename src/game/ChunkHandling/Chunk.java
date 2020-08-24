@@ -4,7 +4,7 @@ import engine.FastNoise;
 
 public class Chunk {
 
-    private final byte debugLightLevel = 16;
+    private final byte debugLightLevel = 15;
 
     //y x z - longest used for memory efficiency
     private final static short chunkSizeX = 16;
@@ -71,7 +71,7 @@ public class Chunk {
         int x = 0;
         int y = 127;
         int z = 0;
-        byte lightLevel = 16;
+        byte lightLevel = debugLightLevel;
         for ( int i = 0; i < (chunkSizeX * chunkSizeY * chunkSizeZ); i++){
 
             short currBlock;
@@ -92,7 +92,7 @@ public class Chunk {
             y--;
             if( y < 0){
                 y = 127;
-                lightLevel = 16;
+                lightLevel = debugLightLevel;
                 x++;
                 if( x > chunkSizeX - 1 ){
                     x = 0;
@@ -111,7 +111,6 @@ public class Chunk {
         int x = 0;
         int y = 127;
         int z = 0;
-        byte lightLevel = 16;
         byte height = (byte)(Math.abs(noise.GetCubicFractal((chunkX*16)+x,(chunkZ*16)+z))*127+heightAdder);
 
         for ( int i = 0; i < (chunkSizeX * chunkSizeY * chunkSizeZ); i++){

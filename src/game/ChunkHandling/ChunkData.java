@@ -218,7 +218,6 @@ public class ChunkData {
 
         int    [][][] pseudoChunk     = new     int[16][128][16];
         int    [][][] caveLight       = new     int[16][128][16];
-        boolean[][][] lightRayChunk   = new boolean[16][128][16];
 
         //shove everything into the 3D arrays
         //fill sun rays with sunlight

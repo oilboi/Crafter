@@ -18,7 +18,7 @@ public class Crafter implements IGameLogic {
 
     public final static int chunkRenderDistance = 3;
 
-    private static final float MOUSE_SENSITIVITY = 0.01f;
+    private static final float MOUSE_SENSITIVITY = 0.008f;
 
     private final Vector3f cameraInc;
 

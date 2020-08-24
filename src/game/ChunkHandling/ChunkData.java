@@ -4,7 +4,9 @@ package game.ChunkHandling;
 import engine.GameItem;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
+import static game.ChunkHandling.ChunkMath.genHash;
 import static game.ChunkHandling.ChunkMesh.generateChunkMesh;
 import static game.Crafter.getChunkRenderDistance;
 
@@ -52,7 +54,7 @@ public class ChunkData {
         if (thisChunk == null){
             return 0;
         }
-        return thisChunk.getBlocks()[ChunkMath.genHash(x, y, z)];
+        return thisChunk.getBlocks()[genHash(x, y, z)];
     }
 
     public static byte getLight(int x, int y, int z, int chunkX, int chunkZ){
@@ -63,7 +65,7 @@ public class ChunkData {
         if (thisChunk == null){
             return 0;
         }
-        return thisChunk.getLights()[ChunkMath.genHash(x, y, z)];
+        return thisChunk.getLights()[genHash(x, y, z)];
     }
 
     public static Chunk getChunk(int chunkX, int chunkZ){
@@ -89,10 +91,11 @@ public class ChunkData {
         if (thisChunk == null) {
             return;
         }
-        thisChunk.setBlock(ChunkMath.genHash(x, y, z), newBlock);
+        thisChunk.setBlock(genHash(x, y, z), newBlock);
 
 //        updateLightColumn(x,z,chunkX-chunkRenderDistance, chunkZ-chunkRenderDistance);
-        updateLighting(x,y,z,chunkX,chunkZ);
+//        updateLighting(x,y,z,chunkX,chunkZ);
+        floodFill(x,y,z,chunkX,chunkZ);
     }
 
     //+ render distance is getting it to base count 0
@@ -179,7 +182,7 @@ public class ChunkData {
 
         byte lightLevel = 16;
         for (int y = 127; y >= 0; y--) {
-            thisChunk.setLight(ChunkMath.genHash(x, y, z), lightLevel);
+            thisChunk.setLight(genHash(x, y, z), lightLevel);
             if (getBlock(x,y,z,chunkX,chunkZ) != 0 && lightLevel > 0){
                 lightLevel --;
             }
@@ -206,7 +209,7 @@ public class ChunkData {
         //get max local lighting
         if(underSunlight(x,y,z, chunkX,chunkZ)){
             System.out.println("this is actually under sunlight");
-            getChunk(chunkX-chunkRenderDistance, chunkZ-chunkRenderDistance).setLight(ChunkMath.genHash(x, y, z), (byte)16);
+            getChunk(chunkX-chunkRenderDistance, chunkZ-chunkRenderDistance).setLight(genHash(x, y, z), (byte)16);
             return;//set the light to max and don't run the loop
         }
 
@@ -216,7 +219,6 @@ public class ChunkData {
             for (int yy = -1; yy <= 1; yy++) {
                 for (int zz = -1; zz <= 1; zz++) {
                     if (Math.abs(xx) + Math.abs(yy) + Math.abs(zz) == 1) {
-                        //System.out.println(xx + " " + yy + " " + zz);
                         byte indexedLight = getLightInChunk(x+xx, y+yy, z+zz, chunkX-chunkRenderDistance, chunkZ-chunkRenderDistance);
                         if (indexedLight > maxLight){
                             maxLight = indexedLight;
@@ -229,8 +231,82 @@ public class ChunkData {
         if (maxLight > 0){
             maxLight -= 1;
         }
+        getChunk(chunkX-chunkRenderDistance, chunkZ-chunkRenderDistance).setLight(genHash(x, y, z), maxLight);
+    }
 
-        getChunk(chunkX-chunkRenderDistance, chunkZ-chunkRenderDistance).setLight(ChunkMath.genHash(x, y, z), maxLight);
+    public static void floodFill(int x, int y, int z, int chunkX, int chunkZ) {
+        ArrayList<int[]> lightBuffer = new ArrayList();
+
+        lightBuffer.add(new int[]{x,y,z});
+
+        while(lightBuffer.size() > 0) {
+            //this is the way to cycle the flood fill
+            int[] lastIndex = (int[]) lightBuffer.toArray()[lightBuffer.toArray().length-1];
+            byte maxLight = 0;
+            byte currentLight = 0;
+            boolean inSunLight = underSunlight(lastIndex[0], lastIndex[1], lastIndex[2], chunkX, chunkZ);
+
+            if (!inSunLight) {
+                for (int xx = -1; xx <= 1; xx++) {
+                    for (int yy = -1; yy <= 1; yy++) {
+                        for (int zz = -1; zz <= 1; zz++) {
+                            if (Math.abs(xx) + Math.abs(yy) + Math.abs(zz) == 1) {
+//                            System.out.println(xx + " " + yy + " " + zz);
+                                short indexedBlock = getBlockInChunk(lastIndex[0] + xx, lastIndex[1] + yy, lastIndex[2] + zz, chunkX - chunkRenderDistance, chunkZ - chunkRenderDistance);
+                                byte indexedLight = getLightInChunk(lastIndex[0] + xx, lastIndex[1] + yy, lastIndex[2] + zz, chunkX - chunkRenderDistance, chunkZ - chunkRenderDistance);
+                                if (currentLight < indexedLight && indexedBlock == 0) {
+                                    maxLight = indexedLight;
+                                }
+//                            System.out.println();
+
+//                            if(indexedLight < currentLight && getBlockInChunk(lastIndex[0] + xx, lastIndex[1] + yy, lastIndex[2] + zz, chunkX - chunkRenderDistance, chunkZ - chunkRenderDistance) == 0){
+//                                lightBuffer.add(new int[]{lastIndex[0] + xx, lastIndex[1] + yy, lastIndex[2] + zz});
+//                                System.out.println("adding to light buffer");
+//                            }
+//                            if (indexedLight > maxLight){
+//
+//                            }
+                            }
+                        }
+                    }
+                }
+                if (maxLight > 0){
+                    maxLight -= 1;
+                }
+            } else{
+                maxLight = 16;
+            }
+
+            getChunk(chunkX-chunkRenderDistance, chunkZ-chunkRenderDistance).setLight(genHash(lastIndex[0],lastIndex[1],lastIndex[2]), maxLight);
+
+            //check neighbors
+            for (int xx = -1; xx <= 1; xx++) {
+                for (int yy = -1; yy <= 1; yy++) {
+                    for (int zz = -1; zz <= 1; zz++) {
+                        if (Math.abs(xx) + Math.abs(yy) + Math.abs(zz) == 1) {
+//                            System.out.println(xx + " " + yy + " " + zz);
+                            short indexedBlock = getBlockInChunk(lastIndex[0] + xx, lastIndex[1] + yy, lastIndex[2] + zz, chunkX - chunkRenderDistance, chunkZ - chunkRenderDistance);
+                            byte indexedLight = getLightInChunk(lastIndex[0] + xx, lastIndex[1] + yy, lastIndex[2] + zz, chunkX - chunkRenderDistance, chunkZ - chunkRenderDistance);
+                            boolean thisIsInSunlight = underSunlight(lastIndex[0] + xx, lastIndex[1] + yy, lastIndex[2] + zz, chunkX - chunkRenderDistance, chunkZ - chunkRenderDistance);
+                            if (maxLight > indexedLight && indexedBlock == 0 && !thisIsInSunlight) {
+                                System.out.println("adding one!");
+                                lightBuffer.add(new int[]{lastIndex[0] + xx, lastIndex[1] + yy, lastIndex[2] + zz});
+                            }
+//                            System.out.println();
+
+//                            if(indexedLight < currentLight && getBlockInChunk(lastIndex[0] + xx, lastIndex[1] + yy, lastIndex[2] + zz, chunkX - chunkRenderDistance, chunkZ - chunkRenderDistance) == 0){
+//                                lightBuffer.add(new int[]{lastIndex[0] + xx, lastIndex[1] + yy, lastIndex[2] + zz});
+//                                System.out.println("adding to light buffer");
+//                            }
+//                            if (indexedLight > maxLight){
+//
+//                            }
+                        }
+                    }
+                }
+            }
+            lightBuffer.remove(lastIndex);
+        }
     }
 
     private static final byte torchDistance = 10;
@@ -261,7 +337,7 @@ public class ChunkData {
                             }
 
 
-                            getChunk(currentChunkX, currentChunkZ).setLight(ChunkMath.genHash(currentPosX, y, currentPosZ), lightLevel);
+                            getChunk(currentChunkX, currentChunkZ).setLight(genHash(currentPosX, y, currentPosZ), lightLevel);
 
                             //add chunks to chunk generation buffer ID: 555
                             boolean found = false;

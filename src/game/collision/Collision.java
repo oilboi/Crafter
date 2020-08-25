@@ -44,28 +44,27 @@ public class Collision {
         fPos.y = (float)Math.floor(fPos.y);
         fPos.z = (float)Math.floor(fPos.z);
 
-        CustomBlockBox[] virtualBlock = new CustomBlockBox[3*3*4];
-        int index = 0;
 
-        //collect all blocks within collision index
-        //todo: turn this into 1D indexing
-        for (int x = -1; x <= 1; x++){
-            for (int z = -1; z <= 1; z++){
-                for (int y = -1; y <= 2; y++){
-                    if (detectBlock(new Vector3f(fPos.x + x, fPos.y + y, fPos.z + z))) {
-                        virtualBlock[index] = new CustomBlockBox((int) fPos.x + x, (int) fPos.y + y, (int) fPos.z + z);
-                        index++;
-                    }
+        int y = 2;
+        int x = -1;
+        int z = -1;
+        //collide with all blocks in local area
+        for (int i = 0; i < 36; i++){
+            if (detectBlock(new Vector3f(fPos.x + x, fPos.y + y, fPos.z + z))) {
+                CustomAABB us = new CustomAABB(pos.x, pos.y, pos.z, width, height);
+                onGround = collide(us, new CustomBlockBox((int) fPos.x + x, (int) fPos.y + y, (int) fPos.z + z), pos, inertia, width, height, onGround);
+            }
+            y--;
+            if (y < -1){
+                y=2;
+                x++;
+                if(x > 1){
+                    x=-1;
+                    z++;
                 }
             }
         }
 
-        //run through collisions
-        for(int i = 0; i < index; i++) {
-            //virtualBlock[i]; //this is the block object
-            CustomAABB us = new CustomAABB(pos.x, pos.y, pos.z, width, height);
-            onGround = collide(us, virtualBlock[i], pos, inertia, width, height, onGround);
-        }
         return onGround;
     }
 
@@ -175,11 +174,7 @@ public class Collision {
         int currentChunkX = (int)(Math.floor(flooredPos.x / 16f));
         int currentChunkZ = (int)(Math.floor(flooredPos.z / 16f));
 
-//        System.out.println(currentChunkX + " " + currentChunkZ);
-
         Vector3f realPos = new Vector3f(flooredPos.x - (16*currentChunkX), flooredPos.y, flooredPos.z - (16*currentChunkZ));
-
-//        System.out.println(getBlockInChunk((int)realPos.x, (int)realPos.y, (int)realPos.z, currentChunkX, currentChunkZ));
 
         return getBlockInChunk((int)realPos.x, (int)realPos.y, (int)realPos.z, currentChunkX, currentChunkZ) != 0;
     }

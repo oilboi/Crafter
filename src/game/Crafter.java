@@ -19,7 +19,7 @@ import static org.lwjgl.glfw.GLFW.*;
 
 public class Crafter implements IGameLogic {
 
-    public final static int chunkRenderDistance = 3;
+    public final static int chunkRenderDistance = 2;
 
     private static final float MOUSE_SENSITIVITY = 0.008f;
 
@@ -30,6 +30,8 @@ public class Crafter implements IGameLogic {
     private final Camera camera;
 
     private ArrayList<GameItem> chunkMeshes = new ArrayList<>();
+
+    private ArrayList<GameItem> itemEntities = new ArrayList<>();
 
     private boolean fButtonPushed = false;
 
@@ -59,9 +61,10 @@ public class Crafter implements IGameLogic {
             for (int z = -chunkRenderDistance; z <= chunkRenderDistance; z++) {
                 ChunkData.storeChunk(x, z, new Chunk(x, z));
                 generateChunkMesh(x, z, chunkMeshes, false);
+                System.out.println(x + " " + z);
             }
         }
-        
+
         player = new Player();
     }
 

@@ -3,15 +3,11 @@ package game.ChunkHandling;
 import engine.GameItem;
 import engine.graph.Mesh;
 import engine.graph.Texture;
-import org.lwjgl.system.MemoryStack;
 
-import java.nio.ByteBuffer;
-import java.nio.IntBuffer;
 import java.util.ArrayList;
 
 import static game.ChunkHandling.ChunkData.*;
 import static game.blocks.BlockDefinition.*;
-import static org.lwjgl.stb.STBImage.stbi_load;
 
 public class ChunkMesh {
 
@@ -277,7 +273,7 @@ public class ChunkMesh {
             for (int z = -1; z <= 1; z++) {
                 if (Math.abs(x) + Math.abs(z) == 1) {
                     if(chunkExists(chunkX + x, chunkZ + z)){
-                        Chunk thisChunk = getChunkData(chunkX + x, chunkZ + z);
+                        Chunk thisChunk = getChunk(chunkX + x, chunkZ + z);
                         //System.out.println("wow that chunk certainly exists");
                         generateChunkMesh(chunkX + x, chunkZ + z, chunkArrayList, true);
                     }

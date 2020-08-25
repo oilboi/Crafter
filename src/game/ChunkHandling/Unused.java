@@ -1,5 +1,10 @@
 package game.ChunkHandling;
 
+import java.util.ArrayList;
+
+import static game.ChunkHandling.ChunkMath.genHash;
+import static game.ChunkHandling.ChunkMesh.generateChunkMesh;
+
 public class Unused {
     //randomly assign block ids
 //    public void genRandom(){
@@ -124,6 +129,60 @@ public class Unused {
 ////            if(block[i] != 1){ //this is debug
 ////                System.out.printf("WARNING!");
 ////            }
+//        }
+//    }
+//    private static final byte torchDistance = 10;
+//    public static void oldFlood(int posX, int posY, int posZ, ArrayList gameItems) throws Exception {
+//        ArrayList<int[]> chunkBuffer = new ArrayList();
+//
+//        //System.out.println(posX + " " + posY + " " + posZ);
+//        byte lightLevel;
+//        for (int x = posX-torchDistance; x < posX + torchDistance; x++){
+//            for (int y = posY - torchDistance; y < posY + torchDistance; y++) {
+//                for (int z = posZ - torchDistance; z < posZ + torchDistance; z++) {
+//                    int currentChunkX = (int) (Math.floor((float) x / 16f));
+//                    int currentChunkZ = (int) (Math.floor((float) z / 16f));
+//
+//
+//                    int currentPosX = x - (16*currentChunkX);
+//                    int currentPosZ = z - (16*currentChunkZ);
+//
+//                    if (currentChunkX >= -chunkRenderDistance && currentChunkX <= chunkRenderDistance && currentChunkZ >= -chunkRenderDistance && currentChunkZ <= chunkRenderDistance){
+//                        if(y >= 0 && y <= 127) {
+//
+//
+//                            lightLevel = (byte)(torchDistance - getDistance(posX, posY, posZ, x, y, z));
+//                            if(lightLevel < 0){
+//                                lightLevel = 0;
+//                            } else if (lightLevel > 16){
+//                                lightLevel = 16;
+//                            }
+//
+//
+//                            getChunk(currentChunkX, currentChunkZ).setLight(genHash(currentPosX, y, currentPosZ), lightLevel);
+//
+//                            //add chunks to chunk generation buffer ID: 555
+//                            boolean found = false;
+//                            if (chunkBuffer.size() > 0) {
+//                                for (int[] index : chunkBuffer) {
+//                                    if (index[0] == currentChunkX && index[1] == currentChunkZ) {
+//                                        found = true;
+//                                    }
+//                                }
+//                            }
+//                            if (!found) {
+//                                chunkBuffer.add(new int[]{currentChunkX, currentChunkZ});
+//                            }
+//                            //end: ID: 555
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//
+//        for (int[] index : chunkBuffer) {
+////            System.out.println(index[0]);
+//            generateChunkMesh(index[0], index[1], gameItems, true);
 //        }
 //    }
 }

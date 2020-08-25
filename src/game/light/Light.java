@@ -13,9 +13,6 @@ public class Light {
     private static final float debugLightLevel = 15;
 
     public static void floodFill(int chunkX, int chunkZ) {
-        chunkX -= chunkRenderDistance;
-        chunkZ -= chunkRenderDistance;
-
         Chunk thisChunk = getChunk(chunkX,chunkZ);
 
         int    [][][] pseudoChunk     = new     int[16][128][16];

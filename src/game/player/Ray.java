@@ -34,7 +34,7 @@ public class Ray {
                 destroyBlock(finalPos, gameItems, chunkNames);
             } else if (placing && lastPos != null){
                 if (!wouldCollide(new CustomAABB(player.getPos().x, player.getPos().y+0.01f, player.getPos().z, player.getWidth(), player.getHeight()-0.02f), new CustomBlockBox((int)lastPos.x, (int)lastPos.y, (int)lastPos.z))) {
-                    placeBlock(lastPos, gameItems, chunkNames, (short) 1);
+                    placeBlock(lastPos, gameItems, chunkNames, (short) 4);
                 }
             }
         } else {

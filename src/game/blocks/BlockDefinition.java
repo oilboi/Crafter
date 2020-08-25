@@ -88,6 +88,17 @@ public class BlockDefinition {
                 new int[]{1,0}, //top
                 new int[]{1,0}  //bottom
         );
+
+        new BlockDefinition(
+                4,
+                "cobblestone",
+                new int[]{2,0}, //front
+                new int[]{2,0}, //back
+                new int[]{2,0}, //right
+                new int[]{2,0}, //left
+                new int[]{2,0}, //top
+                new int[]{2,0}  //bottom
+        );
     }
 
     public static BlockDefinition getID(int ID){

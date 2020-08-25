@@ -26,9 +26,9 @@ public class Crafter implements IGameLogic {
 
     private final Camera camera;
 
-    private GameItem[] gameItems;
+    private GameItem[] chunkMeshes;
 
-    private static final float CAMERA_POS_STEP = 0.5f;
+    private GameItem[] entities;
 
     private boolean fButtonPushed = false;
 
@@ -59,7 +59,7 @@ public class Crafter implements IGameLogic {
             }
         }
 
-        gameItems = new GameItem[index];
+        chunkMeshes = new GameItem[index];
         chunkNames = new String[index];
 
         index = 0;
@@ -76,12 +76,14 @@ public class Crafter implements IGameLogic {
             for (int z = -chunkRenderDistance; z <= chunkRenderDistance; z++) {
 
                 ChunkData.storeChunk(x, z, new Chunk(x, z));
-                generateChunkMesh(x, z, gameItems, chunkNames, false);
+                generateChunkMesh(x, z, chunkMeshes, chunkNames, false);
 //                System.out.println(x + " " + z);
             }
         }
 //        System.out.println("Wow! It's done!");
         player = new Player();
+
+        entities = new GameItem[]{};
     }
 
     @Override
@@ -188,11 +190,11 @@ public class Crafter implements IGameLogic {
             camera.moveRotation(0,-360, 0);
         }
 
-        player.onTick(camera, gameItems, chunkNames);
+        player.onTick(camera, chunkMeshes, chunkNames);
 
 
         //this is the game item loop
-        for (GameItem gameItem : gameItems){
+        for (GameItem gameItem : chunkMeshes){
             //update position
 //            Vector3f itemPos = gameItem.getPosition();
 //            float posx = itemPos.x + displxInc * 0.01f;
@@ -225,13 +227,13 @@ public class Crafter implements IGameLogic {
 
     @Override
     public void render(Window window){
-        renderer.render(window, camera, gameItems);
+        renderer.render(window, camera, chunkMeshes, entities);
     }
 
     @Override
     public void cleanup(){
         renderer.cleanup();
-        for (GameItem gameItem : gameItems){
+        for (GameItem gameItem : chunkMeshes){
             gameItem.getMesh().cleanUp();
         }
     }

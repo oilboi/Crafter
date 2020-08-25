@@ -48,7 +48,7 @@ public class Renderer {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
-    public void render(Window window, Camera camera, GameItem[] gameItems){
+    public void render(Window window, Camera camera, GameItem[] chunkMeshes, GameItem[] entities){
         clear();
 
         if (window.isResized()){
@@ -68,19 +68,30 @@ public class Renderer {
 
         shaderProgram.setUniform("texture_sampler", 0);
 
-        //render each gameItem
-        for(GameItem gameItem : gameItems){
-
-            if (gameItem == null){
+        //render each chunk
+        for(GameItem chunkMesh : chunkMeshes){
+            if (chunkMesh == null){
                 continue;
             }
             //set model view matrix for this item
-            Matrix4f modelViewMatrix = transformation.getModelViewMatrix(gameItem, viewMatrix);
+            Matrix4f modelViewMatrix = transformation.getModelViewMatrix(chunkMesh, viewMatrix);
             shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
-
             //render the mesh for this game item
-            gameItem.getMesh().render();
+            chunkMesh.getMesh().render();
         }
+
+        //render each entity
+        for(GameItem entity : entities){
+            if (entity == null){
+                continue;
+            }
+            //set model view matrix for this item
+            Matrix4f modelViewMatrix = transformation.getModelViewMatrix(entity, viewMatrix);
+            shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+            //render the mesh for this game item
+            entity.getMesh().render();
+        }
+
 
         shaderProgram.unbind();
     }

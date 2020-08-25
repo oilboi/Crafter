@@ -233,8 +233,9 @@ public class ChunkMesh {
 
 
         int hash = genMapHash(chunkX,chunkZ);
+
         if (!mapHashInBounds(hash)) {
-            System.out.println("A HORRIBLE ERROR HAS OCCURRED IN THE CHUNK MESH!!");
+            //System.out.println("A HORRIBLE ERROR HAS OCCURRED IN THE CHUNK MESH!!");
             return;
         }
 

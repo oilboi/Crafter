@@ -3,10 +3,7 @@ package game.player;
 import engine.GameItem;
 import engine.graph.Camera;
 import org.joml.Vector3f;
-import org.lwjgl.system.CallbackI;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 
 import static game.ChunkHandling.ChunkData.getBlockInChunk;
 import static game.Crafter.getChunkRenderDistance;
@@ -135,7 +132,7 @@ public class Player {
         jumpBuffer = true;
     }
 
-    public void onTick(Camera camera, ArrayList gameItems) throws Exception {
+    public void onTick(Camera camera, GameItem[] gameItems) throws Exception {
 
         if(placeTimer > 0){
             placeTimer -= 0.003f;

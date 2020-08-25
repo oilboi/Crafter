@@ -11,16 +11,13 @@ import game.player.Player;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
-import java.util.ArrayList;
-
-import static game.ChunkHandling.ChunkMath.genMapHash;
 import static game.ChunkHandling.ChunkMesh.generateChunkMesh;
 import static game.blocks.BlockDefinition.initializeBlocks;
 import static org.lwjgl.glfw.GLFW.*;
 
 public class Crafter implements IGameLogic {
 
-    public final static int chunkRenderDistance = 3;
+    public static int chunkRenderDistance = 3;
 
     private static final float MOUSE_SENSITIVITY = 0.008f;
 
@@ -55,21 +52,14 @@ public class Crafter implements IGameLogic {
         //this initializes the block definitions
         initializeBlocks();
 
-        int indexer = 0;
         //create the initial map
         for (int x = -chunkRenderDistance; x <= chunkRenderDistance; x++) {
             for (int z = -chunkRenderDistance; z <= chunkRenderDistance; z++) {
                 ChunkData.storeChunk(x, z, new Chunk(x, z));
                 generateChunkMesh(x, z, chunkMeshes, false);
-                System.out.println("--------");
-                genMapHash(x, z);
-                System.out.println(indexer);
-                indexer++;
             }
         }
 
-        System.out.println("Max: " + (chunkRenderDistance*(4*chunkRenderDistance)+(chunkRenderDistance*4)));
-        System.out.println("Indexer: " + (indexer-1));
         player = new Player();
     }
 
@@ -177,7 +167,7 @@ public class Crafter implements IGameLogic {
             camera.moveRotation(0,-360, 0);
         }
 
-        //player.onTick(camera, chunkMeshes);
+        player.onTick(camera, chunkMeshes);
 
 
         //this is the game item loop

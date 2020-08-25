@@ -5,12 +5,14 @@ import game.collision.CustomAABB;
 import game.collision.CustomBlockBox;
 import org.joml.Vector3f;
 
+import java.util.ArrayList;
+
 import static game.ChunkHandling.ChunkData.*;
 import static game.ChunkHandling.ChunkMesh.generateChunkMesh;
 import static game.collision.Collision.wouldCollide;
 
 public class Ray {
-    public static void rayCast(Vector3f pos, Vector3f dir, float length, GameItem[] gameItems, String[] chunkNames, boolean mining, boolean placing, Player player) throws Exception {
+    public static void rayCast(Vector3f pos, Vector3f dir, float length, ArrayList gameItems, boolean mining, boolean placing, Player player) throws Exception {
 
         Vector3f finalPos = null;
         Vector3f newPos   = null;
@@ -31,10 +33,10 @@ public class Ray {
         //System.out.println(finalPos);
         if(finalPos != null) {
             if(mining) {
-                destroyBlock(finalPos, gameItems, chunkNames);
+                destroyBlock(finalPos, gameItems);
             } else if (placing && lastPos != null){
                 if (!wouldCollide(new CustomAABB(player.getPos().x, player.getPos().y+0.01f, player.getPos().z, player.getWidth(), player.getHeight()-0.02f), new CustomBlockBox((int)lastPos.x, (int)lastPos.y, (int)lastPos.z))) {
-                    placeBlock(lastPos, gameItems, chunkNames, (short) 4);
+                    placeBlock(lastPos, gameItems, (short) 4);
                 }
             }
         } else {
@@ -53,7 +55,7 @@ public class Ray {
         return getBlockInChunk((int)realPos.x, (int)realPos.y, (int)realPos.z, current[0], current[1]) != 0;
     }
 
-    private static short destroyBlock(Vector3f flooredPos, GameItem[] gameItems, String[] chunkNames) throws Exception {
+    private static short destroyBlock(Vector3f flooredPos, ArrayList gameItems) throws Exception {
         int currentChunkX = (int)(Math.floor(flooredPos.x / 16f));
         int currentChunkZ = (int)(Math.floor(flooredPos.z / 16f));
         int chunkPosX = (int)flooredPos.x - (16*currentChunkX);
@@ -66,24 +68,24 @@ public class Ray {
 
         //updateLightColumn((int)realPos.x, (int)realPos.z, currentChunkX, currentChunkZ);
 
-        generateChunkMesh(currentChunkX, currentChunkZ, gameItems, chunkNames, true);
+        generateChunkMesh(currentChunkX, currentChunkZ, gameItems, true);
 
 
         if (chunkPosX == 15){ //update neighbor
-            generateChunkMesh(currentChunkX+1, currentChunkZ, gameItems, chunkNames, true);
+            generateChunkMesh(currentChunkX+1, currentChunkZ, gameItems, true);
         }
         if (chunkPosX == 0){
-            generateChunkMesh(currentChunkX-1, currentChunkZ, gameItems, chunkNames, true);
+            generateChunkMesh(currentChunkX-1, currentChunkZ, gameItems, true);
         }
         if (chunkPosZ == 15){
-            generateChunkMesh(currentChunkX, currentChunkZ+1, gameItems, chunkNames, true);
+            generateChunkMesh(currentChunkX, currentChunkZ+1, gameItems, true);
         }
         if (chunkPosZ == 0){
-            generateChunkMesh(currentChunkX, currentChunkZ-1, gameItems, chunkNames, true);
+            generateChunkMesh(currentChunkX, currentChunkZ-1, gameItems, true);
         }
         return 0;
     }
-    private static short placeBlock(Vector3f flooredPos, GameItem[] gameItems, String[] chunkNames, short id) throws Exception {
+    private static short placeBlock(Vector3f flooredPos, ArrayList gameItems, short id) throws Exception {
         int currentChunkX = (int)(Math.floor(flooredPos.x / 16f));
         int currentChunkZ = (int)(Math.floor(flooredPos.z / 16f));
         int chunkPosX = (int)flooredPos.x - (16*currentChunkX);
@@ -96,20 +98,20 @@ public class Ray {
 
         //updateLightColumn((int)realPos.x, (int)realPos.z, currentChunkX, currentChunkZ);
 
-        generateChunkMesh(currentChunkX, currentChunkZ, gameItems, chunkNames, true);
+        generateChunkMesh(currentChunkX, currentChunkZ, gameItems, true);
 
 
         if (chunkPosX == 15){ //update neighbor
-            generateChunkMesh(currentChunkX+1, currentChunkZ, gameItems, chunkNames, true);
+            generateChunkMesh(currentChunkX+1, currentChunkZ, gameItems, true);
         }
         if (chunkPosX == 0){
-            generateChunkMesh(currentChunkX-1, currentChunkZ, gameItems, chunkNames, true);
+            generateChunkMesh(currentChunkX-1, currentChunkZ, gameItems, true);
         }
         if (chunkPosZ == 15){
-            generateChunkMesh(currentChunkX, currentChunkZ+1, gameItems, chunkNames, true);
+            generateChunkMesh(currentChunkX, currentChunkZ+1, gameItems, true);
         }
         if (chunkPosZ == 0){
-            generateChunkMesh(currentChunkX, currentChunkZ-1, gameItems, chunkNames, true);
+            generateChunkMesh(currentChunkX, currentChunkZ-1, gameItems, true);
         }
         return 0;
     }

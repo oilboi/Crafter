@@ -11,6 +11,7 @@ public class Chunk {
     private final static short chunkSizeY = 128;
     private final static short chunkSizeZ = 16;
 
+    private String name;
     private short[] block    = new short[chunkSizeX * chunkSizeY * chunkSizeZ];
     private byte[] naturalLight = new byte[chunkSizeX * chunkSizeY * chunkSizeZ];
     private byte[] torchLight = new byte[chunkSizeX * chunkSizeY * chunkSizeZ];
@@ -18,6 +19,7 @@ public class Chunk {
 
     public Chunk(int chunkX,int chunkZ){
         genBiome(chunkX,chunkZ);
+        name = chunkX + " " + chunkZ;
     }
     public short[] getBlocks(){
         return block;
@@ -85,5 +87,13 @@ public class Chunk {
         this.naturalLight[hash] = light;
     }
 
+
+    public String getName(){
+        return name;
+    }
+
+    public String setName(){
+        return name;
+    }
 
 }

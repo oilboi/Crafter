@@ -13,11 +13,14 @@ public class GameItem {
 
     private final Vector3f rotation;
 
-    public GameItem(Mesh mesh){
+    private final String name;
+
+    public GameItem(Mesh mesh, String name){
         this.mesh = mesh;
         position = new Vector3f(0,0,0);
         scale = 1;
         rotation = new Vector3f(0,0,0);
+        this.name = name;
     }
 
     public Vector3f getPosition(){
@@ -52,4 +55,7 @@ public class GameItem {
         return mesh;
     }
 
+    public String getName(){
+        return name;
+    }
 }

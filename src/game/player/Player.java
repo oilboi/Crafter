@@ -5,6 +5,7 @@ import engine.graph.Camera;
 import org.joml.Vector3f;
 import org.lwjgl.system.CallbackI;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 import static game.ChunkHandling.ChunkData.getBlockInChunk;
@@ -134,7 +135,7 @@ public class Player {
         jumpBuffer = true;
     }
 
-    public void onTick(Camera camera, GameItem[] gameItems, String[] chunkNames) throws Exception {
+    public void onTick(Camera camera, ArrayList gameItems) throws Exception {
 
         if(placeTimer > 0){
             placeTimer -= 0.003f;
@@ -153,10 +154,10 @@ public class Player {
         onGround = applyInertia(pos, inertia, onGround, width, height,true);
 
         if(mining && mineTimer <= 0) {
-            rayCast(camera.getPosition(), camera.getRotationVector(), 4f, gameItems, chunkNames, true, false, this);
+            rayCast(camera.getPosition(), camera.getRotationVector(), 4f, gameItems, true, false, this);
             mineTimer = 0.5f;
         } else if (placing && placeTimer <= 0){
-            rayCast(camera.getPosition(), camera.getRotationVector(), 4f, gameItems, chunkNames, false, true, this);
+            rayCast(camera.getPosition(), camera.getRotationVector(), 4f, gameItems, false, true, this);
             placeTimer = 0.5f;
         }
 

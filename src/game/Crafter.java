@@ -11,6 +11,8 @@ import game.player.Player;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
+import java.util.ArrayList;
+
 import static game.ChunkHandling.ChunkMesh.generateChunkMesh;
 import static game.blocks.BlockDefinition.initializeBlocks;
 import static org.lwjgl.glfw.GLFW.*;
@@ -27,15 +29,11 @@ public class Crafter implements IGameLogic {
 
     private final Camera camera;
 
-    private GameItem[] chunkMeshes;
-
-    private GameItem[] entities;
+    private ArrayList<GameItem> chunkMeshes = new ArrayList<>();
 
     private boolean fButtonPushed = false;
 
     private boolean rButtonPushed = false;
-
-    private String[] chunkNames;
 
     private Player player;
 
@@ -57,38 +55,33 @@ public class Crafter implements IGameLogic {
         initializeBlocks();
 
         //this is a lazy way to deduce the amount of chunks there are in the map
-        int index = 0;
-        for (int x = -chunkRenderDistance; x <= chunkRenderDistance; x++) {
-            for (int z = -chunkRenderDistance; z <= chunkRenderDistance; z++) {
-                index++;
-            }
-        }
+//        int index = 0;
+//        for (int x = -chunkRenderDistance; x <= chunkRenderDistance; x++) {
+//            for (int z = -chunkRenderDistance; z <= chunkRenderDistance; z++) {
+//                index++;
+//            }
+//        }
 
-        chunkMeshes = new GameItem[index];
-        chunkNames = new String[index];
+//        chunkNames = new String[index];
+//
+//        index = 0;
+//        //build an index of names for assignment/access
+//        for (int x = -chunkRenderDistance; x <= chunkRenderDistance; x++) {
+//            for (int z = -chunkRenderDistance; z <= chunkRenderDistance; z++) {
+//                chunkNames[index] = x + " " + z;
+//                index++;
+//            }
+//        }
 
-        index = 0;
-        //build an index of names for assignment/access
-        for (int x = -chunkRenderDistance; x <= chunkRenderDistance; x++) {
-            for (int z = -chunkRenderDistance; z <= chunkRenderDistance; z++) {
-                chunkNames[index] = x + " " + z;
-                index++;
-            }
-        }
 
         //create the initial map
         for (int x = -chunkRenderDistance; x <= chunkRenderDistance; x++) {
             for (int z = -chunkRenderDistance; z <= chunkRenderDistance; z++) {
-
                 ChunkData.storeChunk(x, z, new Chunk(x, z));
-                generateChunkMesh(x, z, chunkMeshes, chunkNames, false);
-//                System.out.println(x + " " + z);
+                generateChunkMesh(x, z, chunkMeshes, false);
             }
         }
-//        System.out.println("Wow! It's done!");
         player = new Player();
-
-        entities = new GameItem[]{};
     }
 
     @Override
@@ -195,7 +188,7 @@ public class Crafter implements IGameLogic {
             camera.moveRotation(0,-360, 0);
         }
 
-        player.onTick(camera, chunkMeshes, chunkNames);
+        player.onTick(camera, chunkMeshes);
 
 
         //this is the game item loop
@@ -232,7 +225,7 @@ public class Crafter implements IGameLogic {
 
     @Override
     public void render(Window window){
-        renderer.render(window, camera, chunkMeshes, entities);
+        renderer.render(window, camera, chunkMeshes);
     }
 
     @Override

@@ -5,6 +5,8 @@ import engine.Window;
 import engine.graph.*;
 import org.joml.Matrix4f;
 
+import java.util.ArrayList;
+
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
 
@@ -47,7 +49,7 @@ public class Renderer {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
-    public void render(Window window, Camera camera, GameItem[] chunkMeshes, GameItem[] entities){
+    public void render(Window window, Camera camera, ArrayList chunkMeshes){
         clear();
 
         if (window.isResized()){
@@ -68,28 +70,18 @@ public class Renderer {
         shaderProgram.setUniform("texture_sampler", 0);
 
         //render each chunk
-        for(GameItem chunkMesh : chunkMeshes){
+        for(Object chunkMesh : chunkMeshes){
             if (chunkMesh == null){
                 continue;
             }
+
             //set model view matrix for this item
-            Matrix4f modelViewMatrix = transformation.getModelViewMatrix(chunkMesh, viewMatrix);
+            Matrix4f modelViewMatrix = transformation.getModelViewMatrix((GameItem)chunkMesh, viewMatrix);
             shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
             //render the mesh for this game item
-            chunkMesh.getMesh().render();
+            ((GameItem) chunkMesh).getMesh().render();
         }
 
-        //render each entity
-        for(GameItem entity : entities){
-            if (entity == null){
-                continue;
-            }
-            //set model view matrix for this item
-            Matrix4f modelViewMatrix = transformation.getModelViewMatrix(entity, viewMatrix);
-            shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
-            //render the mesh for this game item
-            entity.getMesh().render();
-        }
 
 
         shaderProgram.unbind();

@@ -214,7 +214,7 @@ public class ChunkData {
 
 
     private static final byte torchDistance = 10;
-    public static void oldFlood(int posX, int posY, int posZ, GameItem[] gameItems, String[] chunkNames) throws Exception {
+    public static void oldFlood(int posX, int posY, int posZ, ArrayList gameItems) throws Exception {
         ArrayList<int[]> chunkBuffer = new ArrayList();
 
         //System.out.println(posX + " " + posY + " " + posZ);
@@ -264,7 +264,7 @@ public class ChunkData {
 
         for (int[] index : chunkBuffer) {
 //            System.out.println(index[0]);
-            generateChunkMesh(index[0], index[1], gameItems, chunkNames, true);
+            generateChunkMesh(index[0], index[1], gameItems, true);
         }
     }
 

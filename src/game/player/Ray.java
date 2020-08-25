@@ -8,6 +8,7 @@ import org.joml.Vector3f;
 import static game.ChunkHandling.ChunkData.*;
 import static game.ChunkHandling.ChunkMesh.generateChunkMesh;
 import static game.collision.Collision.wouldCollide;
+import static game.light.Light.floodFill;
 
 public class Ray {
     public static void rayCast(Vector3f pos, Vector3f dir, float length, GameItem[] gameItems, boolean mining, boolean placing, Player player) throws Exception {
@@ -64,18 +65,23 @@ public class Ray {
 //        short thisBlock = getBlockInChunk((int)realPos.x, (int)realPos.y, (int)realPos.z, current[0], current[1]);
         setBlock((int)realPos.x, (int)realPos.y, (int)realPos.z, currentChunkX, currentChunkZ, (short) 0);
 
+        floodFill(currentChunkX, currentChunkZ);
         generateChunkMesh(currentChunkX, currentChunkZ, gameItems, true);
 
         if (chunkPosX == 15){ //update neighbor
+            floodFill(currentChunkX+1, currentChunkZ);
             generateChunkMesh(currentChunkX+1, currentChunkZ, gameItems, true);
         }
         if (chunkPosX == 0){
+            floodFill(currentChunkX-1, currentChunkZ);
             generateChunkMesh(currentChunkX-1, currentChunkZ, gameItems, true);
         }
         if (chunkPosZ == 15){
+            floodFill(currentChunkX, currentChunkZ+1);
             generateChunkMesh(currentChunkX, currentChunkZ+1, gameItems, true);
         }
         if (chunkPosZ == 0){
+            floodFill(currentChunkX, currentChunkZ-1);
             generateChunkMesh(currentChunkX, currentChunkZ-1, gameItems, true);
         }
         return 0;
@@ -91,21 +97,28 @@ public class Ray {
 //        short thisBlock = getBlockInChunk((int)realPos.x, (int)realPos.y, (int)realPos.z, current[0], current[1]);
         setBlock((int)realPos.x, (int)realPos.y, (int)realPos.z, currentChunkX, currentChunkZ, (short) id);
 
+        floodFill(currentChunkX, currentChunkZ);
+        
         generateChunkMesh(currentChunkX, currentChunkZ, gameItems, true);
 
 
         if (chunkPosX == 15){ //update neighbor
+            floodFill(currentChunkX+1, currentChunkZ);
             generateChunkMesh(currentChunkX+1, currentChunkZ, gameItems, true);
         }
         if (chunkPosX == 0){
+            floodFill(currentChunkX-1, currentChunkZ);
             generateChunkMesh(currentChunkX-1, currentChunkZ, gameItems, true);
         }
         if (chunkPosZ == 15){
+            floodFill(currentChunkX, currentChunkZ+1);
             generateChunkMesh(currentChunkX, currentChunkZ+1, gameItems, true);
         }
         if (chunkPosZ == 0){
+            floodFill(currentChunkX, currentChunkZ-1);
             generateChunkMesh(currentChunkX, currentChunkZ-1, gameItems, true);
         }
+
         return 0;
     }
 }

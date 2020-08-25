@@ -13,11 +13,12 @@ import org.joml.Vector3f;
 
 import static game.ChunkHandling.ChunkMesh.generateChunkMesh;
 import static game.blocks.BlockDefinition.initializeBlocks;
+import static game.player.TNT.boom;
 import static org.lwjgl.glfw.GLFW.*;
 
 public class Crafter implements IGameLogic {
 
-    public static int chunkRenderDistance = 3;
+    public static int chunkRenderDistance = 5;
 
     private static final float MOUSE_SENSITIVITY = 0.008f;
 
@@ -32,6 +33,10 @@ public class Crafter implements IGameLogic {
     private boolean fButtonPushed = false;
 
     private boolean rButtonPushed = false;
+
+    private boolean tButtonPushed = false;
+
+    private boolean boomBuffer = false;
 
     private Player player;
 
@@ -128,6 +133,17 @@ public class Crafter implements IGameLogic {
         }
 
 
+        //prototype explosion - T KEY
+        if (window.isKeyPressed(GLFW_KEY_T)) {
+            if (!tButtonPushed) {
+                tButtonPushed = true;
+                boomBuffer = true;
+                System.out.println("boom");
+            }
+        } else if (!window.isKeyPressed(GLFW_KEY_T)){
+            tButtonPushed = false;
+        }
+
         //mouse left button input
         if(input.isLeftButtonPressed()){
             player.setMining(true);
@@ -169,37 +185,11 @@ public class Crafter implements IGameLogic {
 
         player.onTick(camera, chunkMeshes);
 
+        if(boomBuffer){
+            boom((int)Math.floor(player.getPos().x),(int)Math.floor(player.getPos().y),(int)Math.floor(player.getPos().z), chunkMeshes);
+            boomBuffer = false;
+        }
 
-        //this is the game item loop
-//        for (GameItem gameItem : chunkMeshes){
-            //update position
-//            Vector3f itemPos = gameItem.getPosition();
-//            float posx = itemPos.x + displxInc * 0.01f;
-//            float posy = itemPos.y + displyInc * 0.01f;
-//            float posz = itemPos.z + displzInc * 0.01f;
-
-//            gameItem.setPosition(posx, posy, posz);
-
-            //Update scale
-//            float scale = gameItem.getScale();
-//            scale += scaleInc * 0.05f;
-//            if (scale < 0) {
-//                scale = 0;
-//            }
-//            gameItem.setScale(scale);
-
-            //gameItem.setPosition((float)Math.random()-0.5f,(float)Math.random()-0.5f,-2f);
-
-            //update rotation angle
-//            float rotation = gameItem.getRotation().y - 1.5f;
-//
-//
-//            if (rotation > 360) {
-//                rotation -= 360;
-//            }
-//
-//            gameItem.setRotation(rotation, rotation, rotation);
-//        }
     }
 
     @Override

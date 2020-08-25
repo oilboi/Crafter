@@ -45,7 +45,6 @@ public class ChunkData {
             return;
         }
         thisChunk.setBlock(genHash(x, y, z), newBlock);
-        floodFill(chunkX,chunkZ);
     }
 
     //todo COMBINE THESE!

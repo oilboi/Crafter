@@ -12,6 +12,7 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 
 import static game.ChunkHandling.ChunkMesh.generateChunkMesh;
+import static game.blocks.BlockDefinition.initializeBlocks;
 import static org.lwjgl.glfw.GLFW.*;
 
 public class Crafter implements IGameLogic {
@@ -51,6 +52,10 @@ public class Crafter implements IGameLogic {
     @Override
     public void init(Window window) throws Exception{
         renderer.init(window);
+
+        //this initializes the block definitions
+        initializeBlocks();
+
         //this is a lazy way to deduce the amount of chunks there are in the map
         int index = 0;
         for (int x = -chunkRenderDistance; x <= chunkRenderDistance; x++) {

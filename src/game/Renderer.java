@@ -41,7 +41,8 @@ public class Renderer {
         //create uniforms for texture sampler
         shaderProgram.createUniform("texture_sampler");
 
-        window.setClearColor(0.f,0.f,0.f,0.f);
+
+        window.setClearColor(0.53f,0.81f,0.92f,0.f);
     }
 
     public void clear(){

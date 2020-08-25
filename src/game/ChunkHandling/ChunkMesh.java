@@ -3,11 +3,15 @@ package game.ChunkHandling;
 import engine.GameItem;
 import engine.graph.Mesh;
 import engine.graph.Texture;
+import org.lwjgl.system.MemoryStack;
 
+import java.nio.ByteBuffer;
+import java.nio.IntBuffer;
 import java.util.ArrayList;
 
 import static game.ChunkHandling.ChunkData.*;
 import static game.blocks.BlockDefinition.*;
+import static org.lwjgl.stb.STBImage.stbi_load;
 
 public class ChunkMesh {
 
@@ -225,6 +229,7 @@ public class ChunkMesh {
         }
 
         Texture texture = new Texture("textures/textureAtlas.png");
+
         Mesh mesh = new Mesh(positionsArray, lightArray, indicesArray, textureCoordArray, texture);
 
 

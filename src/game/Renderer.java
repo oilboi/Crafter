@@ -33,14 +33,12 @@ public class Renderer {
         shaderProgram.createVertexShader(Utils.loadResource("/resources/vertex.vs"));
         shaderProgram.createFragmentShader(Utils.loadResource("/resources/fragment.fs"));
         shaderProgram.link();
-
         //create uniforms for world and projection matrices
         shaderProgram.createUniform("projectionMatrix");
         //create uniforms for model view matrix
         shaderProgram.createUniform("modelViewMatrix");
         //create uniforms for texture sampler
         shaderProgram.createUniform("texture_sampler");
-
 
         window.setClearColor(0.53f,0.81f,0.92f,0.f);
     }

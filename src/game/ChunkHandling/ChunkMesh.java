@@ -7,6 +7,7 @@ import engine.graph.Texture;
 import java.util.ArrayList;
 
 import static game.ChunkHandling.ChunkData.*;
+import static game.blocks.BlockDefinition.*;
 
 public class ChunkMesh {
 
@@ -29,7 +30,8 @@ public class ChunkMesh {
 
         //create the mesh
         for (int w = 0; w < (16 * 128 * 16); w++) {
-            if (getBlockInChunk(x,y,z, chunkX, chunkZ) != 0) {
+            short thisBlock = getBlockInChunk(x,y,z, chunkX, chunkZ);
+            if (thisBlock != 0) {
                 short neighborBlock = getBlockInChunk(x, y, z+1, chunkX, chunkZ);
                 if (neighborBlock == 0) {
                     //front
@@ -47,11 +49,13 @@ public class ChunkMesh {
                     //front
                     indices.add(0+indicesCount); indices.add(1+indicesCount); indices.add(2+indicesCount); indices.add(0+indicesCount); indices.add(2+indicesCount); indices.add(3+indicesCount);
                     indicesCount += 4;
+
+                    float[] textureFront = getFrontTexturePoints(thisBlock);
                     //front
-                    textureCoord.add(0.5f);textureCoord.add(0.0f);
-                    textureCoord.add(0.0f);textureCoord.add(0.0f);
-                    textureCoord.add(0.0f);textureCoord.add(0.5f);
-                    textureCoord.add(0.5f);textureCoord.add(0.5f);
+                    textureCoord.add(textureFront[1]);textureCoord.add(textureFront[2]);
+                    textureCoord.add(textureFront[0]);textureCoord.add(textureFront[2]);
+                    textureCoord.add(textureFront[0]);textureCoord.add(textureFront[3]);
+                    textureCoord.add(textureFront[1]);textureCoord.add(textureFront[3]);
                 }
 
 
@@ -72,11 +76,13 @@ public class ChunkMesh {
                     //back
                     indices.add(0+indicesCount); indices.add(1+indicesCount); indices.add(2+indicesCount); indices.add(0+indicesCount); indices.add(2+indicesCount); indices.add(3+indicesCount);
                     indicesCount += 4;
+
+                    float[] textureBack = getBackTexturePoints(thisBlock);
                     //back
-                    textureCoord.add(0.5f);textureCoord.add(0.0f);
-                    textureCoord.add(0.0f);textureCoord.add(0.0f);
-                    textureCoord.add(0.0f);textureCoord.add(0.5f);
-                    textureCoord.add(0.5f);textureCoord.add(0.5f);
+                    textureCoord.add(textureBack[1]);textureCoord.add(textureBack[2]);
+                    textureCoord.add(textureBack[0]);textureCoord.add(textureBack[2]);
+                    textureCoord.add(textureBack[0]);textureCoord.add(textureBack[3]);
+                    textureCoord.add(textureBack[1]);textureCoord.add(textureBack[3]);
                 }
 
                 neighborBlock = getBlockInChunk(x+1, y, z, chunkX, chunkZ);
@@ -96,11 +102,13 @@ public class ChunkMesh {
                     //right
                     indices.add(0+indicesCount); indices.add(1+indicesCount); indices.add(2+indicesCount); indices.add(0+indicesCount); indices.add(2+indicesCount); indices.add(3+indicesCount);
                     indicesCount += 4;
+
+                    float[] textureRight = getRightTexturePoints(thisBlock);
                     //right
-                    textureCoord.add(0.5f);textureCoord.add(0.0f);
-                    textureCoord.add(0.0f);textureCoord.add(0.0f);
-                    textureCoord.add(0.0f);textureCoord.add(0.5f);
-                    textureCoord.add(0.5f);textureCoord.add(0.5f);
+                    textureCoord.add(textureRight[1]);textureCoord.add(textureRight[2]);
+                    textureCoord.add(textureRight[0]);textureCoord.add(textureRight[2]);
+                    textureCoord.add(textureRight[0]);textureCoord.add(textureRight[3]);
+                    textureCoord.add(textureRight[1]);textureCoord.add(textureRight[3]);
                 }
 
                 neighborBlock = getBlockInChunk(x-1, y, z, chunkX, chunkZ);
@@ -120,11 +128,13 @@ public class ChunkMesh {
                     //left
                     indices.add(0+indicesCount); indices.add(1+indicesCount); indices.add(2+indicesCount); indices.add(0+indicesCount); indices.add(2+indicesCount); indices.add(3+indicesCount);
                     indicesCount += 4;
+
+                    float[] textureLeft = getLeftTexturePoints(thisBlock);
                     //left
-                    textureCoord.add(0.5f);textureCoord.add(0.0f);
-                    textureCoord.add(0.0f);textureCoord.add(0.0f);
-                    textureCoord.add(0.0f);textureCoord.add(0.5f);
-                    textureCoord.add(0.5f);textureCoord.add(0.5f);
+                    textureCoord.add(textureLeft[1]);textureCoord.add(textureLeft[2]);
+                    textureCoord.add(textureLeft[0]);textureCoord.add(textureLeft[2]);
+                    textureCoord.add(textureLeft[0]);textureCoord.add(textureLeft[3]);
+                    textureCoord.add(textureLeft[1]);textureCoord.add(textureLeft[3]);
                 }
 
                 neighborBlock = getBlockInChunk(x, y+1, z, chunkX, chunkZ);
@@ -144,11 +154,13 @@ public class ChunkMesh {
                     //top
                     indices.add(0+indicesCount); indices.add(1+indicesCount); indices.add(2+indicesCount); indices.add(0+indicesCount); indices.add(2+indicesCount); indices.add(3+indicesCount);
                     indicesCount += 4;
+
+                    float[] textureTop = getTopTexturePoints(thisBlock);
                     //top
-                    textureCoord.add(0.5f);textureCoord.add(0.5f);
-                    textureCoord.add(0.0f);textureCoord.add(0.5f);
-                    textureCoord.add(0.0f);textureCoord.add(1.0f);
-                    textureCoord.add(0.5f);textureCoord.add(1.0f);
+                    textureCoord.add(textureTop[1]);textureCoord.add(textureTop[2]);
+                    textureCoord.add(textureTop[0]);textureCoord.add(textureTop[2]);
+                    textureCoord.add(textureTop[0]);textureCoord.add(textureTop[3]);
+                    textureCoord.add(textureTop[1]);textureCoord.add(textureTop[3]);
                 }
 
                 neighborBlock = getBlockInChunk(x, y-1, z, chunkX, chunkZ);
@@ -168,11 +180,13 @@ public class ChunkMesh {
                     //bottom
                     indices.add(0+indicesCount); indices.add(1+indicesCount); indices.add(2+indicesCount); indices.add(0+indicesCount); indices.add(2+indicesCount); indices.add(3+indicesCount);
                     indicesCount += 4;
+
+                    float[] textureBottom = getBottomTexturePoints(thisBlock);
                     //bottom
-                    textureCoord.add(1.0f);textureCoord.add(0.0f);
-                    textureCoord.add(0.5f);textureCoord.add(0.0f);
-                    textureCoord.add(0.5f);textureCoord.add(0.5f);
-                    textureCoord.add(1.0f);textureCoord.add(0.5f);
+                    textureCoord.add(textureBottom[1]);textureCoord.add(textureBottom[2]);
+                    textureCoord.add(textureBottom[0]);textureCoord.add(textureBottom[2]);
+                    textureCoord.add(textureBottom[0]);textureCoord.add(textureBottom[3]);
+                    textureCoord.add(textureBottom[1]);textureCoord.add(textureBottom[3]);
                 }
             }
             y++;
@@ -210,8 +224,7 @@ public class ChunkMesh {
             textureCoordArray[i] = (float)textureCoord.get(i);
         }
 
-
-        Texture texture = new Texture("textures/grassblock.png");
+        Texture texture = new Texture("textures/textureAtlas.png");
         Mesh mesh = new Mesh(positionsArray, lightArray, indicesArray, textureCoordArray, texture);
 
 

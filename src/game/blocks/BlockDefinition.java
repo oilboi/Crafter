@@ -4,21 +4,21 @@ import java.util.ArrayList;
 
 public class BlockDefinition {
 
-    private static ArrayList<BlockDefinition> blockIDs = new ArrayList<>();
+    private final static ArrayList<BlockDefinition> blockIDs = new ArrayList<>();
 
     //fixed fields for the class
-    private static final byte atlasSizeX = 64;
-    private static final byte atlasSizeY = 64;
+    private static final byte atlasSizeX = 32;
+    private static final byte atlasSizeY = 32;
 
     //actual block object fields
-    private int     ID;
-    private String  name;
-    private float[] frontTexture;  //front
-    private float[] backTexture;   //back
-    private float[] rightTexture;  //right
-    private float[] leftTexture;   //left
-    private float[] topTexture;    //top
-    private float[] bottomTexture; //bottom
+    private final int     ID;
+    private final String  name;
+    private final float[] frontTexture;  //front
+    private final float[] backTexture;   //back
+    private final float[] rightTexture;  //right
+    private final float[] leftTexture;   //left
+    private final float[] topTexture;    //top
+    private final float[] bottomTexture; //bottom
 
     private BlockDefinition(int ID, String name, int[] front, int[] back, int[] right, int[] left, int[] top, int[] bottom){
         this.ID   = ID;
@@ -35,10 +35,11 @@ public class BlockDefinition {
 
     private static float[] calculateTexture(int x, int y){
         float[] texturePoints = new float[4];
-        texturePoints[0] = (float)x/(float)atlasSizeX;     //min x
-        texturePoints[1] = (float)(x+1)/(float)atlasSizeX; //max x
-        texturePoints[2] = (float)y/(float)atlasSizeY;     //min y
-        texturePoints[3] = (float)(y+1)/(float)atlasSizeY; //max y
+        texturePoints[0] = (float)x/(float)atlasSizeX;     //min x (-)
+        texturePoints[1] = (float)(x+1)/(float)atlasSizeX; //max x (+)
+
+        texturePoints[2] = (float)y/(float)atlasSizeY;     //min y (-)
+        texturePoints[3] = (float)(y+1)/(float)atlasSizeY; //max y (+)
         return texturePoints;
     }
 
@@ -65,10 +66,51 @@ public class BlockDefinition {
                 new int[]{0,0}, //top
                 new int[]{0,0}  //bottom
         );
+
+        new BlockDefinition(
+                2,
+                "grass",
+                new int[]{5,0}, //front
+                new int[]{5,0}, //back
+                new int[]{5,0}, //right
+                new int[]{5,0}, //left
+                new int[]{4,0}, //top
+                new int[]{0,0}  //bottom
+        );
+
+        new BlockDefinition(
+                3,
+                "stone",
+                new int[]{1,0}, //front
+                new int[]{1,0}, //back
+                new int[]{1,0}, //right
+                new int[]{1,0}, //left
+                new int[]{1,0}, //top
+                new int[]{1,0}  //bottom
+        );
     }
 
     public static BlockDefinition getID(int ID){
         return blockIDs.get(ID);
     }
-    
+
+    public static float[] getFrontTexturePoints(int ID){
+        return blockIDs.get(ID).frontTexture;
+    }
+    public static float[] getBackTexturePoints(int ID){
+        return blockIDs.get(ID).backTexture;
+    }
+    public static float[] getRightTexturePoints(int ID){
+        return blockIDs.get(ID).rightTexture;
+    }
+    public static float[] getLeftTexturePoints(int ID){
+        return blockIDs.get(ID).leftTexture;
+    }
+    public static float[] getTopTexturePoints(int ID){
+        return blockIDs.get(ID).topTexture;
+    }
+    public static float[] getBottomTexturePoints(int ID){
+        return blockIDs.get(ID).bottomTexture;
+    }
+
 }

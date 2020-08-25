@@ -55,8 +55,8 @@ public class TNT {
         }
 
         for (int[] index : chunkBuffer) {
-            generateChunkMesh(index[0], index[1], chunkMeshes, false);
             floodFill(index[0], index[1]);
+            generateChunkMesh(index[0], index[1], chunkMeshes, true);
         }
     }
 }

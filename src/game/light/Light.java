@@ -13,10 +13,15 @@ public class Light {
     private static final float debugLightLevel = 15;
 
     public static void floodFill(int chunkX, int chunkZ) {
-        Chunk thisChunk = getChunk(chunkX,chunkZ);
+//        System.out.println("this is being run" + Math.random());
 
+
+        System.out.println("Flood fill started for " + chunkX + " " + chunkZ);
+        Chunk thisChunk = getChunk(chunkX,chunkZ);
         int    [][][] pseudoChunk     = new     int[16][128][16];
         int    [][][] caveLight       = new     int[16][128][16];
+
+        long startTime = System.currentTimeMillis();
 
         //shove everything into the 3D arrays
         //fill sun rays with sunlight
@@ -39,11 +44,15 @@ public class Light {
                 }
             }
         }
+        long endTime = System.currentTimeMillis();
+        System.out.println("Data Collection Time: " + (endTime - startTime));
 
         //2 is air light source
         //1 is cave light
         //-1 is any solid block
 
+
+        startTime = System.currentTimeMillis();
         //flood the whole thing with sunlight
         //this is the most ridiculous code I've ever written
         for(int y = 127; y > 0; y--){
@@ -64,38 +73,8 @@ public class Light {
                                         if (thisIndexX >= 0 && thisIndexX <= 15 && thisIndexY >= 0 && thisIndexY <= 127 && thisIndexZ >= 0 && thisIndexZ <= 15) {
                                             //get if sunlight
                                             if (pseudoChunk[thisIndexX][thisIndexY][thisIndexZ] == 2){
-                                                //begin distribution queue
-                                                ArrayList queue = new ArrayList();
-                                                queue.add(new int[]{thisIndexX,thisIndexY,thisIndexZ, (int) debugLightLevel});
-                                                while(queue.size() > 0){
-                                                    int[] firstIndex = (int[]) queue.get(0);
-                                                    int currentLight = firstIndex[3];
-                                                    //only pass on light if not pitch black
-                                                    if(currentLight > 1) {
-                                                        //index surroundings
-                                                        for (int xxx = -1; xxx <= 1; xxx++) {
-                                                            for (int yyy = -1; yyy <= 1; yyy++) {
-                                                                for (int zzz = -1; zzz <= 1; zzz++) {
-                                                                    if(Math.abs(xxx) + Math.abs(yyy) + Math.abs(zzz) == 1) {
-                                                                        int thisIndexX2 = firstIndex[0] + xxx;
-                                                                        int thisIndexY2 = firstIndex[1] + yyy;
-                                                                        int thisIndexZ2 = firstIndex[2] + zzz;
-                                                                        //catch boundaries
-                                                                        if (thisIndexX2 >= 0 && thisIndexX2 <= 15 && thisIndexY2 >= 0 && thisIndexY2 <= 127 && thisIndexZ2 >= 0 && thisIndexZ2 <= 15) {
-                                                                            //only spread to cave light that's darker
-                                                                            if (pseudoChunk[thisIndexX2][thisIndexY2][thisIndexZ2] == 1 && caveLight[thisIndexX2][thisIndexY2][thisIndexZ2] < currentLight) {
-                                                                                caveLight[thisIndexX2][thisIndexY2][thisIndexZ2] = currentLight - 1;
-                                                                                queue.add(new int[]{thisIndexX2, thisIndexY2, thisIndexZ2, currentLight - 1});
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                        }
-                                                    }
-                                                    //NEVER REMOVE THIS
-                                                    queue.remove(firstIndex);
-                                                }
+                                                pseudoChunk[thisIndexX][thisIndexY][thisIndexZ] = -1;
+                                                processLightQueue(thisIndexX, thisIndexY, thisIndexZ,pseudoChunk, caveLight);
                                             }
                                         }
                                     }
@@ -107,6 +86,9 @@ public class Light {
             }
         }
 
+        endTime = System.currentTimeMillis();
+        System.out.println("Algorithm Time: " + (endTime - startTime));
+
         for(int y = 127; y > 0; y--) {
             for (int x = 0; x <= 15; x++) {
                 for (int z = 0; z <= 15; z++) {
@@ -116,6 +98,45 @@ public class Light {
                     }
                 }
             }
+        }
+    }
+
+    public static void processLightQueue(int thisIndexX, int thisIndexY, int thisIndexZ,int[][][] pseudoChunk, int[][][] caveLight){
+        //begin distribution queue
+
+        boolean[][][] overflowChecker = new boolean[16][128][16];
+
+        ArrayList queue = new ArrayList();
+        queue.add(new int[]{thisIndexX,thisIndexY,thisIndexZ, (int) debugLightLevel});
+        while(queue.size() > 0){
+            int[] firstIndex = (int[]) queue.get(0);
+            int currentLight = firstIndex[3];
+            //only pass on light if not pitch black
+            if(currentLight > 1) {
+                //index surroundings
+                for (int xxx = -1; xxx <= 1; xxx++) {
+                    for (int yyy = -1; yyy <= 1; yyy++) {
+                        for (int zzz = -1; zzz <= 1; zzz++) {
+                            if(Math.abs(xxx) + Math.abs(yyy) + Math.abs(zzz) == 1) {
+                                int thisIndexX2 = firstIndex[0] + xxx;
+                                int thisIndexY2 = firstIndex[1] + yyy;
+                                int thisIndexZ2 = firstIndex[2] + zzz;
+                                //catch boundaries
+                                if (thisIndexX2 >= 0 && thisIndexX2 <= 15 && thisIndexY2 >= 0 && thisIndexY2 <= 127 && thisIndexZ2 >= 0 && thisIndexZ2 <= 15) {
+                                    //only spread to cave light that's darker
+                                    if (pseudoChunk[thisIndexX2][thisIndexY2][thisIndexZ2] == 1 && !overflowChecker[thisIndexX2][thisIndexY2][thisIndexZ2] && caveLight[thisIndexX2][thisIndexY2][thisIndexZ2] < currentLight) {
+                                        overflowChecker[thisIndexX2][thisIndexY2][thisIndexZ2] = true;
+                                        caveLight[thisIndexX2][thisIndexY2][thisIndexZ2] = currentLight - 1;
+                                        queue.add(new int[]{thisIndexX2, thisIndexY2, thisIndexZ2, currentLight - 1});
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            //NEVER REMOVE THIS
+            queue.remove(firstIndex);
         }
     }
 }

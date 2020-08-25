@@ -98,7 +98,7 @@ public class Ray {
         setBlock((int)realPos.x, (int)realPos.y, (int)realPos.z, currentChunkX, currentChunkZ, (short) id);
 
         floodFill(currentChunkX, currentChunkZ);
-        
+
         generateChunkMesh(currentChunkX, currentChunkZ, gameItems, true);
 
 

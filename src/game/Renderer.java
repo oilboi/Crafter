@@ -49,7 +49,7 @@ public class Renderer {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
-    public void render(Window window, Camera camera, ArrayList chunkMeshes){
+    public void render(Window window, Camera camera, GameItem[] chunkMeshes){
         clear();
 
         if (window.isResized()){
@@ -74,7 +74,6 @@ public class Renderer {
             if (chunkMesh == null){
                 continue;
             }
-
             //set model view matrix for this item
             Matrix4f modelViewMatrix = transformation.getModelViewMatrix((GameItem)chunkMesh, viewMatrix);
             shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);

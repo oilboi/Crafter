@@ -1,9 +1,13 @@
 package game.ChunkHandling;
 
+import static game.Crafter.chunkRenderDistance;
+
 public class ChunkMath {
     private final static short chunkSizeX = 16;
     private final static short chunkSizeY = 128;
     private final static short chunkSizeZ = 16;
+
+    private final static int maxSize = (chunkRenderDistance*(4*chunkRenderDistance)+(chunkRenderDistance*4)+2);
 
     public static int genHash(int x, int y, int z){
         return((x*chunkSizeY) + y + (z*(chunkSizeX * chunkSizeY)));
@@ -17,6 +21,12 @@ public class ChunkMath {
         int y = (int)(Math.floor(i));
         int[] result = {x,y,z};
         return result;
+    }
+
+    public static int genMapHash(int x, int z){
+        x += chunkRenderDistance;
+        z += chunkRenderDistance;
+        return(x * ((chunkRenderDistance * 2) + 1) ) + z;
     }
 
     //todo this does not belong in here

@@ -68,21 +68,21 @@ public class Ray {
 
         //updateLightColumn((int)realPos.x, (int)realPos.z, currentChunkX, currentChunkZ);
 
-        generateChunkMesh(currentChunkX, currentChunkZ, gameItems, true);
+//        generateChunkMesh(currentChunkX, currentChunkZ, gameItems, true);
 
 
-        if (chunkPosX == 15){ //update neighbor
-            generateChunkMesh(currentChunkX+1, currentChunkZ, gameItems, true);
-        }
-        if (chunkPosX == 0){
-            generateChunkMesh(currentChunkX-1, currentChunkZ, gameItems, true);
-        }
-        if (chunkPosZ == 15){
-            generateChunkMesh(currentChunkX, currentChunkZ+1, gameItems, true);
-        }
-        if (chunkPosZ == 0){
-            generateChunkMesh(currentChunkX, currentChunkZ-1, gameItems, true);
-        }
+//        if (chunkPosX == 15){ //update neighbor
+//            generateChunkMesh(currentChunkX+1, currentChunkZ, gameItems, true);
+//        }
+//        if (chunkPosX == 0){
+//            generateChunkMesh(currentChunkX-1, currentChunkZ, gameItems, true);
+//        }
+//        if (chunkPosZ == 15){
+//            generateChunkMesh(currentChunkX, currentChunkZ+1, gameItems, true);
+//        }
+//        if (chunkPosZ == 0){
+//            generateChunkMesh(currentChunkX, currentChunkZ-1, gameItems, true);
+//        }
         return 0;
     }
     private static short placeBlock(Vector3f flooredPos, ArrayList gameItems, short id) throws Exception {
@@ -96,23 +96,23 @@ public class Ray {
 //        short thisBlock = getBlockInChunk((int)realPos.x, (int)realPos.y, (int)realPos.z, current[0], current[1]);
         setBlock((int)realPos.x, (int)realPos.y, (int)realPos.z, currentChunkX, currentChunkZ, (short) id);
 
-        //updateLightColumn((int)realPos.x, (int)realPos.z, currentChunkX, currentChunkZ);
-
-        generateChunkMesh(currentChunkX, currentChunkZ, gameItems, true);
-
-
-        if (chunkPosX == 15){ //update neighbor
-            generateChunkMesh(currentChunkX+1, currentChunkZ, gameItems, true);
-        }
-        if (chunkPosX == 0){
-            generateChunkMesh(currentChunkX-1, currentChunkZ, gameItems, true);
-        }
-        if (chunkPosZ == 15){
-            generateChunkMesh(currentChunkX, currentChunkZ+1, gameItems, true);
-        }
-        if (chunkPosZ == 0){
-            generateChunkMesh(currentChunkX, currentChunkZ-1, gameItems, true);
-        }
+//        //updateLightColumn((int)realPos.x, (int)realPos.z, currentChunkX, currentChunkZ);
+//
+//        generateChunkMesh(currentChunkX, currentChunkZ, gameItems, true);
+//
+//
+//        if (chunkPosX == 15){ //update neighbor
+//            generateChunkMesh(currentChunkX+1, currentChunkZ, gameItems, true);
+//        }
+//        if (chunkPosX == 0){
+//            generateChunkMesh(currentChunkX-1, currentChunkZ, gameItems, true);
+//        }
+//        if (chunkPosZ == 15){
+//            generateChunkMesh(currentChunkX, currentChunkZ+1, gameItems, true);
+//        }
+//        if (chunkPosZ == 0){
+//            generateChunkMesh(currentChunkX, currentChunkZ-1, gameItems, true);
+//        }
         return 0;
     }
 }

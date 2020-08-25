@@ -13,7 +13,7 @@ public class ChunkMesh {
 
     private final static float maxLight = 15;
 
-    public static void generateChunkMesh(int chunkX, int chunkZ, ArrayList chunkArrayList, boolean updating) throws Exception {
+    public static void generateChunkMesh(int chunkX, int chunkZ, GameItem[] chunkArrayList, boolean updating) throws Exception {
         int x = 0;
         int y = 0;
         int z = 0;
@@ -229,57 +229,57 @@ public class ChunkMesh {
         Mesh mesh = new Mesh(positionsArray, lightArray, indicesArray, textureCoordArray, texture);
 
         //not updating
-        if (!updating){
-            boolean found = false;
-            //iterate arraylist
-            for (int i = 0; i < chunkArrayList.size(); i++) {
-                GameItem thisChunk = (GameItem) chunkArrayList.get(i);
-                //prevent crashing
-                if (thisChunk == null){
-                    continue;
-                }
-                //if found then update it and surroundings
-                if(thisChunk.getName().equals(chunkX + " " + chunkZ)) {
-                    chunkArrayList.set(i, new GameItem(mesh, chunkX + " " + chunkZ));
-                    updateNeighbors(chunkX, chunkZ, chunkArrayList);
-                    break;
-                }
-            }
-            //else add it to the list
-            if (!found){
-                chunkArrayList.add(new GameItem(mesh, chunkX + " " + chunkZ));
-                updateNeighbors(chunkX, chunkZ, chunkArrayList);
-            }
-
-        } else { //updating - search for it
-            for (int i = 0; i < chunkArrayList.size(); i++) {
-                GameItem thisChunk = (GameItem) chunkArrayList.get(i);
-                //stop crashing
-                if (thisChunk == null){
-                    continue;
-                }
-
-                //found it
-                if (thisChunk.getName().equals(chunkX + " " + chunkZ)){
-                    thisChunk.getMesh().cleanUp();
-                    chunkArrayList.set(i, new GameItem(mesh, chunkX + " " + chunkZ));
-                }
-            }
-        }
+//        if (!updating){
+//            boolean found = false;
+//            //iterate arraylist
+//            for (int i = 0; i < chunkArrayList.size(); i++) {
+//                GameItem thisChunk = (GameItem) chunkArrayList.get(i);
+//                //prevent crashing
+//                if (thisChunk == null){
+//                    continue;
+//                }
+//                //if found then update it and surroundings
+//                if(thisChunk.getName().equals(chunkX + " " + chunkZ)) {
+//                    chunkArrayList.set(i, new GameItem(mesh, chunkX + " " + chunkZ));
+//                    updateNeighbors(chunkX, chunkZ, chunkArrayList);
+//                    break;
+//                }
+//            }
+//            //else add it to the list
+//            if (!found){
+//                chunkArrayList.add(new GameItem(mesh, chunkX + " " + chunkZ));
+//                updateNeighbors(chunkX, chunkZ, chunkArrayList);
+//            }
+//
+//        } else { //updating - search for it
+//            for (int i = 0; i < chunkArrayList.size(); i++) {
+//                GameItem thisChunk = (GameItem) chunkArrayList.get(i);
+//                //stop crashing
+//                if (thisChunk == null){
+//                    continue;
+//                }
+//
+//                //found it
+//                if (thisChunk.getName().equals(chunkX + " " + chunkZ)){
+//                    thisChunk.getMesh().cleanUp();
+//                    chunkArrayList.set(i, new GameItem(mesh, chunkX + " " + chunkZ));
+//                }
+//            }
+//        }
     }
 
-    public static void updateNeighbors(int chunkX, int chunkZ, ArrayList chunkArrayList) throws Exception {
-        for (int x = -1; x <= 1; x++) {
-            for (int z = -1; z <= 1; z++) {
-                if (Math.abs(x) + Math.abs(z) == 1) {
-                    if(chunkExists(chunkX + x, chunkZ + z)){
-                        Chunk thisChunk = getChunk(chunkX + x, chunkZ + z);
-                        //System.out.println("wow that chunk certainly exists");
-                        generateChunkMesh(chunkX + x, chunkZ + z, chunkArrayList, true);
-                    }
-                }
-            }
-        }
-    }
+//    public static void updateNeighbors(int chunkX, int chunkZ, ArrayList chunkArrayList) throws Exception {
+//        for (int x = -1; x <= 1; x++) {
+//            for (int z = -1; z <= 1; z++) {
+//                if (Math.abs(x) + Math.abs(z) == 1) {
+//                    if(chunkExists(chunkX + x, chunkZ + z)){
+//                        Chunk thisChunk = getChunk(chunkX + x, chunkZ + z);
+//                        //System.out.println("wow that chunk certainly exists");
+//                        generateChunkMesh(chunkX + x, chunkZ + z, chunkArrayList, true);
+//                    }
+//                }
+//            }
+//        }
+//    }
 
 }

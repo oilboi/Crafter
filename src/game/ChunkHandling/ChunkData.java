@@ -5,38 +5,41 @@ import java.util.ArrayList;
 
 import static game.ChunkHandling.ChunkMath.genHash;
 
+import static game.Crafter.chunkRenderDistance;
 import static game.light.Light.floodFill;
 
 public class ChunkData {
 
-    private static ArrayList<Chunk> map = new ArrayList<>();
+    private static Chunk[] map = new Chunk[(chunkRenderDistance*(4*chunkRenderDistance)+(chunkRenderDistance*4)+2)];
 
     public static void storeChunk(int x, int z, Chunk chunk){
-        for(int i = 0; i < map.size(); i++){
-            if (map.get(i).getName().equals(x + " " + z)){
-                map.set(i, chunk);
-                return;
-            }
-        }
+//        for(int i = 0; i < map.size(); i++){
+//            if (map.get(i).getName().equals(x + " " + z)){
+//                map.set(i, chunk);
+//                return;
+//            }
+//        }
         //fails to find it
-        map.add(chunk);
+//        map.add(chunk);
     }
 
     public static Chunk getChunk(int x, int z){
-        for(int i = 0; i < map.size(); i++) {
-            if (map.get(i).getName().equals(x + " " + z)) {
-                return map.get(i);
-            }
-        }
+//        for(int i = 0; i < map.size(); i++) {
+//            if (map.get(i).getName().equals(x + " " + z)) {
+//                System.out.println("oh no");
+//                return map.get(i);
+//
+//            }
+//        }
         return null;
     }
 
     public static boolean chunkExists(int x, int z){
-        for(int i = 0; i < map.size(); i++) {
-            if (map.get(i).getName().equals(x + " " + z)) {
-                return true;
-            }
-        }
+//        for(int i = 0; i < map.size(); i++) {
+//            if (map.get(i).getName().equals(x + " " + z)) {
+//                return true;
+//            }
+//        }
         //failed to find it
         return false;
     }

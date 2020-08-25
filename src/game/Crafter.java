@@ -54,26 +54,6 @@ public class Crafter implements IGameLogic {
         //this initializes the block definitions
         initializeBlocks();
 
-        //this is a lazy way to deduce the amount of chunks there are in the map
-//        int index = 0;
-//        for (int x = -chunkRenderDistance; x <= chunkRenderDistance; x++) {
-//            for (int z = -chunkRenderDistance; z <= chunkRenderDistance; z++) {
-//                index++;
-//            }
-//        }
-
-//        chunkNames = new String[index];
-//
-//        index = 0;
-//        //build an index of names for assignment/access
-//        for (int x = -chunkRenderDistance; x <= chunkRenderDistance; x++) {
-//            for (int z = -chunkRenderDistance; z <= chunkRenderDistance; z++) {
-//                chunkNames[index] = x + " " + z;
-//                index++;
-//            }
-//        }
-
-
         //create the initial map
         for (int x = -chunkRenderDistance; x <= chunkRenderDistance; x++) {
             for (int z = -chunkRenderDistance; z <= chunkRenderDistance; z++) {
@@ -81,6 +61,7 @@ public class Crafter implements IGameLogic {
                 generateChunkMesh(x, z, chunkMeshes, false);
             }
         }
+        
         player = new Player();
     }
 

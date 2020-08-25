@@ -5,6 +5,7 @@ import org.lwjgl.system.CallbackI;
 
 import static game.ChunkHandling.ChunkData.getBlockInChunk;
 import static game.Crafter.getChunkRenderDistance;
+import static game.collision.CollisionMath.floorPos;
 
 public class Collision {
     private static int renderDistance = getChunkRenderDistance();
@@ -38,12 +39,7 @@ public class Collision {
         onGround = false;
 
         //get the real positions of the blocks
-        Vector3f fPos = new Vector3f(pos);
-
-        fPos.x = (float)Math.floor(fPos.x);
-        fPos.y = (float)Math.floor(fPos.y);
-        fPos.z = (float)Math.floor(fPos.z);
-
+        Vector3f fPos = floorPos(pos);
 
         int y = 2;
         int x = -1;

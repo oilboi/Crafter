@@ -30,7 +30,7 @@ public class Crafter implements IGameLogic {
 
     private final Camera camera;
 
-    private GameItem[] chunkMeshes = new GameItem[(chunkRenderDistance*(4*chunkRenderDistance)+(chunkRenderDistance*4))];
+    private GameItem[] chunkMeshes = new GameItem[(chunkRenderDistance*(4*chunkRenderDistance)+(chunkRenderDistance*4)) + 1];
 
     private boolean fButtonPushed = false;
 
@@ -60,7 +60,7 @@ public class Crafter implements IGameLogic {
         for (int x = -chunkRenderDistance; x <= chunkRenderDistance; x++) {
             for (int z = -chunkRenderDistance; z <= chunkRenderDistance; z++) {
                 ChunkData.storeChunk(x, z, new Chunk(x, z));
-//                generateChunkMesh(x, z, chunkMeshes, false);
+                generateChunkMesh(x, z, chunkMeshes, false);
                 System.out.println("--------");
                 genMapHash(x, z);
                 System.out.println(indexer);

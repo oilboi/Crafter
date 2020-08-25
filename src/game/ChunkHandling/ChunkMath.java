@@ -7,7 +7,7 @@ public class ChunkMath {
     private final static short chunkSizeY = 128;
     private final static short chunkSizeZ = 16;
 
-    private final static int maxSize = (chunkRenderDistance*(4*chunkRenderDistance)+(chunkRenderDistance*4)+2);
+    private final static int maxSize = (chunkRenderDistance*(4*chunkRenderDistance)+(chunkRenderDistance*4) + 1);
 
     public static int genHash(int x, int y, int z){
         return((x*chunkSizeY) + y + (z*(chunkSizeX * chunkSizeY)));
@@ -28,12 +28,17 @@ public class ChunkMath {
         z += chunkRenderDistance;
         return(x * ((chunkRenderDistance * 2) + 1) ) + z;
     }
+    public static boolean mapHashInBounds(int thisHash){
+        return thisHash >= 0 && thisHash < maxSize;
+    }
 
     //todo this does not belong in here
-    private static float getDistance(float x1, float y1, float z1, float x2, float y2, float z2){
+    public static float getDistance(float x1, float y1, float z1, float x2, float y2, float z2){
         float x = x1 - x2;
         float y = y1 - y2;
         float z = z1 - z2;
         return (float)Math.hypot(x, Math.hypot(y,z));
     }
+
+
 }

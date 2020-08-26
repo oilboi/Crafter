@@ -5,13 +5,16 @@ import game.collision.CustomAABB;
 import game.collision.CustomBlockBox;
 import org.joml.Vector3f;
 
+import java.util.ArrayList;
+
 import static game.ChunkHandling.ChunkData.*;
 import static game.ChunkHandling.ChunkMesh.generateChunkMesh;
 import static game.collision.Collision.wouldCollide;
+import static game.entity.Entity.addItem;
 import static game.light.Light.floodFill;
 
 public class Ray {
-    public static void rayCast(Vector3f pos, Vector3f dir, float length, GameItem[] gameItems, boolean mining, boolean placing, Player player) throws Exception {
+    public static void rayCast(Vector3f pos, Vector3f dir, float length, GameItem[] gameItems, ArrayList itemEntities, boolean mining, boolean placing, Player player) throws Exception {
 
         Vector3f finalPos = null;
         Vector3f newPos   = null;
@@ -33,6 +36,7 @@ public class Ray {
         if(finalPos != null) {
             if(mining) {
                 destroyBlock(finalPos, gameItems);
+                addItem(finalPos.x, finalPos.y, finalPos.z, itemEntities,2);
             } else if (placing && lastPos != null){
                 if (!wouldCollide(new CustomAABB(player.getPos().x, player.getPos().y+0.01f, player.getPos().z, player.getWidth(), player.getHeight()-0.02f), new CustomBlockBox((int)lastPos.x, (int)lastPos.y, (int)lastPos.z))) {
                     placeBlock(lastPos, gameItems, (short) 4);

@@ -11,8 +11,11 @@ import game.player.Player;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
+import java.util.ArrayList;
+
 import static game.ChunkHandling.ChunkMesh.generateChunkMesh;
 import static game.blocks.BlockDefinition.initializeBlocks;
+import static game.collision.Collision.applyInertia;
 import static game.player.TNT.boom;
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -29,6 +32,7 @@ public class Crafter implements IGameLogic {
     private final Camera camera;
 
     private GameItem[] chunkMeshes = new GameItem[(chunkRenderDistance*(4*chunkRenderDistance)+(chunkRenderDistance*4)) + 1];
+    private ArrayList<GameItem> itemEntities = new ArrayList<>();
 
     private boolean fButtonPushed = false;
 
@@ -183,18 +187,29 @@ public class Crafter implements IGameLogic {
             camera.moveRotation(0,-360, 0);
         }
 
-        player.onTick(camera, chunkMeshes);
+        player.onTick(camera, chunkMeshes, itemEntities);
 
         if(boomBuffer){
             boom((int)Math.floor(player.getPos().x),(int)Math.floor(player.getPos().y),(int)Math.floor(player.getPos().z), chunkMeshes);
             boomBuffer = false;
         }
 
+        for (GameItem itemEntity : itemEntities){
+            Vector3f pos = itemEntity.getPosition();
+            Vector3f rot = itemEntity.getRotation();
+            rot.y += 0.1f;
+            itemEntity.setRotation(rot.x,rot.y,rot.z);
+
+            applyInertia(pos,new Vector3f(0,-4,0),false, 0.2f,0.4f, true);
+
+            itemEntity.setPosition(pos.x,pos.y,pos.z);
+        }
+
     }
 
     @Override
     public void render(Window window){
-        renderer.render(window, camera, chunkMeshes);
+        renderer.render(window, camera, chunkMeshes, itemEntities);
     }
 
     @Override
@@ -202,6 +217,11 @@ public class Crafter implements IGameLogic {
         renderer.cleanup();
         for (GameItem gameItem : chunkMeshes){
             if (gameItem != null) {
+                gameItem.getMesh().cleanUp();
+            }
+        }
+        for (GameItem gameItem : itemEntities){
+            if(gameItem != null){
                 gameItem.getMesh().cleanUp();
             }
         }

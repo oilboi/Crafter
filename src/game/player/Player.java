@@ -5,6 +5,8 @@ import engine.graph.Camera;
 import org.joml.Vector3f;
 
 
+import java.util.ArrayList;
+
 import static game.ChunkHandling.ChunkData.getBlockInChunk;
 import static game.Crafter.getChunkRenderDistance;
 import static game.collision.Collision.applyInertia;
@@ -132,7 +134,7 @@ public class Player {
         jumpBuffer = true;
     }
 
-    public void onTick(Camera camera, GameItem[] gameItems) throws Exception {
+    public void onTick(Camera camera, GameItem[] gameItems, ArrayList itemEntities) throws Exception {
 
         if(placeTimer > 0){
             placeTimer -= 0.003f;
@@ -151,10 +153,10 @@ public class Player {
         onGround = applyInertia(pos, inertia, onGround, width, height,true);
 
         if(mining && mineTimer <= 0) {
-            rayCast(camera.getPosition(), camera.getRotationVector(), 4f, gameItems, true, false, this);
+            rayCast(camera.getPosition(), camera.getRotationVector(), 4f, gameItems, itemEntities, true, false, this);
             mineTimer = 0.5f;
         } else if (placing && placeTimer <= 0){
-            rayCast(camera.getPosition(), camera.getRotationVector(), 4f, gameItems, false, true, this);
+            rayCast(camera.getPosition(), camera.getRotationVector(), 4f, gameItems, itemEntities, false, true, this);
             placeTimer = 0.5f;
         }
 

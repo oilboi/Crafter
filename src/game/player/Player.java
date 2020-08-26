@@ -8,6 +8,7 @@ import org.joml.Vector3f;
 import java.util.ArrayList;
 
 import static game.ChunkHandling.ChunkData.getBlockInChunk;
+import static game.Crafter.chunkRenderDistance;
 import static game.Crafter.getChunkRenderDistance;
 import static game.collision.Collision.applyInertia;
 import static game.player.Ray.rayCast;
@@ -33,6 +34,7 @@ public class Player {
     private boolean placing = false;
     private float placeTimer = 0;
     private short selectedItem = 1;
+    private Vector3f oldPos;
 
     public short getSelectedItem(){
         return selectedItem;
@@ -196,6 +198,8 @@ public class Player {
 
         this.applyInertiaBuffer();
 
+
+
         if(placeTimer > 0){
             placeTimer -= 0.003f;
             if (placeTimer < 0.1){
@@ -212,6 +216,19 @@ public class Player {
 
         onGround = applyInertia(pos, inertia, onGround, width, height,true);
 
+        if (this.pos.x > ((chunkRenderDistance + 1) * 16)-1.5f) {
+            pos.x = oldPos.x;
+        }
+        if (this.pos.x < (chunkRenderDistance * -16) + 0.5f){
+            pos.x = oldPos.x;
+        }
+        if (this.pos.z > ((chunkRenderDistance + 1) * 16)-1.5f) {
+            pos.z = oldPos.z;
+        }
+        if (this.pos.z < (chunkRenderDistance * -16) + 0.5f){
+            pos.z = oldPos.z;
+        }
+
         if(mining && mineTimer <= 0) {
             rayCast(camera.getPosition(), camera.getRotationVector(), 4f, chunkObjects, true, false, this);
             mineTimer = 0.5f;
@@ -220,6 +237,10 @@ public class Player {
             placeTimer = 0.5f;
         }
 
+
+
+
+        oldPos = new Vector3f(pos);
 //        blockPos = new int[]{(int)Math.floor(pos.x), (int)Math.floor(pos.y),(int)Math.floor(pos.z)};
 //
 //        if(blockPos[0] != oldBlockPos[0] || blockPos[1] != oldBlockPos[1] || blockPos[2] != oldBlockPos[2]){

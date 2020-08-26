@@ -17,11 +17,8 @@ public class Light {
         for (int y = 127; y >= 0; y--){
             for (int x = 0; x <= 15; x++){
                 for (int z = 0; z <= 15; z++){
-
                     short thisBlock = getBlockInChunk(x,y,z,chunkX,chunkZ);
-
                     if(thisChunk == null){
-                        System.out.println("fucked");
                         return;
                     }
                     if(underSunlight(x,y,z,chunkX,chunkZ) && thisBlock == 0){

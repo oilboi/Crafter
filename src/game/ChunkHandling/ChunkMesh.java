@@ -15,6 +15,10 @@ public class ChunkMesh {
     private final static float maxLight = 15;
 
     public static void generateChunkMesh(int chunkX, int chunkZ, ChunkObject[][] chunkArray, boolean updating) throws Exception {
+        if(chunkX+chunkRenderDistance < 0 || chunkX+chunkRenderDistance >= ((chunkRenderDistance*2)+1) || chunkZ+chunkRenderDistance < 0 || chunkZ+chunkRenderDistance >= ((chunkRenderDistance*2)+1)){
+            return;
+        }
+
         int x = 0;
         int y = 0;
         int z = 0;

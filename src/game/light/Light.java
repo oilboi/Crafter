@@ -6,131 +6,207 @@ import java.util.ArrayList;
 
 import static game.ChunkHandling.ChunkData.*;
 import static game.ChunkHandling.ChunkMath.genHash;
-import static game.Crafter.chunkRenderDistance;
 
 public class Light {
 
-    private static final float debugLightLevel = 15;
+    private static final byte debugLightLevel = 15;
 
     public static void floodFill(int chunkX, int chunkZ) {
-//        System.out.println("this is being run" + Math.random());
 
+        long startTime = System.nanoTime();
 
-        System.out.println("Flood fill started for " + chunkX + " " + chunkZ);
         Chunk thisChunk = getChunk(chunkX,chunkZ);
-        int    [][][] pseudoChunk     = new     int[16][128][16];
-        int    [][][] caveLight       = new     int[16][128][16];
 
-        long startTime = System.currentTimeMillis();
+        int[] pseudoChunk = new int[16*128*16];
 
-        //shove everything into the 3D arrays
-        //fill sun rays with sunlight
-        for (int x = 0; x <= 15; x++){
-            for(int z = 0; z <= 15; z++){
-                for (int y = 0; y <= 127; y++){
-                    short thisBlock = getBlockInChunk(x,y,z, chunkX,chunkZ);
-                    //lit air
-                    if (thisBlock == 0 && underSunlight(x,y,z,chunkX,chunkZ)) {
-                        pseudoChunk[x][y][z] = 2;
-                        thisChunk.setLight(genHash(x,y,z), (byte)debugLightLevel);
-                        //cave air
-                    } else if (thisBlock == 0 && !underSunlight(x,y,z,chunkX,chunkZ)){
-                        pseudoChunk[x][y][z] = 1;
-                        thisChunk.setLight(genHash(x,y,z), (byte)0);
-                    } else {
-                        pseudoChunk[x][y][z] = -1;
-                        thisChunk.setLight(genHash(x,y,z), (byte)0);
-                    }
+        short[] theseBlocks = thisChunk.getBlocks();
+        byte[]  theseLights = thisChunk.getLights();
+
+        for(int i = 0; i < theseLights.length; i++){
+            theseLights[i] = 0;
+        }
+
+        int x = 0;
+        int y = 127;
+        int z = 0;
+        byte sunLight = debugLightLevel;
+
+        for (int i = 0; i < 16*128*16; i++){
+            short thisBlock = theseBlocks[genHash(x,y,z)];//getBlockInChunk(x,y,z, chunkX,chunkZ);
+
+            //lit air
+            if (thisBlock == 0 && sunLight == 15) {
+                pseudoChunk[genHash(x,y,z)] = 2;
+                theseLights[genHash(x,y,z)] = sunLight;
+            //cave air
+            } else if (thisBlock == 0){
+                pseudoChunk[genHash(x,y,z)] = 1;
+                theseLights[genHash(x,y,z)] = sunLight;
+            //solid blocks
+            } else {
+                pseudoChunk[genHash(x,y,z)] = -1;
+                theseLights[genHash(x,y,z)] = sunLight;
+                sunLight = 0;
+            }
+            y--;
+            if( y < 0){
+                y = 127;
+                x++;
+                sunLight = debugLightLevel;
+                if( x > 15 ){
+                    x = 0;
+                    z++;
                 }
             }
         }
-        long endTime = System.currentTimeMillis();
+
+        long endTime = System.nanoTime();
         System.out.println("Data Collection Time: " + (endTime - startTime));
+//
+//        //2 is air light source
+//        //1 is cave light
+//        //-1 is any solid block
+//
+        x = 0;
+        y = 127;
+        z = 0;
 
-        //2 is air light source
-        //1 is cave light
-        //-1 is any solid block
+        byte localX = 0;
+        byte localY = 0;
+        byte localZ = 0;
 
+        for (int i = 0; i < 16*128*16; i++){
+            //only get if cave light
+            if(pseudoChunk[genHash(x,y,z)] == 1) {
+                for (int w = 0; w < 6; w++){
+                    switch (w){
+                        case 0:
+                            localX = -1;
+                            localY =  0;
+                            localZ =  0;
+                            break;
+                        case 1:
+                            localX =  0;
+                            localY = -1;
+                            localZ =  0;
+                            break;
+                        case 2:
+                            localX =  0;
+                            localY =  0;
+                            localZ = -1;
+                            break;
+                        case 3:
+                            localX =  1;
+                            localY =  0;
+                            localZ =  0;
+                            break;
+                        case 4:
+                            localX =  0;
+                            localY =  1;
+                            localZ =  0;
+                            break;
+                        case 5:
+                            localX =  0;
+                            localY =  0;
+                            localZ =  1;
+                            break;
+                    }
+//                    System.out.println(localX + " " + localY + " " + localZ);
 
-        startTime = System.currentTimeMillis();
-        //flood the whole thing with sunlight
-        //this is the most ridiculous code I've ever written
-        for(int y = 127; y > 0; y--){
-            for (int x = 0; x <= 15; x++){
-                for(int z = 0; z <= 15; z++) {
-                    //only get if cave light
-                    if(pseudoChunk[x][y][z] == 1) {
-                        //index surroundings
-                        for (int xx = -1; xx <= 1; xx++) {
-                            for (int yy = -1; yy <= 1; yy++) {
-                                for (int zz = -1; zz <= 1; zz++) {
-                                    //only do binary direction
-                                    if(Math.abs(xx) + Math.abs(yy) + Math.abs(zz) == 1) {
-                                        int thisIndexX = x + xx;
-                                        int thisIndexY = y + yy;
-                                        int thisIndexZ = z + zz;
-                                        //catch boundaries
-                                        if (thisIndexX >= 0 && thisIndexX <= 15 && thisIndexY >= 0 && thisIndexY <= 127 && thisIndexZ >= 0 && thisIndexZ <= 15) {
-                                            //get if sunlight
-                                            if (pseudoChunk[thisIndexX][thisIndexY][thisIndexZ] == 2){
-                                                pseudoChunk[thisIndexX][thisIndexY][thisIndexZ] = -1;
-                                                processLightQueue(thisIndexX, thisIndexY, thisIndexZ,pseudoChunk, caveLight);
-                                            }
-                                        }
-                                    }
-                                }
-                            }
+                    int thisIndexX = x + localX;
+                    int thisIndexY = y + localY;
+                    int thisIndexZ = z + localZ;
+
+                    if (thisIndexX >= 0 && thisIndexX <= 15 && thisIndexY >= 0 && thisIndexY <= 127 && thisIndexZ >= 0 && thisIndexZ <= 15) {
+                        //get if sunlight
+                        if (pseudoChunk[genHash(thisIndexX,thisIndexY,thisIndexZ)] == 2){
+                            pseudoChunk[genHash(thisIndexX,thisIndexY,thisIndexZ)] = -1;
+                            processLightQueue(thisIndexX, thisIndexY, thisIndexZ,pseudoChunk, theseLights);
                         }
                     }
                 }
             }
-        }
-
-        endTime = System.currentTimeMillis();
-        System.out.println("Algorithm Time: " + (endTime - startTime));
-
-        for(int y = 127; y > 0; y--) {
-            for (int x = 0; x <= 15; x++) {
-                for (int z = 0; z <= 15; z++) {
-                    if(pseudoChunk[x][y][z] == 1) {
-                        int newCaveLight = caveLight[x][y][z];
-                        thisChunk.setLight(genHash(x, y, z), (byte) newCaveLight);
-                    }
+            y--;
+            if( y < 0){
+                y = 127;
+                x++;
+                if( x > 15 ){
+                    x = 0;
+                    z++;
                 }
             }
         }
     }
 
-    public static void processLightQueue(int thisIndexX, int thisIndexY, int thisIndexZ,int[][][] pseudoChunk, int[][][] caveLight){
+
+    public static void processLightQueue(int thisIndexX, int thisIndexY, int thisIndexZ,int[] pseudoChunk, byte[] theseLights){
         //begin distribution queue
 
-        boolean[][][] overflowChecker = new boolean[16][128][16];
-
         ArrayList queue = new ArrayList();
+
         queue.add(new int[]{thisIndexX,thisIndexY,thisIndexZ, (int) debugLightLevel});
+
+//        int count = 0;
+
+        byte localX = 0;
+        byte localY = 0;
+        byte localZ = 0;
+
         while(queue.size() > 0){
+
+            //stop infinite loops
+            if (queue.size() > 1000){
+                break;
+            }
             int[] firstIndex = (int[]) queue.get(0);
+
             int currentLight = firstIndex[3];
             //only pass on light if not pitch black
             if(currentLight > 1) {
                 //index surroundings
-                for (int xxx = -1; xxx <= 1; xxx++) {
-                    for (int yyy = -1; yyy <= 1; yyy++) {
-                        for (int zzz = -1; zzz <= 1; zzz++) {
-                            if(Math.abs(xxx) + Math.abs(yyy) + Math.abs(zzz) == 1) {
-                                int thisIndexX2 = firstIndex[0] + xxx;
-                                int thisIndexY2 = firstIndex[1] + yyy;
-                                int thisIndexZ2 = firstIndex[2] + zzz;
-                                //catch boundaries
-                                if (thisIndexX2 >= 0 && thisIndexX2 <= 15 && thisIndexY2 >= 0 && thisIndexY2 <= 127 && thisIndexZ2 >= 0 && thisIndexZ2 <= 15) {
-                                    //only spread to cave light that's darker
-                                    if (pseudoChunk[thisIndexX2][thisIndexY2][thisIndexZ2] == 1 && !overflowChecker[thisIndexX2][thisIndexY2][thisIndexZ2] && caveLight[thisIndexX2][thisIndexY2][thisIndexZ2] < currentLight) {
-                                        overflowChecker[thisIndexX2][thisIndexY2][thisIndexZ2] = true;
-                                        caveLight[thisIndexX2][thisIndexY2][thisIndexZ2] = currentLight - 1;
-                                        queue.add(new int[]{thisIndexX2, thisIndexY2, thisIndexZ2, currentLight - 1});
-                                    }
-                                }
-                            }
+                for (int w = 0; w < 6; w++) {
+                    switch (w) {
+                        case 0:
+                            localX = -1;
+                            localY = 0;
+                            localZ = 0;
+                            break;
+                        case 1:
+                            localX = 0;
+                            localY = -1;
+                            localZ = 0;
+                            break;
+                        case 2:
+                            localX = 0;
+                            localY = 0;
+                            localZ = -1;
+                            break;
+                        case 3:
+                            localX = 1;
+                            localY = 0;
+                            localZ = 0;
+                            break;
+                        case 4:
+                            localX = 0;
+                            localY = 1;
+                            localZ = 0;
+                            break;
+                        case 5:
+                            localX = 0;
+                            localY = 0;
+                            localZ = 1;
+                            break;
+                    }
+
+                    int thisIndexX2 = firstIndex[0] + localX;
+                    int thisIndexY2 = firstIndex[1] + localY;
+                    int thisIndexZ2 = firstIndex[2] + localZ;
+                    //catch boundaries
+                    if (thisIndexX2 >= 0 && thisIndexX2 <= 15 && thisIndexY2 >= 0 && thisIndexY2 <= 127 && thisIndexZ2 >= 0 && thisIndexZ2 <= 15) {
+                        //only spread to cave light that's darker
+                        if (pseudoChunk[genHash(thisIndexX2, thisIndexY2, thisIndexZ2)] == 1 && theseLights[genHash(thisIndexX2, thisIndexY2, thisIndexZ2)] < currentLight) {
+                            theseLights[genHash(thisIndexX2, thisIndexY2, thisIndexZ2)] = (byte) (currentLight - 1);
+                            queue.add(new int[]{thisIndexX2, thisIndexY2, thisIndexZ2, currentLight - 1});
                         }
                     }
                 }

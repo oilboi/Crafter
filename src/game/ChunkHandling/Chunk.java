@@ -30,13 +30,16 @@ public class Chunk {
         return naturalLight;
     }
 
+    public void setAllLights(byte[] light){
+        this.naturalLight = light;
+    }
+
     private FastNoise noise = new FastNoise();
     private int heightAdder = 40;
     private byte dirtHeight = 4;
 
     //a basic biome test for terrain generation
     public void genBiome(int chunkX, int chunkZ){
-
         int x = 0;
         int y = 127;
         int z = 0;
@@ -87,6 +90,7 @@ public class Chunk {
     public void setLight(int hash, byte light){
         this.naturalLight[hash] = light;
     }
+
 
 
     public String getName(){

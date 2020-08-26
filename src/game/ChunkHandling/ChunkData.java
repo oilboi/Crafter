@@ -45,6 +45,7 @@ public class ChunkData {
             return;
         }
         thisChunk.setBlock(genHash(x, y, z), newBlock);
+
     }
 
     //todo COMBINE THESE!

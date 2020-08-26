@@ -111,7 +111,6 @@ public class Light {
                             localZ =  1;
                             break;
                     }
-//                    System.out.println(localX + " " + localY + " " + localZ);
 
                     int thisIndexX = x + localX;
                     int thisIndexY = y + localY;

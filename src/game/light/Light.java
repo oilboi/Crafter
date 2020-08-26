@@ -13,12 +13,17 @@ public class Light {
 
     public static void floodFill(int chunkX, int chunkZ) {
         Chunk thisChunk = getChunk(chunkX,chunkZ);
+
         for (int y = 127; y >= 0; y--){
             for (int x = 0; x <= 15; x++){
                 for (int z = 0; z <= 15; z++){
 
                     short thisBlock = getBlockInChunk(x,y,z,chunkX,chunkZ);
 
+                    if(thisChunk == null){
+                        System.out.println("fucked");
+                        return;
+                    }
                     if(underSunlight(x,y,z,chunkX,chunkZ) && thisBlock == 0){
                         thisChunk.setLight(genHash(x,y,z), debugLightLevel);
                     } else {

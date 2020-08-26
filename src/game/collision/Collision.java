@@ -8,7 +8,6 @@ import static game.Crafter.getChunkRenderDistance;
 import static game.collision.CollisionMath.floorPos;
 
 public class Collision {
-    private static int renderDistance = getChunkRenderDistance();
     final private static float gameSpeed = 0.001f;
     public static boolean applyInertia(Vector3f pos, Vector3f inertia, boolean onGround, float width, float height, boolean gravity){
         if(gravity) {
@@ -60,7 +59,6 @@ public class Collision {
                 }
             }
         }
-
         return onGround;
     }
 
@@ -169,9 +167,7 @@ public class Collision {
     private static boolean detectBlock(Vector3f flooredPos){
         int currentChunkX = (int)(Math.floor(flooredPos.x / 16f));
         int currentChunkZ = (int)(Math.floor(flooredPos.z / 16f));
-
         Vector3f realPos = new Vector3f(flooredPos.x - (16*currentChunkX), flooredPos.y, flooredPos.z - (16*currentChunkZ));
-
         return getBlockInChunk((int)realPos.x, (int)realPos.y, (int)realPos.z, currentChunkX, currentChunkZ) != 0;
     }
 

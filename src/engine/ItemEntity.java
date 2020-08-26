@@ -3,7 +3,7 @@ package engine;
 import engine.graph.Mesh;
 import org.joml.Vector3f;
 
-public class GameItem {
+public class ItemEntity {
 
     private final Mesh mesh;
 
@@ -15,7 +15,7 @@ public class GameItem {
 
     private final String name;
 
-    public GameItem(Mesh mesh, String name){
+    public ItemEntity(Mesh mesh, String name){
         this.mesh = mesh;
         position = new Vector3f(0,0,0);
         scale = 1;

@@ -14,7 +14,7 @@ public class Main {
             Toolkit tk = Toolkit.getDefaultToolkit();
             Dimension d = tk.getScreenSize();
 
-            GameEngine gameEng = new GameEngine("Crafter", d.width/2,d.height/2,vSync,gameLogic);
+            GameEngine gameEng = new GameEngine("Crafter", d.width/2,d.height/2,false,gameLogic);
             gameEng.run();
         } catch ( Exception excp ){
             excp.printStackTrace();

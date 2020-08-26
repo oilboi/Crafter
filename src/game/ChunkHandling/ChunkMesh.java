@@ -1,21 +1,20 @@
 package game.ChunkHandling;
 
-import engine.GameItem;
+import engine.ChunkObject;
 import engine.graph.Mesh;
 import engine.graph.Texture;
 
 import java.util.ArrayList;
 
 import static game.ChunkHandling.ChunkData.*;
-import static game.ChunkHandling.ChunkMath.genMapHash;
-import static game.ChunkHandling.ChunkMath.mapHashInBounds;
+import static game.Crafter.chunkRenderDistance;
 import static game.blocks.BlockDefinition.*;
 
 public class ChunkMesh {
 
     private final static float maxLight = 15;
 
-    public static void generateChunkMesh(int chunkX, int chunkZ, GameItem[] chunkArray, boolean updating) throws Exception {
+    public static void generateChunkMesh(int chunkX, int chunkZ, ChunkObject[][] chunkArray, boolean updating) throws Exception {
         int x = 0;
         int y = 0;
         int z = 0;
@@ -230,23 +229,14 @@ public class ChunkMesh {
 
         Mesh mesh = new Mesh(positionsArray, lightArray, indicesArray, textureCoordArray, texture);
 
-
-
-        int hash = genMapHash(chunkX,chunkZ);
-
-        if (!mapHashInBounds(hash)) {
-            //System.out.println("A HORRIBLE ERROR HAS OCCURRED IN THE CHUNK MESH!!");
-            return;
-        }
-
-        GameItem thisChunk = chunkArray[hash];
+        ChunkObject thisChunk = chunkArray[chunkX+chunkRenderDistance][chunkZ+chunkRenderDistance];
 
         //prevent memory leak
         if(thisChunk != null){
             thisChunk.getMesh().cleanUp();
         }
 
-        chunkArray[hash] = new GameItem(mesh, "");
+        chunkArray[chunkX+chunkRenderDistance][chunkZ+chunkRenderDistance] = new ChunkObject(mesh);
 
         //not updating
         if (!updating){
@@ -254,7 +244,7 @@ public class ChunkMesh {
         }
     }
 
-    public static void updateNeighbors(int chunkX, int chunkZ, GameItem[] chunkArrayList) throws Exception {
+    public static void updateNeighbors(int chunkX, int chunkZ, ChunkObject[][] chunkArrayList) throws Exception {
         for (int x = -1; x <= 1; x++) {
             for (int z = -1; z <= 1; z++) {
                 if (Math.abs(x) + Math.abs(z) == 1) {

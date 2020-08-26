@@ -1,6 +1,6 @@
 package engine.graph;
 
-import engine.GameItem;
+import engine.ChunkObject;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
@@ -36,13 +36,14 @@ public class Transformation {
         return projectionMatrix;
     }
 
-    public Matrix4f getModelViewMatrix(GameItem gameItem, Matrix4f viewMatrix){
-        Vector3f rotation = gameItem.getRotation();
-        modelViewMatrix.identity().translate(gameItem.getPosition()).
+    public Matrix4f getModelViewMatrix(Matrix4f viewMatrix){
+        Vector3f rotation = new Vector3f(0,0,0);
+
+        modelViewMatrix.identity().translate(new Vector3f(0,0,0)).
                 rotateX((float)Math.toRadians(-rotation.x)).
                 rotateY((float)Math.toRadians(-rotation.y)).
                 rotateZ((float)Math.toRadians(-rotation.z)).
-                scale(gameItem.getScale());
+                scale(1f);
         Matrix4f viewCurr = new Matrix4f(viewMatrix);
         return viewCurr.mul(modelViewMatrix);
     }

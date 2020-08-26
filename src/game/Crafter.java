@@ -1,46 +1,39 @@
 package game;
 
-import engine.GameItem;
+import engine.ChunkObject;
 import engine.IGameLogic;
 import engine.MouseInput;
 import engine.Window;
 import engine.graph.Camera;
 import game.ChunkHandling.Chunk;
-import game.ChunkHandling.ChunkData;
 import game.player.Player;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
-import java.util.ArrayList;
-
+import static game.ChunkHandling.ChunkData.storeChunk;
 import static game.ChunkHandling.ChunkMesh.generateChunkMesh;
 import static game.blocks.BlockDefinition.initializeBlocks;
-import static game.collision.Collision.applyInertia;
-import static game.player.TNT.boom;
 import static org.lwjgl.glfw.GLFW.*;
 
 public class Crafter implements IGameLogic {
 
-    public static int chunkRenderDistance = 1;
+    public static int chunkRenderDistance = 2;
 
     private static final float MOUSE_SENSITIVITY = 0.008f;
-
-    private final Vector3f cameraInc;
 
     private final Renderer renderer;
 
     private final Camera camera;
 
-    private GameItem[] chunkMeshes = new GameItem[(chunkRenderDistance*(4*chunkRenderDistance)+(chunkRenderDistance*4)) + 1];
-    private ArrayList<GameItem> itemEntities = new ArrayList<>();
+    private static ChunkObject[][] mapMeshes = new ChunkObject[(chunkRenderDistance*2)+1][(chunkRenderDistance*2)+1];
 
     private boolean fButtonPushed = false;
-
+//
     private boolean rButtonPushed = false;
+//
+//    private boolean tButtonPushed = false;
 
-    private boolean tButtonPushed = false;
-
-    private boolean boomBuffer = false;
+//    private boolean boomBuffer = false;
 
     private Player player;
 
@@ -51,7 +44,6 @@ public class Crafter implements IGameLogic {
     public Crafter(){
         renderer = new Renderer();
         camera = new Camera();
-        cameraInc = new Vector3f();
     }
 
     @Override
@@ -64,50 +56,58 @@ public class Crafter implements IGameLogic {
         //create the initial map
         for (int x = -chunkRenderDistance; x <= chunkRenderDistance; x++) {
             for (int z = -chunkRenderDistance; z <= chunkRenderDistance; z++) {
-                ChunkData.storeChunk(x, z, new Chunk(x, z));
-                generateChunkMesh(x, z, chunkMeshes, false);
+//                System.out.println("-------");
+//                System.out.println(x + " " + z);
+                Chunk thisChunk = new Chunk(x, z);
+                storeChunk(x,z, thisChunk);
+                generateChunkMesh(x, z, mapMeshes, false);
             }
         }
 
         player = new Player();
     }
 
+    private static final float inertiaApplicationDivision = 10f;
     @Override
     public void input(Window window, MouseInput input){
-        if (window.isKeyPressed(GLFW_KEY_W)){
+
+
+        if (window.isKeyPressed(GLFW_KEY_W) && !player.getForward()){
             float yaw = (float)Math.toRadians(camera.getRotation().y) + (float)Math.PI;
-            float x = (float)Math.sin(-yaw);
-            float z = (float)Math.cos(yaw);
-            player.addInertia(x,0,z);
+            float x = (float)Math.sin(-yaw) / inertiaApplicationDivision;
+            float z = (float)Math.cos(yaw) / inertiaApplicationDivision;
+            player.setInertiaBuffer(x,0,z);
+            player.setForward();
         }
-        if (window.isKeyPressed(GLFW_KEY_S)){
+        if (window.isKeyPressed(GLFW_KEY_S) && !player.getBackward()){
             //no mod needed
             float yaw = (float)Math.toRadians(camera.getRotation().y);
-            float x = (float)Math.sin(-yaw);
-            float z = (float)Math.cos(yaw);
-            player.addInertia(x,0,z);
+            float x = (float)Math.sin(-yaw) / inertiaApplicationDivision;
+            float z = (float)Math.cos(yaw) / inertiaApplicationDivision;
+            player.setInertiaBuffer(x,0,z);
+            player.setBackward();
         }
-
-        if (window.isKeyPressed(GLFW_KEY_A)){
+        if (window.isKeyPressed(GLFW_KEY_A) && !player.getLeft()){
             float yaw = (float)Math.toRadians(camera.getRotation().y) + (float)(Math.PI /2);
-            float x = (float)Math.sin(-yaw);
-            float z = (float)Math.cos(yaw);
-            player.addInertia(x,0,z);
+            float x = (float)Math.sin(-yaw) / inertiaApplicationDivision;
+            float z = (float)Math.cos(yaw) / inertiaApplicationDivision;
+            player.setInertiaBuffer(x,0,z);
+            player.setLeft();
         }
-        if (window.isKeyPressed(GLFW_KEY_D)){
+        if (window.isKeyPressed(GLFW_KEY_D) && !player.getRight()){
             float yaw = (float)Math.toRadians(camera.getRotation().y) - (float)(Math.PI /2);
-            float x = (float)Math.sin(-yaw);
-            float z = (float)Math.cos(yaw);
-            player.addInertia(x,0,z);
+            float x = (float)Math.sin(-yaw) / inertiaApplicationDivision;
+            float z = (float)Math.cos(yaw) / inertiaApplicationDivision;
+            player.setInertiaBuffer(x,0,z);
+            player.setRight();
         }
-
-
 
         if (window.isKeyPressed(GLFW_KEY_LEFT_SHIFT)){
             //cameraInc.y = -1;
         }
-        if (window.isKeyPressed(GLFW_KEY_SPACE) && player.isOnGround()){
-            player.addInertia(0,12f,0);
+        if (window.isKeyPressed(GLFW_KEY_SPACE) && player.isOnGround() && !player.getJump()){
+            player.setInertiaBuffer(0,12f,0);
+            player.setJump();
         }
 
         //prototype toggle locking mouse - F KEY
@@ -135,19 +135,19 @@ public class Crafter implements IGameLogic {
         } else if (!window.isKeyPressed(GLFW_KEY_R)){
             rButtonPushed = false;
         }
-
-
-        //prototype explosion - T KEY
-        if (window.isKeyPressed(GLFW_KEY_T)) {
-            if (!tButtonPushed) {
-                tButtonPushed = true;
-                boomBuffer = true;
-                System.out.println("boom");
-            }
-        } else if (!window.isKeyPressed(GLFW_KEY_T)){
-            tButtonPushed = false;
-        }
-
+//
+//
+//        //prototype explosion - T KEY
+//        if (window.isKeyPressed(GLFW_KEY_T)) {
+//            if (!tButtonPushed) {
+//                tButtonPushed = true;
+//                boomBuffer = true;
+//                System.out.println("boom");
+//            }
+//        } else if (!window.isKeyPressed(GLFW_KEY_T)){
+//            tButtonPushed = false;
+//        }
+//
         //mouse left button input
         if(input.isLeftButtonPressed()){
             player.setMining(true);
@@ -187,42 +187,43 @@ public class Crafter implements IGameLogic {
             camera.moveRotation(0,-360, 0);
         }
 
-        player.onTick(camera, chunkMeshes, itemEntities);
+        player.onTick(camera, mapMeshes);
 
-        if(boomBuffer){
-            boom((int)Math.floor(player.getPos().x),(int)Math.floor(player.getPos().y),(int)Math.floor(player.getPos().z), chunkMeshes);
-            boomBuffer = false;
-        }
+//        if(boomBuffer){
+////            boom((int)Math.floor(player.getPos().x),(int)Math.floor(player.getPos().y),(int)Math.floor(player.getPos().z), chunkMeshes);
+//            boomBuffer = false;
+//        }
 
-        for (GameItem itemEntity : itemEntities){
-            Vector3f pos = itemEntity.getPosition();
-            Vector3f rot = itemEntity.getRotation();
-            rot.y += 0.1f;
-            itemEntity.setRotation(rot.x,rot.y,rot.z);
-
-            applyInertia(pos,new Vector3f(0,-4,0),false, 0.2f,0.4f, true);
-
-            itemEntity.setPosition(pos.x,pos.y,pos.z);
-        }
+//        for (GameItem itemEntity : itemEntities){
+//            Vector3f pos = itemEntity.getPosition();
+//            Vector3f rot = itemEntity.getRotation();
+//            rot.y += 0.1f;
+//            itemEntity.setRotation(rot.x,rot.y,rot.z);
+//
+//            applyInertia(pos,new Vector3f(0,-4,0),false, 0.2f,0.4f, true);
+//
+//            itemEntity.setPosition(pos.x,pos.y,pos.z);
+//        }
 
     }
 
     @Override
     public void render(Window window){
-        renderer.render(window, camera, chunkMeshes, itemEntities);
+        renderer.render(window, camera, mapMeshes);
     }
 
     @Override
     public void cleanup(){
         renderer.cleanup();
-        for (GameItem gameItem : chunkMeshes){
-            if (gameItem != null) {
-                gameItem.getMesh().cleanUp();
+        for(Object[] chunkMeshArray : mapMeshes){
+            if (chunkMeshArray == null){
+                continue;
             }
-        }
-        for (GameItem gameItem : itemEntities){
-            if(gameItem != null){
-                gameItem.getMesh().cleanUp();
+            for (Object chunkMesh : chunkMeshArray) {
+                if(chunkMesh == null){
+                    continue;
+                }
+                ((ChunkObject) chunkMesh).getMesh().cleanUp();
             }
         }
     }

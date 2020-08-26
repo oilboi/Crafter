@@ -9,34 +9,30 @@ import static game.light.Light.floodFill;
 
 public class ChunkData {
 
-    private static Chunk[] map = new Chunk[(chunkRenderDistance*(4*chunkRenderDistance)+(chunkRenderDistance*4)) + 1];
+    private static int arrayLimit = (chunkRenderDistance*2)+1;
 
-    public static void storeChunk(int x, int z, Chunk chunk){
-        int hash = genMapHash(x,z);
-        if (!mapHashInBounds(hash)){
+    private static Chunk[][] map = new Chunk[(chunkRenderDistance*2)+1][(chunkRenderDistance*2)+1];
+
+    public static void storeChunk(int chunkX, int chunkZ, Chunk chunk){
+        chunkX += chunkRenderDistance;
+        chunkZ += chunkRenderDistance;
+        if (chunkX < 0 || chunkX >= arrayLimit || chunkZ < 0 || chunkZ >= arrayLimit){
             return;
         }
-        map[hash] = chunk;
+        map[chunkX][chunkZ] = chunk;
     }
 
-    public static Chunk getChunk(int x, int z){
-        int hash = genMapHash(x,z);
-        if (!mapHashInBounds(hash)){
+    public static Chunk getChunk(int chunkX, int chunkZ){
+        chunkX += chunkRenderDistance;
+        chunkZ += chunkRenderDistance;
+        if (chunkX < 0 || chunkX >= arrayLimit || chunkZ < 0 || chunkZ >= arrayLimit){
             return null;
         }
-        return map[hash];
+        return map[chunkX][chunkZ];
     }
 
-    public static boolean chunkExists(int x, int z){
-        int hash = genMapHash(x,z);
-        if (!mapHashInBounds(hash)){
-            return false;
-        }
-        if (map[hash] == null){
-            return false;
-        }
-        //found it
-        return true;
+    public static boolean chunkExists(int chunkX, int chunkZ){
+        return getChunk(chunkX,chunkZ) != null;
     }
 
     public static void setBlock(int x, int y, int z, int chunkX, int chunkZ, short newBlock){

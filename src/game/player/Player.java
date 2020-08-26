@@ -1,6 +1,6 @@
 package game.player;
 
-import engine.GameItem;
+import engine.ChunkObject;
 import engine.graph.Camera;
 import org.joml.Vector3f;
 
@@ -97,10 +97,64 @@ public class Player {
         inertia.z = z;
     }
 
-    public void addInertia(float x,float y,float z){
-        inertia.x += x;
-        inertia.y += y;
-        inertia.z += z;
+    private Vector3f inertiaBuffer = new Vector3f();
+
+    private boolean forward = false;
+    private boolean backward = false;
+    private boolean left = false;
+    private boolean right = false;
+    private boolean jump = false;
+
+    public boolean getForward(){
+        return forward;
+    }
+    public boolean getBackward(){
+        return backward;
+    }
+    public boolean getLeft(){
+        return left;
+    }
+    public boolean getRight(){
+        return right;
+    }
+    public boolean getJump(){
+        return jump;
+    }
+
+    public void setForward(){
+        forward = true;
+    }
+    public void setBackward(){
+        backward = true;
+    }
+    public void setLeft(){
+        left = true;
+    }
+    public void setRight(){
+        right = true;
+    }
+    public void setJump(){
+        jump = true;
+    }
+
+    private void clearInputBuffer(){
+        this.forward = false;
+        this.backward = false;
+        this.left = false;
+        this.right = false;
+        this.jump = false;
+    }
+
+    public void setInertiaBuffer(float x,float y,float z){
+        inertiaBuffer.x += x;
+        inertiaBuffer.y += y;
+        inertiaBuffer.z += z;
+    }
+
+    private void applyInertiaBuffer(){
+        inertia.x += inertiaBuffer.x;
+        inertia.y += inertiaBuffer.y;
+        inertia.z += inertiaBuffer.z;
 
         //max speed todo: make this call from a player object's maxSpeed!
         Vector3f inertia2D = new Vector3f(inertia.x, 0, inertia.z);
@@ -109,6 +163,10 @@ public class Player {
             inertia.x = inertia2D.x;
             inertia.z = inertia2D.z;
         }
+
+        inertiaBuffer.x = 0f;
+        inertiaBuffer.y = 0f;
+        inertiaBuffer.z = 0f;
     }
 
     private short getBlock(float x, float y, float z){
@@ -134,7 +192,9 @@ public class Player {
         jumpBuffer = true;
     }
 
-    public void onTick(Camera camera, GameItem[] gameItems, ArrayList itemEntities) throws Exception {
+    public void onTick(Camera camera, ChunkObject[][] chunkObjects) throws Exception {
+
+        this.applyInertiaBuffer();
 
         if(placeTimer > 0){
             placeTimer -= 0.003f;
@@ -153,10 +213,10 @@ public class Player {
         onGround = applyInertia(pos, inertia, onGround, width, height,true);
 
         if(mining && mineTimer <= 0) {
-            rayCast(camera.getPosition(), camera.getRotationVector(), 4f, gameItems, itemEntities, true, false, this);
+            rayCast(camera.getPosition(), camera.getRotationVector(), 4f, chunkObjects, true, false, this);
             mineTimer = 0.5f;
         } else if (placing && placeTimer <= 0){
-            rayCast(camera.getPosition(), camera.getRotationVector(), 4f, gameItems, itemEntities, false, true, this);
+            rayCast(camera.getPosition(), camera.getRotationVector(), 4f, chunkObjects, false, true, this);
             placeTimer = 0.5f;
         }
 
@@ -168,5 +228,7 @@ public class Player {
 //        }
 //
 //        oldBlockPos = blockPos.clone();
+
+        clearInputBuffer();
     }
 }

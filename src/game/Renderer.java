@@ -1,6 +1,6 @@
 package game;
 
-import engine.GameItem;
+import engine.ChunkObject;
 import engine.Window;
 import engine.graph.*;
 import org.joml.Matrix4f;
@@ -8,7 +8,6 @@ import org.joml.Matrix4f;
 import java.util.ArrayList;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL30.glBindVertexArray;
 
 public class Renderer {
 
@@ -49,7 +48,7 @@ public class Renderer {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
-    public void render(Window window, Camera camera, GameItem[] chunkMeshes, ArrayList itemEntities){
+    public void render(Window window, Camera camera, ChunkObject[][] chunkMeshes){
         clear();
 
         if (window.isResized()){
@@ -63,38 +62,27 @@ public class Renderer {
         Matrix4f projectionMatrix = transformation.getProjectionMatrix(FOV, window.getWidth(), window.getHeight(), Z_NEAR, Z_FAR);
         shaderProgram.setUniform("projectionMatrix", projectionMatrix);
 
-
         //update the view matrix
         Matrix4f viewMatrix = transformation.getViewMatrix(camera);
 
         shaderProgram.setUniform("texture_sampler", 0);
 
         //render each chunk
-        for(Object chunkMesh : chunkMeshes){
-            if (chunkMesh == null){
+        for(Object[] chunkMeshArray : chunkMeshes){
+            if (chunkMeshArray == null){
                 continue;
             }
-            //set model view matrix for this item
-            Matrix4f modelViewMatrix = transformation.getModelViewMatrix((GameItem)chunkMesh, viewMatrix);
-            shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
-            //render the mesh for this game item
-            ((GameItem) chunkMesh).getMesh().render();
-        }
-
-        //render each item
-        for(Object itemEntity : itemEntities){
-            if (itemEntity == null){
-                continue;
+            for (Object chunkMesh : chunkMeshArray) {
+                if(chunkMesh == null){
+                    continue;
+                }
+                //set model view matrix for this item
+                Matrix4f modelViewMatrix = transformation.getModelViewMatrix(viewMatrix);
+                shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+                //render the mesh for this game item
+                ((ChunkObject) chunkMesh).getMesh().render();
             }
-            //set model view matrix for this item
-            Matrix4f modelViewMatrix = transformation.getModelViewMatrix((GameItem)itemEntity, viewMatrix);
-            shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
-            //render the mesh for this game item
-            ((GameItem) itemEntity).getMesh().render();
         }
-
-
-
         shaderProgram.unbind();
     }
 

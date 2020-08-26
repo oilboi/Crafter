@@ -1,20 +1,17 @@
 package game.player;
 
-import engine.GameItem;
+import engine.ChunkObject;
 import game.collision.CustomAABB;
 import game.collision.CustomBlockBox;
 import org.joml.Vector3f;
 
-import java.util.ArrayList;
-
 import static game.ChunkHandling.ChunkData.*;
 import static game.ChunkHandling.ChunkMesh.generateChunkMesh;
 import static game.collision.Collision.wouldCollide;
-import static game.entity.Entity.addItem;
 import static game.light.Light.floodFill;
 
 public class Ray {
-    public static void rayCast(Vector3f pos, Vector3f dir, float length, GameItem[] gameItems, ArrayList itemEntities, boolean mining, boolean placing, Player player) throws Exception {
+    public static void rayCast(Vector3f pos, Vector3f dir, float length, ChunkObject[][] chunkObjects, boolean mining, boolean placing, Player player) throws Exception {
 
         Vector3f finalPos = null;
         Vector3f newPos   = null;
@@ -35,11 +32,11 @@ public class Ray {
         //System.out.println(finalPos);
         if(finalPos != null) {
             if(mining) {
-                destroyBlock(finalPos, gameItems);
-                addItem(finalPos.x, finalPos.y, finalPos.z, itemEntities,2);
+                short thisBlock = destroyBlock(finalPos, chunkObjects);
+//                addItem(finalPos.x, finalPos.y, finalPos.z,thisBlock);
             } else if (placing && lastPos != null){
                 if (!wouldCollide(new CustomAABB(player.getPos().x, player.getPos().y+0.01f, player.getPos().z, player.getWidth(), player.getHeight()-0.02f), new CustomBlockBox((int)lastPos.x, (int)lastPos.y, (int)lastPos.z))) {
-                    placeBlock(lastPos, gameItems, (short) 4);
+                    placeBlock(lastPos, chunkObjects, (short) 4);
                 }
             }
         } else {
@@ -58,7 +55,7 @@ public class Ray {
         return getBlockInChunk((int)realPos.x, (int)realPos.y, (int)realPos.z, current[0], current[1]) != 0;
     }
 
-    private static short destroyBlock(Vector3f flooredPos, GameItem[] gameItems) throws Exception {
+    private static short destroyBlock(Vector3f flooredPos, ChunkObject[][] chunkObjects) throws Exception {
         int currentChunkX = (int)(Math.floor(flooredPos.x / 16f));
         int currentChunkZ = (int)(Math.floor(flooredPos.z / 16f));
         int chunkPosX = (int)flooredPos.x - (16*currentChunkX);
@@ -66,31 +63,32 @@ public class Ray {
 
         Vector3f realPos = new Vector3f(chunkPosX, flooredPos.y, chunkPosZ);
 
-//        short thisBlock = getBlockInChunk((int)realPos.x, (int)realPos.y, (int)realPos.z, current[0], current[1]);
+        short thisBlock = getBlockInChunk((int)realPos.x, (int)realPos.y, (int)realPos.z, currentChunkX,currentChunkZ);
+
         setBlock((int)realPos.x, (int)realPos.y, (int)realPos.z, currentChunkX, currentChunkZ, (short) 0);
 
         floodFill(currentChunkX, currentChunkZ);
-        generateChunkMesh(currentChunkX, currentChunkZ, gameItems, true);
+        generateChunkMesh(currentChunkX, currentChunkZ, chunkObjects, true);
 
         if (chunkPosX == 15){ //update neighbor
             floodFill(currentChunkX+1, currentChunkZ);
-            generateChunkMesh(currentChunkX+1, currentChunkZ, gameItems, true);
+            generateChunkMesh(currentChunkX+1, currentChunkZ, chunkObjects, true);
         }
         if (chunkPosX == 0){
             floodFill(currentChunkX-1, currentChunkZ);
-            generateChunkMesh(currentChunkX-1, currentChunkZ, gameItems, true);
+            generateChunkMesh(currentChunkX-1, currentChunkZ, chunkObjects, true);
         }
         if (chunkPosZ == 15){
             floodFill(currentChunkX, currentChunkZ+1);
-            generateChunkMesh(currentChunkX, currentChunkZ+1, gameItems, true);
+            generateChunkMesh(currentChunkX, currentChunkZ+1, chunkObjects, true);
         }
         if (chunkPosZ == 0){
             floodFill(currentChunkX, currentChunkZ-1);
-            generateChunkMesh(currentChunkX, currentChunkZ-1, gameItems, true);
+            generateChunkMesh(currentChunkX, currentChunkZ-1, chunkObjects, true);
         }
-        return 0;
+        return thisBlock;
     }
-    private static short placeBlock(Vector3f flooredPos, GameItem[] gameItems, short id) throws Exception {
+    private static short placeBlock(Vector3f flooredPos, ChunkObject[][] chunkObjects, short id) throws Exception {
         int currentChunkX = (int)(Math.floor(flooredPos.x / 16f));
         int currentChunkZ = (int)(Math.floor(flooredPos.z / 16f));
         int chunkPosX = (int)flooredPos.x - (16*currentChunkX);
@@ -103,24 +101,24 @@ public class Ray {
 
         floodFill(currentChunkX, currentChunkZ);
 
-        generateChunkMesh(currentChunkX, currentChunkZ, gameItems, true);
+        generateChunkMesh(currentChunkX, currentChunkZ, chunkObjects, true);
 
 
         if (chunkPosX == 15){ //update neighbor
             floodFill(currentChunkX+1, currentChunkZ);
-            generateChunkMesh(currentChunkX+1, currentChunkZ, gameItems, true);
+            generateChunkMesh(currentChunkX+1, currentChunkZ, chunkObjects, true);
         }
         if (chunkPosX == 0){
             floodFill(currentChunkX-1, currentChunkZ);
-            generateChunkMesh(currentChunkX-1, currentChunkZ, gameItems, true);
+            generateChunkMesh(currentChunkX-1, currentChunkZ, chunkObjects, true);
         }
         if (chunkPosZ == 15){
             floodFill(currentChunkX, currentChunkZ+1);
-            generateChunkMesh(currentChunkX, currentChunkZ+1, gameItems, true);
+            generateChunkMesh(currentChunkX, currentChunkZ+1, chunkObjects, true);
         }
         if (chunkPosZ == 0){
             floodFill(currentChunkX, currentChunkZ-1);
-            generateChunkMesh(currentChunkX, currentChunkZ-1, gameItems, true);
+            generateChunkMesh(currentChunkX, currentChunkZ-1, chunkObjects, true);
         }
 
         return 0;

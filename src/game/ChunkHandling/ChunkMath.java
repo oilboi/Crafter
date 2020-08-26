@@ -23,15 +23,6 @@ public class ChunkMath {
         return result;
     }
 
-    public static int genMapHash(int x, int z){
-        x += chunkRenderDistance;
-        z += chunkRenderDistance;
-        return(x * ((chunkRenderDistance * 2) + 1) ) + z;
-    }
-    public static boolean mapHashInBounds(int thisHash){
-        return thisHash >= 0 && thisHash < maxSize;
-    }
-
     //todo this does not belong in here
     public static float getDistance(float x1, float y1, float z1, float x2, float y2, float z2){
         float x = x1 - x2;

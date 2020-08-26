@@ -155,7 +155,7 @@ public class Light {
         while(queue.size() > 0){
 
             //stop infinite loops
-            if (queue.size() > 1000){
+            if (queue.size() > 256){
                 break;
             }
             int[] firstIndex = (int[]) queue.get(0);

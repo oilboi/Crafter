@@ -12,6 +12,8 @@ import static game.Crafter.chunkRenderDistance;
 import static game.Crafter.getChunkRenderDistance;
 import static game.collision.Collision.applyInertia;
 import static game.player.Ray.rayCast;
+import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_SPACE;
 
 public class Player {
     private static int renderDistance = getChunkRenderDistance();
@@ -147,13 +149,53 @@ public class Player {
         this.jump = false;
     }
 
-    public void setInertiaBuffer(float x,float y,float z){
-        inertiaBuffer.x += x;
-        inertiaBuffer.y += y;
-        inertiaBuffer.z += z;
+    public void setInertiaBuffer(Camera camera){
+        if (this.forward){
+            float yaw = (float)Math.toRadians(camera.getRotation().y) + (float)Math.PI;
+            this.inertia.x += (float)Math.sin(-yaw);
+            this.inertia.z += (float)Math.cos(yaw);
+
+            this.forward = false;
+        }
+        if (this.backward){
+            //no mod needed
+            float yaw = (float)Math.toRadians(camera.getRotation().y);
+            this.inertia.x += (float)Math.sin(-yaw);
+            this.inertia.z += (float)Math.cos(yaw);
+
+            this.backward = false;
+        }
+
+        if (this.right){
+            float yaw = (float)Math.toRadians(camera.getRotation().y) - (float)(Math.PI /2);
+            this.inertia.x += (float)Math.sin(-yaw);
+            this.inertia.z += (float)Math.cos(yaw);
+
+            this.right = false;
+        }
+
+        if (this.left){
+            float yaw = (float)Math.toRadians(camera.getRotation().y) + (float)(Math.PI /2);
+            this.inertia.x += (float)Math.sin(-yaw);
+            this.inertia.z += (float)Math.cos(yaw);
+
+            this.left = false;
+        }
+
+//
+//        if (window.isKeyPressed(GLFW_KEY_LEFT_SHIFT)){
+//            //cameraInc.y = -1;
+//        }
+        if (this.jump && this.isOnGround()){
+            inertia.y += 12f;
+
+            this.jump = false;
+        }
     }
 
-    private void applyInertiaBuffer(){
+    private void applyInertiaBuffer(Camera camera){
+        setInertiaBuffer(camera);
+
         inertia.x += inertiaBuffer.x;
         inertia.y += inertiaBuffer.y;
         inertia.z += inertiaBuffer.z;
@@ -196,9 +238,7 @@ public class Player {
 
     public void onTick(Camera camera, ChunkObject[][] chunkObjects) throws Exception {
 
-        this.applyInertiaBuffer();
-
-
+        this.applyInertiaBuffer(camera);
 
         if(placeTimer > 0){
             placeTimer -= 0.003f;
@@ -216,18 +256,20 @@ public class Player {
 
         onGround = applyInertia(pos, inertia, onGround, width, height,true);
 
-        if (this.pos.x > ((chunkRenderDistance + 1) * 16)-1.5f) {
+        //map boundary check TODO: ID 1000
+        if (this.pos.x > ((chunkRenderDistance + 1) * 16)-0.5f) {
             pos.x = oldPos.x;
         }
         if (this.pos.x < (chunkRenderDistance * -16) + 0.5f){
             pos.x = oldPos.x;
         }
-        if (this.pos.z > ((chunkRenderDistance + 1) * 16)-1.5f) {
+        if (this.pos.z > ((chunkRenderDistance + 1) * 16)-0.5f) {
             pos.z = oldPos.z;
         }
         if (this.pos.z < (chunkRenderDistance * -16) + 0.5f){
             pos.z = oldPos.z;
         }
+        //END TODO: ID 1000
 
         if(mining && mineTimer <= 0) {
             rayCast(camera.getPosition(), camera.getRotationVector(), 4f, chunkObjects, true, false, this);

@@ -18,7 +18,7 @@ import static org.lwjgl.glfw.GLFW.*;
 
 public class Crafter implements IGameLogic {
 
-    public static int chunkRenderDistance = 3;
+    public static int chunkRenderDistance = 1;
 
     private static final float MOUSE_SENSITIVITY = 0.008f;
 
@@ -68,46 +68,26 @@ public class Crafter implements IGameLogic {
         player = new Player();
     }
 
-    private static final float inertiaApplicationDivision = 1f;
     @Override
     public void input(Window window, MouseInput input){
-
-
+//        System.out.println("input thread is running");
         if (window.isKeyPressed(GLFW_KEY_W) && !player.getForward()){
-            float yaw = (float)Math.toRadians(camera.getRotation().y) + (float)Math.PI;
-            float x = (float)Math.sin(-yaw) / inertiaApplicationDivision;
-            float z = (float)Math.cos(yaw) / inertiaApplicationDivision;
-            player.setInertiaBuffer(x,0,z);
             player.setForward();
         }
         if (window.isKeyPressed(GLFW_KEY_S) && !player.getBackward()){
-            //no mod needed
-            float yaw = (float)Math.toRadians(camera.getRotation().y);
-            float x = (float)Math.sin(-yaw) / inertiaApplicationDivision;
-            float z = (float)Math.cos(yaw) / inertiaApplicationDivision;
-            player.setInertiaBuffer(x,0,z);
             player.setBackward();
         }
         if (window.isKeyPressed(GLFW_KEY_A) && !player.getLeft()){
-            float yaw = (float)Math.toRadians(camera.getRotation().y) + (float)(Math.PI /2);
-            float x = (float)Math.sin(-yaw) / inertiaApplicationDivision;
-            float z = (float)Math.cos(yaw) / inertiaApplicationDivision;
-            player.setInertiaBuffer(x,0,z);
             player.setLeft();
         }
         if (window.isKeyPressed(GLFW_KEY_D) && !player.getRight()){
-            float yaw = (float)Math.toRadians(camera.getRotation().y) - (float)(Math.PI /2);
-            float x = (float)Math.sin(-yaw) / inertiaApplicationDivision;
-            float z = (float)Math.cos(yaw) / inertiaApplicationDivision;
-            player.setInertiaBuffer(x,0,z);
             player.setRight();
         }
 
-        if (window.isKeyPressed(GLFW_KEY_LEFT_SHIFT)){
-            //cameraInc.y = -1;
-        }
+//        if (window.isKeyPressed(GLFW_KEY_LEFT_SHIFT)){
+//            //cameraInc.y = -1;
+//        }
         if (window.isKeyPressed(GLFW_KEY_SPACE) && player.isOnGround() && !player.getJump()){
-            player.setInertiaBuffer(0,12f,0);
             player.setJump();
         }
 

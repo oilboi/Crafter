@@ -37,6 +37,7 @@ public class Player {
     private float placeTimer = 0;
     private short selectedItem = 1;
     private Vector3f oldPos;
+    private float accelerationMultiplier = 0.07f;
 
     public short getSelectedItem(){
         return selectedItem;
@@ -152,32 +153,32 @@ public class Player {
     public void setInertiaBuffer(Camera camera){
         if (this.forward){
             float yaw = (float)Math.toRadians(camera.getRotation().y) + (float)Math.PI;
-            this.inertia.x += (float)Math.sin(-yaw);
-            this.inertia.z += (float)Math.cos(yaw);
+            this.inertia.x += (float)(Math.sin(-yaw) * accelerationMultiplier);
+            this.inertia.z += (float)(Math.cos(yaw)  * accelerationMultiplier);
 
             this.forward = false;
         }
         if (this.backward){
             //no mod needed
             float yaw = (float)Math.toRadians(camera.getRotation().y);
-            this.inertia.x += (float)Math.sin(-yaw);
-            this.inertia.z += (float)Math.cos(yaw);
+            this.inertia.x += (float)(Math.sin(-yaw) * accelerationMultiplier);
+            this.inertia.z += (float)(Math.cos(yaw)  * accelerationMultiplier);
 
             this.backward = false;
         }
 
         if (this.right){
             float yaw = (float)Math.toRadians(camera.getRotation().y) - (float)(Math.PI /2);
-            this.inertia.x += (float)Math.sin(-yaw);
-            this.inertia.z += (float)Math.cos(yaw);
+            this.inertia.x += (float)(Math.sin(-yaw) * accelerationMultiplier);
+            this.inertia.z += (float)(Math.cos(yaw)  * accelerationMultiplier);
 
             this.right = false;
         }
 
         if (this.left){
             float yaw = (float)Math.toRadians(camera.getRotation().y) + (float)(Math.PI /2);
-            this.inertia.x += (float)Math.sin(-yaw);
-            this.inertia.z += (float)Math.cos(yaw);
+            this.inertia.x += (float)(Math.sin(-yaw) * accelerationMultiplier);
+            this.inertia.z += (float)(Math.cos(yaw)  * accelerationMultiplier);
 
             this.left = false;
         }

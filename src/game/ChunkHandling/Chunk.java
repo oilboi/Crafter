@@ -49,14 +49,19 @@ public class Chunk {
 
             short currBlock;
 
-            if (y == height) {
-                 currBlock = 2;
-            } else if (y < height && y >= height - dirtHeight){
-                currBlock = 1;
-            } else if (y < height - dirtHeight){
+            if (x == 0 || z == 0){
                 currBlock = 3;
-            } else {
-                currBlock = 0;
+            }
+            else {
+                if (y == height) {
+                    currBlock = 2;
+                } else if (y < height && y >= height - dirtHeight) {
+                    currBlock = 1;
+                } else if (y < height - dirtHeight) {
+                    currBlock = 3;
+                } else {
+                    currBlock = 0;
+                }
             }
 
             block[ChunkMath.genHash(x, y, z)] = currBlock;

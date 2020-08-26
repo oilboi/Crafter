@@ -49,8 +49,9 @@ public class Chunk {
 
             short currBlock;
 
-
-            if (y == height) {
+            if (y == 0 ){
+                currBlock = 5;
+            } else if (y == height) {
                 currBlock = 2;
             } else if (y < height && y >= height - dirtHeight) {
                 currBlock = 1;

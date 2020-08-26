@@ -99,6 +99,17 @@ public class BlockDefinition {
                 new int[]{2,0}, //top
                 new int[]{2,0}  //bottom
         );
+
+        new BlockDefinition(
+                5,
+                "bedrock",
+                new int[]{6,0}, //front
+                new int[]{6,0}, //back
+                new int[]{6,0}, //right
+                new int[]{6,0}, //left
+                new int[]{6,0}, //top
+                new int[]{6,0}  //bottom
+        );
     }
 
     public static BlockDefinition getID(int ID){

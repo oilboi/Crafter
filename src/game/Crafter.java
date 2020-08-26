@@ -13,11 +13,12 @@ import org.joml.Vector3f;
 import static game.ChunkHandling.ChunkData.storeChunk;
 import static game.ChunkHandling.ChunkMesh.generateChunkMesh;
 import static game.blocks.BlockDefinition.initializeBlocks;
+import static game.player.TNT.boom;
 import static org.lwjgl.glfw.GLFW.*;
 
 public class Crafter implements IGameLogic {
 
-    public static int chunkRenderDistance = 2;
+    public static int chunkRenderDistance = 12;
 
     private static final float MOUSE_SENSITIVITY = 0.008f;
 
@@ -31,9 +32,9 @@ public class Crafter implements IGameLogic {
 //
     private boolean rButtonPushed = false;
 //
-//    private boolean tButtonPushed = false;
+    private boolean tButtonPushed = false;
 
-//    private boolean boomBuffer = false;
+    private boolean boomBuffer = false;
 
     private Player player;
 
@@ -57,7 +58,7 @@ public class Crafter implements IGameLogic {
         for (int x = -chunkRenderDistance; x <= chunkRenderDistance; x++) {
             for (int z = -chunkRenderDistance; z <= chunkRenderDistance; z++) {
 //                System.out.println("-------");
-//                System.out.println(x + " " + z);
+                System.out.println(x + " " + z);
                 Chunk thisChunk = new Chunk(x, z);
                 storeChunk(x,z, thisChunk);
                 generateChunkMesh(x, z, mapMeshes, false);
@@ -67,7 +68,7 @@ public class Crafter implements IGameLogic {
         player = new Player();
     }
 
-    private static final float inertiaApplicationDivision = 10f;
+    private static final float inertiaApplicationDivision = 1f;
     @Override
     public void input(Window window, MouseInput input){
 
@@ -137,16 +138,16 @@ public class Crafter implements IGameLogic {
         }
 //
 //
-//        //prototype explosion - T KEY
-//        if (window.isKeyPressed(GLFW_KEY_T)) {
-//            if (!tButtonPushed) {
-//                tButtonPushed = true;
-//                boomBuffer = true;
-//                System.out.println("boom");
-//            }
-//        } else if (!window.isKeyPressed(GLFW_KEY_T)){
-//            tButtonPushed = false;
-//        }
+        //prototype explosion - T KEY
+        if (window.isKeyPressed(GLFW_KEY_T)) {
+            if (!tButtonPushed) {
+                tButtonPushed = true;
+                boomBuffer = true;
+                System.out.println("boom");
+            }
+        } else if (!window.isKeyPressed(GLFW_KEY_T)){
+            tButtonPushed = false;
+        }
 //
         //mouse left button input
         if(input.isLeftButtonPressed()){
@@ -189,10 +190,10 @@ public class Crafter implements IGameLogic {
 
         player.onTick(camera, mapMeshes);
 
-//        if(boomBuffer){
-////            boom((int)Math.floor(player.getPos().x),(int)Math.floor(player.getPos().y),(int)Math.floor(player.getPos().z), chunkMeshes);
-//            boomBuffer = false;
-//        }
+        if(boomBuffer){
+            boom((int)Math.floor(player.getPos().x),(int)Math.floor(player.getPos().y),(int)Math.floor(player.getPos().z), mapMeshes);
+            boomBuffer = false;
+        }
 
 //        for (GameItem itemEntity : itemEntities){
 //            Vector3f pos = itemEntity.getPosition();

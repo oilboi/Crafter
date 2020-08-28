@@ -7,6 +7,8 @@ import org.joml.Matrix4f;
 
 import java.util.ArrayList;
 
+import static engine.ItemEntity.getMesh;
+import static engine.ItemEntity.getTotalObjects;
 import static org.lwjgl.opengl.GL11.*;
 
 public class Renderer {
@@ -83,6 +85,15 @@ public class Renderer {
                 ((ChunkObject) chunkMesh).getMesh().render();
             }
         }
+
+
+        for (int i = 0; i < getTotalObjects(); i++){
+            Matrix4f modelViewMatrix = transformation.getEntityModelViewMatrix(i, viewMatrix);
+            shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+            getMesh(i).render();
+        }
+
+
         shaderProgram.unbind();
     }
 

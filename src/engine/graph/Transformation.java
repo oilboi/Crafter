@@ -4,6 +4,8 @@ import engine.ChunkObject;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
+import static engine.ItemEntity.*;
+
 public class Transformation {
 
     private final Matrix4f projectionMatrix;
@@ -36,9 +38,20 @@ public class Transformation {
         return projectionMatrix;
     }
 
+    public Matrix4f getEntityModelViewMatrix(int ID, Matrix4f viewMatrix){
+        Vector3f rotation = getRotation(ID);
+        modelViewMatrix.identity().translate(getPosition(ID)).
+                rotateX((float)Math.toRadians(-rotation.x)).
+                rotateY((float)Math.toRadians(-rotation.y)).
+                rotateZ((float)Math.toRadians(-rotation.z)).
+                scale(getScale(ID));
+        Matrix4f viewCurr = new Matrix4f(viewMatrix);
+        return viewCurr.mul(modelViewMatrix);
+    }
+
+
     public Matrix4f getModelViewMatrix(Matrix4f viewMatrix){
         Vector3f rotation = new Vector3f(0,0,0);
-
         modelViewMatrix.identity().translate(new Vector3f(0,0,0)).
                 rotateX((float)Math.toRadians(-rotation.x)).
                 rotateY((float)Math.toRadians(-rotation.y)).

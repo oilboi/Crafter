@@ -27,6 +27,7 @@ public class Player {
     private Vector3f inertia = new Vector3f(0,0,0);
     private float height = 1.9f;
     private float width = 0.3f;
+
     private int[] currentChunk = {0,0};
 
     private boolean onGround =  false;

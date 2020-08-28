@@ -5,6 +5,7 @@ import game.collision.CustomAABB;
 import game.collision.CustomBlockBox;
 import org.joml.Vector3f;
 
+import static engine.ItemEntity.createItem;
 import static game.ChunkHandling.ChunkData.*;
 import static game.ChunkHandling.ChunkMesh.generateChunkMesh;
 import static game.Crafter.chunkRenderDistance;
@@ -33,8 +34,8 @@ public class Ray {
         //System.out.println(finalPos);
         if(finalPos != null) {
             if(mining) {
-                destroyBlock(finalPos, chunkObjects);
-//                addItem(finalPos.x, finalPos.y, finalPos.z,thisBlock);
+                int thisBlock = destroyBlock(finalPos, chunkObjects);
+                createItem(thisBlock, finalPos);
             } else if (placing && lastPos != null){
                 if (!wouldCollide(new CustomAABB(player.getPos().x, player.getPos().y+0.01f, player.getPos().z, player.getWidth(), player.getHeight()-0.02f), new CustomBlockBox((int)lastPos.x, (int)lastPos.y, (int)lastPos.z))) {
                     placeBlock(lastPos, chunkObjects, (short) 4);
@@ -56,7 +57,7 @@ public class Ray {
         return getBlockInChunk((int)realPos.x, (int)realPos.y, (int)realPos.z, current[0], current[1]) != 0;
     }
 
-    private static void destroyBlock(Vector3f flooredPos, ChunkObject[][] chunkObjects) throws Exception {
+    private static int destroyBlock(Vector3f flooredPos, ChunkObject[][] chunkObjects) throws Exception {
         int currentChunkX = (int)(Math.floor(flooredPos.x / 16f));
         int currentChunkZ = (int)(Math.floor(flooredPos.z / 16f));
         int chunkPosX = (int)flooredPos.x - (16*currentChunkX);
@@ -67,7 +68,7 @@ public class Ray {
         short thisBlock = getBlockInChunk((int)realPos.x, (int)realPos.y, (int)realPos.z, currentChunkX,currentChunkZ);
 
         if (thisBlock == 5){
-            return;
+            return 0;
         }
 
         setBlock((int)realPos.x, (int)realPos.y, (int)realPos.z, currentChunkX, currentChunkZ, (short) 0);
@@ -91,7 +92,7 @@ public class Ray {
             floodFill(currentChunkX, currentChunkZ-1);
             generateChunkMesh(currentChunkX, currentChunkZ-1, chunkObjects, true);
         }
-//        return thisBlock;
+        return thisBlock;
     }
     private static short placeBlock(Vector3f flooredPos, ChunkObject[][] chunkObjects, short id) throws Exception {
         int currentChunkX = (int)(Math.floor(flooredPos.x / 16f));

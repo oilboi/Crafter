@@ -2,6 +2,8 @@ package game.blocks;
 
 import java.util.ArrayList;
 
+import static engine.ItemEntity.createBlockObjectMesh;
+
 public class BlockDefinition {
 
     private final static ArrayList<BlockDefinition> blockIDs = new ArrayList<>();
@@ -20,7 +22,7 @@ public class BlockDefinition {
     private final float[] topTexture;    //top
     private final float[] bottomTexture; //bottom
 
-    private BlockDefinition(int ID, String name, int[] front, int[] back, int[] right, int[] left, int[] top, int[] bottom){
+    private BlockDefinition(int ID, String name, int[] front, int[] back, int[] right, int[] left, int[] top, int[] bottom) throws Exception {
         this.ID   = ID;
         this.name = name;
         this.frontTexture  = calculateTexture(  front[0],  front[1] );
@@ -31,6 +33,9 @@ public class BlockDefinition {
         this.bottomTexture = calculateTexture( bottom[0], bottom[1] );
 
         blockIDs.add(this);
+
+        //TODO: INITIALIZE NEW OBJECT MESH FOR THIS BLOCK
+        createBlockObjectMesh(ID);
     }
 
     private static float[] calculateTexture(int x, int y){
@@ -43,7 +48,7 @@ public class BlockDefinition {
         return texturePoints;
     }
 
-    public static void initializeBlocks(){
+    public static void initializeBlocks() throws Exception {
 
         new BlockDefinition(
                 0,

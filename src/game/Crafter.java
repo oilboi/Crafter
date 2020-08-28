@@ -1,9 +1,6 @@
 package game;
 
-import engine.ChunkObject;
-import engine.IGameLogic;
-import engine.MouseInput;
-import engine.Window;
+import engine.*;
 import engine.graph.Camera;
 import game.ChunkHandling.Chunk;
 import game.player.Player;
@@ -27,6 +24,8 @@ public class Crafter implements IGameLogic {
     private final Camera camera;
 
     private static ChunkObject[][] mapMeshes = new ChunkObject[(chunkRenderDistance*2)+1][(chunkRenderDistance*2)+1];
+
+    private static ItemEntity[] itemEntities = new ItemEntity[256];
 
     private boolean fButtonPushed = false;
 //
@@ -58,7 +57,7 @@ public class Crafter implements IGameLogic {
         for (int x = -chunkRenderDistance; x <= chunkRenderDistance; x++) {
             for (int z = -chunkRenderDistance; z <= chunkRenderDistance; z++) {
 //                System.out.println("-------");
-                System.out.println(x + " " + z);
+//                System.out.println(x + " " + z);
                 Chunk thisChunk = new Chunk(x, z);
                 storeChunk(x,z, thisChunk);
                 generateChunkMesh(x, z, mapMeshes, false);

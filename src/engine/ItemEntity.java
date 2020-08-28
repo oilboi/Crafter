@@ -35,7 +35,7 @@ public class ItemEntity {
     }
 
     public static void createItem(int blockID, Vector3f pos){
-        System.out.println("Created BLOCKID: " + blockID + " with objectID: " + totalObjects);
+//        System.out.println("Created BLOCKID: " + blockID + " with objectID: " + totalObjects);
         thisMeshID[totalObjects] = blockID;
         pos.x+=0.5f;
         pos.y+=0.5f;
@@ -80,7 +80,7 @@ public class ItemEntity {
 
     public static void createBlockObjectMesh(int thisBlock) throws Exception {
 
-        System.out.println("Created Entity Mesh for ID " + thisBlock + "!");
+//        System.out.println("Created Entity Mesh for ID " + thisBlock + "!");
 
         int indicesCount = 0;
 

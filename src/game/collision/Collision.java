@@ -3,7 +3,7 @@ package game.collision;
 import org.joml.Vector3f;
 import org.lwjgl.system.CallbackI;
 
-import static game.ChunkHandling.ChunkData.getBlockInChunk;
+//import static game.ChunkHandling.ChunkData.getBlockInChunk;
 import static game.Crafter.getChunkRenderDistance;
 import static game.collision.CollisionMath.floorPos;
 
@@ -168,7 +168,7 @@ public class Collision {
         int currentChunkX = (int)(Math.floor(flooredPos.x / 16f));
         int currentChunkZ = (int)(Math.floor(flooredPos.z / 16f));
         Vector3f realPos = new Vector3f(flooredPos.x - (16*currentChunkX), flooredPos.y, flooredPos.z - (16*currentChunkZ));
-        return getBlockInChunk((int)realPos.x, (int)realPos.y, (int)realPos.z, currentChunkX, currentChunkZ) != 0;
+        return true;//todo:getBlockInChunk((int)realPos.x, (int)realPos.y, (int)realPos.z, currentChunkX, currentChunkZ) != 0;
     }
 
     //this is used for block placing

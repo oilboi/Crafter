@@ -7,6 +7,8 @@ import org.joml.Matrix4f;
 
 import java.util.ArrayList;
 
+import static engine.ChunkObject.getChunkMesh;
+import static engine.ChunkObject.getLimit;
 import static engine.ItemEntity.getMesh;
 import static engine.ItemEntity.getTotalObjects;
 import static org.lwjgl.opengl.GL11.*;
@@ -50,7 +52,7 @@ public class Renderer {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
-    public void render(Window window, Camera camera, ChunkObject[][] chunkMeshes){
+    public void render(Window window, Camera camera){
         clear();
 
         if (window.isResized()){
@@ -70,20 +72,16 @@ public class Renderer {
         shaderProgram.setUniform("texture_sampler", 0);
 
         //render each chunk
-        for(Object[] chunkMeshArray : chunkMeshes){
-            if (chunkMeshArray == null){
+        for(int i = 0; i < getLimit(); i++){
+            Mesh thisMesh = getChunkMesh(i);
+            if (thisMesh == null){
+                System.out.println("wow that doesn't exist!");
                 continue;
             }
-            for (Object chunkMesh : chunkMeshArray) {
-                if(chunkMesh == null){
-                    continue;
-                }
-                //set model view matrix for this item
-                Matrix4f modelViewMatrix = transformation.getModelViewMatrix(viewMatrix);
-                shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
-                //render the mesh for this game item
-                ((ChunkObject) chunkMesh).getMesh().render();
-            }
+            Matrix4f modelViewMatrix = transformation.getModelViewMatrix(viewMatrix);
+            shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+            //render the mesh for this chunk
+            thisMesh.render();
         }
 
 

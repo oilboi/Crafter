@@ -7,11 +7,11 @@ import org.joml.Vector3f;
 
 import java.util.ArrayList;
 
-import static game.ChunkHandling.ChunkData.getBlockInChunk;
+//import static game.ChunkHandling.ChunkData.getBlockInChunk;
 import static game.Crafter.chunkRenderDistance;
 import static game.Crafter.getChunkRenderDistance;
 import static game.collision.Collision.applyInertia;
-import static game.player.Ray.rayCast;
+//import static game.player.Ray.rayCast;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_SPACE;
 
@@ -226,7 +226,7 @@ public class Player {
         current[1] = (int)(Math.floor(flooredPos.z / 16f));
         Vector3f realPos = new Vector3f(flooredPos.x - (16*current[0]), flooredPos.y, flooredPos.z - (16*current[1]));
 
-        return getBlockInChunk((int)realPos.x, (int)realPos.y, (int)realPos.z, current[0]+renderDistance, current[1]+renderDistance);
+        return 1;//getBlockInChunk((int)realPos.x, (int)realPos.y, (int)realPos.z, current[0]+renderDistance, current[1]+renderDistance);
     }
 
 
@@ -274,10 +274,10 @@ public class Player {
         //END TODO: ID 1000
 
         if(mining && mineTimer <= 0) {
-            rayCast(camera.getPosition(), camera.getRotationVector(), 4f, chunkObjects, true, false, this);
+//            rayCast(camera.getPosition(), camera.getRotationVector(), 4f, chunkObjects, true, false, this);
             mineTimer = 0.5f;
         } else if (placing && placeTimer <= 0){
-            rayCast(camera.getPosition(), camera.getRotationVector(), 4f, chunkObjects, false, true, this);
+//            rayCast(camera.getPosition(), camera.getRotationVector(), 4f, chunkObjects, false, true, this);
             placeTimer = 0.5f;
         }
 

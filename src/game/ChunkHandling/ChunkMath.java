@@ -23,6 +23,19 @@ public class ChunkMath {
         return result;
     }
 
+    public static int genChunkHash(int x, int z){
+        return ((x+chunkRenderDistance) * ((chunkRenderDistance * 2 ) + 1)) + (z + chunkRenderDistance);
+    }
+
+    public static int[] getChunkHash(int i){
+        int x = (i / ((chunkRenderDistance*2) + 1)) - chunkRenderDistance;
+        i %= ((chunkRenderDistance*2) + 1);
+        int z = i - chunkRenderDistance;
+        return new int[]{x,z};
+    }
+
+
+
     //todo this does not belong in here
     public static float getDistance(float x1, float y1, float z1, float x2, float y2, float z2){
         float x = x1 - x2;

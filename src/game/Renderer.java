@@ -1,14 +1,11 @@
 package game;
 
-import engine.ChunkObject;
 import engine.Window;
 import engine.graph.*;
 import org.joml.Matrix4f;
 
-import java.util.ArrayList;
-
-import static engine.ChunkObject.getChunkMesh;
-import static engine.ChunkObject.getLimit;
+import static engine.Chunk.getChunkMesh;
+import static engine.Chunk.getLimit;
 import static engine.ItemEntity.getMesh;
 import static engine.ItemEntity.getTotalObjects;
 import static org.lwjgl.opengl.GL11.*;
@@ -78,9 +75,10 @@ public class Renderer {
                 System.out.println("wow that doesn't exist!");
                 continue;
             }
+
             Matrix4f modelViewMatrix = transformation.getModelViewMatrix(viewMatrix);
             shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
-            //render the mesh for this chunk
+//            System.out.println(thisMesh);
             thisMesh.render();
         }
 

@@ -1,19 +1,17 @@
 package game.player;
 
-import engine.ChunkObject;
+import engine.Chunk;
 import engine.graph.Camera;
 import org.joml.Vector3f;
 
-
-import java.util.ArrayList;
 
 //import static game.ChunkHandling.ChunkData.getBlockInChunk;
 import static game.Crafter.chunkRenderDistance;
 import static game.Crafter.getChunkRenderDistance;
 import static game.collision.Collision.applyInertia;
+import static game.player.Ray.rayCast;
 //import static game.player.Ray.rayCast;
-import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_SPACE;
+
 
 public class Player {
     private static int renderDistance = getChunkRenderDistance();
@@ -238,7 +236,7 @@ public class Player {
         jumpBuffer = true;
     }
 
-    public void onTick(Camera camera, ChunkObject[][] chunkObjects) throws Exception {
+    public void onTick(Camera camera) throws Exception {
 
         this.applyInertiaBuffer(camera);
 
@@ -274,15 +272,12 @@ public class Player {
         //END TODO: ID 1000
 
         if(mining && mineTimer <= 0) {
-//            rayCast(camera.getPosition(), camera.getRotationVector(), 4f, chunkObjects, true, false, this);
+            rayCast(camera.getPosition(), camera.getRotationVector(), 4f, true, false, this);
             mineTimer = 0.5f;
         } else if (placing && placeTimer <= 0){
-//            rayCast(camera.getPosition(), camera.getRotationVector(), 4f, chunkObjects, false, true, this);
+            rayCast(camera.getPosition(), camera.getRotationVector(), 4f, false, true, this);
             placeTimer = 0.5f;
         }
-
-
-
 
         oldPos = new Vector3f(pos);
 //        blockPos = new int[]{(int)Math.floor(pos.x), (int)Math.floor(pos.y),(int)Math.floor(pos.z)};

@@ -1,35 +1,41 @@
 package game.light;
 
-import game.ChunkHandling.Chunk;
-
 import java.util.ArrayList;
 
-import static game.ChunkHandling.ChunkData.*;
+import static engine.Chunk.*;
 import static game.ChunkHandling.ChunkMath.genHash;
 
 public class Light {
 
-//    private static final byte debugLightLevel = 15;
-//
-//    public static void floodFill(int chunkX, int chunkZ) {
-//        Chunk thisChunk = getChunk(chunkX,chunkZ);
-//
-//        for (int y = 127; y >= 0; y--){
-//            for (int x = 0; x <= 15; x++){
-//                for (int z = 0; z <= 15; z++){
-//                    short thisBlock = getBlockInChunk(x,y,z,chunkX,chunkZ);
-//                    if(thisChunk == null){
-//                        return;
-//                    }
-//                    if(underSunlight(x,y,z,chunkX,chunkZ) && thisBlock == 0){
-//                        thisChunk.setLight(genHash(x,y,z), debugLightLevel);
-//                    } else {
-//                        thisChunk.setLight(genHash(x,y,z), (byte) 9);
-//                    }
-//                }
-//            }
-//        }
-//    }
+    private static final byte debugLightLevel = 15;
+
+    public static void floodFill(int chunkX, int chunkZ) {
+
+        int x = 0;
+        int y = 127;
+        int z = 0;
+
+        byte thisLight = (byte) 15;
+
+        for ( int i = 0; i < (16 * 128 * 16); i++){
+
+            if(thisLight == (byte) 15 && getBlock(x, y, z, chunkX, chunkZ) != 0){
+                thisLight = (byte) 9;
+            }
+            setLight(x, y, z, chunkX, chunkZ, thisLight);
+
+            y--;
+            if( y < 0){
+                y = 127;
+                thisLight = (byte) 15;
+                x++;
+                if( x > 15 ){
+                    x = 0;
+                    z++;
+                }
+            }
+        }
+    }
 
 ////        long startTime = System.nanoTime();
 //

@@ -4,6 +4,7 @@ import engine.*;
 import engine.graph.Camera;
 import game.player.Player;
 import org.joml.Vector2f;
+import org.joml.Vector3f;
 
 //import static game.ChunkHandling.ChunkData.storeChunk;
 import static engine.Chunk.genBiome;
@@ -16,7 +17,7 @@ import static org.lwjgl.glfw.GLFW.*;
 
 public class Crafter implements IGameLogic {
 
-    public static int chunkRenderDistance = 10;
+    public static int chunkRenderDistance = 12;
 
     private static final float MOUSE_SENSITIVITY = 0.008f;
 
@@ -122,7 +123,7 @@ public class Crafter implements IGameLogic {
         if (window.isKeyPressed(GLFW_KEY_R)) {
             if (!rButtonPushed) {
                 rButtonPushed = true;
-//                player.setPos(new Vector3f(0,129,0));
+                player.setPos(new Vector3f(0,129,0));
                 if (Math.random() == 0.0001f){
                     System.out.println("Hey, Ben!");
                 }

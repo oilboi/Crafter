@@ -14,6 +14,7 @@ import static game.player.Ray.rayCast;
 
 
 public class Player {
+
     private static int renderDistance = getChunkRenderDistance();
     private Vector3f pos = new Vector3f(0,129,0);
 
@@ -149,35 +150,37 @@ public class Player {
         this.jump = false;
     }
 
+    private float movementSpeed = 1.5f;
+
     public void setInertiaBuffer(Camera camera){
         if (this.forward){
             float yaw = (float)Math.toRadians(camera.getRotation().y) + (float)Math.PI;
-            this.inertia.x += (float)(Math.sin(-yaw) * accelerationMultiplier);
-            this.inertia.z += (float)(Math.cos(yaw)  * accelerationMultiplier);
+            this.inertia.x += (float)(Math.sin(-yaw) * accelerationMultiplier) * movementSpeed;
+            this.inertia.z += (float)(Math.cos(yaw)  * accelerationMultiplier) * movementSpeed;
 
             this.forward = false;
         }
         if (this.backward){
             //no mod needed
             float yaw = (float)Math.toRadians(camera.getRotation().y);
-            this.inertia.x += (float)(Math.sin(-yaw) * accelerationMultiplier);
-            this.inertia.z += (float)(Math.cos(yaw)  * accelerationMultiplier);
+            this.inertia.x += (float)(Math.sin(-yaw) * accelerationMultiplier) * movementSpeed;
+            this.inertia.z += (float)(Math.cos(yaw)  * accelerationMultiplier) * movementSpeed;
 
             this.backward = false;
         }
 
         if (this.right){
             float yaw = (float)Math.toRadians(camera.getRotation().y) - (float)(Math.PI /2);
-            this.inertia.x += (float)(Math.sin(-yaw) * accelerationMultiplier);
-            this.inertia.z += (float)(Math.cos(yaw)  * accelerationMultiplier);
+            this.inertia.x += (float)(Math.sin(-yaw) * accelerationMultiplier) * movementSpeed;
+            this.inertia.z += (float)(Math.cos(yaw)  * accelerationMultiplier) * movementSpeed;
 
             this.right = false;
         }
 
         if (this.left){
             float yaw = (float)Math.toRadians(camera.getRotation().y) + (float)(Math.PI /2);
-            this.inertia.x += (float)(Math.sin(-yaw) * accelerationMultiplier);
-            this.inertia.z += (float)(Math.cos(yaw)  * accelerationMultiplier);
+            this.inertia.x += (float)(Math.sin(-yaw) * accelerationMultiplier) * movementSpeed;
+            this.inertia.z += (float)(Math.cos(yaw)  * accelerationMultiplier) * movementSpeed;
 
             this.left = false;
         }

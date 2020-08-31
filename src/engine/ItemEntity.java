@@ -44,6 +44,8 @@ public class ItemEntity {
         rotation[totalObjects] = new Vector3f(0,0,0);
         scale[totalObjects] = 1f;
         totalObjects++;
+
+        System.out.println("total items: " + totalObjects);
     }
 
     public static Vector3f getPosition(int ID){

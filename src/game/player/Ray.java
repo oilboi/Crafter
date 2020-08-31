@@ -13,7 +13,7 @@ import static game.collision.Collision.wouldCollide;
 import static game.light.Light.floodFill;
 
 public class Ray {
-    public static void rayCast(Vector3f pos, Vector3f dir, float length, boolean mining, boolean placing, Player player) throws Exception {
+    public static void rayCast(Vector3f pos, Vector3f dir, float length, boolean mining, boolean placing, Player player, boolean debugTest) throws Exception {
 
         Vector3f finalPos = null;
         Vector3f newPos   = null;
@@ -41,8 +41,8 @@ public class Ray {
                     placeBlock(lastPos, (short) 4);
                 }
             }
-        } else {
-
+        } else if (debugTest){
+            createItem(2, lastPos);
         }
     }
 

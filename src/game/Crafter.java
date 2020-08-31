@@ -17,7 +17,7 @@ import static org.lwjgl.glfw.GLFW.*;
 
 public class Crafter implements IGameLogic {
 
-    public static int chunkRenderDistance = 12;
+    public static int chunkRenderDistance = 2;
 
     private static final float MOUSE_SENSITIVITY = 0.008f;
 
@@ -84,24 +84,35 @@ public class Crafter implements IGameLogic {
     @Override
     public void input(Window window, MouseInput input){
 //        System.out.println("input thread is running");
-        if (window.isKeyPressed(GLFW_KEY_W) && !player.getForward()){
-            player.setForward();
-        }
-        if (window.isKeyPressed(GLFW_KEY_S) && !player.getBackward()){
-            player.setBackward();
-        }
-        if (window.isKeyPressed(GLFW_KEY_A) && !player.getLeft()){
-            player.setLeft();
-        }
-        if (window.isKeyPressed(GLFW_KEY_D) && !player.getRight()){
-            player.setRight();
+        if (window.isKeyPressed(GLFW_KEY_W)){
+            player.setForward(true);
+        } else {
+            player.setForward(false);
         }
 
-        if (window.isKeyPressed(GLFW_KEY_LEFT_SHIFT)){
+        if (window.isKeyPressed(GLFW_KEY_S)){
+            player.setBackward(true);
+        } else{
+            player.setBackward(false);
+        }
+        if (window.isKeyPressed(GLFW_KEY_A)){
+            player.setLeft(true);
+        } else {
+            player.setLeft(false);
+        }
+        if (window.isKeyPressed(GLFW_KEY_D)){
+            player.setRight(true);
+        } else {
+            player.setRight(false);
+        }
+
+        if (window.isKeyPressed(GLFW_KEY_LEFT_SHIFT)){ //sneaking
             //cameraInc.y = -1;
         }
-        if (window.isKeyPressed(GLFW_KEY_SPACE) && player.isOnGround() && !player.getJump()){
-            player.setJump();
+        if (window.isKeyPressed(GLFW_KEY_SPACE)){
+            player.setJump(true);
+        } else {
+            player.setJump(false);
         }
 
         //prototype toggle locking mouse - F KEY

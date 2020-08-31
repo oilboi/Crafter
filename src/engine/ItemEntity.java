@@ -8,12 +8,13 @@ import java.util.ArrayList;
 
 import static game.blocks.BlockDefinition.*;
 import static game.blocks.BlockDefinition.getBottomTexturePoints;
+import static game.collision.Collision.applyInertia;
 
 public class ItemEntity {
 
     private final static float itemSize   = 0.2f;
 
-    public final static int MAX_ID_AMOUNT = 26_000;
+    public final static int MAX_ID_AMOUNT = 126_000;
 
     private static int totalObjects       = 0;
 
@@ -35,17 +36,25 @@ public class ItemEntity {
     }
 
     public static void createItem(int blockID, Vector3f pos){
-//        System.out.println("Created BLOCKID: " + blockID + " with objectID: " + totalObjects);
+
         thisMeshID[totalObjects] = blockID;
         pos.x+=0.5f;
         pos.y+=0.5f;
         pos.z+=0.5f;
         position[totalObjects] = pos;
+        inertia[totalObjects] = new Vector3f(0,0,0);
         rotation[totalObjects] = new Vector3f(0,0,0);
         scale[totalObjects] = 1f;
         totalObjects++;
 
         System.out.println("total items: " + totalObjects);
+    }
+
+    public static void onStep(){
+        for (int i = 0; i < totalObjects; i++){
+            applyInertia(position[i], inertia[i],true, itemSize, itemSize*2, true);
+            rotation[i].y += 0.1f;
+        }
     }
 
     public static Vector3f getPosition(int ID){
@@ -81,8 +90,6 @@ public class ItemEntity {
     }
 
     public static void createBlockObjectMesh(int thisBlock) throws Exception {
-
-//        System.out.println("Created Entity Mesh for ID " + thisBlock + "!");
 
         int indicesCount = 0;
 
@@ -251,5 +258,13 @@ public class ItemEntity {
         Mesh mesh = new Mesh(positionsArray, lightArray, indicesArray, textureCoordArray, texture);
 
         meshStorage[thisBlock] = mesh;
+    }
+
+    public static void cleanUp(){
+        for (Mesh thisMesh : meshStorage){
+            if (thisMesh != null){
+                thisMesh.cleanUp();
+            }
+        }
     }
 }

@@ -151,7 +151,6 @@ public class Chunk {
         }
     }
 
-
     public static boolean underSunlight(int x, int y, int z, int chunkX, int chunkZ){
         if(chunkX < -chunkRenderDistance || chunkZ < -chunkRenderDistance || chunkX > chunkRenderDistance || chunkZ > chunkRenderDistance || genChunkHash(chunkX,chunkZ) < 0 || genChunkHash(chunkX,chunkZ) >= limit){
             return false;
@@ -162,5 +161,13 @@ public class Chunk {
             }
         }
         return true;
+    }
+
+    public static void cleanUp(){
+        for (Mesh thisMesh : mesh){
+            if (thisMesh != null){
+                thisMesh.cleanUp();
+            }
+        }
     }
 }

@@ -6,12 +6,10 @@ import game.player.Player;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
-//import static game.ChunkHandling.ChunkData.storeChunk;
 import static engine.Chunk.genBiome;
 import static engine.Chunk.initializeChunkHandler;
 import static game.ChunkHandling.ChunkMesh.generateChunkMesh;
 import static game.blocks.BlockDefinition.initializeBlocks;
-//import static game.player.TNT.boom;
 import static game.player.TNT.boom;
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -19,16 +17,16 @@ public class Crafter implements IGameLogic {
 
     public static int chunkRenderDistance = 2;
 
-    private static final float MOUSE_SENSITIVITY = 0.008f;
+    private static final float MOUSE_SENSITIVITY = 0.009f;
 
     private final Renderer renderer;
 
     private final Camera camera;
 
     private boolean fButtonPushed = false;
-//
+
     private boolean rButtonPushed = false;
-//
+
     private boolean tButtonPushed = false;
 
     private boolean boomBuffer = false;
@@ -215,6 +213,7 @@ public class Crafter implements IGameLogic {
 //            itemEntity.setPosition(pos.x,pos.y,pos.z);
 //        }
 
+        ItemEntity.onStep();
     }
 
     @Override
@@ -224,17 +223,8 @@ public class Crafter implements IGameLogic {
 
     @Override
     public void cleanup(){
+        Chunk.cleanUp();
+        ItemEntity.cleanUp();
         renderer.cleanup();
-//        for(Object[] chunkMeshArray : mapMeshes){
-//            if (chunkMeshArray == null){
-//                continue;
-//            }
-//            for (Object chunkMesh : chunkMeshArray) {
-//                if(chunkMesh == null){
-//                    continue;
-//                }
-//                ((ChunkObject) chunkMesh).getMesh().cleanUp();
-//            }
-//        }
     }
 }

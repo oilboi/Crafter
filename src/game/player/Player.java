@@ -220,10 +220,8 @@ public class Player {
         }
 
 
-        onGround = applyInertia(pos, inertia, onGround, width, height,true);
-
-
-
+        onGround = applyInertia(pos, inertia, true, width, height,true);
+        
         //map boundary check TODO: ID 1000
         if (this.pos.x > ((chunkRenderDistance + 1) * 16)-0.5f) {
             pos.x = oldPos.x;
@@ -246,7 +244,7 @@ public class Player {
         } else if (placing && placeTimer <= 0){
             rayCast(camera.getPosition(), camera.getRotationVector(), 4f, false, true, this, false);
             placeTimer = 0.5f;
-        } else {
+        } else if (mining) {
             rayCast(camera.getPosition(), camera.getRotationVector(), 4f, false, false, this, true);
         }
 

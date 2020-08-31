@@ -27,6 +27,10 @@ public class ItemEntity {
 
     private static float[] scale       =    new float[MAX_ID_AMOUNT];
 
+    private static float[] hover       =    new float[MAX_ID_AMOUNT];
+
+    private static boolean[] floatUp =    new boolean[MAX_ID_AMOUNT];
+
     private static Vector3f[] rotation = new Vector3f[MAX_ID_AMOUNT];
 
     private static Vector3f[] inertia  = new Vector3f[MAX_ID_AMOUNT];
@@ -44,6 +48,7 @@ public class ItemEntity {
         position[totalObjects] = pos;
         inertia[totalObjects] = new Vector3f(0,0,0);
         rotation[totalObjects] = new Vector3f(0,0,0);
+        floatUp[totalObjects] = true;
         scale[totalObjects] = 1f;
         totalObjects++;
 
@@ -54,12 +59,28 @@ public class ItemEntity {
         for (int i = 0; i < totalObjects; i++){
             applyInertia(position[i], inertia[i],true, itemSize, itemSize*2, true);
             rotation[i].y += 0.1f;
+            if (floatUp[i]){
+                hover[i] += 0.00025f;
+                if (hover[i] >= 0.5f){
+                    floatUp[i] = false;
+                }
+            } else {
+                hover[i] -= 0.00025f;
+                if (hover[i] <= 0.0f){
+                    floatUp[i] = true;
+                }
+            }
         }
     }
 
     public static Vector3f getPosition(int ID){
         return position[ID];
     }
+    public static Vector3f getPositionWithHover(int ID){
+        return new Vector3f(position[ID].x, position[ID].y + hover[ID], position[ID].z);
+    }
+
+
 
     public static void setPosition(float x, float y, float z, int ID){
         position[ID].x = x;

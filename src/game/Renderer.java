@@ -83,6 +83,7 @@ public class Renderer {
         }
 
 
+        //render each item entity
         for (int i = 0; i < getTotalObjects(); i++){
             Matrix4f modelViewMatrix = transformation.getEntityModelViewMatrix(i, viewMatrix);
             shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);

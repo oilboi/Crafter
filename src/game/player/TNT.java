@@ -26,7 +26,6 @@ public class TNT {
                     int currentChunkX = (int) (Math.floor((float) x / 16f));
                     int currentChunkZ = (int) (Math.floor((float) z / 16f));
 
-
                     int currentPosX = x - (16 * currentChunkX);
                     int currentPosZ = z - (16 * currentChunkZ);
 
@@ -64,7 +63,7 @@ public class TNT {
 
         for (int[] index : chunkBuffer) {
             floodFill(index[0], index[1]);
-            generateChunkMesh(index[0], index[1], true);
+            generateChunkMesh(index[0], index[1], false);
         }
     }
 }

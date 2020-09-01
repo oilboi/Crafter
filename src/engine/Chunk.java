@@ -71,6 +71,10 @@ public class Chunk {
     }
 
     public static void setBlock(int x,int y,int z, int chunkX, int chunkZ, int newBlock){
+        if(chunkX < -chunkRenderDistance || chunkZ < -chunkRenderDistance || chunkX > chunkRenderDistance || chunkZ > chunkRenderDistance || genChunkHash(chunkX,chunkZ) < 0 || genChunkHash(chunkX,chunkZ) >= limit){
+            return;
+        }
+
         block[genChunkHash(chunkX,chunkZ)][genHash(x,y,z)] = newBlock;
     }
 

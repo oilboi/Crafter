@@ -4,12 +4,15 @@ import org.joml.Vector3f;
 
 import java.util.ArrayList;
 
+import static engine.Chunk.setBlock;
 import static engine.ItemEntity.createBlockObjectMesh;
+import static game.ChunkHandling.ChunkMesh.generateChunkMesh;
+import static game.light.Light.floodFill;
 import static game.player.TNT.boom;
 
 public class BlockDefinition {
 
-    private final static ArrayList<BlockDefinition> blockIDs = new ArrayList<>();
+    private final static BlockDefinition[] blockIDs = new BlockDefinition[256];
 
     //fixed fields for the class
     private static final byte atlasSizeX = 32;
@@ -28,7 +31,7 @@ public class BlockDefinition {
     private final BlockModifier blockModifier;
 
 
-    private BlockDefinition(int ID, String name, int[] front, int[] back, int[] right, int[] left, int[] top, int[] bottom, BlockModifier blockModifier) throws Exception {
+    private BlockDefinition(int ID, String name, int[] front, int[] back, int[] right, int[] left, int[] top, int[] bottom, boolean walkable, BlockModifier blockModifier) throws Exception {
         this.ID   = ID;
         this.name = name;
         this.frontTexture  = calculateTexture(  front[0],  front[1] );
@@ -38,20 +41,20 @@ public class BlockDefinition {
         this.topTexture    = calculateTexture(    top[0],    top[1] );
         this.bottomTexture = calculateTexture( bottom[0], bottom[1] );
         this.blockModifier = blockModifier;
-        blockIDs.add(this);
+        blockIDs[ID] = this;
         //TODO: INITIALIZE NEW OBJECT MESH FOR THIS BLOCK
         createBlockObjectMesh(ID);
     }
 
     public static void onDigCall(int ID, Vector3f pos) throws Exception {
-        if(blockIDs.get(ID) != null && blockIDs.get(ID).blockModifier != null){
-            blockIDs.get(ID).blockModifier.onDig(pos);
+        if(blockIDs[ID] != null && blockIDs[ID].blockModifier != null){
+            blockIDs[ID].blockModifier.onDig(pos);
         }
     }
 
     public static void onPlaceCall(int ID, Vector3f pos) throws Exception {
-        if(blockIDs.get(ID) != null && blockIDs.get(ID).blockModifier != null){
-            blockIDs.get(ID).blockModifier.onPlace(pos);
+        if(blockIDs[ID] != null && blockIDs[ID].blockModifier != null){
+            blockIDs[ID].blockModifier.onPlace(pos);
         }
     }
 
@@ -76,6 +79,7 @@ public class BlockDefinition {
                 new int[]{-1,-1}, //left
                 new int[]{-1,-1}, //top
                 new int[]{-1,-1},  //bottom
+                false,
                 null
         );
 
@@ -88,6 +92,7 @@ public class BlockDefinition {
                 new int[]{0,0}, //left
                 new int[]{0,0}, //top
                 new int[]{0,0},  //bottom
+                true,
                 null
         );
 
@@ -100,6 +105,7 @@ public class BlockDefinition {
                 new int[]{5,0}, //left
                 new int[]{4,0}, //top
                 new int[]{0,0},  //bottom
+                true,
                 null
         );
 
@@ -112,6 +118,7 @@ public class BlockDefinition {
                 new int[]{1,0}, //left
                 new int[]{1,0}, //top
                 new int[]{1,0},  //bottom
+                true,
                 null
         );
 
@@ -124,6 +131,7 @@ public class BlockDefinition {
                 new int[]{2,0}, //left
                 new int[]{2,0}, //top
                 new int[]{2,0},  //bottom
+                true,
                 null
         );
 
@@ -136,6 +144,7 @@ public class BlockDefinition {
                 new int[]{6,0}, //left
                 new int[]{6,0}, //top
                 new int[]{6,0},  //bottom
+                true,
                 null
         );
 
@@ -157,6 +166,7 @@ public class BlockDefinition {
                 new int[]{7,0}, //left
                 new int[]{8,0}, //top
                 new int[]{9,0},  //bottom
+                true,
                 kaboom
         );
 
@@ -164,7 +174,17 @@ public class BlockDefinition {
         BlockModifier splash = new BlockModifier() {
             @Override
             public void onPlace(Vector3f pos) throws Exception {
-                boom((int)pos.x, (int)pos.y, (int)pos.z, 5);
+                int currentChunkX = (int) (Math.floor((float) pos.x / 16f));
+                int currentChunkZ = (int) (Math.floor((float) pos.z / 16f));
+                int currentPosX = (int) (pos.x - (16 * currentChunkX));
+                int currentPosZ = (int) (pos.z - (16 * currentChunkZ));
+
+                for(int y = 0; y < 128; y++){
+                    setBlock(currentPosX, y, currentPosZ, currentChunkX, currentChunkZ,7);
+                }
+
+                floodFill(currentChunkX, currentChunkZ);
+                generateChunkMesh(currentChunkX, currentChunkZ, true);
             }
         };
 
@@ -177,31 +197,32 @@ public class BlockDefinition {
                 new int[]{10,0}, //left
                 new int[]{10,0}, //top
                 new int[]{10,0},  //bottom
+                true,
                 splash
         );
     }
 
     public static BlockDefinition getID(int ID){
-        return blockIDs.get(ID);
+        return blockIDs[ID];
     }
 
     public static float[] getFrontTexturePoints(int ID){
-        return blockIDs.get(ID).frontTexture;
+        return blockIDs[ID].frontTexture;
     }
     public static float[] getBackTexturePoints(int ID){
-        return blockIDs.get(ID).backTexture;
+        return blockIDs[ID].backTexture;
     }
     public static float[] getRightTexturePoints(int ID){
-        return blockIDs.get(ID).rightTexture;
+        return blockIDs[ID].rightTexture;
     }
     public static float[] getLeftTexturePoints(int ID){
-        return blockIDs.get(ID).leftTexture;
+        return blockIDs[ID].leftTexture;
     }
     public static float[] getTopTexturePoints(int ID){
-        return blockIDs.get(ID).topTexture;
+        return blockIDs[ID].topTexture;
     }
     public static float[] getBottomTexturePoints(int ID){
-        return blockIDs.get(ID).bottomTexture;
+        return blockIDs[ID].bottomTexture;
     }
 
 }

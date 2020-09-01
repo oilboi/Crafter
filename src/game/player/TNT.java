@@ -10,6 +10,7 @@ import org.joml.Vector3f;
 import static engine.Chunk.getBlock;
 import static engine.Chunk.setBlock;
 import static engine.ItemEntity.createItem;
+import static engine.TNTEntity.createTNT;
 import static game.ChunkHandling.ChunkMath.getDistance;
 import static game.ChunkHandling.ChunkMesh.generateChunkMesh;
 import static game.Crafter.chunkRenderDistance;
@@ -37,9 +38,13 @@ public class TNT {
                                 //don't destroy bedrock
                                 if(currentBlock != 5) {
                                     setBlock(currentPosX, y, currentPosZ, currentChunkX, currentChunkZ, (short) 0);
-                                    if (currentBlock != 0 && Math.random() > 0.9) {
+                                    //todo: make this an API callback!!
+                                    if (currentBlock != 0 && currentBlock != 6 && Math.random() > 0.98) {
                                         createItem(currentBlock, new Vector3f(currentPosX+(currentChunkX*16), y, currentPosZ+(currentChunkZ*16)));
+                                    } else if (currentBlock == 6){
+                                        createTNT(new Vector3f(currentPosX+(currentChunkX*16), y, currentPosZ+(currentChunkZ*16)), (float)(1.6f+Math.random()));
                                     }
+
                                 }
 
                                 //add chunks to chunk generation buffer ID: 555

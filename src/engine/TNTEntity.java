@@ -49,6 +49,19 @@ public class TNTEntity {
         System.out.println("Created new TNT. Total TNT: " + totalTNT);
     }
 
+    public static void createTNT(Vector3f pos, float timer){
+        pos.x += 0.5f;
+        pos.y += 0.5f;
+        pos.z += 0.5f;
+        tntPos[totalTNT] = new Vector3f(pos);
+        tntInertia[totalTNT] = new Vector3f(randomForceValue(15f),(float)Math.random()*7f,randomForceValue(15f));
+        tntExists[totalTNT] = true;
+        tntTimer[totalTNT] = timer;
+        tntScale[totalTNT] = new Vector3f(1,1,1);
+        totalTNT++;
+        System.out.println("Created new TNT. Total TNT: " + totalTNT);
+    }
+
     public static void onTNTStep() throws Exception {
         for (int i = 0; i < totalTNT; i++){
             tntTimer[i] += 0.001f;
@@ -60,7 +73,7 @@ public class TNTEntity {
                 tntScale[i].z += 0.0005f;
             }
 
-            if (tntTimer[i] > 2f){
+            if (tntTimer[i] > 2.6f){
 
                 boom((int)tntPos[i].x, (int)tntPos[i].y, (int)tntPos[i].z, 5);
 

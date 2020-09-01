@@ -5,8 +5,11 @@ package game.player;
 
 //import static game.light.Light.floodFill;
 
+import org.joml.Vector3f;
+
 import static engine.Chunk.getBlock;
 import static engine.Chunk.setBlock;
+import static engine.ItemEntity.createItem;
 import static game.ChunkHandling.ChunkMath.getDistance;
 import static game.ChunkHandling.ChunkMesh.generateChunkMesh;
 import static game.Crafter.chunkRenderDistance;
@@ -31,9 +34,13 @@ public class TNT {
                         if (currentChunkX >= -chunkRenderDistance && currentChunkX <= chunkRenderDistance && currentChunkZ >= -chunkRenderDistance && currentChunkZ <= chunkRenderDistance) {
                             if (y >= 0 && y <= 127) {
 
+                                int currentBlock = getBlock(currentPosX, y, currentPosZ, currentChunkX, currentChunkZ);
                                 //don't destroy bedrock
-                                if(getBlock(currentPosX, y, currentPosZ, currentChunkX, currentChunkZ) != 5) {
+                                if(currentBlock != 5) {
                                     setBlock(currentPosX, y, currentPosZ, currentChunkX, currentChunkZ, (short) 0);
+                                    if (currentBlock != 0 && Math.random() > 0.9) {
+                                        createItem(currentBlock, new Vector3f(currentPosX+(currentChunkX*16), y, currentPosZ+(currentChunkZ*16)));
+                                    }
                                 }
 
                                 //add chunks to chunk generation buffer ID: 555

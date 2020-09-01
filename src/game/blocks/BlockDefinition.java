@@ -49,6 +49,12 @@ public class BlockDefinition {
         }
     }
 
+    public static void onPlaceCall(int ID, Vector3f pos) throws Exception {
+        if(blockIDs.get(ID) != null && blockIDs.get(ID).blockModifier != null){
+            blockIDs.get(ID).blockModifier.onPlace(pos);
+        }
+    }
+
     private static float[] calculateTexture(int x, int y){
         float[] texturePoints = new float[4];
         texturePoints[0] = (float)x/(float)atlasSizeX;     //min x (-)
@@ -154,6 +160,14 @@ public class BlockDefinition {
                 kaboom
         );
 
+        //water thing
+        BlockModifier splash = new BlockModifier() {
+            @Override
+            public void onPlace(Vector3f pos) throws Exception {
+                boom((int)pos.x, (int)pos.y, (int)pos.z, 5);
+            }
+        };
+
         new BlockDefinition(
                 7,
                 "water",
@@ -163,7 +177,7 @@ public class BlockDefinition {
                 new int[]{10,0}, //left
                 new int[]{10,0}, //top
                 new int[]{10,0},  //bottom
-                null
+                splash
         );
     }
 

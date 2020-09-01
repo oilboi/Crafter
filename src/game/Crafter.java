@@ -8,6 +8,7 @@ import org.joml.Vector3f;
 
 import static engine.Chunk.genBiome;
 import static engine.Chunk.initializeChunkHandler;
+import static engine.ItemEntity.clearItems;
 import static game.ChunkHandling.ChunkMesh.generateChunkMesh;
 import static game.blocks.BlockDefinition.initializeBlocks;
 import static game.player.TNT.boom;
@@ -15,7 +16,7 @@ import static org.lwjgl.glfw.GLFW.*;
 
 public class Crafter implements IGameLogic {
 
-    public static int chunkRenderDistance = 7;
+    public static int chunkRenderDistance = 8;
 
     private static final float MOUSE_SENSITIVITY = 0.009f;
 
@@ -28,6 +29,8 @@ public class Crafter implements IGameLogic {
     private boolean rButtonPushed = false;
 
     private boolean tButtonPushed = false;
+
+    private boolean cButtonPushed = false;
 
     private boolean boomBuffer = false;
 
@@ -146,17 +149,16 @@ public class Crafter implements IGameLogic {
         } else if (!window.isKeyPressed(GLFW_KEY_R)){
             rButtonPushed = false;
         }
-//
-//
-        //prototype explosion - T KEY
-        if (window.isKeyPressed(GLFW_KEY_T)) {
-            if (!tButtonPushed) {
-                tButtonPushed = true;
-                boomBuffer = true;
-                System.out.println("boom");
+
+        //prototype clear objects - C KEY
+        if (window.isKeyPressed(GLFW_KEY_C)) {
+            if (!cButtonPushed) {
+                cButtonPushed = true;
+                clearItems();
+                System.out.println("Cleared all items!");
             }
-        } else if (!window.isKeyPressed(GLFW_KEY_T)){
-            tButtonPushed = false;
+        } else if (!window.isKeyPressed(GLFW_KEY_C)){
+            cButtonPushed = false;
         }
 
         //mouse left button input

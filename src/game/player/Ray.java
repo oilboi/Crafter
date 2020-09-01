@@ -10,6 +10,7 @@ import static engine.ItemEntity.createItem;
 import static game.ChunkHandling.ChunkMesh.generateChunkMesh;
 import static game.Crafter.chunkRenderDistance;
 import static game.blocks.BlockDefinition.onDigCall;
+import static game.blocks.BlockDefinition.onPlaceCall;
 import static game.collision.Collision.wouldCollide;
 import static game.light.Light.floodFill;
 
@@ -101,7 +102,7 @@ public class Ray {
         onDigCall(thisBlock, flooredPos);
         return thisBlock;
     }
-    private static void placeBlock(Vector3f flooredPos, short id) throws Exception {
+    private static void placeBlock(Vector3f flooredPos, short ID) throws Exception {
         int currentChunkX = (int)(Math.floor(flooredPos.x / 16f));
         int currentChunkZ = (int)(Math.floor(flooredPos.z / 16f));
         int chunkPosX = (int)flooredPos.x - (16*currentChunkX);
@@ -109,8 +110,7 @@ public class Ray {
 
         Vector3f realPos = new Vector3f(chunkPosX, flooredPos.y, chunkPosZ);
 
-//        short thisBlock = getBlockInChunk((int)realPos.x, (int)realPos.y, (int)realPos.z, current[0], current[1]);
-        setBlock((int)realPos.x, (int)realPos.y, (int)realPos.z, currentChunkX, currentChunkZ, id);
+        setBlock((int)realPos.x, (int)realPos.y, (int)realPos.z, currentChunkX, currentChunkZ, ID);
 
         floodFill(currentChunkX, currentChunkZ);
 
@@ -133,5 +133,7 @@ public class Ray {
             floodFill(currentChunkX, currentChunkZ-1);
             generateChunkMesh(currentChunkX, currentChunkZ-1, true);
         }
+
+        onPlaceCall(ID, flooredPos);
     }
 }

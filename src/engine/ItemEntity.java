@@ -145,6 +145,23 @@ public class ItemEntity {
         System.out.println("An Item was Deleted. Remaining: " + totalObjects);
     }
 
+    public static void clearItems(){
+        for (int i = 0; i < totalObjects; i++){
+            if(exists[i]){
+                thisMeshID[i] = 0;
+                position[i] = null;
+                inertia[i] = null;
+                rotation[i] = null;
+                floatUp[i] = false;
+                collecting[i] = false;
+                exists[i] = false;
+                scale[i] = 0;
+                timer[i] = 0;
+            }
+        }
+        totalObjects = 0;
+    }
+
     public static boolean itemExists(int ID){
         return exists[ID];
     }

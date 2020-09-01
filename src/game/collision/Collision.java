@@ -30,6 +30,10 @@ public class Collision {
         inertia.x += -inertia.x * gameSpeed * 10; // do (10 - 9.5f) for slippery!
         inertia.z += -inertia.z * gameSpeed * 10;
 
+        if (sneaking) {
+            inertia.y = 0;
+        }
+
         return onGround;
     }
 
@@ -64,6 +68,7 @@ public class Collision {
                 }
             }
         }
+
         return onGround;
     }
 

@@ -37,6 +37,12 @@ public class Collision {
         //get the real positions of the blocks
         Vector3f fPos = floorPos(pos);
 
+
+//        if (detectBlock(new Vector3f(fPos.x, fPos.y+1f, fPos.z))){
+//            pos.y += 1f;
+//        }
+
+
         int y = 2;
         int x = -1;
         int z = -1;
@@ -60,103 +66,91 @@ public class Collision {
     }
 
 
+    private final static float FOOT_ADJUSTMENT_HEIGHT = 0.3f;
+    private final static float HEAD_ADJUSTMENT_HEIGHT = 0.6f;
     //this is where actual collision events occur!
     public static boolean collide(CustomAABB us, CustomBlockBox block, Vector3f pos, Vector3f inertia, float width, float height, boolean onGround){
-        boolean xWithin = !(us.getLeft()   > block.getRight() || us.getRight() < block.getLeft());
-        boolean yWithin = !(us.getBottom() > block.getTop()   || us.getTop()   < block.getBottom());
-        boolean zWithin = !(us.getFront()  > block.getBack()  || us.getBack()  < block.getFront());
+        boolean within;
 
-        //double check to stop clipping if not enough space
-        if (xWithin && zWithin && yWithin &&
-                !detectBlock(new Vector3f(block.getLeft(), block.getBottom()+1,block.getFront())) &&
-                !detectBlock(new Vector3f(block.getLeft(), block.getBottom()+2,block.getFront()))) {
+        within = !(us.getLeft()   > block.getRight() || us.getRight() < block.getLeft() || us.getBottom() > block.getTop()   || us.getTop()   < block.getBottom() || us.getFront()  > block.getBack()  || us.getBack()  < block.getFront());
 
-            //floor detection
+        //floor detection
+        if (within) {
             if (block.getTop() > us.getBottom() && inertia.y < 0 && us.getBottom() - block.getTop() > -0.15f) {
                 //this is the collision debug sphere for terrain
-                float oldPos = pos.y;
-                pos.y = block.getTop();
-                //don't move up if too high
-                if (pos.y - oldPos > 1) {
-                    pos.y = (int)oldPos;
-                }
+                pos.y = block.getTop() + 0.0001f;
                 inertia.y = 0;
                 onGround = true;
             }
         }
 
-        //stop getting shot across the map
-        if (xWithin && zWithin && yWithin  &&
-                !detectBlock(new Vector3f(block.getLeft(), block.getBottom()-1,block.getFront())) &&
-                !detectBlock(new Vector3f(block.getLeft(), block.getBottom()-2,block.getFront()))) {
-            //head detection
+        within = !(us.getLeft()+0.1f > block.getRight() || us.getRight()-0.1f < block.getLeft() || us.getBottom() > block.getTop()   || us.getTop()   < block.getBottom() || us.getFront()+0.1f  > block.getBack()  || us.getBack()-0.1f  < block.getFront());
+
+        //head detection
+        if (within) {
             if (block.getBottom() < us.getTop() && inertia.y >= 0 && us.getTop() - block.getBottom() < 0.15f) {
-                pos.y = block.getBottom() - height;
+                pos.y = block.getBottom() - height - 0.0001f;
                 inertia.y = 0;
             }
         }
 
+
         float averageX = Math.abs(((block.getLeft() + block.getRight())/2f) - pos.x);
         float averageY = Math.abs(((block.getBottom() + block.getTop())/2f) - pos.y);
         float averageZ = Math.abs(((block.getFront() + block.getBack())/2f) - pos.z);
+
         if (averageX > averageZ) {
-            if (!detectBlock(new Vector3f(block.getLeft()+1, block.getBottom(),block.getFront()))) {
-                us = new CustomAABB(pos.x, pos.y + 0.1501f, pos.z, width, height - 0.3001f);
-                xWithin = !(us.getLeft() > block.getRight() || us.getRight() < block.getLeft());
-                yWithin = !(us.getBottom() > block.getTop() || us.getTop() < block.getBottom());
-                zWithin = !(us.getFront() > block.getBack() || us.getBack() < block.getFront());
+//            if (!detectBlock(new Vector3f(block.getLeft()+1, block.getBottom(),block.getFront()))) {
+
+                us = new CustomAABB(pos.x, pos.y + FOOT_ADJUSTMENT_HEIGHT, pos.z, width, height - HEAD_ADJUSTMENT_HEIGHT);
+                within = !(us.getLeft() > block.getRight() || us.getRight() < block.getLeft() || us.getBottom() > block.getTop() || us.getTop() < block.getBottom() || us.getFront() > block.getBack() || us.getBack() < block.getFront());
 
                 //x- detection
-                if (xWithin && zWithin && yWithin) {
+                if (within) {
                     if (block.getRight() > us.getLeft() && inertia.x < 0) {
                         pos.x = block.getRight() + width + 0.00001f;
                         inertia.x = 0;
                     }
                 }
-            }
-            if (!detectBlock(new Vector3f(block.getLeft()-1, block.getBottom(),block.getFront()))) {
-                us = new CustomAABB(pos.x, pos.y + 0.1501f, pos.z, width, height - 0.3001f);
-                xWithin = !(us.getLeft() > block.getRight() || us.getRight() < block.getLeft());
-                yWithin = !(us.getBottom() > block.getTop() || us.getTop() < block.getBottom());
-                zWithin = !(us.getFront() > block.getBack() || us.getBack() < block.getFront());
+//            }
+//            if (!detectBlock(new Vector3f(block.getLeft()-1, block.getBottom(),block.getFront()))) {
+                us = new CustomAABB(pos.x, pos.y + FOOT_ADJUSTMENT_HEIGHT, pos.z, width, height - HEAD_ADJUSTMENT_HEIGHT);
+                within = !(us.getLeft() > block.getRight() || us.getRight() < block.getLeft() || us.getBottom() > block.getTop() || us.getTop() < block.getBottom() || us.getFront() > block.getBack() || us.getBack() < block.getFront());
 
                 //x+ detection
-                if (xWithin && zWithin && yWithin) {
+                if (within) {
                     if (block.getLeft() < us.getRight() && inertia.x > 0) {
                         pos.x = block.getLeft() - width - 0.00001f;
                         inertia.x = 0;
                     }
                 }
-            }
+//            }
         } else {
-            if (!detectBlock(new Vector3f(block.getLeft(), block.getBottom(),block.getFront()+1))) {
-                us = new CustomAABB(pos.x, pos.y + 0.1501f, pos.z, width, height - 0.3001f);
-                xWithin = !(us.getLeft() > block.getRight() || us.getRight() < block.getLeft());
-                yWithin = !(us.getBottom() > block.getTop() || us.getTop() < block.getBottom());
-                zWithin = !(us.getFront() > block.getBack() || us.getBack() < block.getFront());
+//            if (!detectBlock(new Vector3f(block.getLeft(), block.getBottom(),block.getFront()+1))) {
+                us = new CustomAABB(pos.x, pos.y + FOOT_ADJUSTMENT_HEIGHT, pos.z, width, height - HEAD_ADJUSTMENT_HEIGHT);
+                within = !(us.getLeft() > block.getRight() || us.getRight() < block.getLeft() || us.getBottom() > block.getTop() || us.getTop() < block.getBottom() || us.getFront() > block.getBack() || us.getBack() < block.getFront());
 
                 //z- detection
-                if (xWithin && zWithin && yWithin) {
+                if (within) {
                     if (block.getBack() > us.getFront() && inertia.z < 0) {
                         pos.z = block.getBack() + width + 0.00001f;
                         inertia.z = 0;
                     }
                 }
-            }
-            if (!detectBlock(new Vector3f(block.getLeft(), block.getBottom(),block.getFront()-1))) {
-                us = new CustomAABB(pos.x, pos.y + 0.1501f, pos.z, width, height - 0.3001f);
-                xWithin = !(us.getLeft() > block.getRight() || us.getRight() < block.getLeft());
-                yWithin = !(us.getBottom() > block.getTop() || us.getTop() < block.getBottom());
-                zWithin = !(us.getFront() > block.getBack() || us.getBack() < block.getFront());
+//            }
+
+//            if (!detectBlock(new Vector3f(block.getLeft(), block.getBottom(),block.getFront()-1))) {
+                us = new CustomAABB(pos.x, pos.y + FOOT_ADJUSTMENT_HEIGHT, pos.z, width, height - HEAD_ADJUSTMENT_HEIGHT);
+                within = !(us.getLeft() > block.getRight() || us.getRight() < block.getLeft() || us.getBottom() > block.getTop() || us.getTop() < block.getBottom() || us.getFront() > block.getBack() || us.getBack() < block.getFront());
 
                 //z+ detection
-                if (xWithin && zWithin && yWithin) {
+                if (within) {
                     if (block.getFront() < us.getBack() && inertia.z > 0) {
                         pos.z = block.getFront() - width - 0.00001f;
                         inertia.z = 0;
                     }
                 }
-            }
+//            }
         }
         return onGround;
     }

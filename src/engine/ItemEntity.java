@@ -62,7 +62,7 @@ public class ItemEntity {
         scale[totalObjects] = 1f;
         timer[totalObjects] = 0f;
         totalObjects++;
-        System.out.println("total items: " + totalObjects);
+        System.out.println("Created new Item. Total items: " + totalObjects);
     }
 
     public static void onStep(){
@@ -98,6 +98,10 @@ public class ItemEntity {
                     }
                 }
             }
+
+            if (position[i].y < 0){
+                deleteItem(i);
+            }
         }
     }
 
@@ -112,6 +116,33 @@ public class ItemEntity {
         exists[ID] = false;
         scale[ID] = 0;
         timer[ID] = 0;
+
+        for ( int i = ID; i < totalObjects; i ++){
+            thisMeshID[i] = thisMeshID[i+1];
+            position[i] = position[i+1];
+            inertia[i] = inertia[i+1];
+            rotation[i] = rotation[i+1];
+            floatUp[i] = floatUp[i+1];
+            exists[i] = exists[i+1];
+            collecting[i] = collecting[i+1];
+            scale[i] = scale[i+1];
+            timer[i] = timer[i+1];
+            hover[i] = hover[i+1];
+        }
+
+
+        thisMeshID[totalObjects - 1] = 0;
+        position[totalObjects - 1] = null;
+        inertia[totalObjects - 1] = null;
+        rotation[totalObjects - 1] = null;
+        floatUp[totalObjects - 1] = false;
+        collecting[totalObjects - 1] = false;
+        exists[totalObjects - 1] = false;
+        scale[totalObjects - 1] = 0;
+        timer[totalObjects - 1] = 0;
+
+        totalObjects -= 1;
+        System.out.println("An Item was Deleted. Remaining: " + totalObjects);
     }
 
     public static boolean itemExists(int ID){

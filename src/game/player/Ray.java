@@ -38,7 +38,7 @@ public class Ray {
                 createItem(thisBlock, finalPos);
             } else if (placing && lastPos != null){
                 if (!wouldCollide(new CustomAABB(player.getPos().x, player.getPos().y+0.01f, player.getPos().z, player.getWidth(), player.getHeight()-0.02f), new CustomBlockBox((int)lastPos.x, (int)lastPos.y, (int)lastPos.z))) {
-                    placeBlock(lastPos, (short) 4);
+                    placeBlock(lastPos, (short) 6);
                 }
             }
         } else if (debugTest){

@@ -22,7 +22,10 @@ public class BlockDefinition {
     private final float[] topTexture;    //top
     private final float[] bottomTexture; //bottom
 
-    private BlockDefinition(int ID, String name, int[] front, int[] back, int[] right, int[] left, int[] top, int[] bottom) throws Exception {
+    private final BlockModifier blockModifier;
+
+
+    private BlockDefinition(int ID, String name, int[] front, int[] back, int[] right, int[] left, int[] top, int[] bottom, BlockModifier blockModifier) throws Exception {
         this.ID   = ID;
         this.name = name;
         this.frontTexture  = calculateTexture(  front[0],  front[1] );
@@ -31,6 +34,7 @@ public class BlockDefinition {
         this.leftTexture   = calculateTexture(   left[0],   left[1] );
         this.topTexture    = calculateTexture(    top[0],    top[1] );
         this.bottomTexture = calculateTexture( bottom[0], bottom[1] );
+        this.blockModifier = blockModifier;
 
         blockIDs.add(this);
 
@@ -58,7 +62,8 @@ public class BlockDefinition {
                 new int[]{-1,-1}, //right
                 new int[]{-1,-1}, //left
                 new int[]{-1,-1}, //top
-                new int[]{-1,-1}  //bottom
+                new int[]{-1,-1},  //bottom
+                null
         );
 
         new BlockDefinition(
@@ -69,7 +74,8 @@ public class BlockDefinition {
                 new int[]{0,0}, //right
                 new int[]{0,0}, //left
                 new int[]{0,0}, //top
-                new int[]{0,0}  //bottom
+                new int[]{0,0},  //bottom
+                null
         );
 
         new BlockDefinition(
@@ -80,7 +86,8 @@ public class BlockDefinition {
                 new int[]{5,0}, //right
                 new int[]{5,0}, //left
                 new int[]{4,0}, //top
-                new int[]{0,0}  //bottom
+                new int[]{0,0},  //bottom
+                null
         );
 
         new BlockDefinition(
@@ -91,7 +98,8 @@ public class BlockDefinition {
                 new int[]{1,0}, //right
                 new int[]{1,0}, //left
                 new int[]{1,0}, //top
-                new int[]{1,0}  //bottom
+                new int[]{1,0},  //bottom
+                null
         );
 
         new BlockDefinition(
@@ -102,7 +110,8 @@ public class BlockDefinition {
                 new int[]{2,0}, //right
                 new int[]{2,0}, //left
                 new int[]{2,0}, //top
-                new int[]{2,0}  //bottom
+                new int[]{2,0},  //bottom
+                null
         );
 
         new BlockDefinition(
@@ -113,7 +122,27 @@ public class BlockDefinition {
                 new int[]{6,0}, //right
                 new int[]{6,0}, //left
                 new int[]{6,0}, //top
-                new int[]{6,0}  //bottom
+                new int[]{6,0},  //bottom
+                null
+        );
+
+        BlockModifier kaboom = new BlockModifier() {
+            @Override
+            public void onDig() {
+                System.out.println("succ");
+            }
+        };
+
+        new BlockDefinition(
+                6,
+                "tnt",
+                new int[]{7,0}, //front
+                new int[]{7,0}, //back
+                new int[]{7,0}, //right
+                new int[]{7,0}, //left
+                new int[]{8,0}, //top
+                new int[]{9,0},  //bottom
+                kaboom
         );
     }
 

@@ -305,6 +305,8 @@ public class Player {
 
         if(playerIsMoving()){
             applyViewBobbing();
+        } else {
+            returnViewBobbing();
         }
 
 //        blockPos = new int[]{(int)Math.floor(pos.x), (int)Math.floor(pos.y),(int)Math.floor(pos.z)};
@@ -346,6 +348,21 @@ public class Player {
             yBobPos -= 1;
         }
 
+        viewBobbing.x = xBobPos/2000f;
+        viewBobbing.y = yBobPos/2000f;
+    }
+
+    private void returnViewBobbing(){
+        if (xBobPos > 0){
+            xBobPos -= 1;
+        } else if (xBobPos < 0){
+            xBobPos += 1;
+        }
+        if (yBobPos > 0){
+            yBobPos -= 1;
+        } else if (yBobPos < 0){
+            yBobPos += 1;
+        }
         viewBobbing.x = xBobPos/2000f;
         viewBobbing.y = yBobPos/2000f;
     }

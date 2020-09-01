@@ -1,8 +1,11 @@
 package game.blocks;
 
+import org.joml.Vector3f;
+
 import java.util.ArrayList;
 
 import static engine.ItemEntity.createBlockObjectMesh;
+import static game.player.TNT.boom;
 
 public class BlockDefinition {
 
@@ -35,11 +38,15 @@ public class BlockDefinition {
         this.topTexture    = calculateTexture(    top[0],    top[1] );
         this.bottomTexture = calculateTexture( bottom[0], bottom[1] );
         this.blockModifier = blockModifier;
-
         blockIDs.add(this);
-
         //TODO: INITIALIZE NEW OBJECT MESH FOR THIS BLOCK
         createBlockObjectMesh(ID);
+    }
+
+    public static void onDigCall(int ID, Vector3f pos) throws Exception {
+        if(blockIDs.get(ID) != null && blockIDs.get(ID).blockModifier != null){
+            blockIDs.get(ID).blockModifier.onDig(pos);
+        }
     }
 
     private static float[] calculateTexture(int x, int y){
@@ -126,10 +133,12 @@ public class BlockDefinition {
                 null
         );
 
+
+        //tnt explosion
         BlockModifier kaboom = new BlockModifier() {
             @Override
-            public void onDig() {
-                System.out.println("succ");
+            public void onDig(Vector3f pos) throws Exception {
+                boom((int)pos.x, (int)pos.y, (int)pos.z, 5);
             }
         };
 

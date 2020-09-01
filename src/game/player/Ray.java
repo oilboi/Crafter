@@ -9,6 +9,7 @@ import static engine.Chunk.setBlock;
 import static engine.ItemEntity.createItem;
 import static game.ChunkHandling.ChunkMesh.generateChunkMesh;
 import static game.Crafter.chunkRenderDistance;
+import static game.blocks.BlockDefinition.onDigCall;
 import static game.collision.Collision.wouldCollide;
 import static game.light.Light.floodFill;
 
@@ -96,6 +97,8 @@ public class Ray {
             floodFill(currentChunkX, currentChunkZ-1);
             generateChunkMesh(currentChunkX, currentChunkZ-1, true);
         }
+
+        onDigCall(thisBlock, flooredPos);
         return thisBlock;
     }
     private static void placeBlock(Vector3f flooredPos, short id) throws Exception {

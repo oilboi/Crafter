@@ -201,7 +201,7 @@ public class Crafter implements IGameLogic {
         player.onTick(camera);
 
         if(boomBuffer){
-            boom((int)Math.floor(player.getPos().x),(int)Math.floor(player.getPos().y),(int)Math.floor(player.getPos().z));
+            boom((int)Math.floor(player.getPos().x),(int)Math.floor(player.getPos().y),(int)Math.floor(player.getPos().z), 5);
             boomBuffer = false;
         }
 

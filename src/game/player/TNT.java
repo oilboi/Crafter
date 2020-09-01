@@ -13,9 +13,8 @@ import static game.Crafter.chunkRenderDistance;
 import static game.light.Light.floodFill;
 
 public class TNT {
-    public static final int boomDistance = 128;
-    public static void boom(int posX, int posY, int posZ) throws Exception {
-        int[][] chunkBuffer = new int[256][2];
+    public static void boom(int posX, int posY, int posZ, int boomDistance) throws Exception {
+        int[][] chunkBuffer = new int[boomDistance][2];
         int chunkBufferIndex = 0;
         for (int x = posX - boomDistance; x < posX + boomDistance; x++) {
             for (int y = posY - boomDistance; y < posY + boomDistance; y++) {

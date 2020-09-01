@@ -36,9 +36,7 @@ public class Ray {
         //System.out.println(finalPos);
         if(finalPos != null) {
             if(mining) {
-                int thisBlock = destroyBlock(finalPos);
-                if (thisBlock != 0 && thisBlock != 5)
-                createItem(thisBlock, finalPos);
+                destroyBlock(finalPos);
             } else if (placing && lastPos != null){
                 if (!wouldCollide(new CustomAABB(player.getPos().x, player.getPos().y+0.01f, player.getPos().z, player.getWidth(), player.getHeight()-0.02f), new CustomBlockBox((int)lastPos.x, (int)lastPos.y, (int)lastPos.z))) {
                     placeBlock(lastPos, (short) 6);
@@ -60,7 +58,7 @@ public class Ray {
         return getBlock((int)realPos.x, (int)realPos.y, (int)realPos.z, current[0], current[1]) != 0;
     }
 
-    private static int destroyBlock(Vector3f flooredPos) throws Exception {
+    private static void destroyBlock(Vector3f flooredPos) throws Exception {
 
         int currentChunkX = (int)(Math.floor(flooredPos.x / 16f));
         int currentChunkZ = (int)(Math.floor(flooredPos.z / 16f));
@@ -74,7 +72,7 @@ public class Ray {
         int thisBlock = getBlock((int)realPos.x, (int)realPos.y, (int)realPos.z, currentChunkX,currentChunkZ);
 
         if (thisBlock == 5){
-            return 0;
+            return;
         }
 
         setBlock((int)realPos.x, (int)realPos.y, (int)realPos.z, currentChunkX, currentChunkZ, (short) 0);
@@ -101,7 +99,6 @@ public class Ray {
         }
 
         onDigCall(thisBlock, flooredPos);
-        return thisBlock;
     }
     private static void placeBlock(Vector3f flooredPos, short ID) throws Exception {
         int currentChunkX = (int)(Math.floor(flooredPos.x / 16f));

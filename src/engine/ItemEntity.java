@@ -14,36 +14,21 @@ import static game.collision.Collision.applyInertia;
 import static game.player.Player.getPlayer;
 
 public class ItemEntity {
-
     private final static float itemSize   = 0.2f;
-
     public final static int MAX_ID_AMOUNT = 126_000;
-
     private static int totalObjects       = 0;
-
     //TODO: pseudo object holder
     private static Mesh[] meshStorage  =     new Mesh[MAX_ID_AMOUNT];
-
     private static int[] thisMeshID    =      new int[MAX_ID_AMOUNT];
-
     private static Vector3f[] position = new Vector3f[MAX_ID_AMOUNT];
-
     private static float[] scale       =    new float[MAX_ID_AMOUNT];
-
     private static float[] hover       =    new float[MAX_ID_AMOUNT];
-
     private static float[] timer       =    new float[MAX_ID_AMOUNT];
-
     private static boolean[] floatUp =    new boolean[MAX_ID_AMOUNT];
-
     private static boolean[] exists =    new boolean[MAX_ID_AMOUNT];
-
     private static boolean[] collecting =    new boolean[MAX_ID_AMOUNT];
-
     private static Vector3f[] rotation = new Vector3f[MAX_ID_AMOUNT];
-
     private static Vector3f[] inertia  = new Vector3f[MAX_ID_AMOUNT];
-
     public static int getTotalObjects(){
         return totalObjects;
     }
@@ -53,7 +38,7 @@ public class ItemEntity {
         pos.x+=0.5f;
         pos.y+=0.5f;
         pos.z+=0.5f;
-        position[totalObjects] = pos;
+        position[totalObjects] = new Vector3f(pos);
         inertia[totalObjects] = new Vector3f(randomForceValue(9f),(float)Math.random()*10f,randomForceValue(9f));
         rotation[totalObjects] = new Vector3f(0,0,0);
         floatUp[totalObjects] = true;
@@ -71,6 +56,7 @@ public class ItemEntity {
 
             if (itemExists(i) && timer[i] > 3){
                 Player thisPlayer = getPlayer("singleplayer");
+                assert thisPlayer != null;
                 if (getDistance(position[i], thisPlayer.getPosWithCollectionHeight()) < 3f){
                     collecting[i] = true;
                     Vector3f normalizedPos = new Vector3f(thisPlayer.getPosWithCollectionHeight());

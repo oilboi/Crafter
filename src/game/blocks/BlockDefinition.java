@@ -6,6 +6,8 @@ import java.util.ArrayList;
 
 import static engine.Chunk.setBlock;
 import static engine.ItemEntity.createBlockObjectMesh;
+import static engine.ItemEntity.createItem;
+import static engine.TNTEntity.createTNT;
 import static game.ChunkHandling.ChunkMesh.generateChunkMesh;
 import static game.light.Light.floodFill;
 import static game.player.TNT.boom;
@@ -21,6 +23,7 @@ public class BlockDefinition {
     //actual block object fields
     private final int     ID;
     private final String  name;
+    private final boolean dropsItem;
     private final float[] frontTexture;  //front
     private final float[] backTexture;   //back
     private final float[] rightTexture;  //right
@@ -31,9 +34,10 @@ public class BlockDefinition {
     private final BlockModifier blockModifier;
 
 
-    private BlockDefinition(int ID, String name, int[] front, int[] back, int[] right, int[] left, int[] top, int[] bottom, boolean walkable, BlockModifier blockModifier) throws Exception {
+    private BlockDefinition(int ID, String name, boolean dropsItem, int[] front, int[] back, int[] right, int[] left, int[] top, int[] bottom, boolean walkable, BlockModifier blockModifier) throws Exception {
         this.ID   = ID;
         this.name = name;
+        this.dropsItem = dropsItem;
         this.frontTexture  = calculateTexture(  front[0],  front[1] );
         this.backTexture   = calculateTexture(   back[0],   back[1] );
         this.rightTexture  = calculateTexture(  right[0],  right[1] );
@@ -47,8 +51,13 @@ public class BlockDefinition {
     }
 
     public static void onDigCall(int ID, Vector3f pos) throws Exception {
-        if(blockIDs[ID] != null && blockIDs[ID].blockModifier != null){
-            blockIDs[ID].blockModifier.onDig(pos);
+        if(blockIDs[ID] != null){
+            if(blockIDs[ID].dropsItem){
+                createItem(ID, pos);
+            }
+            if(blockIDs[ID].blockModifier != null){
+                blockIDs[ID].blockModifier.onDig(pos);
+            }
         }
     }
 
@@ -73,6 +82,7 @@ public class BlockDefinition {
         new BlockDefinition(
                 0,
                 "air",
+                false,
                 new int[]{-1,-1}, //front
                 new int[]{-1,-1}, //back
                 new int[]{-1,-1}, //right
@@ -86,6 +96,7 @@ public class BlockDefinition {
         new BlockDefinition(
                 1,
                 "dirt",
+                true,
                 new int[]{0,0}, //front
                 new int[]{0,0}, //back
                 new int[]{0,0}, //right
@@ -99,6 +110,7 @@ public class BlockDefinition {
         new BlockDefinition(
                 2,
                 "grass",
+                true,
                 new int[]{5,0}, //front
                 new int[]{5,0}, //back
                 new int[]{5,0}, //right
@@ -112,6 +124,7 @@ public class BlockDefinition {
         new BlockDefinition(
                 3,
                 "stone",
+                true,
                 new int[]{1,0}, //front
                 new int[]{1,0}, //back
                 new int[]{1,0}, //right
@@ -125,6 +138,7 @@ public class BlockDefinition {
         new BlockDefinition(
                 4,
                 "cobblestone",
+                true,
                 new int[]{2,0}, //front
                 new int[]{2,0}, //back
                 new int[]{2,0}, //right
@@ -138,6 +152,7 @@ public class BlockDefinition {
         new BlockDefinition(
                 5,
                 "bedrock",
+                false,
                 new int[]{6,0}, //front
                 new int[]{6,0}, //back
                 new int[]{6,0}, //right
@@ -153,13 +168,15 @@ public class BlockDefinition {
         BlockModifier kaboom = new BlockModifier() {
             @Override
             public void onDig(Vector3f pos) throws Exception {
-                boom((int)pos.x, (int)pos.y, (int)pos.z, 5);
+                //boom((int)pos.x, (int)pos.y, (int)pos.z, 5);
+                createTNT(pos);
             }
         };
 
         new BlockDefinition(
                 6,
                 "tnt",
+                false,
                 new int[]{7,0}, //front
                 new int[]{7,0}, //back
                 new int[]{7,0}, //right
@@ -191,6 +208,7 @@ public class BlockDefinition {
         new BlockDefinition(
                 7,
                 "water",
+                true,
                 new int[]{10,0}, //front
                 new int[]{10,0}, //back
                 new int[]{10,0}, //right

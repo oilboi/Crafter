@@ -9,6 +9,7 @@ import org.joml.Vector3f;
 import static engine.Chunk.genBiome;
 import static engine.Chunk.initializeChunkHandler;
 import static engine.ItemEntity.clearItems;
+import static engine.TNTEntity.createTNTEntityMesh;
 import static game.ChunkHandling.ChunkMesh.generateChunkMesh;
 import static game.blocks.BlockDefinition.initializeBlocks;
 import static game.player.TNT.boom;
@@ -16,7 +17,7 @@ import static org.lwjgl.glfw.GLFW.*;
 
 public class Crafter implements IGameLogic {
 
-    public static int chunkRenderDistance = 8;
+    public static int chunkRenderDistance = 2;
 
     private static final float MOUSE_SENSITIVITY = 0.009f;
 
@@ -54,6 +55,9 @@ public class Crafter implements IGameLogic {
 
         //this creates arrays for the engine to handle the objects
         initializeChunkHandler(chunkRenderDistance);
+
+        //this creates a TNT mesh (here for now)
+        createTNTEntityMesh();
 
         //create the initial map in memory
         int x = -chunkRenderDistance;
@@ -202,23 +206,9 @@ public class Crafter implements IGameLogic {
 
         player.onTick(camera);
 
-        if(boomBuffer){
-            boom((int)Math.floor(player.getPos().x),(int)Math.floor(player.getPos().y),(int)Math.floor(player.getPos().z), 5);
-            boomBuffer = false;
-        }
-
-//        for (GameItem itemEntity : itemEntities){
-//            Vector3f pos = itemEntity.getPosition();
-//            Vector3f rot = itemEntity.getRotation();
-//            rot.y += 0.1f;
-//            itemEntity.setRotation(rot.x,rot.y,rot.z);
-//
-//            applyInertia(pos,new Vector3f(0,-4,0),false, 0.2f,0.4f, true);
-//
-//            itemEntity.setPosition(pos.x,pos.y,pos.z);
-//        }
-
         ItemEntity.onStep();
+
+        TNTEntity.onTNTStep();
     }
 
     @Override

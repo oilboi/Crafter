@@ -4,6 +4,8 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 import static engine.ItemEntity.*;
+import static engine.TNTEntity.getTNTPosition;
+import static engine.TNTEntity.getTNTScale;
 
 public class Transformation {
 
@@ -38,13 +40,23 @@ public class Transformation {
     }
 
     public Matrix4f getEntityModelViewMatrix(int ID, Matrix4f viewMatrix){
-
         Vector3f rotation = getRotation(ID);
         modelViewMatrix.identity().translate(getPositionWithHover(ID)).
                 rotateX((float)Math.toRadians(-rotation.x)).
                 rotateY((float)Math.toRadians(-rotation.y)).
                 rotateZ((float)Math.toRadians(-rotation.z)).
                 scale(getScale(ID));
+        Matrix4f viewCurr = new Matrix4f(viewMatrix);
+        return viewCurr.mul(modelViewMatrix);
+    }
+
+    public Matrix4f getTNTModelViewMatrix(int ID, Matrix4f viewMatrix){
+        Vector3f scale = getTNTScale(ID);
+        modelViewMatrix.identity().translate(getTNTPosition(ID)).
+                rotateX((float)Math.toRadians(0)).
+                rotateY((float)Math.toRadians(0)).
+                rotateZ((float)Math.toRadians(0)).
+                scale(scale);
         Matrix4f viewCurr = new Matrix4f(viewMatrix);
         return viewCurr.mul(modelViewMatrix);
     }

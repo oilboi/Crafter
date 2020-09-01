@@ -7,6 +7,7 @@ import org.joml.Matrix4f;
 import static engine.Chunk.getChunkMesh;
 import static engine.Chunk.getLimit;
 import static engine.ItemEntity.*;
+import static engine.TNTEntity.*;
 import static org.lwjgl.opengl.GL11.*;
 
 public class Renderer {
@@ -90,6 +91,17 @@ public class Renderer {
             Matrix4f modelViewMatrix = transformation.getEntityModelViewMatrix(i, viewMatrix);
             shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
             getMesh(i).render();
+        }
+
+        //render each TNT entity
+        Mesh tntMesh = getTNTMesh();
+        for (int i = 0; i < getTotalTNT(); i++){
+            if (!tntExists(i)){
+                continue;
+            }
+            Matrix4f modelViewMatrix = transformation.getTNTModelViewMatrix(i, viewMatrix);
+            shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+            tntMesh.render();
         }
 
 

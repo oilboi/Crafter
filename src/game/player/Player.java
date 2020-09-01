@@ -3,6 +3,8 @@ package game.player;
 import engine.graph.Camera;
 import org.joml.Vector3f;
 
+import java.util.ArrayList;
+
 import static game.Crafter.chunkRenderDistance;
 import static game.Crafter.getChunkRenderDistance;
 import static game.collision.Collision.applyInertia;
@@ -10,6 +12,7 @@ import static game.player.Ray.rayCast;
 
 
 public class Player {
+    private static ArrayList<Player> Players = new ArrayList();
 
     private static int renderDistance = getChunkRenderDistance();
     private Vector3f pos = new Vector3f(0,129,0);

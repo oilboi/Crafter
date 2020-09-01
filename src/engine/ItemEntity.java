@@ -2,10 +2,12 @@ package engine;
 
 import engine.graph.Mesh;
 import engine.graph.Texture;
+import game.player.Player;
 import org.joml.Vector3f;
 
 import java.util.ArrayList;
 
+import static engine.FancyMath.*;
 import static game.blocks.BlockDefinition.*;
 import static game.blocks.BlockDefinition.getBottomTexturePoints;
 import static game.collision.Collision.applyInertia;
@@ -46,7 +48,7 @@ public class ItemEntity {
         pos.y+=0.5f;
         pos.z+=0.5f;
         position[totalObjects] = pos;
-        inertia[totalObjects] = new Vector3f(0,0,0);
+        inertia[totalObjects] = new Vector3f(randomForceValue(9f),(float)Math.random()*10f,randomForceValue(9f));
         rotation[totalObjects] = new Vector3f(0,0,0);
         floatUp[totalObjects] = true;
         scale[totalObjects] = 1f;
@@ -57,6 +59,9 @@ public class ItemEntity {
 
     public static void onStep(){
         for (int i = 0; i < totalObjects; i++){
+
+//            System.out.println(Player);
+
             applyInertia(position[i], inertia[i],true, itemSize, itemSize*2, true);
             rotation[i].y += 0.1f;
             if (floatUp[i]){
@@ -76,11 +81,10 @@ public class ItemEntity {
     public static Vector3f getPosition(int ID){
         return position[ID];
     }
+
     public static Vector3f getPositionWithHover(int ID){
         return new Vector3f(position[ID].x, position[ID].y + hover[ID], position[ID].z);
     }
-
-
 
     public static void setPosition(float x, float y, float z, int ID){
         position[ID].x = x;

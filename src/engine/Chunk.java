@@ -74,6 +74,9 @@ public class Chunk {
         if(chunkX < -chunkRenderDistance || chunkZ < -chunkRenderDistance || chunkX > chunkRenderDistance || chunkZ > chunkRenderDistance || genChunkHash(chunkX,chunkZ) < 0 || genChunkHash(chunkX,chunkZ) >= limit){
             return;
         }
+        if(y > 127 || y < 0){
+            return;
+        }
 
         block[genChunkHash(chunkX,chunkZ)][genHash(x,y,z)] = newBlock;
     }

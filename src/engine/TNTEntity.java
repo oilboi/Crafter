@@ -67,10 +67,10 @@ public class TNTEntity {
             tntTimer[i] += 0.001f;
             applyInertia(tntPos[i], tntInertia[i], true, tntSize, tntSize * 2, true, false);
 
-            if(tntTimer[i]>1f){
-                tntScale[i].x += 0.0005f;
-                tntScale[i].y += 0.00015f;
-                tntScale[i].z += 0.0005f;
+            if(tntTimer[i]>2.23f){
+                tntScale[i].x += 0.002f;
+                tntScale[i].y += 0.00075f;
+                tntScale[i].z += 0.002f;
             }
 
             if (tntTimer[i] > 2.6f){

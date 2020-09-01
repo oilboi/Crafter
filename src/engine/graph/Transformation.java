@@ -51,12 +51,11 @@ public class Transformation {
     }
 
     public Matrix4f getTNTModelViewMatrix(int ID, Matrix4f viewMatrix){
-        Vector3f scale = getTNTScale(ID);
         modelViewMatrix.identity().translate(getTNTPosition(ID)).
                 rotateX((float)Math.toRadians(0)).
                 rotateY((float)Math.toRadians(0)).
                 rotateZ((float)Math.toRadians(0)).
-                scale(scale);
+                scale(getTNTScale(ID));
         Matrix4f viewCurr = new Matrix4f(viewMatrix);
         return viewCurr.mul(modelViewMatrix);
     }

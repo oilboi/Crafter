@@ -184,6 +184,7 @@ public class Crafter implements IGameLogic {
     public void update(float interval, MouseInput mouseInput) throws Exception {
 
         camera.setPosition(player.getPosWithEyeHeight().x, player.getPosWithEyeHeight().y, player.getPosWithEyeHeight().z);
+        camera.movePosition(player.getViewBobbing().x,player.getViewBobbing().y, player.getViewBobbing().z);
 
         //update camera based on mouse
         Vector2f rotVec = mouseInput.getDisplVec();

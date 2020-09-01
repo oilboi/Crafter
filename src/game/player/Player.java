@@ -40,6 +40,7 @@ public class Player {
     private float accelerationMultiplier = 0.07f;
     private String name;
     private boolean sneaking;
+    private Vector3f viewBobbing = new Vector3f(0,0,0);
 
     public Player(String name){
         this.name = name;
@@ -59,6 +60,9 @@ public class Player {
         return null;
     }
 
+    public Vector3f getViewBobbing(){
+        return this.viewBobbing;
+    }
 
     public short getSelectedItem(){
         return selectedItem;
@@ -106,6 +110,11 @@ public class Player {
     }
 
     public Vector3f getPosWithEyeHeight(){
+        return new Vector3f(pos.x, pos.y + eyeHeight, pos.z);
+    }
+
+
+    public Vector3f getPosWithViewBobbing(){
         return new Vector3f(pos.x, pos.y + eyeHeight, pos.z);
     }
 
@@ -171,6 +180,10 @@ public class Player {
     }
     public void setSneaking(boolean isSneaking){
         sneaking = isSneaking;
+    }
+
+    private boolean playerIsMoving(){
+        return forward || backward || left || right;
     }
 
     private float movementSpeed = 1.5f;
@@ -289,6 +302,11 @@ public class Player {
         }*/
 
         oldPos = new Vector3f(pos);
+
+        if(playerIsMoving()){
+            applyViewBobbing();
+        }
+
 //        blockPos = new int[]{(int)Math.floor(pos.x), (int)Math.floor(pos.y),(int)Math.floor(pos.z)};
 //
 //        if(blockPos[0] != oldBlockPos[0] || blockPos[1] != oldBlockPos[1] || blockPos[2] != oldBlockPos[2]){
@@ -297,5 +315,38 @@ public class Player {
 //        }
 //
 //        oldBlockPos = blockPos.clone();
+    }
+    private boolean xPositive = true;
+    private boolean yPositive = true;
+    private int xBobPos = 0;
+    private int yBobPos = 0;
+
+    private void applyViewBobbing(){
+        if (xPositive) {
+            xBobPos += 1;
+            if (xBobPos >= 150){
+                xPositive = !xPositive;
+                yPositive = !yPositive;
+            }
+        } else {
+            xBobPos -= 1;
+            if (xBobPos <= -150){
+                xPositive = !xPositive;
+                yPositive = !yPositive;
+            }
+        }
+
+        if(xBobPos == 0){
+            yPositive = !yPositive;
+        }
+
+        if (yPositive){
+            yBobPos += 1;
+        } else {
+            yBobPos -= 1;
+        }
+
+        viewBobbing.x = xBobPos/2000f;
+        viewBobbing.y = yBobPos/2000f;
     }
 }

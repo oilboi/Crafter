@@ -118,6 +118,7 @@ public class Chunk {
     private static FastNoise noise = new FastNoise();
     private static int heightAdder = 40;
     private static byte dirtHeight = 4;
+    private static byte waterHeight = 50;
     //a basic biome test for terrain generation
     public static void genBiome(int chunkX, int chunkZ){
         int x = 0;
@@ -139,7 +140,11 @@ public class Chunk {
             } else if (y < height - dirtHeight) {
                 currBlock = 3;
             } else {
-                currBlock = 0;
+                if (y <= waterHeight){
+                    currBlock = 7;
+                } else {
+                    currBlock = 0;
+                }
             }
 
             block[genChunkHash(chunkX,chunkZ)][ChunkMath.genHash(x, y, z)] = currBlock;

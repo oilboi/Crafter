@@ -153,6 +153,18 @@ public class BlockDefinition {
                 new int[]{9,0},  //bottom
                 kaboom
         );
+
+        new BlockDefinition(
+                7,
+                "water",
+                new int[]{10,0}, //front
+                new int[]{10,0}, //back
+                new int[]{10,0}, //right
+                new int[]{10,0}, //left
+                new int[]{10,0}, //top
+                new int[]{10,0},  //bottom
+                null
+        );
     }
 
     public static BlockDefinition getID(int ID){

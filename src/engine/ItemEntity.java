@@ -11,6 +11,7 @@ import static engine.FancyMath.*;
 import static game.blocks.BlockDefinition.*;
 import static game.blocks.BlockDefinition.getBottomTexturePoints;
 import static game.collision.Collision.applyInertia;
+import static game.player.Player.getPlayer;
 
 public class ItemEntity {
 
@@ -31,7 +32,13 @@ public class ItemEntity {
 
     private static float[] hover       =    new float[MAX_ID_AMOUNT];
 
+    private static float[] timer       =    new float[MAX_ID_AMOUNT];
+
     private static boolean[] floatUp =    new boolean[MAX_ID_AMOUNT];
+
+    private static boolean[] exists =    new boolean[MAX_ID_AMOUNT];
+
+    private static boolean[] collecting =    new boolean[MAX_ID_AMOUNT];
 
     private static Vector3f[] rotation = new Vector3f[MAX_ID_AMOUNT];
 
@@ -42,7 +49,6 @@ public class ItemEntity {
     }
 
     public static void createItem(int blockID, Vector3f pos){
-
         thisMeshID[totalObjects] = blockID;
         pos.x+=0.5f;
         pos.y+=0.5f;
@@ -51,31 +57,65 @@ public class ItemEntity {
         inertia[totalObjects] = new Vector3f(randomForceValue(9f),(float)Math.random()*10f,randomForceValue(9f));
         rotation[totalObjects] = new Vector3f(0,0,0);
         floatUp[totalObjects] = true;
+        exists[totalObjects] = true;
+        collecting[totalObjects] = false;
         scale[totalObjects] = 1f;
+        timer[totalObjects] = 0f;
         totalObjects++;
-
         System.out.println("total items: " + totalObjects);
     }
 
     public static void onStep(){
         for (int i = 0; i < totalObjects; i++){
+            timer[i] += 0.001f;
 
-//            System.out.println(Player);
-
-            applyInertia(position[i], inertia[i],true, itemSize, itemSize*2, true);
-            rotation[i].y += 0.1f;
-            if (floatUp[i]){
-                hover[i] += 0.00025f;
-                if (hover[i] >= 0.5f){
-                    floatUp[i] = false;
+            if (itemExists(i) && timer[i] > 3){
+                Player thisPlayer = getPlayer("singleplayer");
+                if (getDistance(position[i], thisPlayer.getPosWithCollectionHeight()) < 3f){
+                    collecting[i] = true;
+                    Vector3f normalizedPos = new Vector3f(thisPlayer.getPosWithCollectionHeight());
+                    normalizedPos.sub(position[i]).normalize().mul(10f);
+                    inertia[i] = normalizedPos;
                 }
-            } else {
-                hover[i] -= 0.00025f;
-                if (hover[i] <= 0.0f){
-                    floatUp[i] = true;
+
+                if (getDistance(position[i], thisPlayer.getPosWithCollectionHeight()) < 0.2f){
+                    deleteItem(i);
+                    continue;
+                }
+            }
+            if (itemExists(i)) {
+                applyInertia(position[i], inertia[i], true, itemSize, itemSize * 2, true);
+                rotation[i].y += 0.1f;
+                if (floatUp[i]){
+                    hover[i] += 0.00025f;
+                    if (hover[i] >= 0.5f){
+                        floatUp[i] = false;
+                    }
+                } else {
+                    hover[i] -= 0.00025f;
+                    if (hover[i] <= 0.0f){
+                        floatUp[i] = true;
+                    }
                 }
             }
         }
+    }
+
+
+    private static void deleteItem(int ID){
+        thisMeshID[ID] = 0;
+        position[ID] = null;
+        inertia[ID] = null;
+        rotation[ID] = null;
+        floatUp[ID] = false;
+        collecting[ID] = false;
+        exists[ID] = false;
+        scale[ID] = 0;
+        timer[ID] = 0;
+    }
+
+    public static boolean itemExists(int ID){
+        return exists[ID];
     }
 
     public static Vector3f getPosition(int ID){

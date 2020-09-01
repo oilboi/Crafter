@@ -12,7 +12,7 @@ import static game.player.Ray.rayCast;
 
 
 public class Player {
-    private static ArrayList<Player> Players = new ArrayList();
+    private static ArrayList<Player> playerList = new ArrayList();
 
     private static int renderDistance = getChunkRenderDistance();
     private Vector3f pos = new Vector3f(0,129,0);
@@ -22,6 +22,7 @@ public class Player {
 
 
     private float eyeHeight = 1.5f;
+    private float collectionHeight = 0.7f;
     private Vector3f inertia = new Vector3f(0,0,0);
     private float height = 1.9f;
     private float width = 0.3f;
@@ -37,6 +38,26 @@ public class Player {
     private short selectedItem = 1;
     private Vector3f oldPos;
     private float accelerationMultiplier = 0.07f;
+    private String name;
+
+    public Player(String name){
+        this.name = name;
+        playerList.add(this);
+    }
+
+    public String getName(){
+        return this.name;
+    }
+
+    public static Player getPlayer(String name){
+        for (Player thisPlayer : playerList){
+            if (thisPlayer.getName().equals(name)){
+                return thisPlayer;
+            }
+        }
+        return null;
+    }
+
 
     public short getSelectedItem(){
         return selectedItem;
@@ -85,6 +106,10 @@ public class Player {
 
     public Vector3f getPosWithEyeHeight(){
         return new Vector3f(pos.x, pos.y + eyeHeight, pos.z);
+    }
+
+    public Vector3f getPosWithCollectionHeight(){
+        return new Vector3f(pos.x, pos.y + collectionHeight, pos.z);
     }
 
     public void setPos(Vector3f pos) {

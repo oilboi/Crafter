@@ -78,8 +78,11 @@ public class Chunk {
         }
 
         //neighbor checking
-        if (y < 0 || y >= 128) { //Y is caught regardless in the else clause if in bounds
+        if (y < 0) { //Y is caught regardless in the else clause if in bounds
             return 0;
+        }
+        if(y >= 128){
+            return 15;
         }
         if(x < 0) {
             return getLight(x+16,y,z,chunkX-1,chunkZ);

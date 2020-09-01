@@ -38,6 +38,7 @@ public class Transformation {
     }
 
     public Matrix4f getEntityModelViewMatrix(int ID, Matrix4f viewMatrix){
+
         Vector3f rotation = getRotation(ID);
         modelViewMatrix.identity().translate(getPositionWithHover(ID)).
                 rotateX((float)Math.toRadians(-rotation.x)).

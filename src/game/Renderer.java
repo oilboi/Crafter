@@ -6,8 +6,7 @@ import org.joml.Matrix4f;
 
 import static engine.Chunk.getChunkMesh;
 import static engine.Chunk.getLimit;
-import static engine.ItemEntity.getMesh;
-import static engine.ItemEntity.getTotalObjects;
+import static engine.ItemEntity.*;
 import static org.lwjgl.opengl.GL11.*;
 
 public class Renderer {
@@ -85,6 +84,9 @@ public class Renderer {
 
         //render each item entity
         for (int i = 0; i < getTotalObjects(); i++){
+            if (!itemExists(i)){
+                continue;
+            }
             Matrix4f modelViewMatrix = transformation.getEntityModelViewMatrix(i, viewMatrix);
             shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
             getMesh(i).render();

@@ -76,7 +76,7 @@ public class Crafter implements IGameLogic {
                 z++;
             }
         }
-        player = new Player();
+        player = new Player("singleplayer");
     }
 
     @Override

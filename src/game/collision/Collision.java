@@ -93,14 +93,11 @@ public class Collision {
                 inertia.y = 0;
             }
         }
-
-
         float averageX = Math.abs(((block.getLeft() + block.getRight())/2f) - pos.x);
-        float averageY = Math.abs(((block.getBottom() + block.getTop())/2f) - pos.y);
         float averageZ = Math.abs(((block.getFront() + block.getBack())/2f) - pos.z);
 
         if (averageX > averageZ) {
-//            if (!detectBlock(new Vector3f(block.getLeft()+1, block.getBottom(),block.getFront()))) {
+            if (!detectBlock(new Vector3f(block.getLeft()+1, block.getBottom(),block.getFront()))) {
 
                 us = new CustomAABB(pos.x, pos.y + FOOT_ADJUSTMENT_HEIGHT, pos.z, width, height - HEAD_ADJUSTMENT_HEIGHT);
                 within = !(us.getLeft() > block.getRight() || us.getRight() < block.getLeft() || us.getBottom() > block.getTop() || us.getTop() < block.getBottom() || us.getFront() > block.getBack() || us.getBack() < block.getFront());
@@ -112,8 +109,8 @@ public class Collision {
                         inertia.x = 0;
                     }
                 }
-//            }
-//            if (!detectBlock(new Vector3f(block.getLeft()-1, block.getBottom(),block.getFront()))) {
+            }
+            if (!detectBlock(new Vector3f(block.getLeft()-1, block.getBottom(),block.getFront()))) {
                 us = new CustomAABB(pos.x, pos.y + FOOT_ADJUSTMENT_HEIGHT, pos.z, width, height - HEAD_ADJUSTMENT_HEIGHT);
                 within = !(us.getLeft() > block.getRight() || us.getRight() < block.getLeft() || us.getBottom() > block.getTop() || us.getTop() < block.getBottom() || us.getFront() > block.getBack() || us.getBack() < block.getFront());
 
@@ -124,9 +121,9 @@ public class Collision {
                         inertia.x = 0;
                     }
                 }
-//            }
+            }
         } else {
-//            if (!detectBlock(new Vector3f(block.getLeft(), block.getBottom(),block.getFront()+1))) {
+            if (!detectBlock(new Vector3f(block.getLeft(), block.getBottom(),block.getFront()+1))) {
                 us = new CustomAABB(pos.x, pos.y + FOOT_ADJUSTMENT_HEIGHT, pos.z, width, height - HEAD_ADJUSTMENT_HEIGHT);
                 within = !(us.getLeft() > block.getRight() || us.getRight() < block.getLeft() || us.getBottom() > block.getTop() || us.getTop() < block.getBottom() || us.getFront() > block.getBack() || us.getBack() < block.getFront());
 
@@ -137,9 +134,9 @@ public class Collision {
                         inertia.z = 0;
                     }
                 }
-//            }
+            }
 
-//            if (!detectBlock(new Vector3f(block.getLeft(), block.getBottom(),block.getFront()-1))) {
+            if (!detectBlock(new Vector3f(block.getLeft(), block.getBottom(),block.getFront()-1))) {
                 us = new CustomAABB(pos.x, pos.y + FOOT_ADJUSTMENT_HEIGHT, pos.z, width, height - HEAD_ADJUSTMENT_HEIGHT);
                 within = !(us.getLeft() > block.getRight() || us.getRight() < block.getLeft() || us.getBottom() > block.getTop() || us.getTop() < block.getBottom() || us.getFront() > block.getBack() || us.getBack() < block.getFront());
 
@@ -150,7 +147,7 @@ public class Collision {
                         inertia.z = 0;
                     }
                 }
-//            }
+            }
         }
         return onGround;
     }

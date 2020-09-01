@@ -7,10 +7,12 @@ import static game.collision.CollisionMath.floorPos;
 
 public class Collision {
     final private static float gameSpeed = 0.001f;
-    public static boolean applyInertia(Vector3f pos, Vector3f inertia, boolean onGround, float width, float height, boolean gravity){
-        if(gravity) {
+    public static boolean applyInertia(Vector3f pos, Vector3f inertia, boolean onGround, float width, float height, boolean gravity, boolean sneaking){
+
+        if(gravity && !sneaking) {
             inertia.y -= 50f * gameSpeed; //gravity
         }
+
         //limit speed
         if (inertia.y <= -70f){
             inertia.y = -70f;

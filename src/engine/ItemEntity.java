@@ -84,7 +84,7 @@ public class ItemEntity {
                 }
             }
             if (itemExists(i)) {
-                applyInertia(position[i], inertia[i], true, itemSize, itemSize * 2, true);
+                applyInertia(position[i], inertia[i], true, itemSize, itemSize * 2, true, false);
                 rotation[i].y += 0.1f;
                 if (floatUp[i]){
                     hover[i] += 0.00025f;

@@ -25,6 +25,10 @@ public class Chunk {
     }
 
     public static void setChunkMesh(int chunkX, int chunkZ, Mesh newMesh){
+        if(chunkX < -chunkRenderDistance || chunkZ < -chunkRenderDistance || chunkX > chunkRenderDistance || chunkZ > chunkRenderDistance || genChunkHash(chunkX,chunkZ) < 0 || genChunkHash(chunkX,chunkZ) >= limit){
+            return;
+        }
+
         if (mesh[genChunkHash(chunkX,chunkZ)] != null){
             mesh[genChunkHash(chunkX,chunkZ)].cleanUp();
         }
@@ -97,11 +101,17 @@ public class Chunk {
             return getLight(x,y,z-16,chunkX,chunkZ+1);
         }
 
+
+
         //self chunk checking
         return light[genChunkHash(chunkX,chunkZ)][genHash(x,y,z)];
     }
 
     public static void setLight(int x,int y,int z, int chunkX, int chunkZ, byte newLight){
+        if(chunkX < -chunkRenderDistance || chunkZ < -chunkRenderDistance || chunkX > chunkRenderDistance || chunkZ > chunkRenderDistance || genChunkHash(chunkX,chunkZ) < 0 || genChunkHash(chunkX,chunkZ) >= limit){
+            return;
+        }
+
         light[genChunkHash(chunkX,chunkZ)][genHash(x,y,z)] = newLight;
     }
 

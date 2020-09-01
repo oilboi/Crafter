@@ -39,6 +39,7 @@ public class Player {
     private Vector3f oldPos;
     private float accelerationMultiplier = 0.07f;
     private String name;
+    private boolean sneaking;
 
     public Player(String name){
         this.name = name;
@@ -149,6 +150,9 @@ public class Player {
     public boolean getJump(){
         return jump;
     }
+    public boolean isSneaking(){
+        return sneaking;
+    }
 
     public void setForward(boolean isForward){
         forward = isForward;
@@ -164,6 +168,9 @@ public class Player {
     }
     public void setJump(boolean isJump){
         jump = isJump;
+    }
+    public void setSneaking(boolean isSneaking){
+        sneaking = isSneaking;
     }
 
     private float movementSpeed = 1.5f;
@@ -211,8 +218,13 @@ public class Player {
 
         //max speed todo: make this call from a player object's maxSpeed!
         Vector3f inertia2D = new Vector3f(inertia.x, 0, inertia.z);
-        if(inertia2D.length() > 5){
-            inertia2D = inertia2D.normalize().mul(5);
+
+        float maxSpeed = 5f;
+        if(sneaking){
+            maxSpeed = 1f;
+        }
+        if(inertia2D.length() > maxSpeed){
+            inertia2D = inertia2D.normalize().mul(maxSpeed);
             inertia.x = inertia2D.x;
             inertia.z = inertia2D.z;
         }
@@ -248,7 +260,7 @@ public class Player {
         }
 
 
-        onGround = applyInertia(pos, inertia, true, width, height,true);
+        onGround = applyInertia(pos, inertia, true, width, height,true, sneaking);
 
         //map boundary check TODO: ID 1000
         if (this.pos.x > ((chunkRenderDistance + 1) * 16)-0.5f) {

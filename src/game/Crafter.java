@@ -105,8 +105,11 @@ public class Crafter implements IGameLogic {
         }
 
         if (window.isKeyPressed(GLFW_KEY_LEFT_SHIFT)){ //sneaking
-            //cameraInc.y = -1;
+            player.setSneaking(true);
+        }else{
+            player.setSneaking(false);
         }
+
         if (window.isKeyPressed(GLFW_KEY_SPACE)){
             player.setJump(true);
         } else {

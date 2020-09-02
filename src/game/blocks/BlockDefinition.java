@@ -218,6 +218,20 @@ public class BlockDefinition {
                 true,
                 splash
         );
+
+        new BlockDefinition(
+                8,
+                "flarg",
+                true,
+                new int[]{1,0}, //front
+                new int[]{4,0}, //back
+                new int[]{2,0}, //right
+                new int[]{6,0}, //left
+                new int[]{7,0}, //top
+                new int[]{3,0},  //bottom
+                true,
+                kaboom
+        );
     }
 
     public static BlockDefinition getID(int ID){

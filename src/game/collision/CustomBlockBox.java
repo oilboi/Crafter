@@ -2,37 +2,42 @@ package game.collision;
 
 public class CustomBlockBox {
 
-    private float[] aabb;
+    private static float[] aabb = new float[6];
 
-    public CustomBlockBox(int x, int y, int z){
+    public static void setBlockBox(int x, int y, int z){
 
-        aabb = new float[]{(float)x, (float)y, (float)z, x+1f, y+1f, z+1f};
+        aabb[0] = (float)x;
+        aabb[1] = (float)y;
+        aabb[2] = (float)z;
+        aabb[3] = x+1f;
+        aabb[4] = y+1f;
+        aabb[5] = z+1f;
 
     }
 
     //getters
 
-    public float getLeft(){
+    public static float BlockBoxGetLeft(){
         return aabb[0];
     }
 
-    public float getBottom(){
+    public static float BlockBoxGetBottom(){
         return aabb[1];
     }
 
-    public float getFront(){
+    public static float BlockBoxGetFront(){
         return aabb[2];
     }
 
-    public float getRight(){
+    public static float BlockBoxGetRight(){
         return aabb[3];
     }
 
-    public float getTop(){
+    public static float BlockBoxGetTop(){
         return aabb[4];
     }
 
-    public float getBack(){
+    public static float getBack(){
         return aabb[5];
     }
 }

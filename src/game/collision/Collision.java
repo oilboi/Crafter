@@ -4,6 +4,7 @@ import org.joml.Vector3f;
 
 import static engine.Chunk.getBlock;
 import static game.collision.CollisionMath.floorPos;
+import static game.collision.CustomAABB.setAABB;
 
 public class Collision {
     final private static float gameSpeed = 0.001f;
@@ -53,7 +54,7 @@ public class Collision {
         //collide with all blocks in local area
         for (int i = 0; i < 36; i++){
             if (detectBlock(new Vector3f(fPos.x + x, fPos.y + y, fPos.z + z))) {
-                onGround = collide(new CustomBlockBox((int) fPos.x + x, (int) fPos.y + y, (int) fPos.z + z), pos, inertia, width, height, onGround);
+                onGround = collide((int) fPos.x + x, (int) fPos.y + y, (int) fPos.z + z, pos, inertia, width, height, onGround);
             }
             y--;
             if (y < -1){
@@ -81,9 +82,9 @@ public class Collision {
     private final static float FOOT_ADJUSTMENT_HEIGHT = 0.3f;
     private final static float HEAD_ADJUSTMENT_HEIGHT = 0.6f;
     //this is where actual collision events occur!
-    public static boolean collide(CustomBlockBox block, Vector3f pos, Vector3f inertia, float width, float height, boolean onGround){
+    public static boolean collide(int blockPosX, int blockPosY, int blockPosz, Vector3f pos, Vector3f inertia, float width, float height, boolean onGround){
 
-        CustomAABB us = new CustomAABB(pos.x, pos.y, pos.z, width, height);
+        setAABB(pos.x, pos.y, pos.z, width, height);
 
         boolean within;
 
@@ -97,49 +98,49 @@ public class Collision {
                 onGround = true;
             }
         }
-
-        us.updatePos(pos);
-
-        within = !(us.getLeft() > block.getRight() || us.getRight() < block.getLeft() || us.getBottom() > block.getTop() || us.getTop() < block.getBottom() || us.getFront() > block.getBack() || us.getBack() < block.getFront());
-        //head detection
-        if (within) {
-            if (block.getBottom() < us.getTop() && inertia.y >= 0 && us.getTop() - block.getBottom() < 0.15f) {
-                pos.y = block.getBottom() - height - 0.001f;
-                inertia.y = 0;
-            }
-        }
-
-        us.updatePos(pos);
-
-        float averageX = Math.abs(((block.getLeft() + block.getRight())/2f) - pos.x);
-        float averageZ = Math.abs(((block.getFront() + block.getBack())/2f) - pos.z);
-
-        within = !(us.getLeft() > block.getRight() || us.getRight() < block.getLeft() || us.getBottom() > block.getTop() || us.getTop() < block.getBottom() || us.getFront() > block.getBack() || us.getBack() < block.getFront());
-        if (within) {
-            if (averageX > averageZ) {
-                //x- detection
-                if (block.getRight() > us.getLeft() && inertia.x < 0) {
-                    pos.x = block.getRight() + width + 0.001f;
-                    inertia.x = 0;
-                }
-                //x+ detection
-                if (block.getLeft() < us.getRight() && inertia.x > 0) {
-                    pos.x = block.getLeft() - width - 0.001f;
-                    inertia.x = 0;
-                }
-            } else {
-                //z- detection
-                if (block.getBack() > us.getFront() && inertia.z < 0) {
-                    pos.z = block.getBack() + width + 0.001f;
-                    inertia.z = 0;
-                }
-                 //z+ detection
-                if (block.getFront() < us.getBack() && inertia.z > 0) {
-                    pos.z = block.getFront() - width - 0.001f;
-                    inertia.z = 0;
-                }
-            }
-        }
+//
+//        us.updatePos(pos);
+//
+//        within = !(us.getLeft() > block.getRight() || us.getRight() < block.getLeft() || us.getBottom() > block.getTop() || us.getTop() < block.getBottom() || us.getFront() > block.getBack() || us.getBack() < block.getFront());
+//        //head detection
+//        if (within) {
+//            if (block.getBottom() < us.getTop() && inertia.y >= 0 && us.getTop() - block.getBottom() < 0.15f) {
+//                pos.y = block.getBottom() - height - 0.001f;
+//                inertia.y = 0;
+//            }
+//        }
+//
+//        us.updatePos(pos);
+//
+//        float averageX = Math.abs(((block.getLeft() + block.getRight())/2f) - pos.x);
+//        float averageZ = Math.abs(((block.getFront() + block.getBack())/2f) - pos.z);
+//
+//        within = !(us.getLeft() > block.getRight() || us.getRight() < block.getLeft() || us.getBottom() > block.getTop() || us.getTop() < block.getBottom() || us.getFront() > block.getBack() || us.getBack() < block.getFront());
+//        if (within) {
+//            if (averageX > averageZ) {
+//                //x- detection
+//                if (block.getRight() > us.getLeft() && inertia.x < 0) {
+//                    pos.x = block.getRight() + width + 0.001f;
+//                    inertia.x = 0;
+//                }
+//                //x+ detection
+//                if (block.getLeft() < us.getRight() && inertia.x > 0) {
+//                    pos.x = block.getLeft() - width - 0.001f;
+//                    inertia.x = 0;
+//                }
+//            } else {
+//                //z- detection
+//                if (block.getBack() > us.getFront() && inertia.z < 0) {
+//                    pos.z = block.getBack() + width + 0.001f;
+//                    inertia.z = 0;
+//                }
+//                 //z+ detection
+//                if (block.getFront() < us.getBack() && inertia.z > 0) {
+//                    pos.z = block.getFront() - width - 0.001f;
+//                    inertia.z = 0;
+//                }
+//            }
+//        }
         return onGround;
     }
 

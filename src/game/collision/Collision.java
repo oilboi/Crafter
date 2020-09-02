@@ -22,6 +22,8 @@ public class Collision {
             inertia.y = 70f;
         }
 
+
+
         pos.x += inertia.x * gameSpeed;
         pos.y += inertia.y * gameSpeed;
         pos.z += inertia.z * gameSpeed;
@@ -39,18 +41,47 @@ public class Collision {
         return onGround;
     }
 
+    //these are class/method caches!! NOT FIELDS!
+    private static Vector3f fPos;
+    private static boolean onGround;
+    private static int x,y,z;
+    private static Vector3f oldPos;
+    private static Vector3f oldInertia;
+
     private static boolean collisionDetect(Vector3f pos, Vector3f inertia, float width, float height){
-        boolean onGround = false;
+        onGround = false;
 
         //get the real positions of the blocks
-        Vector3f fPos = floorPos(pos);
+        fPos = floorPos(pos);
 
-        int y = 2;
-        int x = -1;
-        int z = -1;
+        y = 2;
+        x = -1;
+        z = -1;
 
-        Vector3f oldPos = new Vector3f(pos);
-        Vector3f oldInertia = new Vector3f(inertia);
+        oldPos = new Vector3f(pos);
+        oldInertia = new Vector3f(inertia);
+
+        int xMin;
+        int xMax;
+
+        switch (inertiaConversion(inertia.x)){
+            case -1:
+                xMin = -1;
+                xMax = 0;
+                break;
+            case 1:
+                xMin = 0;
+                xMax = 1;
+                break;
+            default:
+                xMin = 0;
+                xMax = 0;
+                break;
+        }
+
+        for (;xMin <= xMax; xMin++){
+            System.out.println(xMin);
+        }
 
         //collide with all blocks in local area
         for (int i = 0; i < 36; i++){
@@ -158,4 +189,17 @@ public class Collision {
 //    public static boolean wouldCollide(CustomAABB us, CustomBlockBox block){
 //        return !(AABBGetLeft() > BlockBoxGetRight() || AABBGetRight() < BlockBoxGetLeft() || AABBGetBottom() > BlockBoxGetTop() || AABBGetTop() < BlockBoxGetBottom() || AABBGetFront() > BlockBoxGetBack() || AABBGetBack() < BlockBoxGetFront());
 //    }
+
+    private static boolean inertiaIsZero(float thisInertia){
+        return Math.abs(thisInertia) < 0.0001;
+    }
+
+    private static int inertiaConversion(float thisInertia){
+        if (thisInertia > 0.0001){
+            return 1;
+        } else if (thisInertia < -0.0001){
+            return -1;
+        }
+        return 0;
+    }
 }

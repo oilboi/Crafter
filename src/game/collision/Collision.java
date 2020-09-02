@@ -4,7 +4,8 @@ import org.joml.Vector3f;
 
 import static engine.Chunk.getBlock;
 import static game.collision.CollisionMath.floorPos;
-import static game.collision.CustomAABB.setAABB;
+import static game.collision.CustomAABB.*;
+import static game.collision.CustomBlockBox.*;
 
 public class Collision {
     final private static float gameSpeed = 0.001f;
@@ -85,15 +86,13 @@ public class Collision {
     public static boolean collide(int blockPosX, int blockPosY, int blockPosz, Vector3f pos, Vector3f inertia, float width, float height, boolean onGround){
 
         setAABB(pos.x, pos.y, pos.z, width, height);
+        setBlockBox(blockPosX,blockPosY,blockPosz);
 
-        boolean within;
-
-        within = !(us.getLeft() > block.getRight() || us.getRight() < block.getLeft() || us.getBottom() > block.getTop() || us.getTop() < block.getBottom() || us.getFront() > block.getBack() || us.getBack() < block.getFront());
         //floor detection
-        if (within) {
-            if (block.getTop() > us.getBottom() && inertia.y < 0 && us.getBottom() - block.getTop() > -0.15f) {
+        if (isWithin()) {
+            if (BlockBoxGetTop() > AABBGetBottom() && inertia.y < 0 && AABBGetBottom() - BlockBoxGetTop() > -0.15f) {
                 //this is the collision debug sphere for terrain
-                pos.y = block.getTop() + 0.0001f;
+                pos.y = BlockBoxGetTop() + 0.0001f;
                 inertia.y = 0;
                 onGround = true;
             }
@@ -144,6 +143,10 @@ public class Collision {
         return onGround;
     }
 
+    private static boolean isWithin(){
+        return !(AABBGetLeft() > BlockBoxGetRight() || AABBGetRight() < BlockBoxGetLeft() || AABBGetBottom() > BlockBoxGetTop() || AABBGetTop() < BlockBoxGetBottom() || AABBGetFront() > BlockBoxGetBack() || AABBGetBack() < BlockBoxGetFront());
+    }
+
     private static boolean detectBlock(Vector3f flooredPos){
         int currentChunkX = (int)(Math.floor(flooredPos.x / 16f));
         int currentChunkZ = (int)(Math.floor(flooredPos.z / 16f));
@@ -152,7 +155,7 @@ public class Collision {
     }
 
     //this is used for block placing
-    public static boolean wouldCollide(CustomAABB us, CustomBlockBox block){
-        return !(us.getLeft() > block.getRight() || us.getRight() < block.getLeft() || us.getBottom() > block.getTop() || us.getTop() < block.getBottom() || us.getFront() > block.getBack() || us.getBack() < block.getFront());
-    }
+//    public static boolean wouldCollide(CustomAABB us, CustomBlockBox block){
+//        return !(AABBGetLeft() > BlockBoxGetRight() || AABBGetRight() < BlockBoxGetLeft() || AABBGetBottom() > BlockBoxGetTop() || AABBGetTop() < BlockBoxGetBottom() || AABBGetFront() > BlockBoxGetBack() || AABBGetBack() < BlockBoxGetFront());
+//    }
 }

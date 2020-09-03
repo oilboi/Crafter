@@ -54,6 +54,11 @@ public class ItemEntity {
         for (int i = 0; i < totalObjects; i++){
             timer[i] += 0.001f;
 
+            //delete items that are too old
+            if (timer[i] > 10f){
+                deleteItem(i);
+            }
+
             if (itemExists(i) && timer[i] > 3){
                 Player thisPlayer = getPlayer("singleplayer");
                 assert thisPlayer != null;
@@ -89,7 +94,7 @@ public class ItemEntity {
                 }
             }
 
-            if (position[i].y < 0){
+            if (itemExists(i) && position[i].y < 0){
                 deleteItem(i);
             }
         }

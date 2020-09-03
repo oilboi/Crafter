@@ -212,7 +212,6 @@ public class Collision {
 
         //head detection
         if (BlockBoxGetBottom() < AABBGetTop() && AABBGetTop() - BlockBoxGetBottom() < 0.1f) {
-            System.out.println(AABBGetTop() - BlockBoxGetBottom());
             pos.y = BlockBoxGetBottom() - height - 0.001f;
             inertia.y = 0;
         }

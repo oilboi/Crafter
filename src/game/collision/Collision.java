@@ -12,7 +12,7 @@ public class Collision {
     public static boolean applyInertia(Vector3f pos, Vector3f inertia, boolean onGround, float width, float height, boolean gravity, boolean sneaking){
 
         if(gravity && !sneaking) {
-            inertia.y -= 50f * gameSpeed; //gravity
+            inertia.y -= 40f * gameSpeed; //gravity
         }
 
         //limit speed
@@ -39,8 +39,6 @@ public class Collision {
     private static Vector3f fPos;
     private static boolean onGround;
     private static int x,y,z;
-    private static Vector3f oldPos;
-    private static Vector3f oldInertia;
 
     private static boolean collisionDetect(Vector3f pos, Vector3f inertia, float width, float height){
         onGround = false;

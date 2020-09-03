@@ -218,7 +218,7 @@ public class Player {
 //            //cameraInc.y = -1;
 //        }
         if (this.jump && this.isOnGround()){
-            inertia.y += 12f;
+            inertia.y += 10.5f;
         }
     }
 

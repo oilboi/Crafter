@@ -17,7 +17,7 @@ public class CustomAABB {
         aabb[5] = z+width;
     }
 
-    public void updatePos(Vector3f pos){
+    public static void updateAABBPos(Vector3f pos){
         aabb[0] = pos.x-width;
         aabb[1] = pos.y;
         aabb[2] = pos.z-width;
@@ -26,8 +26,8 @@ public class CustomAABB {
         aabb[5] = pos.z+width;
     }
 
-    public void updateWidth(float width){
-        this.width = width;
+    public static void updateWidth(float newWidth){
+        width = newWidth;
     }
 
     public static float AABBGetLeft(){

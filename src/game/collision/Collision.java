@@ -22,12 +22,6 @@ public class Collision {
             inertia.y = 70f;
         }
 
-
-
-        pos.x += inertia.x * gameSpeed;
-        pos.y += inertia.y * gameSpeed;
-        pos.z += inertia.z * gameSpeed;
-
         onGround = collisionDetect(pos, inertia, width, height);
 
         //apply friction
@@ -51,131 +45,248 @@ public class Collision {
     private static boolean collisionDetect(Vector3f pos, Vector3f inertia, float width, float height){
         onGround = false;
 
-        //get the real positions of the blocks
-        fPos = floorPos(pos);
 
-        y = 2;
-        x = -1;
-        z = -1;
+        pos.y += inertia.y * gameSpeed;
 
-        oldPos = new Vector3f(pos);
-        oldInertia = new Vector3f(inertia);
+        fPos = floorPos(new Vector3f(pos));
 
-        int xMin;
-        int xMax;
+        int up = 0;
 
-        switch (inertiaConversion(inertia.x)){
+        //todo: begin Y collision detection
+        switch (inertiaToDir(inertia.y)){
             case -1:
-                xMin = -1;
-                xMax = 0;
+                y = (int)fPos.y;
                 break;
             case 1:
-                xMin = 0;
-                xMax = 1;
+                y = (int)Math.floor(pos.y + height);
+                up = 1;
                 break;
             default:
-                xMin = 0;
-                xMax = 0;
+                y = 777;
                 break;
         }
 
-        for (;xMin <= xMax; xMin++){
-            System.out.println(xMin);
+        if (y != 777) {
+            switch (up){
+                case 0:
+                    for (x = -1; x <= 1; x++) {
+                        for (z = -1; z <= 1; z++) {
+                            if (detectBlock(new Vector3f(fPos.x + x, y, fPos.z + z))) {
+                                onGround = collideYNegative((int) fPos.x + x, y, (int) fPos.z + z, pos, inertia, width, height, onGround);
+                            }
+                        }
+                    }
+                    break;
+                case 1:
+                    for (x = -1; x <= 1; x++) {
+                        for (z = -1; z <= 1; z++) {
+                            if (detectBlock(new Vector3f(fPos.x + x, y, fPos.z + z))) {
+                                collideYPositive((int) fPos.x + x, y, (int) fPos.z + z, pos, inertia, width, height);
+                            }
+                        }
+                    }
+                    break;
+            }
         }
 
-        //collide with all blocks in local area
-        for (int i = 0; i < 36; i++){
-            if (detectBlock(new Vector3f(fPos.x + x, fPos.y + y, fPos.z + z))) {
-                onGround = collide((int) fPos.x + x, (int) fPos.y + y, (int) fPos.z + z, pos, inertia, width, height, onGround);
-            }
-            y--;
-            if (y < -1){
-                y=2;
-                x++;
-                if(x > 1){
-                    x=-1;
-                    z++;
-                }
+
+        //todo: begin X collision detection
+        pos.x += inertia.x * gameSpeed;
+
+        fPos = floorPos(new Vector3f(pos));
+
+        boolean doIt = true;
+
+        int positive = 0;
+
+        switch (inertiaToDir(inertia.x)){
+            case -1:
+                x = (int)Math.floor(pos.x - width);
+                break;
+            case 1:
+                x = (int)Math.floor(pos.x + width);
+                positive = 1;
+                break;
+            default:
+                doIt = false;
+                break;
+        }
+
+        if (doIt) {
+            switch (positive){
+                case 1:
+                    for (float yy = 0; yy <= height; yy = yy + 0.5f) {
+                        for (z = -1; z <= 1; z++) {
+                            if (detectBlock(floorPos(new Vector3f(x, yy + pos.y, fPos.z + z)))) {
+                                collideXPositive(x, (int)(yy + pos.y), (int) fPos.z + z, pos, inertia, width, height);
+                            }
+                        }
+                    }
+                    break;
+                case 0:
+                    for (float yy = 0; yy <= height; yy = yy + 0.5f) {
+                        for (z = -1; z <= 1; z++) {
+                            if (detectBlock(floorPos(new Vector3f(x, yy + pos.y, fPos.z + z)))) {
+                                collideXNegative(x, (int)(yy + pos.y), (int) fPos.z + z, pos, inertia, width, height);
+                            }
+                        }
+                    }
+                    break;
             }
         }
 
-        //final touches to make sure player is not clipping
-        if(pos.y < oldPos.y){
-            if(pos.x != oldPos.x || pos.z != oldPos.z){
-                pos.y = oldPos.y;
-                inertia.y = oldInertia.y;
+
+        //todo: Begin Z collision detection
+
+        pos.z += inertia.z * gameSpeed;
+
+        fPos = floorPos(new Vector3f(pos));
+
+        doIt = true;
+
+        positive = 0;
+
+        switch (inertiaToDir(inertia.z)){
+            case -1:
+                z = (int)Math.floor(pos.z - width);
+                break;
+            case 1:
+                z = (int)Math.floor(pos.z + width);
+                positive = 1;
+                break;
+            default:
+                doIt = false;
+                break;
+        }
+
+        if (doIt) {
+            switch (positive){
+                case 1:
+                    for (float yy = 0; yy <= height; yy = yy + 0.5f) {
+                        for (x = -1; x <= 1; x++) {
+                            if (detectBlock(floorPos(new Vector3f(fPos.x + x, yy + pos.y, z)))) {
+                                collideZPositive((int)fPos.x + x, (int)(yy + pos.y), z, pos, inertia, width, height);
+                            }
+                        }
+                    }
+                    break;
+                case 0:
+                    for (float yy = 0; yy <= height; yy = yy + 0.5f) {
+                        for (x = -1; x <= 1; x++) {
+                            if (detectBlock(floorPos(new Vector3f(fPos.x + x, yy + pos.y, z)))) {
+                                collideZNegative((int)fPos.x + x, (int)(yy + pos.y), z, pos, inertia, width, height);
+                            }
+                        }
+                    }
+                    break;
             }
+        }
+        return onGround;
+    }
+
+    public static boolean collideYNegative(int blockPosX, int blockPosY, int blockPosz, Vector3f pos, Vector3f inertia, float width, float height, boolean onGround){
+        setAABB(pos.x, pos.y, pos.z, width, height);
+        setBlockBox(blockPosX,blockPosY,blockPosz);
+        if (!isWithin()){
+            return onGround;
+        }
+
+        if (BlockBoxGetTop() > AABBGetBottom() && AABBGetBottom() - BlockBoxGetTop() > -0.1f) {
+            //this is the collision debug sphere for terrain
+            pos.y = BlockBoxGetTop() + 0.0001f;
+            inertia.y = 0;
+            onGround = true;
         }
 
         return onGround;
     }
 
-
-    private final static float FOOT_ADJUSTMENT_HEIGHT = 0.3f;
-    private final static float HEAD_ADJUSTMENT_HEIGHT = 0.6f;
-    //this is where actual collision events occur!
-    public static boolean collide(int blockPosX, int blockPosY, int blockPosz, Vector3f pos, Vector3f inertia, float width, float height, boolean onGround){
+    public static void collideYPositive(int blockPosX, int blockPosY, int blockPosz, Vector3f pos, Vector3f inertia, float width, float height){
 
         setAABB(pos.x, pos.y, pos.z, width, height);
         setBlockBox(blockPosX,blockPosY,blockPosz);
 
-        //floor detection
-        if (isWithin()) {
-            if (BlockBoxGetTop() > AABBGetBottom() && inertia.y < 0 && AABBGetBottom() - BlockBoxGetTop() > -0.15f) {
-                //this is the collision debug sphere for terrain
-                pos.y = BlockBoxGetTop() + 0.0001f;
-                inertia.y = 0;
-                onGround = true;
-            }
+        if (!isWithin()){
+            return;
         }
-//
-//        us.updatePos(pos);
-//
-//        within = !(us.getLeft() > block.getRight() || us.getRight() < block.getLeft() || us.getBottom() > block.getTop() || us.getTop() < block.getBottom() || us.getFront() > block.getBack() || us.getBack() < block.getFront());
-//        //head detection
-//        if (within) {
-//            if (block.getBottom() < us.getTop() && inertia.y >= 0 && us.getTop() - block.getBottom() < 0.15f) {
-//                pos.y = block.getBottom() - height - 0.001f;
-//                inertia.y = 0;
-//            }
-//        }
-//
-//        us.updatePos(pos);
-//
-//        float averageX = Math.abs(((block.getLeft() + block.getRight())/2f) - pos.x);
-//        float averageZ = Math.abs(((block.getFront() + block.getBack())/2f) - pos.z);
-//
-//        within = !(us.getLeft() > block.getRight() || us.getRight() < block.getLeft() || us.getBottom() > block.getTop() || us.getTop() < block.getBottom() || us.getFront() > block.getBack() || us.getBack() < block.getFront());
-//        if (within) {
-//            if (averageX > averageZ) {
-//                //x- detection
-//                if (block.getRight() > us.getLeft() && inertia.x < 0) {
-//                    pos.x = block.getRight() + width + 0.001f;
-//                    inertia.x = 0;
-//                }
-//                //x+ detection
-//                if (block.getLeft() < us.getRight() && inertia.x > 0) {
-//                    pos.x = block.getLeft() - width - 0.001f;
-//                    inertia.x = 0;
-//                }
-//            } else {
-//                //z- detection
-//                if (block.getBack() > us.getFront() && inertia.z < 0) {
-//                    pos.z = block.getBack() + width + 0.001f;
-//                    inertia.z = 0;
-//                }
-//                 //z+ detection
-//                if (block.getFront() < us.getBack() && inertia.z > 0) {
-//                    pos.z = block.getFront() - width - 0.001f;
-//                    inertia.z = 0;
-//                }
-//            }
-//        }
-        return onGround;
+
+        //head detection
+        if (BlockBoxGetBottom() < AABBGetTop() && AABBGetTop() - BlockBoxGetBottom() < 0.1f) {
+            System.out.println(AABBGetTop() - BlockBoxGetBottom());
+            pos.y = BlockBoxGetBottom() - height - 0.001f;
+            inertia.y = 0;
+        }
     }
 
+    public static void collideXPositive(int blockPosX, int blockPosY, int blockPosz, Vector3f pos, Vector3f inertia, float width, float height){
+
+        setAABB(pos.x, pos.y, pos.z, width, height);
+        setBlockBox(blockPosX,blockPosY,blockPosz);
+
+        if (!isWithin()){
+            return;
+        }
+
+        if (BlockBoxGetLeft() < AABBGetRight() && BlockBoxGetLeft() - AABBGetRight() > -0.1f) {
+            pos.x = BlockBoxGetLeft() - width - 0.001f;
+            inertia.x = 0;
+        }
+    }
+
+    public static void collideXNegative(int blockPosX, int blockPosY, int blockPosz, Vector3f pos, Vector3f inertia, float width, float height){
+
+        setAABB(pos.x, pos.y, pos.z, width, height);
+        setBlockBox(blockPosX,blockPosY,blockPosz);
+
+        if (!isWithin()){
+            return;
+        }
+
+        if (BlockBoxGetRight() > AABBGetLeft() && BlockBoxGetRight() - AABBGetLeft() < 0.1f) {
+            pos.x = BlockBoxGetRight() + width + 0.001f;
+            inertia.x = 0;
+        }
+    }
+
+
+    public static void collideZPositive(int blockPosX, int blockPosY, int blockPosz, Vector3f pos, Vector3f inertia, float width, float height){
+
+        setAABB(pos.x, pos.y, pos.z, width, height);
+        setBlockBox(blockPosX,blockPosY,blockPosz);
+
+        if (!isWithin()){
+            return;
+        }
+
+        if (BlockBoxGetFront() < AABBGetBack() && BlockBoxGetFront() - AABBGetBack() > -0.1f) {
+            pos.z = BlockBoxGetFront() - width - 0.001f;
+            inertia.z = 0;
+        }
+    }
+
+    public static void collideZNegative(int blockPosX, int blockPosY, int blockPosz, Vector3f pos, Vector3f inertia, float width, float height){
+
+        setAABB(pos.x, pos.y, pos.z, width, height);
+        setBlockBox(blockPosX,blockPosY,blockPosz);
+
+        if (!isWithin()){
+            return;
+        }
+
+        if (BlockBoxGetBack() > AABBGetFront() && BlockBoxGetBack() - AABBGetFront() < 0.1f) {
+            pos.z = BlockBoxGetBack() + width + 0.001f;
+            inertia.z = 0;
+        }
+    }
+
+
     private static boolean isWithin(){
-        return !(AABBGetLeft() > BlockBoxGetRight() || AABBGetRight() < BlockBoxGetLeft() || AABBGetBottom() > BlockBoxGetTop() || AABBGetTop() < BlockBoxGetBottom() || AABBGetFront() > BlockBoxGetBack() || AABBGetBack() < BlockBoxGetFront());
+        return !(AABBGetLeft() > BlockBoxGetRight() ||
+                 AABBGetRight() < BlockBoxGetLeft() ||
+                 AABBGetBottom() > BlockBoxGetTop() ||
+                 AABBGetTop() < BlockBoxGetBottom() ||
+                 AABBGetFront() > BlockBoxGetBack() ||
+                 AABBGetBack() < BlockBoxGetFront());
     }
 
     private static boolean detectBlock(Vector3f flooredPos){
@@ -185,21 +296,22 @@ public class Collision {
         return getBlock((int)realPos.x, (int)realPos.y, (int)realPos.z, currentChunkX, currentChunkZ) != 0;
     }
 
+
+
+
+    private static int inertiaToDir(float thisInertia){
+        if (thisInertia > 0.0001f){
+            return 1;
+        } else if (thisInertia < -0.0001f){
+            return -1;
+        }
+
+        return 0;
+    }
+
     //this is used for block placing
 //    public static boolean wouldCollide(CustomAABB us, CustomBlockBox block){
 //        return !(AABBGetLeft() > BlockBoxGetRight() || AABBGetRight() < BlockBoxGetLeft() || AABBGetBottom() > BlockBoxGetTop() || AABBGetTop() < BlockBoxGetBottom() || AABBGetFront() > BlockBoxGetBack() || AABBGetBack() < BlockBoxGetFront());
 //    }
 
-    private static boolean inertiaIsZero(float thisInertia){
-        return Math.abs(thisInertia) < 0.0001;
-    }
-
-    private static int inertiaConversion(float thisInertia){
-        if (thisInertia > 0.0001){
-            return 1;
-        } else if (thisInertia < -0.0001){
-            return -1;
-        }
-        return 0;
-    }
 }

@@ -60,7 +60,7 @@ public class ItemEntity {
                 if (getDistance(position[i], thisPlayer.getPosWithCollectionHeight()) < 3f){
                     collecting[i] = true;
                     Vector3f normalizedPos = new Vector3f(thisPlayer.getPosWithCollectionHeight());
-                    normalizedPos.sub(position[i]).normalize().mul(10f);
+                    normalizedPos.sub(position[i]).normalize().mul(15f);
                     inertia[i] = normalizedPos;
                 }
 

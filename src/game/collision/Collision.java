@@ -9,7 +9,7 @@ import static game.collision.CustomBlockBox.*;
 
 public class Collision {
     final private static float gameSpeed = 0.001f;
-    public static boolean applyInertia(Vector3f pos, Vector3f inertia, boolean onGround, float width, float height, boolean gravity, boolean sneaking){
+    public static boolean applyInertia(Vector3f pos, Vector3f inertia, boolean onGround, float width, float height, boolean gravity, boolean sneaking, boolean applyCollision){
 
         if(gravity && !sneaking) {
             inertia.y -= 40f * gameSpeed; //gravity
@@ -22,7 +22,13 @@ public class Collision {
             inertia.y = 70f;
         }
 
-        onGround = collisionDetect(pos, inertia, width, height);
+        if (applyCollision) {
+            onGround = collisionDetect(pos, inertia, width, height);
+        } else {
+            pos.x += inertia.x * gameSpeed;
+            pos.y += inertia.y * gameSpeed;
+            pos.z += inertia.z * gameSpeed;
+        }
 
         //apply friction
         inertia.x += -inertia.x * gameSpeed * 10; // do (10 - 9.5f) for slippery!

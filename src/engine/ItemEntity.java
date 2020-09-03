@@ -70,7 +70,11 @@ public class ItemEntity {
                 }
             }
             if (itemExists(i)) {
-                applyInertia(position[i], inertia[i], true, itemSize, itemSize * 2, true, false);
+                if (collecting[i]) {
+                    applyInertia(position[i], inertia[i], true, itemSize, itemSize * 2, false, false, false);
+                } else {
+                    applyInertia(position[i], inertia[i], true, itemSize, itemSize * 2, true, false, true);
+                }
                 rotation[i].y += 0.1f;
                 if (floatUp[i]){
                     hover[i] += 0.00025f;

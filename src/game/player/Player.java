@@ -273,7 +273,7 @@ public class Player {
         }
 
 
-        onGround = applyInertia(pos, inertia, true, width, height,true, sneaking);
+        onGround = applyInertia(pos, inertia, true, width, height,true, sneaking, true);
 
         //map boundary check TODO: ID 1000
         if (this.pos.x > ((chunkRenderDistance + 1) * 16)-0.5f) {

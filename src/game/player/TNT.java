@@ -42,7 +42,7 @@ public class TNT {
                                     if (currentBlock != 0 && currentBlock != 6 && Math.random() > 0.98) {
                                         createItem(currentBlock, new Vector3f(currentPosX+(currentChunkX*16), y, currentPosZ+(currentChunkZ*16)));
                                     } else if (currentBlock == 6){
-                                        createTNT(new Vector3f(currentPosX+(currentChunkX*16), y, currentPosZ+(currentChunkZ*16)), (float)(1.6f+Math.random()));
+                                        createTNT(new Vector3f(currentPosX+(currentChunkX*16), y, currentPosZ+(currentChunkZ*16)), (float)(1.6f+Math.random()), false);
                                     }
 
                                 }

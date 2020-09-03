@@ -169,7 +169,7 @@ public class BlockDefinition {
             @Override
             public void onDig(Vector3f pos) throws Exception {
                 //boom((int)pos.x, (int)pos.y, (int)pos.z, 5);
-                createTNT(pos);
+                createTNT(pos, 0, true);
             }
         };
 

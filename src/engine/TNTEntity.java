@@ -49,12 +49,18 @@ public class TNTEntity {
         System.out.println("Created new TNT. Total TNT: " + totalTNT);
     }
 
-    public static void createTNT(Vector3f pos, float timer){
+    public static void createTNT(Vector3f pos, float timer, boolean punched){
         pos.x += 0.5f;
         pos.y += 0.5f;
         pos.z += 0.5f;
         tntPos[totalTNT] = new Vector3f(pos);
-        tntInertia[totalTNT] = new Vector3f(randomForceValue(15f),(float)Math.random()*7f,randomForceValue(15f));
+        float tntJump;
+        if (punched){
+            tntJump = (float)Math.random()*10f;
+        } else {
+            tntJump = 0f;
+        }
+        tntInertia[totalTNT] = new Vector3f(randomForceValue(15f),tntJump,randomForceValue(15f));
         tntExists[totalTNT] = true;
         tntTimer[totalTNT] = timer;
         tntScale[totalTNT] = new Vector3f(1,1,1);

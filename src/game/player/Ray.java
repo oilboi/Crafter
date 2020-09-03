@@ -11,7 +11,9 @@ import static game.ChunkHandling.ChunkMesh.generateChunkMesh;
 import static game.Crafter.chunkRenderDistance;
 import static game.blocks.BlockDefinition.onDigCall;
 import static game.blocks.BlockDefinition.onPlaceCall;
-//import static game.collision.Collision.wouldCollide;
+import static game.collision.Collision.wouldCollidePlacing;
+import static game.collision.CustomAABB.setAABB;
+import static game.collision.CustomBlockBox.setBlockBox;
 import static game.light.Light.floodFill;
 
 public class Ray {
@@ -33,14 +35,18 @@ public class Ray {
             lastPos = new Vector3f(newPos);
         }
 
-        //System.out.println(finalPos);
         if(finalPos != null) {
             if(mining) {
                 destroyBlock(finalPos);
             } else if (placing && lastPos != null){
-//                if (!wouldCollide(new CustomAABB(player.getPos().x, player.getPos().y+0.01f, player.getPos().z, player.getWidth(), player.getHeight()-0.02f), new CustomBlockBox((int)lastPos.x, (int)lastPos.y, (int)lastPos.z))) {
+
+                setAABB(player.getPos().x, player.getPos().y, player.getPos().z, player.getWidth(), player.getHeight());
+
+                setBlockBox((int)lastPos.x,(int)lastPos.y,(int)lastPos.z);
+
+                if (!wouldCollidePlacing()) {
                     placeBlock(lastPos, (short) 6);
-//                }
+                }
             }
         } else if (debugTest){
             createItem(2, lastPos);

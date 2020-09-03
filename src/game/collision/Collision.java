@@ -297,8 +297,6 @@ public class Collision {
     }
 
 
-
-
     private static int inertiaToDir(float thisInertia){
         if (thisInertia > 0.0001f){
             return 1;
@@ -309,9 +307,12 @@ public class Collision {
         return 0;
     }
 
-    //this is used for block placing
-//    public static boolean wouldCollide(CustomAABB us, CustomBlockBox block){
-//        return !(AABBGetLeft() > BlockBoxGetRight() || AABBGetRight() < BlockBoxGetLeft() || AABBGetBottom() > BlockBoxGetTop() || AABBGetTop() < BlockBoxGetBottom() || AABBGetFront() > BlockBoxGetBack() || AABBGetBack() < BlockBoxGetFront());
-//    }
-
+    public static boolean wouldCollidePlacing(){
+        return !(AABBGetLeft() > BlockBoxGetRight() ||
+                AABBGetRight() < BlockBoxGetLeft() ||
+                AABBGetBottom() > BlockBoxGetTop() ||
+                AABBGetTop() < BlockBoxGetBottom() ||
+                AABBGetFront() > BlockBoxGetBack() ||
+                AABBGetBack() < BlockBoxGetFront());
+    }
 }

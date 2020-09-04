@@ -2,6 +2,8 @@ package engine;
 
 import engine.graph.Mesh;
 import engine.graph.Texture;
+import engine.sound.SoundManager;
+import game.Crafter;
 import org.joml.Vector3f;
 
 import java.util.ArrayList;
@@ -49,7 +51,7 @@ public class TNTEntity {
         System.out.println("Created new TNT. Total TNT: " + totalTNT);
     }
 
-    public static void createTNT(Vector3f pos, float timer, boolean punched){
+    public static void createTNT(Vector3f pos, float timer, boolean punched, SoundManager soundMgr){
         pos.x += 0.5f;
         pos.y += 0.5f;
         pos.z += 0.5f;
@@ -57,6 +59,7 @@ public class TNTEntity {
         float tntJump;
         if (punched){
             tntJump = (float)Math.random()*10f;
+            soundMgr.playSoundSource(Crafter.Sounds.TNTHISS.toString());
         } else {
             tntJump = 0f;
         }
@@ -68,7 +71,7 @@ public class TNTEntity {
         System.out.println("Created new TNT. Total TNT: " + totalTNT);
     }
 
-    public static void onTNTStep() throws Exception {
+    public static void onTNTStep(SoundManager soundMgr) throws Exception {
         for (int i = 0; i < totalTNT; i++){
             tntTimer[i] += 0.001f;
             applyInertia(tntPos[i], tntInertia[i], true, tntSize, tntSize * 2, true, false, true);
@@ -81,7 +84,9 @@ public class TNTEntity {
 
             if (tntTimer[i] > 2.6f){
 
-                boom((int)tntPos[i].x, (int)tntPos[i].y, (int)tntPos[i].z, 5);
+                boom((int)tntPos[i].x, (int)tntPos[i].y, (int)tntPos[i].z, 5, soundMgr);
+
+                soundMgr.playSoundSource(Crafter.Sounds.TNT.toString());
 
                 deleteTNT(i);
 

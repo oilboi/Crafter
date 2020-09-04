@@ -5,6 +5,7 @@ package game.player;
 
 //import static game.light.Light.floodFill;
 
+import engine.sound.SoundManager;
 import org.joml.Vector3f;
 
 import static engine.Chunk.getBlock;
@@ -17,7 +18,7 @@ import static game.Crafter.chunkRenderDistance;
 import static game.light.Light.floodFill;
 
 public class TNT {
-    public static void boom(int posX, int posY, int posZ, int boomDistance) throws Exception {
+    public static void boom(int posX, int posY, int posZ, int boomDistance, SoundManager soundMgr) throws Exception {
         int[][] chunkBuffer = new int[boomDistance][2];
         int chunkBufferIndex = 0;
         for (int x = posX - boomDistance; x < posX + boomDistance; x++) {
@@ -42,7 +43,7 @@ public class TNT {
                                     if (currentBlock != 0 && currentBlock != 6 && Math.random() > 0.98) {
                                         createItem(currentBlock, new Vector3f(currentPosX+(currentChunkX*16), y, currentPosZ+(currentChunkZ*16)));
                                     } else if (currentBlock == 6){
-                                        createTNT(new Vector3f(currentPosX+(currentChunkX*16), y, currentPosZ+(currentChunkZ*16)), (float)(1.6f+Math.random()), false);
+                                        createTNT(new Vector3f(currentPosX+(currentChunkX*16), y, currentPosZ+(currentChunkZ*16)), (float)(1.6f+Math.random()), false, soundMgr);
                                     }
 
                                 }

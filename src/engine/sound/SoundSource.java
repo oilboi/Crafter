@@ -56,8 +56,4 @@ public class SoundSource {
         stop();
         alDeleteSources(sourceId);
     }
-
-
-
-
 }

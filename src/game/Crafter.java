@@ -2,9 +2,14 @@ package game;
 
 import engine.*;
 import engine.graph.Camera;
+import engine.sound.SoundBuffer;
+import engine.sound.SoundListener;
+import engine.sound.SoundManager;
+import engine.sound.SoundSource;
 import game.player.Player;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+import org.lwjgl.openal.AL11;
 
 import static engine.Chunk.genBiome;
 import static engine.Chunk.initializeChunkHandler;
@@ -12,7 +17,6 @@ import static engine.ItemEntity.clearItems;
 import static engine.TNTEntity.createTNTEntityMesh;
 import static game.ChunkHandling.ChunkMesh.generateChunkMesh;
 import static game.blocks.BlockDefinition.initializeBlocks;
-import static game.player.TNT.boom;
 import static org.lwjgl.glfw.GLFW.*;
 
 public class Crafter implements IGameLogic {
@@ -22,6 +26,8 @@ public class Crafter implements IGameLogic {
     private static final float MOUSE_SENSITIVITY = 0.009f;
 
     private final Renderer renderer;
+
+    private final SoundManager soundMgr;
 
     private final Camera camera;
 
@@ -37,6 +43,8 @@ public class Crafter implements IGameLogic {
 
     private Player player;
 
+    public enum Sounds { TNT, STONE, TNTHISS };
+
     public static int getChunkRenderDistance(){
         return chunkRenderDistance;
     }
@@ -44,14 +52,17 @@ public class Crafter implements IGameLogic {
     public Crafter(){
         renderer = new Renderer();
         camera = new Camera();
+        soundMgr = new SoundManager();
     }
 
     @Override
     public void init(Window window) throws Exception{
         renderer.init(window);
 
+        soundMgr.init();
+
         //this initializes the block definitions
-        initializeBlocks();
+        initializeBlocks(soundMgr);
 
         //this creates arrays for the engine to handle the objects
         initializeChunkHandler(chunkRenderDistance);
@@ -84,6 +95,33 @@ public class Crafter implements IGameLogic {
             }
         }
         player = new Player("singleplayer");
+
+        this.soundMgr.init();
+        this.soundMgr.setAttenuationModel(AL11.AL_EXPONENT_DISTANCE);
+        setupSounds();
+    }
+
+    private void setupSounds() throws Exception {
+
+        SoundBuffer buffBack = new SoundBuffer("sounds/stone_1.ogg");
+        soundMgr.addSoundBuffer(buffBack);
+        SoundSource sourceBack = new SoundSource(false, false);
+        sourceBack.setBuffer(buffBack.getBufferId());
+        soundMgr.addSoundSource(Sounds.STONE.toString(), sourceBack);
+
+        SoundBuffer buffBack2 = new SoundBuffer("sounds/tnt_explode.ogg");
+        soundMgr.addSoundBuffer(buffBack2);
+        SoundSource sourceBack2 = new SoundSource(false, false);
+        sourceBack2.setBuffer(buffBack2.getBufferId());
+        soundMgr.addSoundSource(Sounds.TNT.toString(), sourceBack2);
+
+        SoundBuffer buffBack3 = new SoundBuffer("sounds/tnt_ignite.ogg");
+        soundMgr.addSoundBuffer(buffBack3);
+        SoundSource sourceBack3 = new SoundSource(false, false);
+        sourceBack3.setBuffer(buffBack3.getBufferId());
+        soundMgr.addSoundSource(Sounds.TNTHISS.toString(), sourceBack3);
+//
+        soundMgr.setListener(new SoundListener(new Vector3f()));
     }
 
     @Override
@@ -143,6 +181,7 @@ public class Crafter implements IGameLogic {
             if (!rButtonPushed) {
                 rButtonPushed = true;
                 player.setPos(new Vector3f(0,129,0));
+
                 if (Math.random() == 0.0001f){
                     System.out.println("Hey, Ben!");
                 }
@@ -205,11 +244,13 @@ public class Crafter implements IGameLogic {
             camera.moveRotation(0,-360, 0);
         }
 
-        player.onTick(camera);
+        player.onTick(camera, soundMgr);
 
         ItemEntity.onStep();
 
-        TNTEntity.onTNTStep();
+        TNTEntity.onTNTStep(soundMgr);
+
+//        soundMgr.updateListenerPosition(camera);
     }
 
     @Override
@@ -220,6 +261,7 @@ public class Crafter implements IGameLogic {
     @Override
     public void cleanup(){
         Chunk.cleanUp();
+        soundMgr.cleanup();
         ItemEntity.cleanUp();
         renderer.cleanup();
     }

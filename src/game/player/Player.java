@@ -1,6 +1,7 @@
 package game.player;
 
 import engine.graph.Camera;
+import engine.sound.SoundManager;
 import org.joml.Vector3f;
 
 import java.util.ArrayList;
@@ -254,7 +255,7 @@ public class Player {
     }
 
 
-    public void onTick(Camera camera) throws Exception {
+    public void onTick(Camera camera, SoundManager soundMgr) throws Exception {
 
         this.applyInertiaBuffer(camera);
 
@@ -292,10 +293,10 @@ public class Player {
 
 
         if(mining && mineTimer <= 0) {
-            rayCast(camera.getPosition(), camera.getRotationVector(), 4f, true, false, this, false);
+            rayCast(camera.getPosition(), camera.getRotationVector(), 4f, true, false, this, false, soundMgr);
             mineTimer = 0.5f;
         } else if (placing && placeTimer <= 0){
-            rayCast(camera.getPosition(), camera.getRotationVector(), 4f, false, true, this, false);
+            rayCast(camera.getPosition(), camera.getRotationVector(), 4f, false, true, this, false, soundMgr);
             placeTimer = 0.5f;
         } /*else if (mining) {
             rayCast(camera.getPosition(), camera.getRotationVector(), 4f, false, false, this, true);

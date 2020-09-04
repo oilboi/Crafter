@@ -1,5 +1,7 @@
 package game.player;
 
+import engine.sound.SoundManager;
+import game.Crafter;
 import game.collision.CustomAABB;
 import game.collision.CustomBlockBox;
 import org.joml.Vector3f;
@@ -17,7 +19,7 @@ import static game.collision.CustomBlockBox.setBlockBox;
 import static game.light.Light.floodFill;
 
 public class Ray {
-    public static void rayCast(Vector3f pos, Vector3f dir, float length, boolean mining, boolean placing, Player player, boolean debugTest) throws Exception {
+    public static void rayCast(Vector3f pos, Vector3f dir, float length, boolean mining, boolean placing, Player player, boolean debugTest, SoundManager soundMgr) throws Exception {
 
         Vector3f finalPos = null;
         Vector3f newPos   = null;
@@ -38,6 +40,7 @@ public class Ray {
         if(finalPos != null) {
             if(mining) {
                 destroyBlock(finalPos);
+                soundMgr.playSoundSource(Crafter.Sounds.STONE.toString());
             } else if (placing && lastPos != null){
 
                 setAABB(player.getPos().x, player.getPos().y, player.getPos().z, player.getWidth(), player.getHeight());
@@ -46,6 +49,7 @@ public class Ray {
 
                 if (!wouldCollidePlacing()) {
                     placeBlock(lastPos, (short) 6/*Math.ceil(Math.random() * 7)*/);
+                    soundMgr.playSoundSource(Crafter.Sounds.STONE.toString());
                 }
             }
         } else if (debugTest){

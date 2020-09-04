@@ -1,5 +1,6 @@
 package game.blocks;
 
+import engine.sound.SoundManager;
 import org.joml.Vector3f;
 
 import java.util.ArrayList;
@@ -77,7 +78,7 @@ public class BlockDefinition {
         return texturePoints;
     }
 
-    public static void initializeBlocks() throws Exception {
+    public static void initializeBlocks(SoundManager soundMgr) throws Exception {
 
         new BlockDefinition(
                 0,
@@ -169,7 +170,7 @@ public class BlockDefinition {
             @Override
             public void onDig(Vector3f pos) throws Exception {
                 //boom((int)pos.x, (int)pos.y, (int)pos.z, 5);
-                createTNT(pos, 0, true);
+                createTNT(pos, 0, true, soundMgr);
             }
         };
 

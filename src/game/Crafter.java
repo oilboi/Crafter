@@ -43,7 +43,7 @@ public class Crafter implements IGameLogic {
 
     private Player player;
 
-    public enum Sounds { TNT, STONE, TNTHISS };
+    public enum Sounds { TNT, STONE, TNTHISS, PICKUP };
 
     public static int getChunkRenderDistance(){
         return chunkRenderDistance;
@@ -120,6 +120,13 @@ public class Crafter implements IGameLogic {
         SoundSource sourceBack3 = new SoundSource(false, false);
         sourceBack3.setBuffer(buffBack3.getBufferId());
         soundMgr.addSoundSource(Sounds.TNTHISS.toString(), sourceBack3);
+
+
+        SoundBuffer buffBack4 = new SoundBuffer("sounds/pickup.ogg");
+        soundMgr.addSoundBuffer(buffBack4);
+        SoundSource sourceBack4 = new SoundSource(false, false);
+        sourceBack4.setBuffer(buffBack4.getBufferId());
+        soundMgr.addSoundSource(Sounds.PICKUP.toString(), sourceBack4);
 //
         soundMgr.setListener(new SoundListener(new Vector3f()));
     }
@@ -246,7 +253,7 @@ public class Crafter implements IGameLogic {
 
         player.onTick(camera, soundMgr);
 
-        ItemEntity.onStep();
+        ItemEntity.onStep(soundMgr);
 
         TNTEntity.onTNTStep(soundMgr);
 

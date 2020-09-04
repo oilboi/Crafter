@@ -2,6 +2,8 @@ package engine;
 
 import engine.graph.Mesh;
 import engine.graph.Texture;
+import engine.sound.SoundManager;
+import game.Crafter;
 import game.player.Player;
 import org.joml.Vector3f;
 
@@ -50,7 +52,7 @@ public class ItemEntity {
         System.out.println("Created new Item. Total items: " + totalObjects);
     }
 
-    public static void onStep(){
+    public static void onStep(SoundManager soundMgr){
         for (int i = 0; i < totalObjects; i++){
             timer[i] += 0.001f;
 
@@ -63,6 +65,9 @@ public class ItemEntity {
                 Player thisPlayer = getPlayer("singleplayer");
                 assert thisPlayer != null;
                 if (getDistance(position[i], thisPlayer.getPosWithCollectionHeight()) < 3f){
+                    if (collecting[i] == false){
+                        soundMgr.playSoundSource(Crafter.Sounds.PICKUP.toString());
+                    }
                     collecting[i] = true;
                     Vector3f normalizedPos = new Vector3f(thisPlayer.getPosWithCollectionHeight());
                     normalizedPos.sub(position[i]).normalize().mul(15f);

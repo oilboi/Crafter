@@ -89,6 +89,23 @@ public class Chunk {
         block[chunkX][chunkZ][y][x][z] = newBlock;
     }
 
+    public static void setBlock(int x, int y, int z, int newBlock){
+        int currentChunkX = (int) (Math.floor((float) x / 16f));
+        int currentChunkZ = (int) (Math.floor((float) z / 16f));
+        int currentPosX = (int) (x - (16 * currentChunkX));
+        int currentPosZ = (int) (z - (16 * currentChunkZ));
+
+        currentChunkX += chunkRenderDistance;
+        currentChunkZ += chunkRenderDistance;
+        if(currentChunkX < 0 || currentChunkZ < 0 || currentChunkX >= limit || currentChunkZ >= limit){
+            return;
+        }
+        if(y > 127 || y < 0){
+            return;
+        }
+        block[currentChunkX][currentChunkZ][y][currentPosX][currentPosZ] = newBlock;
+    }
+
     public static byte getLight(int x,int y,int z, int chunkX, int chunkZ){
         chunkX += chunkRenderDistance;
         chunkZ += chunkRenderDistance;

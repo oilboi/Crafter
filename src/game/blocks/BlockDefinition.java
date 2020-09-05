@@ -220,6 +220,24 @@ public class BlockDefinition {
                 splash
         );
 
+
+        //water thing
+        BlockModifier uhOh = new BlockModifier() {
+            @Override
+            public void onPlace(Vector3f pos) throws Exception {
+
+                for(int y = 0; y < 128; y++){
+                    setBlock((int)pos.x, y, (int)pos.z,6);
+                }
+
+                int currentChunkX = (int) (Math.floor((float) pos.x / 16f));
+                int currentChunkZ = (int) (Math.floor((float) pos.z / 16f));
+
+                floodFill(currentChunkX, currentChunkZ);
+                generateChunkMesh(currentChunkX, currentChunkZ, true);
+            }
+        };
+
         new BlockDefinition(
                 8,
                 "flarg",
@@ -231,7 +249,7 @@ public class BlockDefinition {
                 new int[]{7,0}, //top
                 new int[]{3,0},  //bottom
                 true,
-                kaboom
+                uhOh
         );
     }
 

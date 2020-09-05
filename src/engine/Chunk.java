@@ -82,6 +82,12 @@ public class Chunk {
         if(chunkX < 0 || chunkZ < 0 || chunkX >= limit || chunkZ >= limit){
             return;
         }
+        if(z >= 16 || z < 0){
+            return;
+        }
+        if(x >= 16 || x < 0){
+            return;
+        }
         if(y > 127 || y < 0){
             return;
         }

@@ -1,10 +1,5 @@
 package game.player;
 
-//import static game.ChunkHandling.ChunkData.getBlock;
-//import static game.ChunkHandling.ChunkData.setBlock;
-
-//import static game.light.Light.floodFill;
-
 import engine.sound.SoundManager;
 import org.joml.Vector3f;
 
@@ -14,57 +9,61 @@ import static engine.FancyMath.getDistance;
 import static engine.ItemEntity.createItem;
 import static engine.TNTEntity.createTNT;
 import static game.ChunkHandling.ChunkMesh.generateChunkMesh;
-import static game.Crafter.chunkRenderDistance;
 import static game.light.Light.floodFill;
 
 public class TNT {
+    private static int[][] chunkBuffer;
+    private static int chunkBufferIndex;
+    private static int currentChunkX;
+    private static int currentChunkZ;
+    private static int currentPosX;
+    private static int currentPosZ;
+    private static int currentBlock;
+    private static boolean found = false;
+    private static int x,y,z;
+
     public static void boom(int posX, int posY, int posZ, int boomDistance, SoundManager soundMgr) throws Exception {
+        chunkBufferIndex = 0;
+        chunkBuffer = new int[boomDistance][2];
 
-        int[][] chunkBuffer = new int[boomDistance][2];
+        for (x = posX - boomDistance; x < posX + boomDistance; x++) {
+            for (y = posY - boomDistance; y < posY + boomDistance; y++) {
+                for (z = posZ - boomDistance; z < posZ + boomDistance; z++) {
 
-        int chunkBufferIndex = 0;
+                    currentChunkX = (int)(Math.floor((float) x / 16f));
+                    currentChunkZ = (int)(Math.floor((float) z / 16f));
 
-        for (int x = posX - boomDistance; x < posX + boomDistance; x++) {
-            for (int y = posY - boomDistance; y < posY + boomDistance; y++) {
-                for (int z = posZ - boomDistance; z < posZ + boomDistance; z++) {
-
-                    int currentChunkX = (int) (Math.floor((float) x / 16f));
-                    int currentChunkZ = (int) (Math.floor((float) z / 16f));
-
-                    int currentPosX = x - (16 * currentChunkX);
-                    int currentPosZ = z - (16 * currentChunkZ);
+                    currentPosX = x - (16 * currentChunkX);
+                    currentPosZ = z - (16 * currentChunkZ);
 
                     if (getDistance(posX, posY, posZ, x, y, z) <= boomDistance) {
-                        if (currentChunkX >= -chunkRenderDistance && currentChunkX <= chunkRenderDistance && currentChunkZ >= -chunkRenderDistance && currentChunkZ <= chunkRenderDistance) {
-                            if (y >= 0 && y <= 127) {
 
-                                int currentBlock = getBlock(currentPosX, y, currentPosZ, currentChunkX, currentChunkZ);
-                                //don't destroy bedrock
-                                if(currentBlock != 5) {
-                                    setBlock(currentPosX, y, currentPosZ, currentChunkX, currentChunkZ, (short) 0);
-                                    //todo: make this an API callback!!
-                                    if (currentBlock != 0 && currentBlock != 6 && Math.random() > 0.98) {
-                                        createItem(currentBlock, new Vector3f(currentPosX+(currentChunkX*16), y, currentPosZ+(currentChunkZ*16)));
-                                    } else if (currentBlock == 6){
-                                        createTNT(new Vector3f(currentPosX+(currentChunkX*16), y, currentPosZ+(currentChunkZ*16)), (float)(1.6f+Math.random()), false, soundMgr);
-                                    }
+                        currentBlock = getBlock(currentPosX, y, currentPosZ, currentChunkX, currentChunkZ);
 
-                                }
+                        //don't destroy bedrock
+                        if(currentBlock != 5) {
+                            setBlock(currentPosX, y, currentPosZ, currentChunkX, currentChunkZ, (short) 0);
+                            //todo: make this an API callback!!
+                            /*if (currentBlock != 0 && currentBlock != 6 && Math.random() > 0.98) {
+                                createItem(currentBlock, new Vector3f(currentPosX+(currentChunkX*16), y, currentPosZ+(currentChunkZ*16)));
+                            } else */if (currentBlock == 6){
+                                createTNT(new Vector3f(x, y, z), (float)(Math.random()+Math.random()), false, soundMgr);
+                            }
 
-                                //add chunks to chunk generation buffer ID: 555
-                                boolean found = false;
-                                for (int[] index : chunkBuffer) {
-                                    if (index[0] == currentChunkX && index[1] == currentChunkZ) {
-                                        found = true;
-                                    }
-                                }
-                                if (!found) {
-                                    chunkBuffer[chunkBufferIndex] = new int[]{currentChunkX, currentChunkZ};
-                                    chunkBufferIndex++;
-                                }
-                                //end: ID: 555
+                        }
+
+                        //add chunks to chunk generation buffer ID: 555
+                        found = false;
+                        for (int[] index : chunkBuffer) {
+                            if (index[0] == currentChunkX && index[1] == currentChunkZ) {
+                                found = true;
                             }
                         }
+                        if (!found) {
+                            chunkBuffer[chunkBufferIndex] = new int[]{currentChunkX, currentChunkZ};
+                            chunkBufferIndex++;
+                        }
+                        //end: ID: 555
                     }
                 }
             }

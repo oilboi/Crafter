@@ -2,8 +2,6 @@ package game.player;
 
 import engine.sound.SoundManager;
 import game.Crafter;
-import game.collision.CustomAABB;
-import game.collision.CustomBlockBox;
 import org.joml.Vector3f;
 
 import static engine.Chunk.getBlock;

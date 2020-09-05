@@ -6,6 +6,7 @@ import org.joml.Vector3f;
 
 import java.util.ArrayList;
 
+import static engine.sound.SoundAPI.playSound;
 import static game.Crafter.chunkRenderDistance;
 import static game.Crafter.getChunkRenderDistance;
 import static game.collision.Collision.applyInertia;
@@ -324,18 +325,20 @@ public class Player {
     private int xBobPos = 0;
     private int yBobPos = 0;
 
-    private void applyViewBobbing(){
+    private void applyViewBobbing() throws Exception {
         if (xPositive) {
             xBobPos += 1;
-            if (xBobPos >= 150){
+            if (xBobPos >= 200){
                 xPositive = !xPositive;
                 yPositive = !yPositive;
+                playSound("dirt_" + (int)(Math.ceil(Math.random()*3)), pos);
             }
         } else {
             xBobPos -= 1;
-            if (xBobPos <= -150){
+            if (xBobPos <= -200){
                 xPositive = !xPositive;
                 yPositive = !yPositive;
+                playSound("dirt_"  + (int)(Math.ceil(Math.random()*3)), pos);
             }
         }
 

@@ -39,8 +39,6 @@ public class Ray {
         if(finalPos != null) {
             if(mining) {
                 destroyBlock(finalPos);
-//                soundMgr.playSoundSource(Crafter.Sounds.STONE.toString());
-                playSound("stone_1", finalPos);
             } else if (placing && lastPos != null){
 
                 setAABB(player.getPos().x, player.getPos().y, player.getPos().z, player.getWidth(), player.getHeight());
@@ -49,8 +47,6 @@ public class Ray {
 
                 if (!wouldCollidePlacing()) {
                     placeBlock(lastPos, (short) 8/*Math.ceil(Math.random() * 7)*/);
-//                    soundMgr.playSoundSource(Crafter.Sounds.STONE.toString());
-                    playSound("stone_1", finalPos);
                 }
             }
         } else if (debugTest){

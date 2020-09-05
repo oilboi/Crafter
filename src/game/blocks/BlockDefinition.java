@@ -9,6 +9,7 @@ import static engine.Chunk.setBlock;
 import static engine.ItemEntity.createBlockObjectMesh;
 import static engine.ItemEntity.createItem;
 import static engine.TNTEntity.createTNT;
+import static engine.sound.SoundAPI.playSound;
 import static game.ChunkHandling.ChunkMesh.generateChunkMesh;
 //import static game.light.Light.floodFill;
 import static game.player.TNT.boom;
@@ -31,11 +32,27 @@ public class BlockDefinition {
     private final float[] leftTexture;   //left
     private final float[] topTexture;    //top
     private final float[] bottomTexture; //bottom
+    private final String placeSound;
+    private final String digSound;
 
     private final BlockModifier blockModifier;
 
 
-    private BlockDefinition(int ID, String name, boolean dropsItem, int[] front, int[] back, int[] right, int[] left, int[] top, int[] bottom, boolean walkable, BlockModifier blockModifier) throws Exception {
+    private BlockDefinition(
+            int ID,String name,
+            boolean dropsItem,
+            int[] front,
+            int[] back,
+            int[] right,
+            int[] left,
+            int[] top,
+            int[] bottom,
+            boolean walkable,
+            BlockModifier blockModifier,
+            String placeSound,
+            String digSound
+    ) throws Exception {
+
         this.ID   = ID;
         this.name = name;
         this.dropsItem = dropsItem;
@@ -46,9 +63,12 @@ public class BlockDefinition {
         this.topTexture    = calculateTexture(    top[0],    top[1] );
         this.bottomTexture = calculateTexture( bottom[0], bottom[1] );
         this.blockModifier = blockModifier;
+        this.placeSound = placeSound;
+        this.digSound = digSound;
         blockIDs[ID] = this;
         //TODO: INITIALIZE NEW OBJECT MESH FOR THIS BLOCK
         createBlockObjectMesh(ID);
+
     }
 
     public static void onDigCall(int ID, Vector3f pos) throws Exception {
@@ -59,12 +79,19 @@ public class BlockDefinition {
             if(blockIDs[ID].blockModifier != null){
                 blockIDs[ID].blockModifier.onDig(pos);
             }
+            if (!blockIDs[ID].digSound.equals("")) {
+                playSound(blockIDs[ID].digSound, pos.add(0.5f, 0.5f, 0.5f));
+            }
         }
     }
 
     public static void onPlaceCall(int ID, Vector3f pos) throws Exception {
-        if(blockIDs[ID] != null && blockIDs[ID].blockModifier != null){
+        if(blockIDs[ID] != null && blockIDs[ID].blockModifier != null) {
             blockIDs[ID].blockModifier.onPlace(pos);
+        }
+
+        if (!blockIDs[ID].placeSound.equals("")) {
+            playSound(blockIDs[ID].placeSound, pos.add(0.5f, 0.5f, 0.5f));
         }
     }
 
@@ -91,7 +118,9 @@ public class BlockDefinition {
                 new int[]{-1,-1}, //top
                 new int[]{-1,-1},  //bottom
                 false,
-                null
+                null,
+                "",
+                ""
         );
 
         new BlockDefinition(
@@ -105,7 +134,9 @@ public class BlockDefinition {
                 new int[]{0,0}, //top
                 new int[]{0,0},  //bottom
                 true,
-                null
+                null,
+                "dirt_1",
+                "dirt_2"
         );
 
         new BlockDefinition(
@@ -119,7 +150,9 @@ public class BlockDefinition {
                 new int[]{4,0}, //top
                 new int[]{0,0},  //bottom
                 true,
-                null
+                null,
+                "dirt_1",
+                "dirt_2"
         );
 
         new BlockDefinition(
@@ -133,7 +166,9 @@ public class BlockDefinition {
                 new int[]{1,0}, //top
                 new int[]{1,0},  //bottom
                 true,
-                null
+                null,
+                "stone_1",
+                "stone_2"
         );
 
         new BlockDefinition(
@@ -147,7 +182,9 @@ public class BlockDefinition {
                 new int[]{2,0}, //top
                 new int[]{2,0},  //bottom
                 true,
-                null
+                null,
+                "stone_3",
+                "stone_2"
         );
 
         new BlockDefinition(
@@ -161,7 +198,9 @@ public class BlockDefinition {
                 new int[]{6,0}, //top
                 new int[]{6,0},  //bottom
                 true,
-                null
+                null,
+                "stone_1",
+                "stone_1"
         );
 
 
@@ -185,7 +224,9 @@ public class BlockDefinition {
                 new int[]{8,0}, //top
                 new int[]{9,0},  //bottom
                 true,
-                kaboom
+                kaboom,
+                "wood_1",
+                "wood_2"
         );
 
         //water thing
@@ -217,7 +258,9 @@ public class BlockDefinition {
                 new int[]{10,0}, //top
                 new int[]{10,0},  //bottom
                 true,
-                splash
+                splash,
+                "",
+                ""
         );
 
 
@@ -249,7 +292,9 @@ public class BlockDefinition {
                 new int[]{7,0}, //top
                 new int[]{3,0},  //bottom
                 true,
-                uhOh
+                uhOh,
+                "dirt_1",
+                "dirt_2"
         );
     }
 

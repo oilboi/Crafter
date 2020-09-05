@@ -68,7 +68,7 @@ public class TNTEntity {
         tntTimer[totalTNT] = timer;
         tntScale[totalTNT] = new Vector3f(1,1,1);
         totalTNT++;
-        System.out.println("Created new TNT. Total TNT: " + totalTNT);
+//        System.out.println("Created new TNT. Total TNT: " + totalTNT);
     }
 
     public static void onTNTStep(SoundManager soundMgr) throws Exception {
@@ -122,7 +122,7 @@ public class TNTEntity {
         tntTimer[totalTNT - 1] = 0;
 
         totalTNT -= 1;
-        System.out.println("A TNT was Deleted. Remaining: " + totalTNT);
+//        System.out.println("A TNT was Deleted. Remaining: " + totalTNT);
     }
 
     public static Vector3f getTNTScale(int ID){

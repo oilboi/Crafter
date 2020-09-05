@@ -219,7 +219,10 @@ public class Chunk {
             } else if (y < height - dirtHeight) {
                 currBlock = 3;
             } else {
-                if (y <= waterHeight){
+                if (y == waterHeight+1){
+                    currBlock = 6;
+                }
+                else if (y <= waterHeight){
                     currBlock = 7;
                 } else {
                     currBlock = 0;

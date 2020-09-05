@@ -10,10 +10,6 @@ import org.lwjgl.openal.ALCCapabilities;
 
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import static org.lwjgl.openal.AL10.alDistanceModel;
 import static org.lwjgl.openal.ALC10.*;
@@ -24,17 +20,17 @@ public class SoundManager {
     private long context;
     private SoundListener listener;
 
-    private final List<SoundBuffer> soundBufferList;
+    private SoundBuffer[] soundBufferList;
 
-    private final Map<String, SoundSource> soundSourceMap;
+    private SoundSource[] soundSourceArray;
 
     private final Matrix4f cameraMatrix;
 
+    private int currentIndex = 0;
+
     public SoundManager(){
-        soundBufferList = new ArrayList<>();
-
-        soundSourceMap = new HashMap<>();
-
+        soundBufferList = new SoundBuffer[32];
+        soundSourceArray = new SoundSource[32];
         cameraMatrix = new Matrix4f();
     }
 
@@ -58,28 +54,27 @@ public class SoundManager {
         AL.createCapabilities(deviceCaps);
     }
 
-    public void addSoundSource(String name, SoundSource soundSource){
-        this.soundSourceMap.put(name, soundSource);
-    }
+    public void playSoundSource(SoundBuffer soundBuffer, SoundSource soundSource) {
 
-    public SoundSource getSoundSource(String name) {
-        return this.soundSourceMap.get(name);
-    }
+        if (soundBufferList[currentIndex] != null){
+            soundBufferList[currentIndex].cleanUp();
+        }
+        soundBufferList[currentIndex] = soundBuffer;
 
-    public void playSoundSource(String name) {
-        SoundSource soundSource = this.soundSourceMap.get(name);
-        if (soundSource != null && !soundSource.isPlaying()) {
-            soundSource.play();
+
+        if (soundSourceArray[currentIndex] != null) {
+            soundSourceArray[currentIndex].stop();
+            soundSourceArray[currentIndex].cleanUp();
+        }
+        this.soundSourceArray[currentIndex] = soundSource;
+        this.soundSourceArray[currentIndex].play();
+
+        currentIndex++;
+        if (currentIndex >= 32){
+            currentIndex = 0;
         }
     }
 
-    public void removeSoundSource(String name) {
-        this.soundSourceMap.remove(name);
-    }
-
-    public void addSoundBuffer(SoundBuffer soundBuffer) {
-        this.soundBufferList.add(soundBuffer);
-    }
 
     public SoundListener getListener() {
         return this.listener;
@@ -105,14 +100,18 @@ public class SoundManager {
     }
 
     public void cleanup() {
-        for (SoundSource soundSource : soundSourceMap.values()) {
+        for (SoundSource soundSource : soundSourceArray) {
             soundSource.cleanUp();
         }
-        soundSourceMap.clear();
+
+        soundSourceArray = null;
+
         for (SoundBuffer soundBuffer : soundBufferList) {
             soundBuffer.cleanUp();
         }
-        soundBufferList.clear();
+
+        soundBufferList = null;
+
         if (context != NULL) {
             alcDestroyContext(context);
         }

@@ -96,7 +96,7 @@ public class Crafter implements IGameLogic {
         player = new Player("singleplayer");
 
         this.soundMgr.init();
-        this.soundMgr.setAttenuationModel(AL11.AL_DISTANCE_MODEL);
+        this.soundMgr.setAttenuationModel(AL11.AL_LINEAR_DISTANCE);
 
         soundMgr.setListener(new SoundListener(new Vector3f()));
     }

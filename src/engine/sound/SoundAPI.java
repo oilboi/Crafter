@@ -9,13 +9,14 @@ public class SoundAPI {
     private static SoundManager soundManager = getSoundManager();
 
     public static void playSound(String name, Vector3f pos) throws Exception {
-        SoundBuffer buffBack = new SoundBuffer("sounds/" + name + ".ogg");
-        soundManager.addSoundBuffer(buffBack);
+        SoundBuffer soundBuffer = new SoundBuffer("sounds/" + name + ".ogg");
+
         SoundSource thisSource = new SoundSource(false, false);
-        thisSource.setBuffer(buffBack.getBufferId());
+
+        thisSource.setBuffer(soundBuffer.getBufferId());
+
         thisSource.setPosition(pos);
-        soundManager.addSoundSource(name,thisSource);
-        soundManager.playSoundSource(name);
-        soundManager.removeSoundSource(name);
+
+        soundManager.playSoundSource(soundBuffer, thisSource);
     }
 }

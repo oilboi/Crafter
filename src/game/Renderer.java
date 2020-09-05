@@ -70,17 +70,21 @@ public class Renderer {
         shaderProgram.setUniform("texture_sampler", 0);
 
         //render each chunk
-        for(int i = 0; i < getLimit(); i++){
-            Mesh thisMesh = getChunkMesh(i);
-            if (thisMesh == null){
-                System.out.println("wow that doesn't exist!");
-                continue;
-            }
+        for(int x = 0; x < getLimit(); x++) {
+            for (int z = 0; z < getLimit(); z++) {
 
-            Matrix4f modelViewMatrix = transformation.getModelViewMatrix(viewMatrix);
-            shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
-//            System.out.println(thisMesh);
-            thisMesh.render();
+                Mesh thisMesh = getChunkMesh(x,z);
+
+                if (thisMesh == null) {
+                    System.out.println("wow that doesn't exist!");
+                    continue;
+                }
+
+                Matrix4f modelViewMatrix = transformation.getModelViewMatrix(viewMatrix);
+                shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+
+                thisMesh.render();
+            }
         }
 
 

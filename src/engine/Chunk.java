@@ -1,51 +1,56 @@
 package engine;
 
 import engine.graph.Mesh;
-import game.ChunkHandling.ChunkMath;
-
-import static game.ChunkHandling.ChunkMath.genChunkHash;
-import static game.ChunkHandling.ChunkMath.genHash;
 import static game.Crafter.chunkRenderDistance;
 
 public class Chunk {
 
-    private static int [][] block;
-    private static byte[][] light;
-    private static Mesh[]   mesh;
+    private static int [][][][][] block;
+    private static byte[][][][][] light;
+    private static Mesh[][]   mesh;
 
     private static int limit = 0;
 
     public static void initializeChunkHandler(int chunkRenderDistance){
 
-        block = new int[((chunkRenderDistance * 2) + 1) * ((chunkRenderDistance * 2) + 1)][16*128*16];
-        light = new byte[((chunkRenderDistance * 2) + 1) * ((chunkRenderDistance * 2) + 1)][16*128*16];
-        mesh  = new Mesh[((chunkRenderDistance * 2) + 1) * ((chunkRenderDistance * 2) + 1)];
-        limit = ((chunkRenderDistance * 2) + 1) * ((chunkRenderDistance * 2) + 1);
+        block = new  int[((chunkRenderDistance * 2) + 1)][((chunkRenderDistance * 2) + 1)][128][16][16];
+        light = new byte[((chunkRenderDistance * 2) + 1)][((chunkRenderDistance * 2) + 1)][128][16][16];
+        mesh  = new Mesh[((chunkRenderDistance * 2) + 1)][((chunkRenderDistance * 2) + 1)];
+        limit = ((chunkRenderDistance * 2) + 1);
 
     }
 
     public static void setChunkMesh(int chunkX, int chunkZ, Mesh newMesh){
-        if(chunkX < -chunkRenderDistance || chunkZ < -chunkRenderDistance || chunkX > chunkRenderDistance || chunkZ > chunkRenderDistance || genChunkHash(chunkX,chunkZ) < 0 || genChunkHash(chunkX,chunkZ) >= limit){
+        chunkX += chunkRenderDistance;
+        chunkZ += chunkRenderDistance;
+
+        if(chunkX < 0 || chunkZ < 0 || chunkX >= limit || chunkZ >= limit){
             return;
         }
 
-        if (mesh[genChunkHash(chunkX,chunkZ)] != null){
-            mesh[genChunkHash(chunkX,chunkZ)].cleanUp();
+        if (mesh[chunkX][chunkZ] != null){
+            mesh[chunkX][chunkZ].cleanUp();
         }
-        mesh[genChunkHash(chunkX,chunkZ)] = newMesh;
+        mesh[chunkX][chunkZ] = newMesh;
     }
 
     public static int getLimit(){
         return limit;
     }
 
-    public static Mesh getChunkMesh(int i){
-        return mesh[i];
+    public static Mesh getChunkMesh(int chunkX, int chunkZ){
+        return mesh[chunkX][chunkZ];
     }
 
     public static int getBlock(int x,int y,int z, int chunkX, int chunkZ){
+        chunkX += chunkRenderDistance;
+        chunkZ += chunkRenderDistance;
 
-        if(chunkX < -chunkRenderDistance || chunkZ < -chunkRenderDistance || chunkX > chunkRenderDistance || chunkZ > chunkRenderDistance || genChunkHash(chunkX,chunkZ) < 0 || genChunkHash(chunkX,chunkZ) >= limit){
+        return getInternalBlock(x,y,z,chunkX,chunkZ);
+    }
+    private static int getInternalBlock(int x,int y,int z, int chunkX, int chunkZ){
+
+        if(chunkX < 0 || chunkZ < 0 || chunkX >= limit || chunkZ >= limit){
             return 0;
         }
 
@@ -54,37 +59,45 @@ public class Chunk {
             return 0;
         }
         if(x < 0) {
-            return getBlock(x+16,y,z,chunkX-1,chunkZ);
+            return getInternalBlock(x+16,y,z,chunkX-1,chunkZ);
         }
         if (x >= 16) {
-            return getBlock(x-16,y,z,chunkX+1,chunkZ);
+            return getInternalBlock(x-16,y,z,chunkX+1,chunkZ);
         }
         if (z < 0) {
-            return getBlock(x,y,z+16,chunkX,chunkZ-1);
+            return getInternalBlock(x,y,z+16,chunkX,chunkZ-1);
         }
         if (z >= 16) {
-            return getBlock(x,y,z-16,chunkX,chunkZ+1);
+            return getInternalBlock(x,y,z-16,chunkX,chunkZ+1);
         }
 
         //self chunk checking
-        return block[genChunkHash(chunkX,chunkZ)][genHash(x,y,z)];
+        return block[chunkX][chunkZ][y][x][z];
     }
 
     public static void setBlock(int x,int y,int z, int chunkX, int chunkZ, int newBlock){
-        if(chunkX < -chunkRenderDistance || chunkZ < -chunkRenderDistance || chunkX > chunkRenderDistance || chunkZ > chunkRenderDistance || genChunkHash(chunkX,chunkZ) < 0 || genChunkHash(chunkX,chunkZ) >= limit){
+        chunkX += chunkRenderDistance;
+        chunkZ += chunkRenderDistance;
+
+        if(chunkX < 0 || chunkZ < 0 || chunkX >= limit || chunkZ >= limit){
             return;
         }
         if(y > 127 || y < 0){
             return;
         }
 
-        block[genChunkHash(chunkX,chunkZ)][genHash(x,y,z)] = newBlock;
+        block[chunkX][chunkZ][y][x][z] = newBlock;
     }
 
-
     public static byte getLight(int x,int y,int z, int chunkX, int chunkZ){
+        chunkX += chunkRenderDistance;
+        chunkZ += chunkRenderDistance;
+        return getInternalLight(x,y,z,chunkX,chunkZ);
+    }
 
-        if(chunkX < -chunkRenderDistance || chunkZ < -chunkRenderDistance || chunkX > chunkRenderDistance || chunkZ > chunkRenderDistance || genChunkHash(chunkX,chunkZ) < 0 || genChunkHash(chunkX,chunkZ) >= limit){
+    private static byte getInternalLight(int x,int y,int z, int chunkX, int chunkZ){
+
+        if(chunkX < 0 || chunkZ < 0 || chunkX >= limit || chunkZ >= limit){
             return 0;
         }
 
@@ -96,30 +109,31 @@ public class Chunk {
             return 15;
         }
         if(x < 0) {
-            return getLight(x+16,y,z,chunkX-1,chunkZ);
+            return getInternalLight(x+16,y,z,chunkX-1,chunkZ);
         }
         if (x >= 16) {
-            return getLight(x-16,y,z,chunkX+1,chunkZ);
+            return getInternalLight(x-16,y,z,chunkX+1,chunkZ);
         }
         if (z < 0) {
-            return getLight(x,y,z+16,chunkX,chunkZ-1);
+            return getInternalLight(x,y,z+16,chunkX,chunkZ-1);
         }
         if (z >= 16) {
-            return getLight(x,y,z-16,chunkX,chunkZ+1);
+            return getInternalLight(x,y,z-16,chunkX,chunkZ+1);
         }
 
-
-
         //self chunk checking
-        return light[genChunkHash(chunkX,chunkZ)][genHash(x,y,z)];
+        return light[chunkX][chunkZ][y][x][z];
     }
 
     public static void setLight(int x,int y,int z, int chunkX, int chunkZ, byte newLight){
-        if(chunkX < -chunkRenderDistance || chunkZ < -chunkRenderDistance || chunkX > chunkRenderDistance || chunkZ > chunkRenderDistance || genChunkHash(chunkX,chunkZ) < 0 || genChunkHash(chunkX,chunkZ) >= limit){
+        chunkX += chunkRenderDistance;
+        chunkZ += chunkRenderDistance;
+
+        if(chunkX < 0 || chunkZ < 0 || chunkX >= limit || chunkZ >= limit){
             return;
         }
 
-        light[genChunkHash(chunkX,chunkZ)][genHash(x,y,z)] = newLight;
+        light[chunkX][chunkZ][y][x][z] = newLight;
     }
 
     private static FastNoise noise = new FastNoise();
@@ -128,6 +142,9 @@ public class Chunk {
     private static byte waterHeight = 50;
     //a basic biome test for terrain generation
     public static void genBiome(int chunkX, int chunkZ){
+        chunkX += chunkRenderDistance;
+        chunkZ += chunkRenderDistance;
+
         int x = 0;
         int y = 127;
         int z = 0;
@@ -154,12 +171,12 @@ public class Chunk {
                 }
             }
 
-            block[genChunkHash(chunkX,chunkZ)][ChunkMath.genHash(x, y, z)] = currBlock;
+            block[chunkX][chunkZ][y][x][z] = currBlock;
 
             if (currBlock == 0) {
-                light[genChunkHash(chunkX,chunkZ)][ChunkMath.genHash(x, y, z)] = 15;//0;
+                light[chunkX][chunkZ][y][x][z] = 15;//0;
             }else{
-                light[genChunkHash(chunkX,chunkZ)][ChunkMath.genHash(x, y, z)] = 0;
+                light[chunkX][chunkZ][y][x][z] = 0;
             }
 
             y--;
@@ -177,7 +194,11 @@ public class Chunk {
     }
 
     public static boolean underSunlight(int x, int y, int z, int chunkX, int chunkZ){
-        if(chunkX < -chunkRenderDistance || chunkZ < -chunkRenderDistance || chunkX > chunkRenderDistance || chunkZ > chunkRenderDistance || genChunkHash(chunkX,chunkZ) < 0 || genChunkHash(chunkX,chunkZ) >= limit){
+
+        chunkX += chunkRenderDistance;
+        chunkZ += chunkRenderDistance;
+
+        if(chunkX < 0 || chunkZ < 0 || chunkX >= limit || chunkZ >= limit){
             return false;
         }
         for (int indexY = 127; indexY > y; indexY--) {
@@ -189,9 +210,11 @@ public class Chunk {
     }
 
     public static void cleanUp(){
-        for (Mesh thisMesh : mesh){
-            if (thisMesh != null){
-                thisMesh.cleanUp();
+        for (Mesh[] thisMeshArray : mesh){
+            for (Mesh thisMesh : thisMeshArray) {
+                if (thisMesh != null) {
+                    thisMesh.cleanUp();
+                }
             }
         }
     }

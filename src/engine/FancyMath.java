@@ -25,4 +25,12 @@ public class FancyMath {
         return (float)Math.hypot((pos1.x - pos2.x), Math.hypot((pos1.y - pos2.y), (pos1.z - pos2.z)));
     }
 
+    //todo this does not belong in here
+    public static float getDistance(float x1, float y1, float z1, float x2, float y2, float z2){
+        float x = x1 - x2;
+        float y = y1 - y2;
+        float z = z1 - z2;
+        return (float)Math.hypot(x, Math.hypot(y,z));
+    }
+
 }

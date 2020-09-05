@@ -10,17 +10,20 @@ import org.joml.Vector3f;
 
 import static engine.Chunk.getBlock;
 import static engine.Chunk.setBlock;
+import static engine.FancyMath.getDistance;
 import static engine.ItemEntity.createItem;
 import static engine.TNTEntity.createTNT;
-import static game.ChunkHandling.ChunkMath.getDistance;
 import static game.ChunkHandling.ChunkMesh.generateChunkMesh;
 import static game.Crafter.chunkRenderDistance;
 import static game.light.Light.floodFill;
 
 public class TNT {
     public static void boom(int posX, int posY, int posZ, int boomDistance, SoundManager soundMgr) throws Exception {
+
         int[][] chunkBuffer = new int[boomDistance][2];
+
         int chunkBufferIndex = 0;
+
         for (int x = posX - boomDistance; x < posX + boomDistance; x++) {
             for (int y = posY - boomDistance; y < posY + boomDistance; y++) {
                 for (int z = posZ - boomDistance; z < posZ + boomDistance; z++) {

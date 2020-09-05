@@ -6,6 +6,7 @@ import engine.graph.Texture;
 import java.util.ArrayList;
 
 import static engine.Chunk.*;
+import static game.Crafter.chunkRenderDistance;
 import static game.blocks.BlockDefinition.*;
 
 public class ChunkMesh {
@@ -13,9 +14,7 @@ public class ChunkMesh {
     private final static float maxLight = 15;
 
     public static void generateChunkMesh(int chunkX, int chunkZ, boolean updating) throws Exception {
-//        if(chunkX+chunkRenderDistance < 0 || chunkX+chunkRenderDistance >= ((chunkRenderDistance*2)+1) || chunkZ+chunkRenderDistance < 0 || chunkZ+chunkRenderDistance >= ((chunkRenderDistance*2)+1)){
-//            return;
-//        }
+
 
         int x = 0;
         int y = 0;
@@ -33,6 +32,7 @@ public class ChunkMesh {
 
         //create the mesh
         for (int w = 0; w < (16 * 128 * 16); w++) {
+
             int thisBlock = getBlock(x,y,z,chunkX,chunkZ);
 
             if (thisBlock != 0) {
@@ -45,6 +45,7 @@ public class ChunkMesh {
                     positions.add(1f + x + offsetX); positions.add(0f + y); positions.add(1f + z + offsetZ);
                     //front
                     float frontLight = getLight(x,y,z+1, chunkX, chunkZ)/maxLight;
+
                     frontLight = (float)Math.pow(Math.pow(frontLight,1.5),1.5);
                     //front
                     for (int i = 0; i < 12; i++){

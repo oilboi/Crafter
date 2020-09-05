@@ -3,7 +3,6 @@ package game.light;
 import java.util.ArrayList;
 
 import static engine.Chunk.*;
-import static game.ChunkHandling.ChunkMath.genHash;
 
 public class Light {
 

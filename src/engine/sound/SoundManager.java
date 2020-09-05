@@ -68,9 +68,9 @@ public class SoundManager {
 
     public void playSoundSource(String name) {
         SoundSource soundSource = this.soundSourceMap.get(name);
-//        if (soundSource != null && !soundSource.isPlaying()) {
+        if (soundSource != null && !soundSource.isPlaying()) {
             soundSource.play();
-//        }
+        }
     }
 
     public void removeSoundSource(String name) {
@@ -92,7 +92,6 @@ public class SoundManager {
     public void updateListenerPosition(Camera camera) {
         // Update camera matrix with camera data
         Transformation.updateGenericViewMatrix(camera.getPosition(), camera.getRotation(), cameraMatrix);
-
         listener.setPosition(camera.getPosition());
         Vector3f at = new Vector3f();
         cameraMatrix.positiveZ(at).negate();

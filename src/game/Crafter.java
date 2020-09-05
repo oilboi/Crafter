@@ -23,13 +23,13 @@ import static org.lwjgl.glfw.GLFW.*;
 
 public class Crafter implements IGameLogic {
 
-    public static int chunkRenderDistance = 20;
+    public static int chunkRenderDistance = 2;
 
     private static final float MOUSE_SENSITIVITY = 0.009f;
 
     private final Renderer renderer;
 
-    private final SoundManager soundMgr;
+    private static final SoundManager soundMgr = new SoundManager();
 
     private final Camera camera;
 
@@ -45,8 +45,6 @@ public class Crafter implements IGameLogic {
 
     private Player player;
 
-    public enum Sounds { TNT, STONE, TNTHISS, PICKUP };
-
     public static int getChunkRenderDistance(){
         return chunkRenderDistance;
     }
@@ -54,7 +52,6 @@ public class Crafter implements IGameLogic {
     public Crafter(){
         renderer = new Renderer();
         camera = new Camera();
-        soundMgr = new SoundManager();
     }
 
     @Override
@@ -99,40 +96,13 @@ public class Crafter implements IGameLogic {
         player = new Player("singleplayer");
 
         this.soundMgr.init();
-        this.soundMgr.setAttenuationModel(AL11.AL_EXPONENT_DISTANCE);
-        setupSounds();
+        this.soundMgr.setAttenuationModel(AL11.AL_DISTANCE_MODEL);
 
-        chunkUpdate(0,0);
+        soundMgr.setListener(new SoundListener(new Vector3f()));
     }
 
-    private void setupSounds() throws Exception {
-
-        SoundBuffer buffBack = new SoundBuffer("sounds/stone_1.ogg");
-        soundMgr.addSoundBuffer(buffBack);
-        SoundSource sourceBack = new SoundSource(false, false);
-        sourceBack.setBuffer(buffBack.getBufferId());
-        soundMgr.addSoundSource(Sounds.STONE.toString(), sourceBack);
-
-        SoundBuffer buffBack2 = new SoundBuffer("sounds/tnt_explode.ogg");
-        soundMgr.addSoundBuffer(buffBack2);
-        SoundSource sourceBack2 = new SoundSource(false, false);
-        sourceBack2.setBuffer(buffBack2.getBufferId());
-        soundMgr.addSoundSource(Sounds.TNT.toString(), sourceBack2);
-
-        SoundBuffer buffBack3 = new SoundBuffer("sounds/tnt_ignite.ogg");
-        soundMgr.addSoundBuffer(buffBack3);
-        SoundSource sourceBack3 = new SoundSource(false, false);
-        sourceBack3.setBuffer(buffBack3.getBufferId());
-        soundMgr.addSoundSource(Sounds.TNTHISS.toString(), sourceBack3);
-
-
-        SoundBuffer buffBack4 = new SoundBuffer("sounds/pickup.ogg");
-        soundMgr.addSoundBuffer(buffBack4);
-        SoundSource sourceBack4 = new SoundSource(false, false);
-        sourceBack4.setBuffer(buffBack4.getBufferId());
-        soundMgr.addSoundSource(Sounds.PICKUP.toString(), sourceBack4);
-//
-        soundMgr.setListener(new SoundListener(new Vector3f()));
+    public static SoundManager getSoundManager(){
+        return soundMgr;
     }
 
     @Override
@@ -257,13 +227,14 @@ public class Crafter implements IGameLogic {
 
         player.onTick(camera, soundMgr);
 
+        soundMgr.updateListenerPosition(camera);
+
         ItemEntity.onStep(soundMgr);
 
         TNTEntity.onTNTStep(soundMgr);
 
         chunkUpdater();
 
-//        soundMgr.updateListenerPosition(camera);
     }
 
     @Override

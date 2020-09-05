@@ -9,6 +9,7 @@ import org.joml.Vector3f;
 import java.util.ArrayList;
 
 import static engine.FancyMath.*;
+import static engine.sound.SoundAPI.playSound;
 import static game.blocks.BlockDefinition.*;
 import static game.collision.Collision.applyInertia;
 import static game.player.TNT.boom;
@@ -51,7 +52,7 @@ public class TNTEntity {
         System.out.println("Created new TNT. Total TNT: " + totalTNT);
     }
 
-    public static void createTNT(Vector3f pos, float timer, boolean punched, SoundManager soundMgr){
+    public static void createTNT(Vector3f pos, float timer, boolean punched, SoundManager soundMgr) throws Exception {
         pos.x += 0.5f;
         pos.y += 0.5f;
         pos.z += 0.5f;
@@ -59,7 +60,8 @@ public class TNTEntity {
         float tntJump;
         if (punched){
             tntJump = (float)Math.random()*10f;
-            soundMgr.playSoundSource(Crafter.Sounds.TNTHISS.toString());
+//            soundMgr.playSoundSource(Crafter.Sounds.TNTHISS.toString());
+            playSound("tnt_ignite", pos);
         } else {
             tntJump = 0f;
         }
@@ -86,7 +88,8 @@ public class TNTEntity {
 
                 boom((int)tntPos[i].x, (int)tntPos[i].y, (int)tntPos[i].z, 5, soundMgr);
 
-                soundMgr.playSoundSource(Crafter.Sounds.TNT.toString());
+//                soundMgr.playSoundSource(Crafter.Sounds.TNT.toString());
+                playSound("tnt_explode", tntPos[i]);
 
                 deleteTNT(i);
 

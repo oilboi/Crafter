@@ -7,6 +7,7 @@ import org.joml.Vector3f;
 import static engine.Chunk.getBlock;
 import static engine.Chunk.setBlock;
 import static engine.ItemEntity.createItem;
+import static engine.sound.SoundAPI.playSound;
 import static game.ChunkHandling.ChunkMesh.generateChunkMesh;
 import static game.Crafter.chunkRenderDistance;
 import static game.blocks.BlockDefinition.onDigCall;
@@ -38,7 +39,8 @@ public class Ray {
         if(finalPos != null) {
             if(mining) {
                 destroyBlock(finalPos);
-                soundMgr.playSoundSource(Crafter.Sounds.STONE.toString());
+//                soundMgr.playSoundSource(Crafter.Sounds.STONE.toString());
+                playSound("stone_1", finalPos);
             } else if (placing && lastPos != null){
 
                 setAABB(player.getPos().x, player.getPos().y, player.getPos().z, player.getWidth(), player.getHeight());
@@ -47,7 +49,8 @@ public class Ray {
 
                 if (!wouldCollidePlacing()) {
                     placeBlock(lastPos, (short) 8/*Math.ceil(Math.random() * 7)*/);
-                    soundMgr.playSoundSource(Crafter.Sounds.STONE.toString());
+//                    soundMgr.playSoundSource(Crafter.Sounds.STONE.toString());
+                    playSound("stone_1", finalPos);
                 }
             }
         } else if (debugTest){

@@ -10,6 +10,7 @@ import org.joml.Vector3f;
 import java.util.ArrayList;
 
 import static engine.FancyMath.*;
+import static engine.sound.SoundAPI.playSound;
 import static game.blocks.BlockDefinition.*;
 import static game.blocks.BlockDefinition.getBottomTexturePoints;
 import static game.collision.Collision.applyInertia;
@@ -52,7 +53,7 @@ public class ItemEntity {
 //        System.out.println("Created new Item. Total items: " + totalObjects);
     }
 
-    public static void onStep(SoundManager soundMgr){
+    public static void onStep(SoundManager soundMgr) throws Exception {
         for (int i = 0; i < totalObjects; i++){
             timer[i] += 0.001f;
 
@@ -66,7 +67,7 @@ public class ItemEntity {
                 assert thisPlayer != null;
                 if (getDistance(position[i], thisPlayer.getPosWithCollectionHeight()) < 3f){
                     if (collecting[i] == false){
-                        soundMgr.playSoundSource(Crafter.Sounds.PICKUP.toString());
+                        /*soundMgr.playSoundSource(*/playSound("pickup", position[i])/*Crafter.Sounds.PICKUP.toString())*/;
                     }
                     collecting[i] = true;
                     Vector3f normalizedPos = new Vector3f(thisPlayer.getPosWithCollectionHeight());

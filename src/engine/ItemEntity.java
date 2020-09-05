@@ -49,7 +49,7 @@ public class ItemEntity {
         scale[totalObjects] = 1f;
         timer[totalObjects] = 0f;
         totalObjects++;
-        System.out.println("Created new Item. Total items: " + totalObjects);
+//        System.out.println("Created new Item. Total items: " + totalObjects);
     }
 
     public static void onStep(SoundManager soundMgr){
@@ -142,7 +142,7 @@ public class ItemEntity {
         timer[totalObjects - 1] = 0;
 
         totalObjects -= 1;
-        System.out.println("An Item was Deleted. Remaining: " + totalObjects);
+//        System.out.println("An Item was Deleted. Remaining: " + totalObjects);
     }
 
     public static void clearItems(){

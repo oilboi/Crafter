@@ -8,33 +8,33 @@ public class Light {
 
     private static final byte debugLightLevel = 15;
 
-    public static void floodFill(int chunkX, int chunkZ) {
-
-        int x = 0;
-        int y = 127;
-        int z = 0;
-
-        byte thisLight = (byte) 15;
-
-        for ( int i = 0; i < (16 * 128 * 16); i++){
-
-            if(thisLight == (byte) 15 && getBlock(x, y, z, chunkX, chunkZ) != 0){
-                thisLight = (byte) 9;
-            }
-            setLight(x, y, z, chunkX, chunkZ, thisLight);
-
-            y--;
-            if( y < 0){
-                y = 127;
-                thisLight = (byte) 15;
-                x++;
-                if( x > 15 ){
-                    x = 0;
-                    z++;
-                }
-            }
-        }
-    }
+//    public static void floodFill(int chunkX, int chunkZ) {
+//
+//        int x = 0;
+//        int y = 127;
+//        int z = 0;
+//
+//        byte thisLight = (byte) 15;
+//
+//        for ( int i = 0; i < (16 * 128 * 16); i++){
+//
+//            if(thisLight == (byte) 15 && getBlock(x, y, z, chunkX, chunkZ) != 0){
+//                thisLight = (byte) 9;
+//            }
+//            setLight(x, y, z, chunkX, chunkZ, thisLight);
+//
+//            y--;
+//            if( y < 0){
+//                y = 127;
+//                thisLight = (byte) 15;
+//                x++;
+//                if( x > 15 ){
+//                    x = 0;
+//                    z++;
+//                }
+//            }
+//        }
+//    }
 
 ////        long startTime = System.nanoTime();
 //

@@ -10,7 +10,7 @@ import static engine.ItemEntity.createBlockObjectMesh;
 import static engine.ItemEntity.createItem;
 import static engine.TNTEntity.createTNT;
 import static game.ChunkHandling.ChunkMesh.generateChunkMesh;
-import static game.light.Light.floodFill;
+//import static game.light.Light.floodFill;
 import static game.player.TNT.boom;
 
 public class BlockDefinition {
@@ -201,8 +201,8 @@ public class BlockDefinition {
                     setBlock(currentPosX, y, currentPosZ, currentChunkX, currentChunkZ,7);
                 }
 
-                floodFill(currentChunkX, currentChunkZ);
-                generateChunkMesh(currentChunkX, currentChunkZ, true);
+//                floodFill(currentChunkX, currentChunkZ);
+//                generateChunkMesh(currentChunkX, currentChunkZ, true);
             }
         };
 
@@ -233,8 +233,8 @@ public class BlockDefinition {
                 int currentChunkX = (int) (Math.floor((float) pos.x / 16f));
                 int currentChunkZ = (int) (Math.floor((float) pos.z / 16f));
 
-                floodFill(currentChunkX, currentChunkZ);
-                generateChunkMesh(currentChunkX, currentChunkZ, true);
+//                floodFill(currentChunkX, currentChunkZ);
+//                generateChunkMesh(currentChunkX, currentChunkZ, true);
             }
         };
 

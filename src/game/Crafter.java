@@ -13,6 +13,8 @@ import org.lwjgl.openal.AL11;
 
 import static engine.Chunk.genBiome;
 import static engine.Chunk.initializeChunkHandler;
+import static engine.ChunkUpdateHandler.chunkUpdate;
+import static engine.ChunkUpdateHandler.chunkUpdater;
 import static engine.ItemEntity.clearItems;
 import static engine.TNTEntity.createTNTEntityMesh;
 import static game.ChunkHandling.ChunkMesh.generateChunkMesh;
@@ -21,7 +23,7 @@ import static org.lwjgl.glfw.GLFW.*;
 
 public class Crafter implements IGameLogic {
 
-    public static int chunkRenderDistance = 20;
+    public static int chunkRenderDistance = 1;
 
     private static final float MOUSE_SENSITIVITY = 0.009f;
 
@@ -99,6 +101,8 @@ public class Crafter implements IGameLogic {
         this.soundMgr.init();
         this.soundMgr.setAttenuationModel(AL11.AL_EXPONENT_DISTANCE);
         setupSounds();
+
+        chunkUpdate(0,0);
     }
 
     private void setupSounds() throws Exception {
@@ -256,6 +260,8 @@ public class Crafter implements IGameLogic {
         ItemEntity.onStep(soundMgr);
 
         TNTEntity.onTNTStep(soundMgr);
+
+        chunkUpdater();
 
 //        soundMgr.updateListenerPosition(camera);
     }

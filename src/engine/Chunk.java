@@ -1,6 +1,8 @@
 package engine;
 
 import engine.graph.Mesh;
+
+import static engine.ChunkUpdateHandler.chunkUpdate;
 import static game.Crafter.chunkRenderDistance;
 
 public class Chunk {
@@ -93,6 +95,8 @@ public class Chunk {
         }
 
         block[chunkX][chunkZ][y][x][z] = newBlock;
+        chunkUpdate(chunkX,chunkZ);
+        updateNeighbor(chunkX, chunkZ,x,y,z);
     }
 
     public static void setBlock(int x, int y, int z, int newBlock){
@@ -109,7 +113,10 @@ public class Chunk {
         if(y > 127 || y < 0){
             return;
         }
+
         block[currentChunkX][currentChunkZ][y][currentPosX][currentPosZ] = newBlock;
+        chunkUpdate(currentChunkX,currentChunkZ);
+        updateNeighbor(currentChunkX, currentChunkZ,x,y,z);
     }
 
     public static byte getLight(int x,int y,int z, int chunkX, int chunkZ){
@@ -148,6 +155,7 @@ public class Chunk {
         return light[chunkX][chunkZ][y][x][z];
     }
 
+
     public static void setLight(int x,int y,int z, int chunkX, int chunkZ, byte newLight){
         chunkX += chunkRenderDistance;
         chunkZ += chunkRenderDistance;
@@ -157,6 +165,30 @@ public class Chunk {
         }
 
         light[chunkX][chunkZ][y][x][z] = newLight;
+        chunkUpdate(chunkX,chunkZ);
+        updateNeighbor(chunkX, chunkZ,x,y,z);
+    }
+
+    private static void updateNeighbor(int chunkX, int chunkZ, int x, int y, int z){
+//        chunkX += chunkRenderDistance;
+//        chunkZ += chunkRenderDistance;
+
+        if (x == 15 && chunkX < limit){ //update neighbor
+//            floodFill(currentChunkX+1, currentChunkZ);
+            chunkUpdate(chunkX+1, chunkZ);
+        }
+        if (x == 0 && chunkX > 0){
+//            floodFill(currentChunkX-1, currentChunkZ);
+            chunkUpdate(chunkX-1, chunkZ);
+        }
+        if (z == 15&& chunkZ < limit){
+//            floodFill(currentChunkX, currentChunkZ+1);
+            chunkUpdate(chunkX, chunkZ+1);
+        }
+        if (z == 0 && chunkZ > 0){
+//            floodFill(currentChunkX, currentChunkZ-1);
+            chunkUpdate(chunkX, chunkZ-1);
+        }
     }
 
     private static FastNoise noise = new FastNoise();
@@ -196,11 +228,11 @@ public class Chunk {
 
             block[chunkX][chunkZ][y][x][z] = currBlock;
 
-            if (currBlock == 0) {
+//            if (currBlock == 0) {
                 light[chunkX][chunkZ][y][x][z] = 15;//0;
-            }else{
-                light[chunkX][chunkZ][y][x][z] = 0;
-            }
+//            }else{
+//                light[chunkX][chunkZ][y][x][z] = 0;
+//            }
 
             y--;
             if( y < 0){

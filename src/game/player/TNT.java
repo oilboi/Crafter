@@ -9,7 +9,7 @@ import static engine.FancyMath.getDistance;
 import static engine.ItemEntity.createItem;
 import static engine.TNTEntity.createTNT;
 import static game.ChunkHandling.ChunkMesh.generateChunkMesh;
-import static game.light.Light.floodFill;
+//import static game.light.Light.floodFill;
 
 public class TNT {
     private static int[][] chunkBuffer;
@@ -70,8 +70,8 @@ public class TNT {
         }
 
         for (int[] index : chunkBuffer) {
-            floodFill(index[0], index[1]);
-            generateChunkMesh(index[0], index[1], false);
+//            floodFill(index[0], index[1]);
+//            generateChunkMesh(index[0], index[1], false);
         }
     }
 }

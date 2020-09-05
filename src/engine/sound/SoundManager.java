@@ -27,10 +27,11 @@ public class SoundManager {
     private final Matrix4f cameraMatrix;
 
     private int currentIndex = 0;
+    private final int maxSounds = 64;
 
     public SoundManager(){
-        soundBufferList = new SoundBuffer[32];
-        soundSourceArray = new SoundSource[32];
+        soundBufferList = new SoundBuffer[maxSounds];
+        soundSourceArray = new SoundSource[maxSounds];
         cameraMatrix = new Matrix4f();
     }
 
@@ -70,7 +71,7 @@ public class SoundManager {
         this.soundSourceArray[currentIndex].play();
 
         currentIndex++;
-        if (currentIndex >= 32){
+        if (currentIndex >= maxSounds){
             currentIndex = 0;
         }
     }

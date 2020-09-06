@@ -10,7 +10,7 @@ public class ChunkUpdateHandler {
     private static int[] timers  = new int[0];
 
     public static void chunkUpdate( int x, int z ){
-
+//        System.out.println("Chunk update at: " + x + " " + z);
         boolean found = false;
         for (int i = 0; i < queue.length; i++){
             if (queue[i][0] == x && queue[i][1] == z) {
@@ -21,6 +21,7 @@ public class ChunkUpdateHandler {
         if (!found){
             addToQueue(x,z);
         }
+//        System.out.println("The new Array Size: " + Arrays.deepToString(queue));
     }
 
     private static void addToQueue(int x, int z){
@@ -45,15 +46,24 @@ public class ChunkUpdateHandler {
         }
         queue = newQueue.clone();
         timers = newTimers.clone();
+
+//        System.out.println("A queue item was deleted: " + Arrays.deepToString(queue));
     }
 
     public static void chunkUpdater() throws Exception {
+        int oldQueueLength = queue.length;
         for (int i = 0; i < queue.length; i++){
             timers[i] += 1;
-            if(timers[i] > 100){
+            if(timers[i] > 50){
+//                System.out.println("Generating chunk mesh: " + (queue[i][0]-chunkRenderDistance) + " " + (queue[i][1]-chunkRenderDistance));
                 generateChunkMesh(queue[i][0]-chunkRenderDistance, queue[i][1]-chunkRenderDistance, false);
                 removeFromQueue(i);
+                return;
             }
         }
+
+//        if (queue.length == 0 && oldQueueLength > 0) {
+//            System.out.println("------------------------------queue cleared");
+//        }
     }
 }

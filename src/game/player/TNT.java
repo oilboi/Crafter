@@ -44,10 +44,10 @@ public class TNT {
                         if(currentBlock != 5) {
                             setBlock(currentPosX, y, currentPosZ, currentChunkX, currentChunkZ, (short) 0);
                             //todo: make this an API callback!!
-                            /*if (currentBlock != 0 && currentBlock != 6 && Math.random() > 0.98) {
+                            if (currentBlock != 0 && currentBlock != 6 && Math.random() > 0.98) {
                                 createItem(currentBlock, new Vector3f(currentPosX+(currentChunkX*16), y, currentPosZ+(currentChunkZ*16)));
-                            } else */if (currentBlock == 6){
-                                createTNT(new Vector3f(x, y, z), (float)(Math.random()+Math.random()), false, soundMgr);
+                            } else if (currentBlock == 6){
+                                createTNT(new Vector3f(x, y, z), (float)(1f+Math.random()), false, soundMgr);
                             }
 
                         }

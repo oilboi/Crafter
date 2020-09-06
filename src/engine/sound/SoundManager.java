@@ -102,7 +102,9 @@ public class SoundManager {
 
     public void cleanup() {
         for (SoundSource soundSource : soundSourceArray) {
-            soundSource.cleanUp();
+            if (soundSource != null) {
+                soundSource.cleanUp();
+            }
         }
 
         soundSourceArray = null;
@@ -116,6 +118,7 @@ public class SoundManager {
         if (context != NULL) {
             alcDestroyContext(context);
         }
+
         if (device != NULL) {
             alcCloseDevice(device);
         }

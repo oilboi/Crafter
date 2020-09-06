@@ -46,7 +46,7 @@ public class Ray {
                 setBlockBox((int)lastPos.x,(int)lastPos.y,(int)lastPos.z);
 
                 if (!wouldCollidePlacing()) {
-                    placeBlock(lastPos, (short) 8/*Math.ceil(Math.random() * 7)*/);
+                    placeBlock(lastPos, (short) 6/*Math.ceil(Math.random() * 7)*/);
                 }
             }
         } else if (debugTest){

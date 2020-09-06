@@ -102,8 +102,8 @@ public class Chunk {
     public static void setBlock(int x, int y, int z, int newBlock){
         int currentChunkX = (int) (Math.floor((float) x / 16f));
         int currentChunkZ = (int) (Math.floor((float) z / 16f));
-        int currentPosX = (int) (x - (16 * currentChunkX));
-        int currentPosZ = (int) (z - (16 * currentChunkZ));
+        int currentPosX = x - (16 * currentChunkX);
+        int currentPosZ = z - (16 * currentChunkZ);
 
         currentChunkX += chunkRenderDistance;
         currentChunkZ += chunkRenderDistance;
@@ -170,23 +170,18 @@ public class Chunk {
     }
 
     private static void updateNeighbor(int chunkX, int chunkZ, int x, int y, int z){
-//        chunkX += chunkRenderDistance;
-//        chunkZ += chunkRenderDistance;
-
-        if (x == 15 && chunkX < limit){ //update neighbor
-//            floodFill(currentChunkX+1, currentChunkZ);
+        if (x == 15){ //update neighbor
             chunkUpdate(chunkX+1, chunkZ);
         }
-        if (x == 0 && chunkX > 0){
-//            floodFill(currentChunkX-1, currentChunkZ);
+
+        if (x == 0){
             chunkUpdate(chunkX-1, chunkZ);
         }
-        if (z == 15&& chunkZ < limit){
-//            floodFill(currentChunkX, currentChunkZ+1);
+
+        if (z == 15){
             chunkUpdate(chunkX, chunkZ+1);
         }
-        if (z == 0 && chunkZ > 0){
-//            floodFill(currentChunkX, currentChunkZ-1);
+        if (z == 0){
             chunkUpdate(chunkX, chunkZ-1);
         }
     }
@@ -219,10 +214,10 @@ public class Chunk {
             } else if (y < height - dirtHeight) {
                 currBlock = 3;
             } else {
-                if (y == waterHeight+1){
+                /*if (y == waterHeight+1){
                     currBlock = 6;
                 }
-                else if (y <= waterHeight){
+                else*/ if (y <= waterHeight){
                     currBlock = 7;
                 } else {
                     currBlock = 0;

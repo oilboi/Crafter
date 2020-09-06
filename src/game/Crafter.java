@@ -72,25 +72,16 @@ public class Crafter implements IGameLogic {
         //create the initial map in memory
         int x = -chunkRenderDistance;
         int z = -chunkRenderDistance;
-        for (int i = 0; i < ((chunkRenderDistance * 2) + 1) * ((chunkRenderDistance * 2) + 1); i++){
-            genBiome(x,z);
-            x++;
-            if (x > chunkRenderDistance){
-                x = -chunkRenderDistance;
-                z++;
+        for (x = -chunkRenderDistance; x <= chunkRenderDistance; x++){
+            for (z = -chunkRenderDistance; z<= chunkRenderDistance; z++){
+                genBiome(x,z);
             }
         }
 
-        //create the initial map in memory
-        x = -chunkRenderDistance;
-        z = -chunkRenderDistance;
-        for (int i = 0; i < ((chunkRenderDistance * 2) + 1) * ((chunkRenderDistance * 2) + 1); i++){
-            generateChunkMesh(x, z, false);
-            System.out.println(x + " " + z);
-            x++;
-            if (x > chunkRenderDistance){
-                x = -chunkRenderDistance;
-                z++;
+        for (x = -chunkRenderDistance; x <= chunkRenderDistance; x++){
+            for (z = -chunkRenderDistance; z<= chunkRenderDistance; z++){
+                generateChunkMesh(x, z, false);
+                System.out.println(x + " " + z);
             }
         }
         player = new Player("singleplayer");
@@ -161,7 +152,7 @@ public class Crafter implements IGameLogic {
         if (window.isKeyPressed(GLFW_KEY_R)) {
             if (!rButtonPushed) {
                 rButtonPushed = true;
-                player.setPos(new Vector3f(0,129,0));
+                player.setPos(new Vector3f(-48,57,-128));
 
                 if (Math.random() == 0.0001f){
                     System.out.println("Hey, Ben!");

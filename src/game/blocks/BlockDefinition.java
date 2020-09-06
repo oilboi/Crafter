@@ -208,7 +208,6 @@ public class BlockDefinition {
         BlockModifier kaboom = new BlockModifier() {
             @Override
             public void onDig(Vector3f pos) throws Exception {
-                //boom((int)pos.x, (int)pos.y, (int)pos.z, 5);
                 createTNT(pos, 0, true, soundMgr);
             }
         };
@@ -225,7 +224,7 @@ public class BlockDefinition {
                 new int[]{9,0},  //bottom
                 true,
                 kaboom,
-                "wood_1",
+                "dirt_1",
                 "wood_2"
         );
 
@@ -241,9 +240,6 @@ public class BlockDefinition {
                 for(int y = 0; y < 128; y++){
                     setBlock(currentPosX, y, currentPosZ, currentChunkX, currentChunkZ,7);
                 }
-
-//                floodFill(currentChunkX, currentChunkZ);
-//                generateChunkMesh(currentChunkX, currentChunkZ, true);
             }
         };
 
@@ -272,12 +268,6 @@ public class BlockDefinition {
                 for(int y = 0; y < 128; y++){
                     setBlock((int)pos.x, y, (int)pos.z,6);
                 }
-
-                int currentChunkX = (int) (Math.floor((float) pos.x / 16f));
-                int currentChunkZ = (int) (Math.floor((float) pos.z / 16f));
-
-//                floodFill(currentChunkX, currentChunkZ);
-//                generateChunkMesh(currentChunkX, currentChunkZ, true);
             }
         };
 

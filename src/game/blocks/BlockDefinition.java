@@ -259,32 +259,132 @@ public class BlockDefinition {
                 ""
         );
 
-
-        //water thing
-        BlockModifier uhOh = new BlockModifier() {
-            @Override
-            public void onPlace(Vector3f pos) throws Exception {
-
-                for(int y = 0; y < 128; y++){
-                    setBlock((int)pos.x, y, (int)pos.z,6);
-                }
-            }
-        };
-
         new BlockDefinition(
                 8,
-                "flarg",
+                "coal ore",
                 true,
-                new int[]{1,0}, //front
-                new int[]{4,0}, //back
-                new int[]{2,0}, //right
-                new int[]{6,0}, //left
-                new int[]{7,0}, //top
-                new int[]{3,0},  //bottom
+                new int[]{11,0}, //front
+                new int[]{11,0}, //back
+                new int[]{11,0}, //right
+                new int[]{11,0}, //left
+                new int[]{11,0}, //top
+                new int[]{11,0},  //bottom
                 true,
-                uhOh,
-                "dirt_1",
-                "dirt_2"
+                null,
+                "stone_1",
+                "stone_2"
+        );
+
+        new BlockDefinition(
+                9,
+                "iron ore",
+                true,
+                new int[]{12,0}, //front
+                new int[]{12,0}, //back
+                new int[]{12,0}, //right
+                new int[]{12,0}, //left
+                new int[]{12,0}, //top
+                new int[]{12,0},  //bottom
+                true,
+                null,
+                "stone_1",
+                "stone_2"
+        );
+
+        new BlockDefinition(
+                10,
+                "gold ore",
+                true,
+                new int[]{13,0}, //front
+                new int[]{13,0}, //back
+                new int[]{13,0}, //right
+                new int[]{13,0}, //left
+                new int[]{13,0}, //top
+                new int[]{13,0},  //bottom
+                true,
+                null,
+                "stone_1",
+                "stone_2"
+        );
+
+        new BlockDefinition(
+                11,
+                "diamond ore",
+                true,
+                new int[]{14,0}, //front
+                new int[]{14,0}, //back
+                new int[]{14,0}, //right
+                new int[]{14,0}, //left
+                new int[]{14,0}, //top
+                new int[]{14,0},  //bottom
+                true,
+                null,
+                "stone_1",
+                "stone_2"
+        );
+
+        new BlockDefinition(
+                12,
+                "emerald ore",
+                true,
+                new int[]{15,0}, //front
+                new int[]{15,0}, //back
+                new int[]{15,0}, //right
+                new int[]{15,0}, //left
+                new int[]{15,0}, //top
+                new int[]{15,0},  //bottom
+                true,
+                null,
+                "stone_1",
+                "stone_2"
+        );
+
+        new BlockDefinition(
+                13,
+                "lapis lazuli",
+                true,
+                new int[]{16,0}, //front
+                new int[]{16,0}, //back
+                new int[]{16,0}, //right
+                new int[]{16,0}, //left
+                new int[]{16,0}, //top
+                new int[]{16,0},  //bottom
+                true,
+                null,
+                "stone_1",
+                "stone_2"
+        );
+
+        new BlockDefinition(
+                14,
+                "sapphire ore",
+                true,
+                new int[]{17,0}, //front
+                new int[]{17,0}, //back
+                new int[]{17,0}, //right
+                new int[]{17,0}, //left
+                new int[]{17,0}, //top
+                new int[]{17,0},  //bottom
+                true,
+                null,
+                "stone_1",
+                "stone_2"
+        );
+
+        new BlockDefinition(
+                15,
+                "ruby ore",
+                true,
+                new int[]{18,0}, //front
+                new int[]{18,0}, //back
+                new int[]{18,0}, //right
+                new int[]{18,0}, //left
+                new int[]{18,0}, //top
+                new int[]{18,0},  //bottom
+                true,
+                null,
+                "stone_1",
+                "stone_2"
         );
     }
 

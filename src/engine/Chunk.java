@@ -211,13 +211,18 @@ public class Chunk {
                 currBlock = 2;
             } else if (y < height && y >= height - dirtHeight) {
                 currBlock = 1;
-            } else if (y < height - dirtHeight) {
-                currBlock = 3;
-            } else {
-                /*if (y == waterHeight+1){
-                    currBlock = 6;
+            } else if (y < height - dirtHeight) { //TODO: stone level
+                if (y <= 30 && y > 0){
+                    if (Math.random() > 0.95){
+                        currBlock = (short) Math.floor(8+(Math.random() * 8));
+                    } else {
+                        currBlock = 3;
+                    }
+                } else {
+                    currBlock = 3;
                 }
-                else*/ if (y <= waterHeight){
+            } else {
+                if (y <= waterHeight){
                     currBlock = 7;
                 } else {
                     currBlock = 0;

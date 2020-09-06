@@ -110,7 +110,9 @@ public class SoundManager {
         soundSourceArray = null;
 
         for (SoundBuffer soundBuffer : soundBufferList) {
-            soundBuffer.cleanUp();
+            if (soundBuffer != null) {
+                soundBuffer.cleanUp();
+            }
         }
 
         soundBufferList = null;

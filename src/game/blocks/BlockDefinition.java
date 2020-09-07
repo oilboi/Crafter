@@ -3,20 +3,19 @@ package game.blocks;
 import engine.sound.SoundManager;
 import org.joml.Vector3f;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import static engine.Chunk.setBlock;
 import static engine.ItemEntity.createBlockObjectMesh;
 import static engine.ItemEntity.createItem;
 import static engine.TNTEntity.createTNT;
 import static engine.sound.SoundAPI.playSound;
-import static game.ChunkHandling.ChunkMesh.generateChunkMesh;
-//import static game.light.Light.floodFill;
-import static game.player.TNT.boom;
 
 public class BlockDefinition {
 
     private final static BlockDefinition[] blockIDs = new BlockDefinition[256];
+    private static Map<String, BlockShape> blockShapeMap = new HashMap<>();
 
     //fixed fields for the class
     private static final byte atlasSizeX = 32;
@@ -32,11 +31,11 @@ public class BlockDefinition {
     private final float[] leftTexture;   //left
     private final float[] topTexture;    //top
     private final float[] bottomTexture; //bottom
+    private final boolean walkable;
+    private final String  thisBlockShape;
     private final String placeSound;
     private final String digSound;
-
     private final BlockModifier blockModifier;
-
 
     private BlockDefinition(
             int ID,String name,
@@ -47,6 +46,7 @@ public class BlockDefinition {
             int[] left,
             int[] top,
             int[] bottom,
+            String thisBlockShape,
             boolean walkable,
             BlockModifier blockModifier,
             String placeSound,
@@ -62,6 +62,8 @@ public class BlockDefinition {
         this.leftTexture   = calculateTexture(   left[0],   left[1] );
         this.topTexture    = calculateTexture(    top[0],    top[1] );
         this.bottomTexture = calculateTexture( bottom[0], bottom[1] );
+        this.thisBlockShape = thisBlockShape;
+        this.walkable = walkable;
         this.blockModifier = blockModifier;
         this.placeSound = placeSound;
         this.digSound = digSound;
@@ -105,7 +107,24 @@ public class BlockDefinition {
         return texturePoints;
     }
 
+    public static float[][] getBlockShape(int ID){
+        return blockShapeMap.get(blockIDs[ID].thisBlockShape).getBoxes();
+    }
+
+    public static boolean isWalkable(int ID){
+        return blockIDs[ID].walkable;
+    }
+
     public static void initializeBlocks(SoundManager soundMgr) throws Exception {
+
+        blockShapeMap.put("air",
+                new BlockShape(new float[][]{{0f,0f,0f,1f,1f,1f}})
+        );
+
+        blockShapeMap.put("normal",
+                new BlockShape(new float[][]{{0f,0f,0f,1f,1f,1f}})
+        );
+
 
         new BlockDefinition(
                 0,
@@ -117,6 +136,7 @@ public class BlockDefinition {
                 new int[]{-1,-1}, //left
                 new int[]{-1,-1}, //top
                 new int[]{-1,-1},  //bottom
+                "normal",
                 false,
                 null,
                 "",
@@ -133,6 +153,7 @@ public class BlockDefinition {
                 new int[]{0,0}, //left
                 new int[]{0,0}, //top
                 new int[]{0,0},  //bottom
+                "normal",
                 true,
                 null,
                 "dirt_1",
@@ -149,6 +170,7 @@ public class BlockDefinition {
                 new int[]{5,0}, //left
                 new int[]{4,0}, //top
                 new int[]{0,0},  //bottom
+                "normal",
                 true,
                 null,
                 "dirt_1",
@@ -165,6 +187,7 @@ public class BlockDefinition {
                 new int[]{1,0}, //left
                 new int[]{1,0}, //top
                 new int[]{1,0},  //bottom
+                "normal",
                 true,
                 null,
                 "stone_1",
@@ -181,6 +204,7 @@ public class BlockDefinition {
                 new int[]{2,0}, //left
                 new int[]{2,0}, //top
                 new int[]{2,0},  //bottom
+                "normal",
                 true,
                 null,
                 "stone_3",
@@ -197,6 +221,7 @@ public class BlockDefinition {
                 new int[]{6,0}, //left
                 new int[]{6,0}, //top
                 new int[]{6,0},  //bottom
+                "normal",
                 true,
                 null,
                 "stone_1",
@@ -222,6 +247,7 @@ public class BlockDefinition {
                 new int[]{7,0}, //left
                 new int[]{8,0}, //top
                 new int[]{9,0},  //bottom
+                "normal",
                 true,
                 kaboom,
                 "dirt_1",
@@ -253,6 +279,7 @@ public class BlockDefinition {
                 new int[]{10,0}, //left
                 new int[]{10,0}, //top
                 new int[]{10,0},  //bottom
+                "normal",
                 true,
                 splash,
                 "",
@@ -269,6 +296,7 @@ public class BlockDefinition {
                 new int[]{11,0}, //left
                 new int[]{11,0}, //top
                 new int[]{11,0},  //bottom
+                "normal",
                 true,
                 null,
                 "stone_1",
@@ -285,6 +313,7 @@ public class BlockDefinition {
                 new int[]{12,0}, //left
                 new int[]{12,0}, //top
                 new int[]{12,0},  //bottom
+                "normal",
                 true,
                 null,
                 "stone_1",
@@ -301,6 +330,7 @@ public class BlockDefinition {
                 new int[]{13,0}, //left
                 new int[]{13,0}, //top
                 new int[]{13,0},  //bottom
+                "normal",
                 true,
                 null,
                 "stone_1",
@@ -317,6 +347,7 @@ public class BlockDefinition {
                 new int[]{14,0}, //left
                 new int[]{14,0}, //top
                 new int[]{14,0},  //bottom
+                "normal",
                 true,
                 null,
                 "stone_1",
@@ -333,6 +364,7 @@ public class BlockDefinition {
                 new int[]{15,0}, //left
                 new int[]{15,0}, //top
                 new int[]{15,0},  //bottom
+                "normal",
                 true,
                 null,
                 "stone_1",
@@ -349,6 +381,7 @@ public class BlockDefinition {
                 new int[]{16,0}, //left
                 new int[]{16,0}, //top
                 new int[]{16,0},  //bottom
+                "normal",
                 true,
                 null,
                 "stone_1",
@@ -365,6 +398,7 @@ public class BlockDefinition {
                 new int[]{17,0}, //left
                 new int[]{17,0}, //top
                 new int[]{17,0},  //bottom
+                "normal",
                 true,
                 null,
                 "stone_1",
@@ -381,6 +415,7 @@ public class BlockDefinition {
                 new int[]{18,0}, //left
                 new int[]{18,0}, //top
                 new int[]{18,0},  //bottom
+                "normal",
                 true,
                 null,
                 "stone_1",

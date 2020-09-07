@@ -2,7 +2,11 @@ package game.collision;
 
 import org.joml.Vector3f;
 
+import java.util.Arrays;
+
 import static engine.Chunk.getBlock;
+import static game.blocks.BlockDefinition.getBlockShape;
+import static game.blocks.BlockDefinition.isWalkable;
 import static game.collision.CollisionMath.floorPos;
 import static game.collision.CustomAABB.*;
 import static game.collision.CustomBlockBox.*;
@@ -75,6 +79,10 @@ public class Collision {
                 case 0:
                     for (x = -1; x <= 1; x++) {
                         for (z = -1; z <= 1; z++) {
+                            if (isWalkable(debugDetectBlock(new Vector3f(fPos.x + x, y, fPos.z + z)))) {
+                                System.out.println(Arrays.deepToString(getBlockShape(debugDetectBlock(new Vector3f(fPos.x + x, y, fPos.z + z)))));
+                            }
+
                             if (detectBlock(new Vector3f(fPos.x + x, y, fPos.z + z))) {
                                 onGround = collideYNegative((int) fPos.x + x, y, (int) fPos.z + z, pos, inertia, width, height, onGround);
                             }
@@ -297,6 +305,13 @@ public class Collision {
         int currentChunkZ = (int)(Math.floor(flooredPos.z / 16f));
         Vector3f realPos = new Vector3f(flooredPos.x - (16*currentChunkX), flooredPos.y, flooredPos.z - (16*currentChunkZ));
         return getBlock((int)realPos.x, (int)realPos.y, (int)realPos.z, currentChunkX, currentChunkZ) != 0;
+    }
+
+    private static int debugDetectBlock(Vector3f flooredPos){
+        int currentChunkX = (int)(Math.floor(flooredPos.x / 16f));
+        int currentChunkZ = (int)(Math.floor(flooredPos.z / 16f));
+        Vector3f realPos = new Vector3f(flooredPos.x - (16*currentChunkX), flooredPos.y, flooredPos.z - (16*currentChunkZ));
+        return getBlock((int)realPos.x, (int)realPos.y, (int)realPos.z, currentChunkX, currentChunkZ);
     }
 
 

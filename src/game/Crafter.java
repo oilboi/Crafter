@@ -194,6 +194,8 @@ public class Crafter implements IGameLogic {
     @Override
     public void update(float interval, MouseInput mouseInput) throws Exception {
 
+        chunkUpdater();
+
         camera.setPosition(player.getPosWithEyeHeight().x, player.getPosWithEyeHeight().y, player.getPosWithEyeHeight().z);
         camera.movePosition(player.getViewBobbing().x,player.getViewBobbing().y, player.getViewBobbing().z);
 
@@ -223,9 +225,6 @@ public class Crafter implements IGameLogic {
         ItemEntity.onStep(soundMgr);
 
         TNTEntity.onTNTStep(soundMgr);
-
-        chunkUpdater();
-
     }
 
     @Override

@@ -299,9 +299,9 @@ public class Player {
         } else if (placing && placeTimer <= 0){
             rayCast(camera.getPosition(), camera.getRotationVector(), 4f, false, true, this, false, soundMgr);
             placeTimer = 0.5f;
-        } /*else if (mining) {
-            rayCast(camera.getPosition(), camera.getRotationVector(), 4f, false, false, this, true);
-        }*/
+        } else if (mining) {
+            rayCast(camera.getPosition(), camera.getRotationVector(), 4f, false, false, this, true, soundMgr);
+        }
 
         oldPos = new Vector3f(pos);
 

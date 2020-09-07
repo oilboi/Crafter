@@ -14,9 +14,6 @@ import static game.collision.CustomBlockBox.*;
 public class Collision {
     final private static float gameSpeed = 0.001f;
 
-    //here for caching
-    private static int cachedBlock;
-
     public static boolean applyInertia(Vector3f pos, Vector3f inertia, boolean onGround, float width, float height, boolean gravity, boolean sneaking, boolean applyCollision){
 
         if(gravity && !sneaking) {
@@ -53,6 +50,8 @@ public class Collision {
     private static Vector3f fPos;
     private static boolean onGround;
     private static int x,y,z;
+    private static int cachedBlock;
+    private static Vector3f cachedPos = new Vector3f(0,0,0);
 
     private static boolean collisionDetect(Vector3f pos, Vector3f inertia, float width, float height){
         onGround = false;
@@ -83,10 +82,16 @@ public class Collision {
                 case 0:
                     for (x = -1; x <= 1; x++) {
                         for (z = -1; z <= 1; z++) {
-                            cachedBlock = detectBlock(new Vector3f(fPos.x + x, y, fPos.z + z));
-                            if (isWalkable(cachedBlock)) {
-                                System.out.println(Arrays.deepToString(getBlockShape(cachedBlock)));
-                            }
+                            cachedPos.x = fPos.x + x;
+                            cachedPos.y = y;
+                            cachedPos.z = fPos.z + z;
+
+                            cachedBlock = detectBlock(cachedPos);
+
+//                            if (isWalkable(cachedBlock)) {
+//                                System.out.println(Arrays.deepToString(getBlockShape(cachedBlock)));
+//                            }
+
                             if (isWalkable(cachedBlock)) {
                                 onGround = collideYNegative((int) fPos.x + x, y, (int) fPos.z + z, pos, inertia, width, height, onGround);
                             }
@@ -96,7 +101,11 @@ public class Collision {
                 case 1:
                     for (x = -1; x <= 1; x++) {
                         for (z = -1; z <= 1; z++) {
-                            cachedBlock = detectBlock(new Vector3f(fPos.x + x, y, fPos.z + z));
+                            cachedPos.x = fPos.x + x;
+                            cachedPos.y = y;
+                            cachedPos.z = fPos.z + z;
+                            cachedBlock = detectBlock(cachedPos);
+
                             if (isWalkable(cachedBlock)) {
                                 collideYPositive((int) fPos.x + x, y, (int) fPos.z + z, pos, inertia, width, height);
                             }
@@ -134,7 +143,12 @@ public class Collision {
                 case 1:
                     for (float yy = 0; yy <= height; yy = yy + 0.5f) {
                         for (z = -1; z <= 1; z++) {
-                            cachedBlock = detectBlock(floorPos(new Vector3f(x, yy + pos.y, fPos.z + z)));
+                            cachedPos.x = x;
+                            cachedPos.y = yy + pos.y;
+                            cachedPos.z = fPos.z + z;
+
+                            cachedBlock = detectBlock(floorPos(cachedPos));
+
                             if (isWalkable(cachedBlock)) {
                                 collideXPositive(x, (int)(yy + pos.y), (int) fPos.z + z, pos, inertia, width, height);
                             }
@@ -144,7 +158,12 @@ public class Collision {
                 case 0:
                     for (float yy = 0; yy <= height; yy = yy + 0.5f) {
                         for (z = -1; z <= 1; z++) {
-                            cachedBlock = detectBlock(floorPos(new Vector3f(x, yy + pos.y, fPos.z + z)));
+                            cachedPos.x = x;
+                            cachedPos.y = yy + pos.y;
+                            cachedPos.z = fPos.z + z;
+
+                            cachedBlock = detectBlock(floorPos(cachedPos));
+
                             if (isWalkable(cachedBlock)) {
                                 collideXNegative(x, (int)(yy + pos.y), (int) fPos.z + z, pos, inertia, width, height);
                             }
@@ -183,7 +202,10 @@ public class Collision {
                 case 1:
                     for (float yy = 0; yy <= height; yy = yy + 0.5f) {
                         for (x = -1; x <= 1; x++) {
-                            cachedBlock = detectBlock(floorPos(new Vector3f(fPos.x + x, yy + pos.y, z)));
+                            cachedPos.x = fPos.x + x;
+                            cachedPos.y = yy + pos.y;
+                            cachedPos.z = z;
+                            cachedBlock = detectBlock(floorPos(cachedPos));
                             if (isWalkable(cachedBlock)) {
                                 collideZPositive((int)fPos.x + x, (int)(yy + pos.y), z, pos, inertia, width, height);
                             }
@@ -193,7 +215,10 @@ public class Collision {
                 case 0:
                     for (float yy = 0; yy <= height; yy = yy + 0.5f) {
                         for (x = -1; x <= 1; x++) {
-                            cachedBlock = detectBlock(floorPos(new Vector3f(fPos.x + x, yy + pos.y, z)));
+                            cachedPos.x = fPos.x + x;
+                            cachedPos.y = yy + pos.y;
+                            cachedPos.z = z;
+                            cachedBlock = detectBlock(floorPos(cachedPos));
                             if (isWalkable(cachedBlock)) {
                                 collideZNegative((int)fPos.x + x, (int)(yy + pos.y), z, pos, inertia, width, height);
                             }

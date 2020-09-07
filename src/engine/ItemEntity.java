@@ -50,7 +50,7 @@ public class ItemEntity {
         scale[totalObjects] = 1f;
         timer[totalObjects] = 0f;
         totalObjects++;
-//        System.out.println("Created new Item. Total items: " + totalObjects);
+        System.out.println("Created new Item. Total items: " + totalObjects);
     }
 
     public static void onStep(SoundManager soundMgr) throws Exception {

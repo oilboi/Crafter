@@ -84,27 +84,6 @@ public class Ray {
 
         setBlock((int)realPos.x, (int)realPos.y, (int)realPos.z, currentChunkX, currentChunkZ, (short) 0);
 
-//        floodFill(currentChunkX, currentChunkZ);
-//
-//        generateChunkMesh(currentChunkX, currentChunkZ, true);
-//
-//        if (chunkPosX == 15 && currentChunkX < chunkRenderDistance){ //update neighbor
-////            floodFill(currentChunkX+1, currentChunkZ);
-//            generateChunkMesh(currentChunkX+1, currentChunkZ, true);
-//        }
-//        if (chunkPosX == 0 && currentChunkX > -chunkRenderDistance){
-////            floodFill(currentChunkX-1, currentChunkZ);
-//            generateChunkMesh(currentChunkX-1, currentChunkZ, true);
-//        }
-//        if (chunkPosZ == 15&& currentChunkZ < chunkRenderDistance){
-////            floodFill(currentChunkX, currentChunkZ+1);
-//            generateChunkMesh(currentChunkX, currentChunkZ+1, true);
-//        }
-//        if (chunkPosZ == 0 && currentChunkZ > -chunkRenderDistance){
-////            floodFill(currentChunkX, currentChunkZ-1);
-//            generateChunkMesh(currentChunkX, currentChunkZ-1, true);
-//        }
-
         onDigCall(thisBlock, flooredPos);
     }
     private static void placeBlock(Vector3f flooredPos, short ID) throws Exception {
@@ -116,28 +95,6 @@ public class Ray {
         Vector3f realPos = new Vector3f(chunkPosX, flooredPos.y, chunkPosZ);
 
         setBlock((int)realPos.x, (int)realPos.y, (int)realPos.z, currentChunkX, currentChunkZ, ID);
-
-//        floodFill(currentChunkX, currentChunkZ);
-
-//        generateChunkMesh(currentChunkX, currentChunkZ, true);
-
-
-//        if (chunkPosX == 15){ //update neighbor
-////            floodFill(currentChunkX+1, currentChunkZ);
-//            generateChunkMesh(currentChunkX+1, currentChunkZ, true);
-//        }
-//        if (chunkPosX == 0){
-////            floodFill(currentChunkX-1, currentChunkZ);
-//            generateChunkMesh(currentChunkX-1, currentChunkZ, true);
-//        }
-//        if (chunkPosZ == 15){
-////            floodFill(currentChunkX, currentChunkZ+1);
-//            generateChunkMesh(currentChunkX, currentChunkZ+1, true);
-//        }
-//        if (chunkPosZ == 0){
-////            floodFill(currentChunkX, currentChunkZ-1);
-//            generateChunkMesh(currentChunkX, currentChunkZ-1, true);
-//        }
 
         onPlaceCall(ID, flooredPos);
     }

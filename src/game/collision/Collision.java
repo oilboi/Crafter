@@ -13,6 +13,10 @@ import static game.collision.CustomBlockBox.*;
 
 public class Collision {
     final private static float gameSpeed = 0.001f;
+
+    //here for caching
+    private static int cachedBlock;
+
     public static boolean applyInertia(Vector3f pos, Vector3f inertia, boolean onGround, float width, float height, boolean gravity, boolean sneaking, boolean applyCollision){
 
         if(gravity && !sneaking) {
@@ -79,11 +83,11 @@ public class Collision {
                 case 0:
                     for (x = -1; x <= 1; x++) {
                         for (z = -1; z <= 1; z++) {
-                            if (isWalkable(debugDetectBlock(new Vector3f(fPos.x + x, y, fPos.z + z)))) {
-                                System.out.println(Arrays.deepToString(getBlockShape(debugDetectBlock(new Vector3f(fPos.x + x, y, fPos.z + z)))));
+                            cachedBlock = detectBlock(new Vector3f(fPos.x + x, y, fPos.z + z));
+                            if (isWalkable(cachedBlock)) {
+                                System.out.println(Arrays.deepToString(getBlockShape(cachedBlock)));
                             }
-
-                            if (detectBlock(new Vector3f(fPos.x + x, y, fPos.z + z))) {
+                            if (isWalkable(cachedBlock)) {
                                 onGround = collideYNegative((int) fPos.x + x, y, (int) fPos.z + z, pos, inertia, width, height, onGround);
                             }
                         }
@@ -92,7 +96,8 @@ public class Collision {
                 case 1:
                     for (x = -1; x <= 1; x++) {
                         for (z = -1; z <= 1; z++) {
-                            if (detectBlock(new Vector3f(fPos.x + x, y, fPos.z + z))) {
+                            cachedBlock = detectBlock(new Vector3f(fPos.x + x, y, fPos.z + z));
+                            if (isWalkable(cachedBlock)) {
                                 collideYPositive((int) fPos.x + x, y, (int) fPos.z + z, pos, inertia, width, height);
                             }
                         }
@@ -129,7 +134,8 @@ public class Collision {
                 case 1:
                     for (float yy = 0; yy <= height; yy = yy + 0.5f) {
                         for (z = -1; z <= 1; z++) {
-                            if (detectBlock(floorPos(new Vector3f(x, yy + pos.y, fPos.z + z)))) {
+                            cachedBlock = detectBlock(floorPos(new Vector3f(x, yy + pos.y, fPos.z + z)));
+                            if (isWalkable(cachedBlock)) {
                                 collideXPositive(x, (int)(yy + pos.y), (int) fPos.z + z, pos, inertia, width, height);
                             }
                         }
@@ -138,7 +144,8 @@ public class Collision {
                 case 0:
                     for (float yy = 0; yy <= height; yy = yy + 0.5f) {
                         for (z = -1; z <= 1; z++) {
-                            if (detectBlock(floorPos(new Vector3f(x, yy + pos.y, fPos.z + z)))) {
+                            cachedBlock = detectBlock(floorPos(new Vector3f(x, yy + pos.y, fPos.z + z)));
+                            if (isWalkable(cachedBlock)) {
                                 collideXNegative(x, (int)(yy + pos.y), (int) fPos.z + z, pos, inertia, width, height);
                             }
                         }
@@ -176,7 +183,8 @@ public class Collision {
                 case 1:
                     for (float yy = 0; yy <= height; yy = yy + 0.5f) {
                         for (x = -1; x <= 1; x++) {
-                            if (detectBlock(floorPos(new Vector3f(fPos.x + x, yy + pos.y, z)))) {
+                            cachedBlock = detectBlock(floorPos(new Vector3f(fPos.x + x, yy + pos.y, z)));
+                            if (isWalkable(cachedBlock)) {
                                 collideZPositive((int)fPos.x + x, (int)(yy + pos.y), z, pos, inertia, width, height);
                             }
                         }
@@ -185,7 +193,8 @@ public class Collision {
                 case 0:
                     for (float yy = 0; yy <= height; yy = yy + 0.5f) {
                         for (x = -1; x <= 1; x++) {
-                            if (detectBlock(floorPos(new Vector3f(fPos.x + x, yy + pos.y, z)))) {
+                            cachedBlock = detectBlock(floorPos(new Vector3f(fPos.x + x, yy + pos.y, z)));
+                            if (isWalkable(cachedBlock)) {
                                 collideZNegative((int)fPos.x + x, (int)(yy + pos.y), z, pos, inertia, width, height);
                             }
                         }
@@ -300,14 +309,7 @@ public class Collision {
                  AABBGetBack() < BlockBoxGetFront());
     }
 
-    private static boolean detectBlock(Vector3f flooredPos){
-        int currentChunkX = (int)(Math.floor(flooredPos.x / 16f));
-        int currentChunkZ = (int)(Math.floor(flooredPos.z / 16f));
-        Vector3f realPos = new Vector3f(flooredPos.x - (16*currentChunkX), flooredPos.y, flooredPos.z - (16*currentChunkZ));
-        return getBlock((int)realPos.x, (int)realPos.y, (int)realPos.z, currentChunkX, currentChunkZ) != 0;
-    }
-
-    private static int debugDetectBlock(Vector3f flooredPos){
+    private static int detectBlock(Vector3f flooredPos){
         int currentChunkX = (int)(Math.floor(flooredPos.x / 16f));
         int currentChunkZ = (int)(Math.floor(flooredPos.z / 16f));
         Vector3f realPos = new Vector3f(flooredPos.x - (16*currentChunkX), flooredPos.y, flooredPos.z - (16*currentChunkZ));

@@ -4,14 +4,13 @@ public class CustomBlockBox {
 
     private static float[] aabb = new float[6];
 
-    public static void setBlockBox(int x, int y, int z){
-
-        aabb[0] = (float)x;
-        aabb[1] = (float)y;
-        aabb[2] = (float)z;
-        aabb[3] = x+1f;
-        aabb[4] = y+1f;
-        aabb[5] = z+1f;
+    public static void setBlockBox(int x, int y, int z, float[] blockBox){
+        aabb[0] = x + blockBox[0];
+        aabb[1] = y + blockBox[1];
+        aabb[2] = z + blockBox[2];
+        aabb[3] = x + blockBox[3];
+        aabb[4] = y + blockBox[4];
+        aabb[5] = z + blockBox[5];
 
     }
 

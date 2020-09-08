@@ -9,8 +9,7 @@ import static engine.ItemEntity.createItem;
 import static engine.sound.SoundAPI.playSound;
 import static game.ChunkHandling.ChunkMesh.generateChunkMesh;
 import static game.Crafter.chunkRenderDistance;
-import static game.blocks.BlockDefinition.onDigCall;
-import static game.blocks.BlockDefinition.onPlaceCall;
+import static game.blocks.BlockDefinition.*;
 import static game.collision.Collision.wouldCollidePlacing;
 import static game.collision.CustomAABB.setAABB;
 import static game.collision.CustomBlockBox.setBlockBox;
@@ -42,10 +41,10 @@ public class Ray {
 
                 setAABB(player.getPos().x, player.getPos().y, player.getPos().z, player.getWidth(), player.getHeight());
 
-                setBlockBox((int)lastPos.x,(int)lastPos.y,(int)lastPos.z);
+                setBlockBox((int)lastPos.x,(int)lastPos.y,(int)lastPos.z, getBlockShape(1)[0]);
 
                 if (!wouldCollidePlacing()) {
-                    placeBlock(lastPos, (short) 17)/*Math.floor(8+(Math.random() * 8)))*/;
+                    placeBlock(lastPos, (short)(16 + (Math.random() * 2)))/*Math.floor(8+(Math.random() * 8)))*/;
                 }
             }
         } else if (debugTest){

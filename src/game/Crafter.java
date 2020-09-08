@@ -72,14 +72,15 @@ public class Crafter implements IGameLogic {
         createTNTEntityMesh();
 
         //create the initial map in memory
-        int x = -chunkRenderDistance;
-        int z = -chunkRenderDistance;
+        int x;
+        int z;
         for (x = -chunkRenderDistance; x <= chunkRenderDistance; x++){
             for (z = -chunkRenderDistance; z<= chunkRenderDistance; z++){
                 genBiome(x,z);
             }
         }
 
+        //create chunk meshes
         for (x = -chunkRenderDistance; x <= chunkRenderDistance; x++){
             for (z = -chunkRenderDistance; z<= chunkRenderDistance; z++){
                 generateChunkMesh(x, z, false);

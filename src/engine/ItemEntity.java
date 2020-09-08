@@ -19,6 +19,8 @@ import static game.player.Player.getPlayer;
 public class ItemEntity {
     private final static float itemSize   = 0.2f;
     public final static int MAX_ID_AMOUNT = 126_000;
+    private static Texture textureAtlas;
+
     private static int totalObjects       = 0;
     //TODO: pseudo object holder
     private static Mesh[] meshStorage  =     new Mesh[MAX_ID_AMOUNT];
@@ -131,7 +133,6 @@ public class ItemEntity {
             hover[i] = hover[i+1];
         }
 
-
         thisMeshID[totalObjects - 1] = 0;
         position[totalObjects - 1] = null;
         inertia[totalObjects - 1] = null;
@@ -201,6 +202,10 @@ public class ItemEntity {
 
     public static Mesh getMesh(int ID){
         return meshStorage[thisMeshID[ID]];
+    }
+
+    public static void initializeItemTextureAtlas() throws Exception {
+        textureAtlas = new Texture("textures/textureAtlas.png");
     }
 
     public static void createBlockObjectMesh(int thisBlock) throws Exception {
@@ -367,9 +372,7 @@ public class ItemEntity {
             textureCoordArray[i] = (float)textureCoord.get(i);
         }
 
-        Texture texture = new Texture("textures/textureAtlas.png");
-
-        Mesh mesh = new Mesh(positionsArray, lightArray, indicesArray, textureCoordArray, texture);
+        Mesh mesh = new Mesh(positionsArray, lightArray, indicesArray, textureCoordArray, textureAtlas);
 
         meshStorage[thisBlock] = mesh;
     }

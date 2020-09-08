@@ -2,10 +2,8 @@ package game;
 
 import engine.*;
 import engine.graph.Camera;
-import engine.sound.SoundBuffer;
 import engine.sound.SoundListener;
 import engine.sound.SoundManager;
-import engine.sound.SoundSource;
 import game.player.Player;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
@@ -13,11 +11,12 @@ import org.lwjgl.openal.AL11;
 
 import static engine.Chunk.genBiome;
 import static engine.Chunk.initializeChunkHandler;
-import static engine.ChunkUpdateHandler.chunkUpdate;
 import static engine.ChunkUpdateHandler.chunkUpdater;
 import static engine.ItemEntity.clearItems;
+import static engine.ItemEntity.initializeItemTextureAtlas;
 import static engine.TNTEntity.createTNTEntityMesh;
 import static game.ChunkHandling.ChunkMesh.generateChunkMesh;
+import static game.ChunkHandling.ChunkMesh.initializeChunkTextureAtlas;
 import static game.blocks.BlockDefinition.initializeBlocks;
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -59,6 +58,9 @@ public class Crafter implements IGameLogic {
         renderer.init(window);
 
         soundMgr.init();
+
+        initializeChunkTextureAtlas();
+        initializeItemTextureAtlas();
 
         //this initializes the block definitions
         initializeBlocks(soundMgr);

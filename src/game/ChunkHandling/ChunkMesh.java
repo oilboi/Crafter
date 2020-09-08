@@ -11,10 +11,15 @@ import static game.blocks.BlockDefinition.*;
 
 public class ChunkMesh {
 
+    private static Texture textureAtlas;
+
     private final static float maxLight = 15;
 
+    public static void initializeChunkTextureAtlas() throws Exception {
+         textureAtlas = new Texture("textures/textureAtlas.png");
+    }
+    
     public static void generateChunkMesh(int chunkX, int chunkZ, boolean updating) throws Exception {
-
 
         int x = 0;
         int y = 0;
@@ -229,9 +234,7 @@ public class ChunkMesh {
             textureCoordArray[i] = (float)textureCoord.get(i);
         }
 
-        Texture texture = new Texture("textures/textureAtlas.png");
-
-        Mesh mesh = new Mesh(positionsArray, lightArray, indicesArray, textureCoordArray, texture);
+        Mesh mesh = new Mesh(positionsArray, lightArray, indicesArray, textureCoordArray, textureAtlas);
 
         setChunkMesh(chunkX, chunkZ, mesh);
 

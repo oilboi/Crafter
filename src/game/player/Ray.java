@@ -4,8 +4,7 @@ import engine.sound.SoundManager;
 import game.Crafter;
 import org.joml.Vector3f;
 
-import static engine.Chunk.getBlock;
-import static engine.Chunk.setBlock;
+import static engine.Chunk.*;
 import static engine.ItemEntity.createItem;
 import static engine.sound.SoundAPI.playSound;
 import static game.ChunkHandling.ChunkMesh.generateChunkMesh;
@@ -46,7 +45,7 @@ public class Ray {
                 setBlockBox((int)lastPos.x,(int)lastPos.y,(int)lastPos.z);
 
                 if (!wouldCollidePlacing()) {
-                    placeBlock(lastPos, (short) 16)/*Math.floor(8+(Math.random() * 8)))*/;
+                    placeBlock(lastPos, (short) 17)/*Math.floor(8+(Math.random() * 8)))*/;
                 }
             }
         } else if (debugTest){
@@ -75,6 +74,8 @@ public class Ray {
         int chunkPosZ = (int)flooredPos.z - (16*currentChunkZ);
 
         Vector3f realPos = new Vector3f(chunkPosX, flooredPos.y, chunkPosZ);
+
+        System.out.println(getRotation((int)realPos.x, (int)realPos.y, (int)realPos.z, currentChunkX,currentChunkZ));
 
         int thisBlock = getBlock((int)realPos.x, (int)realPos.y, (int)realPos.z, currentChunkX,currentChunkZ);
 

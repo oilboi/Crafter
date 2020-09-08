@@ -17,10 +17,10 @@ public class Player {
     private static ArrayList<Player> playerList = new ArrayList();
 
     private static int renderDistance = getChunkRenderDistance();
-    private Vector3f pos = new Vector3f(0,129,0);
+    private Vector3f pos = new Vector3f(0,53,0);
 
-    private int[] blockPos = {0,129,0};
-    private int[] oldBlockPos = {0,129,0};
+    private int[] blockPos = {0,50,0};
+    private int[] oldBlockPos = {0,50,0};
 
 
     private float eyeHeight = 1.5f;

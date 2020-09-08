@@ -32,7 +32,7 @@ public class BlockDefinition {
     private final float[] topTexture;    //top
     private final float[] bottomTexture; //bottom
     private final boolean walkable;
-    private final String  thisBlockShape;
+    private final String drawType;
     private final String placeSound;
     private final String digSound;
     private final BlockModifier blockModifier;
@@ -46,7 +46,7 @@ public class BlockDefinition {
             int[] left,
             int[] top,
             int[] bottom,
-            String thisBlockShape,
+            String drawType,
             boolean walkable,
             BlockModifier blockModifier,
             String placeSound,
@@ -62,7 +62,7 @@ public class BlockDefinition {
         this.leftTexture   = calculateTexture(   left[0],   left[1] );
         this.topTexture    = calculateTexture(    top[0],    top[1] );
         this.bottomTexture = calculateTexture( bottom[0], bottom[1] );
-        this.thisBlockShape = thisBlockShape;
+        this.drawType = drawType;
         this.walkable = walkable;
         this.blockModifier = blockModifier;
         this.placeSound = placeSound;
@@ -107,8 +107,16 @@ public class BlockDefinition {
         return texturePoints;
     }
 
+    public static String getBlockName(int ID){
+        return blockIDs[ID].name;
+    }
+
+    public static String getBlockDrawType(int ID){
+        return blockIDs[ID].drawType;
+    }
+
     public static float[][] getBlockShape(int ID){
-        return blockShapeMap.get(blockIDs[ID].thisBlockShape).getBoxes();
+        return blockShapeMap.get(blockIDs[ID].drawType).getBoxes();
     }
 
     public static boolean isWalkable(int ID){
@@ -129,9 +137,17 @@ public class BlockDefinition {
                 new BlockShape(
                         new float[][]{
                                 {0f,0f,0f,1f,0.5f,1f},
-                                {0f,0f,0f,0.5f,1f,1f}
+                                {0f,0f,0f,1f,1f,0.5f}
                         }
                         )
+        );
+
+        blockShapeMap.put("slab",
+                new BlockShape(
+                        new float[][]{
+                                {0f,0f,0f,1f,0.5f,1f}
+                        }
+                )
         );
 
 
@@ -145,7 +161,7 @@ public class BlockDefinition {
                 new int[]{-1,-1}, //left
                 new int[]{-1,-1}, //top
                 new int[]{-1,-1},  //bottom
-                "normal",
+                "air",
                 false,
                 null,
                 "",
@@ -442,6 +458,23 @@ public class BlockDefinition {
                 new int[]{2,0}, //top
                 new int[]{2,0},  //bottom
                 "stair",
+                true,
+                null,
+                "stone_3",
+                "stone_2"
+        );
+
+        new BlockDefinition(
+                17,
+                "cobblestone slab",
+                true,
+                new int[]{2,0}, //front
+                new int[]{2,0}, //back
+                new int[]{2,0}, //right
+                new int[]{2,0}, //left
+                new int[]{2,0}, //top
+                new int[]{2,0},  //bottom
+                "slab",
                 true,
                 null,
                 "stone_3",

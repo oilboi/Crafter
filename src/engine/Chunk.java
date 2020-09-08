@@ -8,15 +8,16 @@ import static game.Crafter.chunkRenderDistance;
 public class Chunk {
 
     private static int [][][][][] block;
+    private static byte [][][][][] rotation;
     private static byte[][][][][] light;
     private static Mesh[][]   mesh;
 
     private static int limit = 0;
 
     public static void initializeChunkHandler(int chunkRenderDistance){
-
         block = new  int[((chunkRenderDistance * 2) + 1)][((chunkRenderDistance * 2) + 1)][128][16][16];
         light = new byte[((chunkRenderDistance * 2) + 1)][((chunkRenderDistance * 2) + 1)][128][16][16];
+        rotation = new byte[((chunkRenderDistance * 2) + 1)][((chunkRenderDistance * 2) + 1)][128][16][16];
         mesh  = new Mesh[((chunkRenderDistance * 2) + 1)][((chunkRenderDistance * 2) + 1)];
         limit = ((chunkRenderDistance * 2) + 1);
 
@@ -43,6 +44,63 @@ public class Chunk {
     public static Mesh getChunkMesh(int chunkX, int chunkZ){
         return mesh[chunkX][chunkZ];
     }
+
+    public static byte getRotation(int x,int y,int z, int chunkX, int chunkZ){
+        chunkX += chunkRenderDistance;
+        chunkZ += chunkRenderDistance;
+
+        return getInternalRotation(x,y,z,chunkX,chunkZ);
+    }
+    private static byte getInternalRotation(int x,int y,int z, int chunkX, int chunkZ){
+
+        if(chunkX < 0 || chunkZ < 0 || chunkX >= limit || chunkZ >= limit){
+            return 0;
+        }
+
+        //neighbor checking
+        if (y < 0 || y >= 128) { //Y is caught regardless in the else clause if in bounds
+            return 0;
+        }
+        if(x < 0) {
+            return getInternalRotation(x+16,y,z,chunkX-1,chunkZ);
+        }
+        if (x >= 16) {
+            return getInternalRotation(x-16,y,z,chunkX+1,chunkZ);
+        }
+        if (z < 0) {
+            return getInternalRotation(x,y,z+16,chunkX,chunkZ-1);
+        }
+        if (z >= 16) {
+            return getInternalRotation(x,y,z-16,chunkX,chunkZ+1);
+        }
+
+        //self chunk checking
+        return rotation[chunkX][chunkZ][y][x][z];
+    }
+
+    public static void setRotation(int x,int y,int z, int chunkX, int chunkZ, byte newRotation){
+        chunkX += chunkRenderDistance;
+        chunkZ += chunkRenderDistance;
+
+        if(chunkX < 0 || chunkZ < 0 || chunkX >= limit || chunkZ >= limit){
+            return;
+        }
+        if(z >= 16 || z < 0){
+            return;
+        }
+        if(x >= 16 || x < 0){
+            return;
+        }
+        if(y > 127 || y < 0){
+            return;
+        }
+
+        rotation[chunkX][chunkZ][y][x][z] = newRotation;
+        chunkUpdate(chunkX,chunkZ);
+        updateNeighbor(chunkX, chunkZ,x,y,z);
+    }
+
+
 
     public static int getBlock(int x,int y,int z, int chunkX, int chunkZ){
         chunkX += chunkRenderDistance;

@@ -194,23 +194,22 @@ public class Chunk {
     public static void genBiome(int chunkX, int chunkZ){
         chunkX += chunkRenderDistance;
         chunkZ += chunkRenderDistance;
-
         short currBlock;
 
         byte height = (byte)(Math.abs(noise.GetCubicFractal((chunkX*16),(chunkZ*16)))*127+heightAdder);
             for (int x = 0; x < 16; x++) {
                 for (int z = 0; z < 16; z++) {
-
+                    float dirtHeightRandom = (float)Math.floor(Math.random() * 2f);
                     height = (byte)(Math.abs(noise.GetCubicFractal((chunkX*16)+x,(chunkZ*16)+z))*127+heightAdder);
 
                     for (int y = 127; y >= 0; y--) {
 
 
-                    if (y == 0) {
+                    if (y <= 0 + dirtHeightRandom) {
                         currBlock = 5;
                     } else if (y == height) {
                         currBlock = 2;
-                    } else if (y < height && y >= height - dirtHeight) {
+                    } else if (y < height && y >= height - dirtHeight - dirtHeightRandom) {
                         currBlock = 1;
                     } else if (y < height - dirtHeight) { //TODO: stone level
                         if (y <= 30 && y > 0) {

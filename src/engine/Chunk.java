@@ -195,57 +195,48 @@ public class Chunk {
         chunkX += chunkRenderDistance;
         chunkZ += chunkRenderDistance;
 
-        int x = 0;
-        int y = 127;
-        int z = 0;
+        short currBlock;
 
-        byte height = (byte)(Math.abs(noise.GetCubicFractal((chunkX*16)+x,(chunkZ*16)+z))*127+heightAdder);
+        byte height = (byte)(Math.abs(noise.GetCubicFractal((chunkX*16),(chunkZ*16)))*127+heightAdder);
+            for (int x = 0; x < 16; x++) {
+                for (int z = 0; z < 16; z++) {
 
-        for ( int i = 0; i < (16 * 128 * 16); i++){
+                    height = (byte)(Math.abs(noise.GetCubicFractal((chunkX*16)+x,(chunkZ*16)+z))*127+heightAdder);
 
-            short currBlock;
+                    for (int y = 127; y >= 0; y--) {
 
-            if (y == 0 ){
-                currBlock = 5;
-            } else if (y == height) {
-                currBlock = 2;
-            } else if (y < height && y >= height - dirtHeight) {
-                currBlock = 1;
-            } else if (y < height - dirtHeight) { //TODO: stone level
-                if (y <= 30 && y > 0){
-                    if (Math.random() > 0.95){
-                        currBlock = (short) Math.floor(8+(Math.random() * 8));
+
+                    if (y == 0) {
+                        currBlock = 5;
+                    } else if (y == height) {
+                        currBlock = 2;
+                    } else if (y < height && y >= height - dirtHeight) {
+                        currBlock = 1;
+                    } else if (y < height - dirtHeight) { //TODO: stone level
+                        if (y <= 30 && y > 0) {
+                            if (Math.random() > 0.95) {
+                                currBlock = (short) Math.floor(8 + (Math.random() * 8));
+                            } else {
+                                currBlock = 3;
+                            }
+                        } else {
+                            currBlock = 3;
+                        }
                     } else {
-                        currBlock = 3;
+                        if (y <= waterHeight) {
+                            currBlock = 7;
+                        } else {
+                            currBlock = 0;
+                        }
                     }
-                } else {
-                    currBlock = 3;
-                }
-            } else {
-                if (y <= waterHeight){
-                    currBlock = 7;
-                } else {
-                    currBlock = 0;
-                }
-            }
 
-            block[chunkX][chunkZ][y][x][z] = currBlock;
+                    block[chunkX][chunkZ][y][x][z] = currBlock;
 
 //            if (currBlock == 0) {
-                light[chunkX][chunkZ][y][x][z] = 15;//0;
+                    light[chunkX][chunkZ][y][x][z] = 15;//0;
 //            }else{
 //                light[chunkX][chunkZ][y][x][z] = 0;
 //            }
-
-            y--;
-            if( y < 0){
-                y = 127;
-                x++;
-                height = (byte)(Math.abs(noise.GetCubicFractal((chunkX*16)+x,(chunkZ*16)+z))*127+heightAdder);
-                if( x > 15 ){
-                    x = 0;
-                    height = (byte)(Math.abs(noise.GetCubicFractal((chunkX*16)+x,(chunkZ*16)+z))*127+heightAdder);
-                    z++;
                 }
             }
         }

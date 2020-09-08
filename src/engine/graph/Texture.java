@@ -32,9 +32,7 @@ public class Texture {
             width = w.get();
             height = h.get();
         }
-
         this.id = createTexture(buf);
-
         stbi_image_free(buf);
     }
 

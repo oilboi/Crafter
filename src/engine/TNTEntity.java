@@ -329,6 +329,6 @@ public class TNTEntity {
     }
 
     public static void cleanTNTUp(){
-        mesh.cleanUp();
+        mesh.cleanUp(false);
     }
 }

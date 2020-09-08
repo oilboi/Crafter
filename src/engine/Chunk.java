@@ -31,7 +31,7 @@ public class Chunk {
         }
 
         if (mesh[chunkX][chunkZ] != null){
-            mesh[chunkX][chunkZ].cleanUp();
+            mesh[chunkX][chunkZ].cleanUp(false);
         }
         mesh[chunkX][chunkZ] = newMesh;
     }
@@ -271,7 +271,7 @@ public class Chunk {
         for (Mesh[] thisMeshArray : mesh){
             for (Mesh thisMesh : thisMeshArray) {
                 if (thisMesh != null) {
-                    thisMesh.cleanUp();
+                    thisMesh.cleanUp(true);
                 }
             }
         }

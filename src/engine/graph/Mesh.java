@@ -124,7 +124,7 @@ public class Mesh {
         glBindVertexArray(0);
     }
 
-    public void cleanUp(){
+    public void cleanUp(boolean deleteTexture){
         glDisableVertexAttribArray(0);
 
         //delete the vbos
@@ -134,7 +134,9 @@ public class Mesh {
         glDeleteBuffers(idxVboId);
 
         //delete the texture
-        texture.cleanup();
+        if (deleteTexture) {
+            texture.cleanup();
+        }
 
         //delete the vao
         glBindVertexArray(0);

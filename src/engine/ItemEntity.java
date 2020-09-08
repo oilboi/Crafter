@@ -380,7 +380,7 @@ public class ItemEntity {
     public static void cleanUp(){
         for (Mesh thisMesh : meshStorage){
             if (thisMesh != null){
-                thisMesh.cleanUp();
+                thisMesh.cleanUp(true);
             }
         }
     }

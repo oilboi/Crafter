@@ -140,13 +140,41 @@ public class BlockDefinition {
                 new BlockShape(new float[][]{{0f,0f,0f,1f,1f,1f}})
         );
 
-        blockShapeMap.put("stair",
+        blockShapeMap.put("stair 1",
                 new BlockShape(
                         new float[][]{
                                 {0f,0f,0f,1f,0.5f,1f},
                                 {0f,0f,0f,1f,1f,0.5f}
                         }
                         )
+        );
+
+        blockShapeMap.put("stair 2",
+                new BlockShape(
+                        new float[][]{
+                                {0f,0f,0f,1f,0.5f,1f},
+
+                                {0f,0f,0.5f,1f,1f,1f}
+                        }
+                )
+        );
+
+        blockShapeMap.put("stair 3",
+                new BlockShape(
+                        new float[][]{
+                                {0f,0f,0f,1f,0.5f,1f},
+                                {0f,0f,0f,0.5f,1f,1f}
+                        }
+                )
+        );
+
+        blockShapeMap.put("stair 4",
+                new BlockShape(
+                        new float[][]{
+                                {0f,0f,0f,1f,0.5f,1f},
+                                {0.5f,0f,0f,1f,1f,1f}
+                        }
+                )
         );
 
         blockShapeMap.put("slab",
@@ -472,7 +500,7 @@ public class BlockDefinition {
 
         new BlockDefinition(
                 16,
-                "cobblestone stair",
+                "cobblestone stair 1",
                 true,
                 new int[]{2,0}, //front
                 new int[]{2,0}, //back
@@ -480,7 +508,7 @@ public class BlockDefinition {
                 new int[]{2,0}, //left
                 new int[]{2,0}, //top
                 new int[]{2,0},  //bottom
-                "stair",
+                "stair 1",
                 true,
                 true,
                 null,
@@ -490,7 +518,7 @@ public class BlockDefinition {
 
         new BlockDefinition(
                 17,
-                "cobblestone slab",
+                "cobblestone stair 2",
                 true,
                 new int[]{2,0}, //front
                 new int[]{2,0}, //back
@@ -498,7 +526,43 @@ public class BlockDefinition {
                 new int[]{2,0}, //left
                 new int[]{2,0}, //top
                 new int[]{2,0},  //bottom
-                "slab",
+                "stair 2",
+                true,
+                true,
+                null,
+                "stone_3",
+                "stone_2"
+        );
+
+        new BlockDefinition(
+                18,
+                "cobblestone stair 3",
+                true,
+                new int[]{2,0}, //front
+                new int[]{2,0}, //back
+                new int[]{2,0}, //right
+                new int[]{2,0}, //left
+                new int[]{2,0}, //top
+                new int[]{2,0},  //bottom
+                "stair 3",
+                true,
+                true,
+                null,
+                "stone_3",
+                "stone_2"
+        );
+
+        new BlockDefinition(
+                19,
+                "cobblestone stair 4",
+                true,
+                new int[]{2,0}, //front
+                new int[]{2,0}, //back
+                new int[]{2,0}, //right
+                new int[]{2,0}, //left
+                new int[]{2,0}, //top
+                new int[]{2,0},  //bottom
+                "stair 4",
                 true,
                 true,
                 null,

@@ -33,11 +33,11 @@ public class ChunkMesh {
         offsetX = chunkX * 16;
         offsetZ = chunkZ * 16;
 
-        String neighborDrawType;
-        //create the mesh
         for (int y = 0; y < 128; y++) {
             for (int x = 0; x < 16; x++) {
                 for (int z = 0; z < 16; z++) {
+
+                    //todo --------------------------------------- THE NORMAL DRAWTYPE
 
                     int thisBlock = getBlock(x, y, z, chunkX, chunkZ);
                     if (thisBlock != 0 && getBlockDrawType(thisBlock).equals("normal")) {
@@ -308,7 +308,9 @@ public class ChunkMesh {
                         }
                     }
 
-                    //todo: ------------------------------------------------------------------------------------------------=-=-=-=
+                    //todo: ---------------------------------------------------------- the block box draw type
+
+
                     else if (thisBlock != 0) {
                         for (float[] thisBlockBox : getBlockShape(thisBlock)) {
                             // 0, 1, 2, 3, 4, 5
@@ -399,16 +401,26 @@ public class ChunkMesh {
 
                             float[] textureBack = getBackTexturePoints(thisBlock);
 
-                            //back
-                            textureCoord.add(textureBack[1] - ((1-thisBlockBox[3])/32f)); //x positive
-                            textureCoord.add(textureBack[2] + ((1-thisBlockBox[4])/32f)); //y positive
-                            textureCoord.add(textureBack[0] - ((0-thisBlockBox[0])/32f)); //x negative
-                            textureCoord.add(textureBack[2] + ((1-thisBlockBox[4])/32f)); //y positive
+                            // 0, 1, 2, 3, 4, 5
+                            //-x,-y,-z, x, y, z
+                            // 0, 0, 0, 1, 1, 1
 
-                            textureCoord.add(textureBack[0] - ((0-thisBlockBox[0])/32f)); //x negative
-                            textureCoord.add(textureBack[3] - ((thisBlockBox[1])/32f));   //y negative
-                            textureCoord.add(textureBack[1] - ((1-thisBlockBox[3])/32f)); //x positive
-                            textureCoord.add(textureBack[3] - ((thisBlockBox[1])/32f));   //y negative
+                            // 0, 1,  2, 3
+                            //-x,+x, -y,+y
+
+
+                            //back
+                            textureCoord.add(textureBack[1] - ((1-thisBlockBox[0])/32f));
+                            textureCoord.add(textureBack[2] + ((1-thisBlockBox[4])/32f));
+                            textureCoord.add(textureBack[0] - ((0-thisBlockBox[3])/32f));
+                            textureCoord.add(textureBack[2] + ((1-thisBlockBox[4])/32f));
+
+                            textureCoord.add(textureBack[0] - ((0-thisBlockBox[3])/32f));
+                            textureCoord.add(textureBack[3] - ((  thisBlockBox[1])/32f));
+                            textureCoord.add(textureBack[1] - ((1-thisBlockBox[0])/32f));
+                            textureCoord.add(textureBack[3] - ((  thisBlockBox[1])/32f));
+
+
 
 
 

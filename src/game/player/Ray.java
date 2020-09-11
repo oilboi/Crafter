@@ -1,19 +1,14 @@
 package game.player;
 
 import engine.sound.SoundManager;
-import game.Crafter;
 import org.joml.Vector3f;
 
 import static engine.Chunk.*;
 import static engine.ItemEntity.createItem;
-import static engine.sound.SoundAPI.playSound;
-import static game.ChunkHandling.ChunkMesh.generateChunkMesh;
-import static game.Crafter.chunkRenderDistance;
 import static game.blocks.BlockDefinition.*;
 import static game.collision.Collision.wouldCollidePlacing;
 import static game.collision.CustomAABB.setAABB;
 import static game.collision.CustomBlockBox.setBlockBox;
-//import static game.light.Light.floodFill;
 
 public class Ray {
     public static void rayCast(Vector3f pos, Vector3f dir, float length, boolean mining, boolean placing, Player player, boolean debugTest, SoundManager soundMgr) throws Exception {

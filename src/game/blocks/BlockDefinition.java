@@ -570,6 +570,58 @@ public class BlockDefinition {
                 "stone_3",
                 "stone_2"
         );
+
+        new BlockDefinition(
+                20,
+                "pumpkin",
+                true,
+                new int[]{19,0}, //front
+                new int[]{19,0}, //back
+                new int[]{19,0}, //right
+                new int[]{19,0}, //left
+                new int[]{20,0}, //top
+                new int[]{20,0},  //bottom
+                "normal",
+                true,
+                false,
+                null,
+                "wood_1",
+                "wood_2"
+        );
+        new BlockDefinition(
+                21,
+                "jack 'o lantern unlit",
+                true,
+                new int[]{21,0}, //front
+                new int[]{19,0}, //back
+                new int[]{19,0}, //right
+                new int[]{19,0}, //left
+                new int[]{20,0}, //top
+                new int[]{20,0},  //bottom
+                "normal",
+                true,
+                false,
+                null,
+                "wood_1",
+                "wood_2"
+        );
+        new BlockDefinition(
+                22,
+                "jack 'o lantern lit",
+                true,
+                new int[]{22,0}, //front
+                new int[]{19,0}, //back
+                new int[]{19,0}, //right
+                new int[]{19,0}, //left
+                new int[]{20,0}, //top
+                new int[]{20,0},  //bottom
+                "normal",
+                true,
+                false,
+                null,
+                "wood_1",
+                "wood_2"
+        );
     }
 
     public static BlockDefinition getID(int ID){

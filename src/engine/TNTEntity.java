@@ -3,7 +3,6 @@ package engine;
 import engine.graph.Mesh;
 import engine.graph.Texture;
 import engine.sound.SoundManager;
-import game.Crafter;
 import org.joml.Vector3f;
 
 import java.util.ArrayList;
@@ -16,24 +15,15 @@ import static game.player.TNT.boom;
 
 public class TNTEntity {
     private final static float tntSize = 0.5f;
-
     private final static int MAX_ID_AMOUNT = 126_000;
-
     private static int totalTNT = 0;
-
     //TODO: pseudo object holder
-
     private static Mesh mesh;
     private static Vector3f[] tntPos = new Vector3f[MAX_ID_AMOUNT];
-
     private static Vector3f tntScale[] = new Vector3f[MAX_ID_AMOUNT];
-
     private static float[] tntTimer =    new float[MAX_ID_AMOUNT];
-
     private static boolean[] tntExists =    new boolean[MAX_ID_AMOUNT];
-
     private static Vector3f[] tntInertia = new Vector3f[MAX_ID_AMOUNT];
-
 
     public static int getTotalTNT(){
         return totalTNT;

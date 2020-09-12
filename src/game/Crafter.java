@@ -12,6 +12,7 @@ import org.lwjgl.openal.AL11;
 import static engine.Chunk.genBiome;
 import static engine.Chunk.initializeChunkHandler;
 import static engine.ChunkUpdateHandler.chunkUpdater;
+import static engine.Entity.registerEntity;
 import static engine.ItemEntity.clearItems;
 import static engine.ItemEntity.initializeItemTextureAtlas;
 import static engine.TNTEntity.createTNTEntityMesh;
@@ -84,7 +85,6 @@ public class Crafter implements IGameLogic {
         for (x = -chunkRenderDistance; x <= chunkRenderDistance; x++){
             for (z = -chunkRenderDistance; z<= chunkRenderDistance; z++){
                 generateChunkMesh(x, z, false);
-                System.out.println(x + " " + z);
             }
         }
         player = new Player("singleplayer");
@@ -93,6 +93,15 @@ public class Crafter implements IGameLogic {
         this.soundMgr.setAttenuationModel(AL11.AL_LINEAR_DISTANCE);
 
         soundMgr.setListener(new SoundListener(new Vector3f()));
+
+        registerEntity(
+                new EntityInterface(){
+                    @Override
+                    public void onCreate() {
+                        System.out.println("this worked!");
+                    }
+                }
+        );
     }
 
     public static SoundManager getSoundManager(){

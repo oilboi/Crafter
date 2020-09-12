@@ -93,15 +93,6 @@ public class Crafter implements IGameLogic {
         this.soundMgr.setAttenuationModel(AL11.AL_LINEAR_DISTANCE);
 
         soundMgr.setListener(new SoundListener(new Vector3f()));
-
-        registerEntity(
-                new EntityInterface(){
-                    @Override
-                    public void onCreate() {
-                        System.out.println("this worked!");
-                    }
-                }
-        );
     }
 
     public static SoundManager getSoundManager(){

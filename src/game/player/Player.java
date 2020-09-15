@@ -329,21 +329,21 @@ public class Player {
         if (xPositive) {
             xBobPos += 1;
             if (xBobPos >= 200){
-                xPositive = !xPositive;
-                yPositive = !yPositive;
+                xPositive = false;
+                yPositive = false;
                 playSound("dirt_" + (int)(Math.ceil(Math.random()*3)), pos);
             }
         } else {
             xBobPos -= 1;
             if (xBobPos <= -200){
-                xPositive = !xPositive;
-                yPositive = !yPositive;
+                xPositive = true;
+                yPositive = false;
                 playSound("dirt_"  + (int)(Math.ceil(Math.random()*3)), pos);
             }
         }
 
         if(xBobPos == 0){
-            yPositive = !yPositive;
+            yPositive = true;
         }
 
         if (yPositive){

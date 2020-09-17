@@ -19,13 +19,17 @@ public class Renderer {
 
     private static final float FOV = (float) Math.toRadians(60.0f);
 
-    private static final float Z_NEAR = 0.01f;
+    private static final float HUD_Z_NEAR = -0.01f;
+    private static final float HUD_Z_FAR = 1120.f;
 
+    private static final float Z_NEAR = 0.01f;
     private static final float Z_FAR = 1120.f;
 
     private final Transformation transformation;
 
     private ShaderProgram shaderProgram;
+
+    private ShaderProgram hudShaderProgram;
 
     public Renderer(){
         transformation = new Transformation();
@@ -36,12 +40,27 @@ public class Renderer {
         shaderProgram.createVertexShader(Utils.loadResource("/resources/vertex.vs"));
         shaderProgram.createFragmentShader(Utils.loadResource("/resources/fragment.fs"));
         shaderProgram.link();
+
         //create uniforms for world and projection matrices
         shaderProgram.createUniform("projectionMatrix");
         //create uniforms for model view matrix
         shaderProgram.createUniform("modelViewMatrix");
         //create uniforms for texture sampler
         shaderProgram.createUniform("texture_sampler");
+
+        //todo ----------------------------------------------------------------------------------------
+        hudShaderProgram = new ShaderProgram();
+        hudShaderProgram.createVertexShader(Utils.loadResource("/resources/hud_vertex.vs"));
+        hudShaderProgram.createFragmentShader(Utils.loadResource("/resources/hud_fragment.fs"));
+        hudShaderProgram.link();
+
+        //create uniforms for world and projection matrices
+        hudShaderProgram.createUniform("projectionMatrix");
+        //create uniforms for model view matrix
+        hudShaderProgram.createUniform("modelViewMatrix");
+        //create uniforms for texture sampler
+        hudShaderProgram.createUniform("texture_sampler");
+
 
         window.setClearColor(0.53f,0.81f,0.92f,0.f);
     }
@@ -58,6 +77,7 @@ public class Renderer {
             window.setResized(false);
         }
 
+        //todo: BEGIN WORLD SHADER PROGRAM!
         shaderProgram.bind();
 
         //update projection matrix
@@ -109,13 +129,31 @@ public class Renderer {
             tntMesh.render();
         }
 
-
         shaderProgram.unbind();
+
+        //TODO: BEGIN HUD SHADER PROGRAM!
+        hudShaderProgram.bind();
+
+        //update projection matrix
+        Matrix4f hudProjectionMatrix = transformation.getProjectionMatrix(FOV, window.getWidth(), window.getHeight(), HUD_Z_NEAR, HUD_Z_FAR);
+        hudShaderProgram.setUniform("projectionMatrix", projectionMatrix);
+        //update the view matrix
+        Matrix4f hudViewMatrix = transformation.getViewMatrix(camera);
+        hudShaderProgram.setUniform("texture_sampler", 0);
+
+
+        
+        hudShaderProgram.unbind();
+
     }
 
     public void cleanup(){
         if (shaderProgram != null){
             shaderProgram.cleanup();
+        }
+
+        if (hudShaderProgram != null){
+            hudShaderProgram.cleanup();
         }
     }
 }

@@ -73,9 +73,9 @@ public class Ray {
 
         int thisBlock = getBlock((int)realPos.x, (int)realPos.y, (int)realPos.z, currentChunkX,currentChunkZ);
 
-        if (thisBlock == 5){
-            return;
-        }
+//        if (thisBlock == 5){
+//            return;
+//        }
 
         setBlock((int)realPos.x, (int)realPos.y, (int)realPos.z, currentChunkX, currentChunkZ, (short) 0);
 

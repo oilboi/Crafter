@@ -4,9 +4,11 @@ import engine.Utils;
 import engine.Window;
 import engine.graph.*;
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
 
 import static engine.Chunk.getChunkMesh;
 import static engine.Chunk.getLimit;
+import static engine.Hud.getHudMesh;
 import static engine.ItemEntity.*;
 import static engine.TNTEntity.*;
 import static org.lwjgl.opengl.GL11.*;
@@ -19,10 +21,10 @@ public class Renderer {
 
     private static final float FOV = (float) Math.toRadians(60.0f);
 
-    private static final float HUD_Z_NEAR = -0.01f;
+    private static final float HUD_Z_NEAR = 0.0f;
     private static final float HUD_Z_FAR = 1120.f;
 
-    private static final float Z_NEAR = 0.01f;
+    private static final float Z_NEAR = 0.1f;
     private static final float Z_FAR = 1120.f;
 
     private final Transformation transformation;
@@ -131,18 +133,35 @@ public class Renderer {
 
         shaderProgram.unbind();
 
+
+
+
+
+
         //TODO: BEGIN HUD SHADER PROGRAM!
         hudShaderProgram.bind();
 
-        //update projection matrix
-        Matrix4f hudProjectionMatrix = transformation.getProjectionMatrix(FOV, window.getWidth(), window.getHeight(), HUD_Z_NEAR, HUD_Z_FAR);
-        hudShaderProgram.setUniform("projectionMatrix", projectionMatrix);
-        //update the view matrix
-        Matrix4f hudViewMatrix = transformation.getViewMatrix(camera);
+        Matrix4f hudProjectionMatrix = transformation.getProjectionMatrix(90f, window.getWidth(), window.getHeight(), 0.0000001f, 0.1f);
+
+//        hudProjectionMatrix.rotateLocalY((float)Math.PI);
+
+        hudShaderProgram.setUniform("projectionMatrix", hudProjectionMatrix);
+
+        Matrix4f hudViewMatrix = new Matrix4f();
+
         hudShaderProgram.setUniform("texture_sampler", 0);
 
+        hudViewMatrix.translate(0,0,-0.0000001f/*0.9999999f*/);
 
-        
+
+        Mesh thisMesh = getHudMesh();
+        Matrix4f modelViewMatrix = transformation.getModelViewMatrix(hudViewMatrix);
+        hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+
+        thisMesh.render();
+
+
+
         hudShaderProgram.unbind();
 
     }

@@ -12,9 +12,9 @@ public class Hud {
         fontTextureAtlas = new Texture("textures/font.png");
     }
 
-    private final static float scale = 0.0000001f;
+    private final static float scale = 0.00000002f;
 
-    private static float currentScale = 0.15f;
+    private static float currentScale = 1f;
 
     public static Mesh getHudMesh(){
         return thisMesh;

@@ -4,10 +4,10 @@ import engine.Utils;
 import engine.Window;
 import engine.graph.*;
 import org.joml.Matrix4f;
-import org.joml.Vector3f;
 
 import static engine.Chunk.getChunkMesh;
 import static engine.Chunk.getLimit;
+import static engine.Hud.getHotBarMesh;
 import static engine.Hud.getHudMesh;
 import static engine.ItemEntity.*;
 import static engine.TNTEntity.*;
@@ -157,7 +157,11 @@ public class Renderer {
         Mesh thisMesh = getHudMesh();
         Matrix4f modelViewMatrix = transformation.getModelViewMatrix(hudViewMatrix);
         hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+        thisMesh.render();
 
+        thisMesh = getHotBarMesh();
+        modelViewMatrix = transformation.getModelViewMatrix(hudViewMatrix);
+        hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
         thisMesh.render();
 
 

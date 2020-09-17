@@ -14,6 +14,8 @@ public class Hud {
 
     private final static float scale = 0.0000001f;
 
+    private static float currentScale = 0.15f;
+
     public static Mesh getHudMesh(){
         return thisMesh;
     }
@@ -28,20 +30,20 @@ public class Hud {
         int indicesCount = 0;
 
         //front
-        positions.add(scale);
-        positions.add(scale);
+        positions.add(scale*13.5f * currentScale);
+        positions.add(scale * currentScale);
         positions.add(0.0f); //z (how close it is to screen)
 
-        positions.add(-scale);
-        positions.add(scale);
+        positions.add(-scale*13.5f * currentScale);
+        positions.add(scale * currentScale);
         positions.add(0.0f);
 
-        positions.add(-scale);
-        positions.add(-scale);
+        positions.add(-scale*13.5f * currentScale);
+        positions.add(-scale * currentScale);
         positions.add(0.0f);
 
-        positions.add(scale);
-        positions.add(-scale);
+        positions.add(scale*13.5f * currentScale);
+        positions.add(-scale * currentScale);
         positions.add(0.0f);
         //front
         float frontLight = 1f;//getLight(x, y, z + 1, chunkX, chunkZ) / maxLight;

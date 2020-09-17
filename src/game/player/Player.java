@@ -6,6 +6,7 @@ import org.joml.Vector3f;
 
 import java.util.ArrayList;
 
+import static engine.Hud.createSelection;
 import static engine.sound.SoundAPI.playSound;
 import static game.Crafter.chunkRenderDistance;
 import static game.Crafter.getChunkRenderDistance;
@@ -37,12 +38,12 @@ public class Player {
     private float mineTimer = 0;
     private boolean placing = false;
     private float placeTimer = 0;
-    private short selectedItem = 1;
     private Vector3f oldPos;
     private float accelerationMultiplier = 0.07f;
     private String name;
     private boolean sneaking;
     private Vector3f viewBobbing = new Vector3f(0,0,0);
+    private int currentInventorySelection = 0;
 
     public Player(String name){
         this.name = name;
@@ -62,16 +63,12 @@ public class Player {
         return null;
     }
 
+    public int getInventorySelection(){
+        return this.currentInventorySelection;
+    }
+
     public Vector3f getViewBobbing(){
         return this.viewBobbing;
-    }
-
-    public short getSelectedItem(){
-        return selectedItem;
-    }
-
-    public void setSelectedItem(short newItem){
-        selectedItem = newItem;
     }
 
     public void setMining( boolean mining){
@@ -369,5 +366,21 @@ public class Player {
         }
         viewBobbing.x = xBobPos/2000f;
         viewBobbing.y = yBobPos/2000f;
+    }
+
+    public void changeScrollSelection(int i){
+        currentInventorySelection += i;
+        if (currentInventorySelection < 0) {
+            currentInventorySelection = 8;
+        }
+        if (currentInventorySelection > 8) {
+            currentInventorySelection = 0;
+        }
+
+        createSelection(currentInventorySelection);
+    }
+
+    public int getCurrentInventorySelection(){
+        return currentInventorySelection;
     }
 }

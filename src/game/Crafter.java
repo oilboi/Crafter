@@ -197,6 +197,13 @@ public class Crafter implements IGameLogic {
         } else {
             player.setPlacing(false);
         }
+
+        float scroll = input.getScroll();
+        if (scroll < 0){
+            player.changeScrollSelection(1);
+        }else if(scroll > 0){
+            player.changeScrollSelection(-1);
+        }
     }
 
     @Override

@@ -21,6 +21,8 @@ public class MouseInput {
 
     private boolean mouseLocked = true;
 
+    private float scroll = 0;
+
     public MouseInput(){
         previousPos = new Vector2d(-1,-1);
         currentPos = new Vector2d(0,0);
@@ -42,6 +44,10 @@ public class MouseInput {
             rightButtonPressed = button == GLFW_MOUSE_BUTTON_2 && action == GLFW_PRESS;
         });
 
+        glfwSetScrollCallback(window.getWindowHandle(), (windowHandle, xOffset, yOffset) -> {
+            scroll = (float)yOffset;
+        });
+
     }
 
     public Vector2f getDisplVec() {
@@ -54,7 +60,6 @@ public class MouseInput {
 
         if (mouseLocked) {
             glfwSetCursorPos(window.getWindowHandle(), window.getWidth() / 2, window.getHeight() / 2);
-
 
             if (previousPos.x > 0 && previousPos.y > 0 && inWindow) {
                 double deltax = currentPos.x - window.getWidth() / 2;//previousPos.x;
@@ -93,4 +98,9 @@ public class MouseInput {
         return mouseLocked;
     }
 
+    public float getScroll(){
+        float thisScroll = scroll;
+        scroll = 0.0f;
+        return thisScroll;
+    }
 }

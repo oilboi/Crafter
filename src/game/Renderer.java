@@ -7,8 +7,7 @@ import org.joml.Matrix4f;
 
 import static engine.Chunk.getChunkMesh;
 import static engine.Chunk.getLimit;
-import static engine.Hud.getHotBarMesh;
-import static engine.Hud.getHudMesh;
+import static engine.Hud.*;
 import static engine.ItemEntity.*;
 import static engine.TNTEntity.*;
 import static org.lwjgl.opengl.GL11.*;
@@ -133,11 +132,6 @@ public class Renderer {
 
         shaderProgram.unbind();
 
-
-
-
-
-
         //TODO: BEGIN HUD SHADER PROGRAM!
         hudShaderProgram.bind();
 
@@ -153,17 +147,25 @@ public class Renderer {
 
         hudViewMatrix.translate(0,0,-0.0000001f/*0.9999999f*/);
 
+//        {
+//            Mesh thisMesh = getHudMesh();
+//            Matrix4f modelViewMatrix = transformation.getModelViewMatrix(hudViewMatrix);
+//            hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+//            thisMesh.render();
+//        }
+        {
+            Mesh thisMesh = getHotBarMesh();
+            Matrix4f modelViewMatrix = transformation.getModelViewMatrix(hudViewMatrix);
+            hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+            thisMesh.render();
+        }
 
-        Mesh thisMesh = getHudMesh();
-        Matrix4f modelViewMatrix = transformation.getModelViewMatrix(hudViewMatrix);
-        hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
-        thisMesh.render();
-
-        thisMesh = getHotBarMesh();
-        modelViewMatrix = transformation.getModelViewMatrix(hudViewMatrix);
-        hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
-        thisMesh.render();
-
+        {
+            Mesh thisMesh = getSelectionMesh();
+            Matrix4f modelViewMatrix = transformation.getModelViewMatrix(hudViewMatrix);
+            hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+            thisMesh.render();
+        }
 
 
         hudShaderProgram.unbind();

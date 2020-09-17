@@ -39,7 +39,7 @@ public class Ray {
                 setBlockBox((int)lastPos.x,(int)lastPos.y,(int)lastPos.z, getBlockShape(1)[0]);
 
                 if (!wouldCollidePlacing()) {
-                    placeBlock(lastPos, (short)(20+ (Math.random() * 3)));//(16 + (Math.random() * 4)))/*Math.floor(8+(Math.random() * 8)))*/;
+                    placeBlock(lastPos, player.getCurrentInventorySelection()+1);
                 }
             }
         } else if (debugTest){
@@ -81,7 +81,7 @@ public class Ray {
 
         onDigCall(thisBlock, flooredPos);
     }
-    private static void placeBlock(Vector3f flooredPos, short ID) throws Exception {
+    private static void placeBlock(Vector3f flooredPos, int ID) throws Exception {
         int currentChunkX = (int)(Math.floor(flooredPos.x / 16f));
         int currentChunkZ = (int)(Math.floor(flooredPos.z / 16f));
         int chunkPosX = (int)flooredPos.x - (16*currentChunkX);

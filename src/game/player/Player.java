@@ -45,6 +45,17 @@ public class Player {
     private Vector3f viewBobbing = new Vector3f(0,0,0);
     private int currentInventorySelection = 0;
 
+    private static boolean inventoryOpen = false;
+
+    public void toggleInventory(){
+        inventoryOpen = !inventoryOpen;
+        System.out.println(inventoryOpen);
+    }
+
+    public boolean isInventoryOpen(){
+        return inventoryOpen;
+    }
+
     public Player(String name){
         this.name = name;
         playerList.add(this);

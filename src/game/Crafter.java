@@ -43,7 +43,7 @@ public class Crafter implements IGameLogic {
 
     private boolean cButtonPushed = false;
 
-    private boolean boomBuffer = false;
+    private boolean eButtonPushed = false;
 
     private Player player;
 
@@ -106,103 +106,132 @@ public class Crafter implements IGameLogic {
 
     @Override
     public void input(Window window, MouseInput input){
-//        System.out.println("input thread is running");
-        if (window.isKeyPressed(GLFW_KEY_W)){
-            player.setForward(true);
-        } else {
-            player.setForward(false);
-        }
 
-        if (window.isKeyPressed(GLFW_KEY_S)){
-            player.setBackward(true);
-        } else{
-            player.setBackward(false);
-        }
-        if (window.isKeyPressed(GLFW_KEY_A)){
-            player.setLeft(true);
-        } else {
-            player.setLeft(false);
-        }
-        if (window.isKeyPressed(GLFW_KEY_D)){
-            player.setRight(true);
-        } else {
-            player.setRight(false);
-        }
 
-        if (window.isKeyPressed(GLFW_KEY_LEFT_SHIFT)){ //sneaking
-            player.setSneaking(true);
-        }else{
-            player.setSneaking(false);
-        }
+        if (!player.isInventoryOpen()) {
+            if (window.isKeyPressed(GLFW_KEY_W)) {
+                player.setForward(true);
+            } else {
+                player.setForward(false);
+            }
 
-        if (window.isKeyPressed(GLFW_KEY_SPACE)){
-            player.setJump(true);
-        } else {
-            player.setJump(false);
+            if (window.isKeyPressed(GLFW_KEY_S)) {
+                player.setBackward(true);
+            } else {
+                player.setBackward(false);
+            }
+            if (window.isKeyPressed(GLFW_KEY_A)) {
+                player.setLeft(true);
+            } else {
+                player.setLeft(false);
+            }
+            if (window.isKeyPressed(GLFW_KEY_D)) {
+                player.setRight(true);
+            } else {
+                player.setRight(false);
+            }
+
+            if (window.isKeyPressed(GLFW_KEY_LEFT_SHIFT)) { //sneaking
+                player.setSneaking(true);
+            } else {
+                player.setSneaking(false);
+            }
+
+            if (window.isKeyPressed(GLFW_KEY_SPACE)) {
+                player.setJump(true);
+            } else {
+                player.setJump(false);
+            }
         }
 
         //prototype toggle locking mouse - F KEY
-        if (window.isKeyPressed(GLFW_KEY_F)) {
-            if (!fButtonPushed) {
+//        if (window.isKeyPressed(GLFW_KEY_F)) {
+//            if (!fButtonPushed) {
+//                input.setMouseLocked(!input.isMouseLocked());
+//                fButtonPushed = true;
+//                if(!input.isMouseLocked()) {
+//                    glfwSetInputMode(window.getWindowHandle(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+//                } else{
+//                    glfwSetInputMode(window.getWindowHandle(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+//                }
+//            }
+//        } else if (!window.isKeyPressed(GLFW_KEY_F)){
+//            fButtonPushed = false;
+//        }
+
+        //prototype reset position - R KEY
+//        if (window.isKeyPressed(GLFW_KEY_R)) {
+//            if (!rButtonPushed) {
+//                rButtonPushed = true;
+//                player.setPos(new Vector3f(-48,57,-128));
+//
+//                if (Math.random() == 0.0001f){
+//                    System.out.println("Hey, Ben!");
+//                }
+//                else {
+//                    System.out.println("Position reset!");
+//                }
+//            }
+//        } else if (!window.isKeyPressed(GLFW_KEY_R)){
+//            rButtonPushed = false;
+//        }
+
+        //prototype clear objects - C KEY
+//        if (window.isKeyPressed(GLFW_KEY_C)) {
+//            if (!cButtonPushed) {
+//                cButtonPushed = true;
+//                clearItems();
+//                System.out.println("Cleared all items!");
+//            }
+//        } else if (!window.isKeyPressed(GLFW_KEY_C)){
+//            cButtonPushed = false;
+//        }
+
+        //prototype clear objects - C KEY
+        if (window.isKeyPressed(GLFW_KEY_E)) {
+            if (!eButtonPushed) {
+                eButtonPushed = true;
+                player.toggleInventory();
                 input.setMouseLocked(!input.isMouseLocked());
-                fButtonPushed = true;
                 if(!input.isMouseLocked()) {
                     glfwSetInputMode(window.getWindowHandle(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
                 } else{
                     glfwSetInputMode(window.getWindowHandle(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
                 }
+
+                player.setForward(false);
+                player.setBackward(false);
+                player.setLeft(false);
+                player.setRight(false);
+                player.setSneaking(false);
+                player.setJump(false);
             }
-        } else if (!window.isKeyPressed(GLFW_KEY_F)){
-            fButtonPushed = false;
+        } else if (!window.isKeyPressed(GLFW_KEY_E)){
+            eButtonPushed = false;
         }
 
-        //prototype reset position - R KEY
-        if (window.isKeyPressed(GLFW_KEY_R)) {
-            if (!rButtonPushed) {
-                rButtonPushed = true;
-                player.setPos(new Vector3f(-48,57,-128));
 
-                if (Math.random() == 0.0001f){
-                    System.out.println("Hey, Ben!");
-                }
-                else {
-                    System.out.println("Position reset!");
-                }
+        if (!player.isInventoryOpen()) {
+            //mouse left button input
+            if (input.isLeftButtonPressed()) {
+                player.setMining(true);
+            } else {
+                player.setMining(false);
             }
-        } else if (!window.isKeyPressed(GLFW_KEY_R)){
-            rButtonPushed = false;
-        }
 
-        //prototype clear objects - C KEY
-        if (window.isKeyPressed(GLFW_KEY_C)) {
-            if (!cButtonPushed) {
-                cButtonPushed = true;
-                clearItems();
-                System.out.println("Cleared all items!");
+            //mouse right button input
+            if (input.isRightButtonPressed()) {
+                player.setPlacing(true);
+            } else {
+                player.setPlacing(false);
             }
-        } else if (!window.isKeyPressed(GLFW_KEY_C)){
-            cButtonPushed = false;
-        }
 
-        //mouse left button input
-        if(input.isLeftButtonPressed()){
-            player.setMining(true);
-        } else {
-            player.setMining(false);
-        }
-
-        //mouse right button input
-        if(input.isRightButtonPressed()){
-            player.setPlacing(true);
-        } else {
-            player.setPlacing(false);
-        }
-
-        float scroll = input.getScroll();
-        if (scroll < 0){
-            player.changeScrollSelection(1);
-        }else if(scroll > 0){
-            player.changeScrollSelection(-1);
+            float scroll = input.getScroll();
+            if (scroll < 0) {
+                player.changeScrollSelection(1);
+            } else if (scroll > 0) {
+                player.changeScrollSelection(-1);
+            }
         }
     }
 
@@ -240,13 +269,11 @@ public class Crafter implements IGameLogic {
         ItemEntity.onStep(soundMgr);
 
         TNTEntity.onTNTStep(soundMgr);
-
-//        System.out.println(player.getPos().x + " " + player.getPos().y + " " + player.getPos().z);
     }
 
     @Override
     public void render(Window window){
-        renderer.render(window, camera);
+        renderer.render(window, camera, player);
     }
 
     @Override

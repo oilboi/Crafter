@@ -3,6 +3,7 @@ package game;
 import engine.Utils;
 import engine.Window;
 import engine.graph.*;
+import game.player.Player;
 import org.joml.Matrix4f;
 
 import static engine.Chunk.getChunkMesh;
@@ -70,7 +71,7 @@ public class Renderer {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
-    public void render(Window window, Camera camera){
+    public void render(Window window, Camera camera, Player player){
         clear();
 
         if (window.isResized()){
@@ -153,19 +154,30 @@ public class Renderer {
 //            hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
 //            thisMesh.render();
 //        }
-        {
-            Mesh thisMesh = getHotBarMesh();
-            Matrix4f modelViewMatrix = transformation.getModelViewMatrix(hudViewMatrix);
-            hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
-            thisMesh.render();
+
+        if (player.isInventoryOpen()) {
+            {
+                Mesh thisMesh = getInventoryMesh();
+                Matrix4f modelViewMatrix = transformation.getModelViewMatrix(hudViewMatrix);
+                hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+                thisMesh.render();
+            }
+        } else {
+            {
+                Mesh thisMesh = getHotBarMesh();
+                Matrix4f modelViewMatrix = transformation.getModelViewMatrix(hudViewMatrix);
+                hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+                thisMesh.render();
+            }
+
+            {
+                Mesh thisMesh = getSelectionMesh();
+                Matrix4f modelViewMatrix = transformation.getModelViewMatrix(hudViewMatrix);
+                hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+                thisMesh.render();
+            }
         }
 
-        {
-            Mesh thisMesh = getSelectionMesh();
-            Matrix4f modelViewMatrix = transformation.getModelViewMatrix(hudViewMatrix);
-            hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
-            thisMesh.render();
-        }
 
 
         hudShaderProgram.unbind();

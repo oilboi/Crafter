@@ -153,12 +153,12 @@ public class Renderer {
         hudShaderProgram.setUniform("texture_sampler", 0);
         hudViewMatrix.translate(0,0,-0.0000001f/*0.9999999f*/);
 
-//        {
-//            Mesh thisMesh = getHudMesh();
-//            Matrix4f modelViewMatrix = transformation.getModelViewMatrix(hudViewMatrix);
-//            hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
-//            thisMesh.render();
-//        }
+        {
+            Mesh thisMesh = testTextMesh();
+            Matrix4f modelViewMatrix = transformation.getModelViewMatrix(hudViewMatrix);
+            hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+            thisMesh.render();
+        }
 
         if (isPlayerInventoryOpen()) {
             {

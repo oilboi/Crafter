@@ -260,7 +260,7 @@ public class Crafter implements IGameLogic {
             camera.moveRotation(0,-360, 0);
         }
 
-        playerOnTick(camera, soundMgr);
+        playerOnTick(camera);
 
         soundMgr.updateListenerPosition(camera);
 

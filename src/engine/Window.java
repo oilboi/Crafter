@@ -103,6 +103,10 @@ public class Window {
         glEnable(GL_CULL_FACE);
         glCullFace(GL_BACK);
 
+        // Support for transparencies
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
         //hide cursor
         glfwSetInputMode(this.windowHandle, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 

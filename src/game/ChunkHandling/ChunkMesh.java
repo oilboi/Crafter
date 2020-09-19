@@ -98,12 +98,15 @@ public class ChunkMesh {
                             positions.add(0f + x + offsetX);
                             positions.add(1f + y);
                             positions.add(0f + z + offsetZ);
+
                             positions.add(1f + x + offsetX);
                             positions.add(1f + y);
                             positions.add(0f + z + offsetZ);
+
                             positions.add(1f + x + offsetX);
                             positions.add(0f + y);
                             positions.add(0f + z + offsetZ);
+
                             positions.add(0f + x + offsetX);
                             positions.add(0f + y);
                             positions.add(0f + z + offsetZ);
@@ -141,12 +144,15 @@ public class ChunkMesh {
                             positions.add(1f + x + offsetX);
                             positions.add(1f + y);
                             positions.add(0f + z + offsetZ);
+
                             positions.add(1f + x + offsetX);
                             positions.add(1f + y);
                             positions.add(1f + z + offsetZ);
+
                             positions.add(1f + x + offsetX);
                             positions.add(0f + y);
                             positions.add(1f + z + offsetZ);
+
                             positions.add(1f + x + offsetX);
                             positions.add(0f + y);
                             positions.add(0f + z + offsetZ);
@@ -184,12 +190,15 @@ public class ChunkMesh {
                             positions.add(0f + x + offsetX);
                             positions.add(1f + y);
                             positions.add(1f + z + offsetZ);
+
                             positions.add(0f + x + offsetX);
                             positions.add(1f + y);
                             positions.add(0f + z + offsetZ);
+
                             positions.add(0f + x + offsetX);
                             positions.add(0f + y);
                             positions.add(0f + z + offsetZ);
+
                             positions.add(0f + x + offsetX);
                             positions.add(0f + y);
                             positions.add(1f + z + offsetZ);
@@ -227,12 +236,15 @@ public class ChunkMesh {
                             positions.add(0f + x + offsetX);
                             positions.add(1f + y);
                             positions.add(0f + z + offsetZ);
+
                             positions.add(0f + x + offsetX);
                             positions.add(1f + y);
                             positions.add(1f + z + offsetZ);
+
                             positions.add(1f + x + offsetX);
                             positions.add(1f + y);
                             positions.add(1f + z + offsetZ);
+
                             positions.add(1f + x + offsetX);
                             positions.add(1f + y);
                             positions.add(0f + z + offsetZ);
@@ -270,12 +282,15 @@ public class ChunkMesh {
                             positions.add(0f + x + offsetX);
                             positions.add(0f + y);
                             positions.add(1f + z + offsetZ);
+
                             positions.add(0f + x + offsetX);
                             positions.add(0f + y);
                             positions.add(0f + z + offsetZ);
+
                             positions.add(1f + x + offsetX);
                             positions.add(0f + y);
                             positions.add(0f + z + offsetZ);
+
                             positions.add(1f + x + offsetX);
                             positions.add(0f + y);
                             positions.add(1f + z + offsetZ);

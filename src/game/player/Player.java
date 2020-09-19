@@ -31,11 +31,24 @@ public class Player {
     private static float placeTimer              = 0;
     private static Vector3f oldPos               = new Vector3f(0,0,0);
     private static float accelerationMultiplier  = 0.07f;
-    private static String name                   = "";
+    private static String name                   = "singleplayer";
     private static boolean sneaking              = false;
     private static Vector3f viewBobbing          = new Vector3f(0,0,0);
     private static int currentInventorySelection = 0;
     private static boolean inventoryOpen         = false;
+    private static Vector3f worldSelectionPos    = null;
+
+    public static void setPlayerWorldSelectionPos(Vector3f thePos){
+        worldSelectionPos = thePos;
+    }
+
+    public static void setPlayerWorldSelectionPos(){
+        worldSelectionPos = null;
+    }
+
+    public static Vector3f getPlayerWorldSelectionPos(){
+        return worldSelectionPos;
+    }
 
     public static void togglePlayerInventory(){
         inventoryOpen = !inventoryOpen;
@@ -238,7 +251,7 @@ public class Player {
     }
 
 
-    public static void playerOnTick(Camera camera, SoundManager soundMgr) throws Exception {
+    public static void playerOnTick(Camera camera) throws Exception {
 
         applyPlayerInertiaBuffer(camera);
 
@@ -276,14 +289,14 @@ public class Player {
 
 
         if(mining && mineTimer <= 0) {
-            rayCast(camera.getPosition(), camera.getRotationVector(), 4f, true, false, false, soundMgr);
+            rayCast(camera.getPosition(), camera.getRotationVector(), 4f,  true, false);
             mineTimer = 0.5f;
         } else if (placing && placeTimer <= 0){
-            rayCast(camera.getPosition(), camera.getRotationVector(), 4f, false, true, false, soundMgr);
+            rayCast(camera.getPosition(), camera.getRotationVector(), 4f,  false, true);
             placeTimer = 0.5f;
-        } /*else if (mining) {
-            rayCast(camera.getPosition(), camera.getRotationVector(), 4f, false, false, this, true, soundMgr);
-        }*/
+        } else {
+            rayCast(camera.getPosition(), camera.getRotationVector(), 4f,  false, false);
+        }
 
         oldPos = new Vector3f(pos);
 

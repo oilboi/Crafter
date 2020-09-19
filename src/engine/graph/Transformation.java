@@ -78,4 +78,8 @@ public class Transformation {
                 .rotateY((float)Math.toRadians(rotation.y))
                 .translate(-position.x, -position.y, -position.z);
     }
+
+    public static Matrix4f getWorldSelectionViewMatrix(Vector3f position, Matrix4f matrix){
+        return matrix.translate(position.x, position.y, position.z);
+    }
 }

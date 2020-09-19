@@ -5,12 +5,14 @@ import engine.Window;
 import engine.graph.*;
 import game.player.Player;
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
 
 import static engine.Chunk.getChunkMesh;
 import static engine.Chunk.getLimit;
 import static engine.Hud.*;
 import static engine.ItemEntity.*;
 import static engine.TNTEntity.*;
+import static game.player.Player.getPlayerWorldSelectionPos;
 import static game.player.Player.isPlayerInventoryOpen;
 import static org.lwjgl.opengl.GL11.*;
 
@@ -132,21 +134,23 @@ public class Renderer {
             tntMesh.render();
         }
 
+        //render world selection mesh
+        if (getPlayerWorldSelectionPos() != null){
+            Mesh selectionMesh = getWorldSelectionMesh();
+            Matrix4f modelViewMatrix = transformation.getWorldSelectionViewMatrix(getPlayerWorldSelectionPos(), viewMatrix);
+            shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+            selectionMesh.render();
+        }
+
         shaderProgram.unbind();
 
         //TODO: BEGIN HUD SHADER PROGRAM!
         hudShaderProgram.bind();
 
         Matrix4f hudProjectionMatrix = transformation.getProjectionMatrix(90f, window.getWidth(), window.getHeight(), 0.0000001f, 0.1f);
-
-//        hudProjectionMatrix.rotateLocalY((float)Math.PI);
-
         hudShaderProgram.setUniform("projectionMatrix", hudProjectionMatrix);
-
         Matrix4f hudViewMatrix = new Matrix4f();
-
         hudShaderProgram.setUniform("texture_sampler", 0);
-
         hudViewMatrix.translate(0,0,-0.0000001f/*0.9999999f*/);
 
 //        {
@@ -178,8 +182,6 @@ public class Renderer {
                 thisMesh.render();
             }
         }
-
-
 
         hudShaderProgram.unbind();
 

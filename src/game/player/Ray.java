@@ -12,7 +12,7 @@ import static game.collision.CustomBlockBox.setBlockBox;
 import static game.player.Player.*;
 
 public class Ray {
-    public static void rayCast(Vector3f pos, Vector3f dir, float length, boolean mining, boolean placing, boolean debugTest, SoundManager soundMgr) throws Exception {
+    public static void rayCast(Vector3f pos, Vector3f dir, float length, boolean mining, boolean placing) throws Exception {
 
         Vector3f finalPos = null;
         Vector3f newPos   = null;
@@ -43,8 +43,12 @@ public class Ray {
                     placeBlock(lastPos, getCurrentInventorySelection()+11);
                 }
             }
-        } else if (debugTest){
-            createItem(2, lastPos);
+            else {
+                setPlayerWorldSelectionPos(finalPos); //position
+            }
+        }
+        else {
+            setPlayerWorldSelectionPos(); //null
         }
     }
 

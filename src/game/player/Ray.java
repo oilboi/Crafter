@@ -9,9 +9,10 @@ import static game.blocks.BlockDefinition.*;
 import static game.collision.Collision.wouldCollidePlacing;
 import static game.collision.CustomAABB.setAABB;
 import static game.collision.CustomBlockBox.setBlockBox;
+import static game.player.Player.*;
 
 public class Ray {
-    public static void rayCast(Vector3f pos, Vector3f dir, float length, boolean mining, boolean placing, Player player, boolean debugTest, SoundManager soundMgr) throws Exception {
+    public static void rayCast(Vector3f pos, Vector3f dir, float length, boolean mining, boolean placing, boolean debugTest, SoundManager soundMgr) throws Exception {
 
         Vector3f finalPos = null;
         Vector3f newPos   = null;
@@ -34,12 +35,12 @@ public class Ray {
                 destroyBlock(finalPos);
             } else if (placing && lastPos != null){
 
-                setAABB(player.getPos().x, player.getPos().y, player.getPos().z, player.getWidth(), player.getHeight());
+                setAABB(getPlayerPos().x, getPlayerPos().y, getPlayerPos().z, getPlayerWidth(), getPlayerHeight());
 
                 setBlockBox((int)lastPos.x,(int)lastPos.y,(int)lastPos.z, getBlockShape(1)[0]);
 
                 if (!wouldCollidePlacing()) {
-                    placeBlock(lastPos, player.getCurrentInventorySelection()+11);
+                    placeBlock(lastPos, getCurrentInventorySelection()+11);
                 }
             }
         } else if (debugTest){

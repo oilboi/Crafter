@@ -14,7 +14,7 @@ import static engine.sound.SoundAPI.playSound;
 import static game.blocks.BlockDefinition.*;
 import static game.blocks.BlockDefinition.getBottomTexturePoints;
 import static game.collision.Collision.applyInertia;
-import static game.player.Player.getPlayer;
+import static game.player.Player.getPlayerPosWithCollectionHeight;
 
 public class ItemEntity {
     private final static float itemSize   = 0.2f;
@@ -65,19 +65,17 @@ public class ItemEntity {
             }
 
             if (itemExists(i) && timer[i] > 3){
-                Player thisPlayer = getPlayer("singleplayer");
-                assert thisPlayer != null;
-                if (getDistance(position[i], thisPlayer.getPosWithCollectionHeight()) < 3f){
+                if (getDistance(position[i], getPlayerPosWithCollectionHeight()) < 3f){
                     if (collecting[i] == false){
                         /*soundMgr.playSoundSource(*/playSound("pickup", position[i])/*Crafter.Sounds.PICKUP.toString())*/;
                     }
                     collecting[i] = true;
-                    Vector3f normalizedPos = new Vector3f(thisPlayer.getPosWithCollectionHeight());
+                    Vector3f normalizedPos = new Vector3f(getPlayerPosWithCollectionHeight());
                     normalizedPos.sub(position[i]).normalize().mul(15f);
                     inertia[i] = normalizedPos;
                 }
 
-                if (getDistance(position[i], thisPlayer.getPosWithCollectionHeight()) < 0.2f){
+                if (getDistance(position[i], getPlayerPosWithCollectionHeight()) < 0.2f){
                     deleteItem(i);
                     continue;
                 }

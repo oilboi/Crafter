@@ -11,6 +11,7 @@ import static engine.Chunk.getLimit;
 import static engine.Hud.*;
 import static engine.ItemEntity.*;
 import static engine.TNTEntity.*;
+import static game.player.Player.isPlayerInventoryOpen;
 import static org.lwjgl.opengl.GL11.*;
 
 public class Renderer {
@@ -71,7 +72,7 @@ public class Renderer {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
-    public void render(Window window, Camera camera, Player player){
+    public void render(Window window, Camera camera){
         clear();
 
         if (window.isResized()){
@@ -155,7 +156,7 @@ public class Renderer {
 //            thisMesh.render();
 //        }
 
-        if (player.isInventoryOpen()) {
+        if (isPlayerInventoryOpen()) {
             {
                 Mesh thisMesh = getInventoryMesh();
                 Matrix4f modelViewMatrix = transformation.getModelViewMatrix(hudViewMatrix);

@@ -4,8 +4,6 @@ import engine.graph.Camera;
 import engine.sound.SoundManager;
 import org.joml.Vector3f;
 
-import java.util.ArrayList;
-
 import static engine.Hud.createSelection;
 import static engine.sound.SoundAPI.playSound;
 import static game.Crafter.chunkRenderDistance;
@@ -15,225 +13,201 @@ import static game.player.Ray.rayCast;
 
 
 public class Player {
-    private static ArrayList<Player> playerList = new ArrayList();
+    private static int renderDistance            = getChunkRenderDistance();
+    private static Vector3f pos                  = new Vector3f(0,53,0);
+    private static int[] blockPos                = {0,50,0};
+    private static int[] oldBlockPos             = {0,50,0};
+    private static float eyeHeight               = 1.5f;
+    private static float collectionHeight        = 0.7f;
+    private static Vector3f inertia              = new Vector3f(0,0,0);
+    private static float height                  = 1.9f;
+    private static float width                   = 0.3f;
+    private static int[] currentChunk            = {0,0};
+    private static boolean onGround              =  false;
+    private static boolean jumpBuffer            = false;
+    private static boolean mining                = false;
+    private static float mineTimer               = 0;
+    private static boolean placing               = false;
+    private static float placeTimer              = 0;
+    private static Vector3f oldPos               = new Vector3f(0,0,0);
+    private static float accelerationMultiplier  = 0.07f;
+    private static String name                   = "";
+    private static boolean sneaking              = false;
+    private static Vector3f viewBobbing          = new Vector3f(0,0,0);
+    private static int currentInventorySelection = 0;
+    private static boolean inventoryOpen         = false;
 
-    private static int renderDistance = getChunkRenderDistance();
-    private Vector3f pos = new Vector3f(0,53,0);
-
-    private int[] blockPos = {0,50,0};
-    private int[] oldBlockPos = {0,50,0};
-
-
-    private float eyeHeight = 1.5f;
-    private float collectionHeight = 0.7f;
-    private Vector3f inertia = new Vector3f(0,0,0);
-    private float height = 1.9f;
-    private float width = 0.3f;
-
-    private int[] currentChunk = {0,0};
-
-    private boolean onGround =  false;
-    private boolean jumpBuffer = false;
-    private boolean mining = false;
-    private float mineTimer = 0;
-    private boolean placing = false;
-    private float placeTimer = 0;
-    private Vector3f oldPos;
-    private float accelerationMultiplier = 0.07f;
-    private String name;
-    private boolean sneaking;
-    private Vector3f viewBobbing = new Vector3f(0,0,0);
-    private int currentInventorySelection = 0;
-
-    private static boolean inventoryOpen = false;
-
-    public void toggleInventory(){
+    public static void togglePlayerInventory(){
         inventoryOpen = !inventoryOpen;
-        System.out.println(inventoryOpen);
     }
 
-    public boolean isInventoryOpen(){
+    public static boolean isPlayerInventoryOpen(){
         return inventoryOpen;
     }
 
-    public Player(String name){
-        this.name = name;
-        playerList.add(this);
+    public static String getPlayerName(){
+        return name;
     }
 
-    public String getName(){
-        return this.name;
+    public static int getPlayerInventorySelection(){
+        return currentInventorySelection;
     }
 
-    public static Player getPlayer(String name){
-        for (Player thisPlayer : playerList){
-            if (thisPlayer.getName().equals(name)){
-                return thisPlayer;
-            }
-        }
-        return null;
+    public static Vector3f getPlayerViewBobbing(){
+        return viewBobbing;
     }
 
-    public int getInventorySelection(){
-        return this.currentInventorySelection;
-    }
-
-    public Vector3f getViewBobbing(){
-        return this.viewBobbing;
-    }
-
-    public void setMining( boolean mining){
+    public static void setPlayerMining( boolean isMining){
 //        if (mineTimer == 0) {
 //            mining = true;
 //            mineTimer = 20;
 //        }
-        this.mining = mining;
+        mining = isMining;
     }
 
-    public boolean getMining(){
+    public static boolean getPlayerMining(){
         return mining;
     }
 
 
-    public void setPlacing( boolean placing) {
+    public static void setPlayerPlacing( boolean isPlacing) {
 //        if (placeTimer == 0) {
 //            placing = true;
 //            placeTimer = 20;
 //        }
-
-        this.placing = placing;
+        placing = isPlacing;
     }
 
-    public float getHeight(){
+    public static float getPlayerHeight(){
         return height;
     }
-    public float getWidth(){
+    public static float getPlayerWidth(){
         return width;
     }
 
-    public boolean getPlacing() {
+    public static boolean getPlayerPlacing() {
         return placing;
     }
 
-    public Vector3f getPos() {
+    public static Vector3f getPlayerPos() {
         return pos;
     }
 
-    public Vector3f getPosWithEyeHeight(){
+    public static Vector3f getPlayerPosWithEyeHeight(){
         return new Vector3f(pos.x, pos.y + eyeHeight, pos.z);
     }
 
 
-    public Vector3f getPosWithViewBobbing(){
+    public static Vector3f getPlayerPosWithViewBobbing(){
         return new Vector3f(pos.x, pos.y + eyeHeight, pos.z);
     }
 
-    public Vector3f getPosWithCollectionHeight(){
+    public static Vector3f getPlayerPosWithCollectionHeight(){
         return new Vector3f(pos.x, pos.y + collectionHeight, pos.z);
     }
 
-    public void setPos(Vector3f pos) {
-        this.pos = pos;
+    public static void setPlayerPos(Vector3f newPos) {
+        pos = newPos;
     }
 
-    public Vector3f getInertia(){
+    public static Vector3f getPlayerInertia(){
         return inertia;
     }
 
-    public void setInertia(float x,float y,float z){
+    public static void setPlayerInertia(float x,float y,float z){
         inertia.x = x;
         inertia.y = y;
         inertia.z = z;
     }
 
-    private Vector3f inertiaBuffer = new Vector3f();
+    private static Vector3f inertiaBuffer = new Vector3f();
 
-    private boolean forward = false;
-    private boolean backward = false;
-    private boolean left = false;
-    private boolean right = false;
-    private boolean jump = false;
+    private static boolean forward = false;
+    private static boolean backward = false;
+    private static boolean left = false;
+    private static boolean right = false;
+    private static boolean jump = false;
 
-    public boolean getForward(){
+    public static boolean getPlayerForward(){
         return forward;
     }
-    public boolean getBackward(){
+    public static boolean getPlayerBackward(){
         return backward;
     }
-    public boolean getLeft(){
+    public static boolean getPlayerLeft(){
         return left;
     }
-    public boolean getRight(){
+    public static boolean getPlayerRight(){
         return right;
     }
-    public boolean getJump(){
+    public static boolean getPlayerJump(){
         return jump;
     }
-    public boolean isSneaking(){
+    public static boolean isPlayerSneaking(){
         return sneaking;
     }
 
-    public void setForward(boolean isForward){
+    public static void setPlayerForward(boolean isForward){
         forward = isForward;
     }
-    public void setBackward(boolean isBackward){
+    public static void setPlayerBackward(boolean isBackward){
         backward = isBackward;
     }
-    public void setLeft(boolean isLeft){
+    public static void setPlayerLeft(boolean isLeft){
         left = isLeft;
     }
-    public void setRight(boolean isRight){
+    public static void setPlayerRight(boolean isRight){
         right = isRight;
     }
-    public void setJump(boolean isJump){
+    public static void setPlayerJump(boolean isJump){
         jump = isJump;
     }
-    public void setSneaking(boolean isSneaking){
+    public static void setPlayerSneaking(boolean isSneaking){
         sneaking = isSneaking;
     }
 
-    private boolean playerIsMoving(){
+    private static boolean playerIsMoving(){
         return forward || backward || left || right;
     }
 
-    private float movementSpeed = 1.5f;
+    private static float movementSpeed = 1.5f;
 
-    public void setInertiaBuffer(Camera camera){
-        if (this.forward){
+    public static void setPlayerInertiaBuffer(Camera camera){
+        if (forward){
             float yaw = (float)Math.toRadians(camera.getRotation().y) + (float)Math.PI;
-            this.inertia.x += (float)(Math.sin(-yaw) * accelerationMultiplier) * movementSpeed;
-            this.inertia.z += (float)(Math.cos(yaw)  * accelerationMultiplier) * movementSpeed;
+            inertia.x += (float)(Math.sin(-yaw) * accelerationMultiplier) * movementSpeed;
+            inertia.z += (float)(Math.cos(yaw)  * accelerationMultiplier) * movementSpeed;
         }
-        if (this.backward){
+        if (backward){
             //no mod needed
             float yaw = (float)Math.toRadians(camera.getRotation().y);
-            this.inertia.x += (float)(Math.sin(-yaw) * accelerationMultiplier) * movementSpeed;
-            this.inertia.z += (float)(Math.cos(yaw)  * accelerationMultiplier) * movementSpeed;
+            inertia.x += (float)(Math.sin(-yaw) * accelerationMultiplier) * movementSpeed;
+            inertia.z += (float)(Math.cos(yaw)  * accelerationMultiplier) * movementSpeed;
         }
 
-        if (this.right){
+        if (right){
             float yaw = (float)Math.toRadians(camera.getRotation().y) - (float)(Math.PI /2);
-            this.inertia.x += (float)(Math.sin(-yaw) * accelerationMultiplier) * movementSpeed;
-            this.inertia.z += (float)(Math.cos(yaw)  * accelerationMultiplier) * movementSpeed;
+            inertia.x += (float)(Math.sin(-yaw) * accelerationMultiplier) * movementSpeed;
+            inertia.z += (float)(Math.cos(yaw)  * accelerationMultiplier) * movementSpeed;
         }
 
-        if (this.left){
+        if (left){
             float yaw = (float)Math.toRadians(camera.getRotation().y) + (float)(Math.PI /2);
-            this.inertia.x += (float)(Math.sin(-yaw) * accelerationMultiplier) * movementSpeed;
-            this.inertia.z += (float)(Math.cos(yaw)  * accelerationMultiplier) * movementSpeed;
+            inertia.x += (float)(Math.sin(-yaw) * accelerationMultiplier) * movementSpeed;
+            inertia.z += (float)(Math.cos(yaw)  * accelerationMultiplier) * movementSpeed;
         }
 
 //
 //        if (window.isKeyPressed(GLFW_KEY_LEFT_SHIFT)){
 //            //cameraInc.y = -1;
 //        }
-        if (this.jump && this.isOnGround()){
+        if (jump && isPlayerOnGround()){
             inertia.y += 10.5f;
         }
     }
 
-    private void applyInertiaBuffer(Camera camera){
-        setInertiaBuffer(camera);
+    private static void applyPlayerInertiaBuffer(Camera camera){
+        setPlayerInertiaBuffer(camera);
 
         inertia.x += inertiaBuffer.x;
         inertia.y += inertiaBuffer.y;
@@ -259,14 +233,14 @@ public class Player {
 
 
 
-    public Boolean isOnGround(){
+    public static Boolean isPlayerOnGround(){
         return onGround;
     }
 
 
-    public void onTick(Camera camera, SoundManager soundMgr) throws Exception {
+    public static void playerOnTick(Camera camera, SoundManager soundMgr) throws Exception {
 
-        this.applyInertiaBuffer(camera);
+        applyPlayerInertiaBuffer(camera);
 
         if(placeTimer > 0){
             placeTimer -= 0.003f;
@@ -286,26 +260,26 @@ public class Player {
         onGround = applyInertia(pos, inertia, true, width, height,true, sneaking, true);
 
         //map boundary check TODO: ID 1000
-        if (this.pos.x > ((chunkRenderDistance + 1) * 16)-0.5f) {
+        if (pos.x > ((chunkRenderDistance + 1) * 16)-0.5f) {
             pos.x = oldPos.x;
         }
-        if (this.pos.x < (chunkRenderDistance * -16) + 0.5f){
+        if (pos.x < (chunkRenderDistance * -16) + 0.5f){
             pos.x = oldPos.x;
         }
-        if (this.pos.z > ((chunkRenderDistance + 1) * 16)-0.5f) {
+        if (pos.z > ((chunkRenderDistance + 1) * 16)-0.5f) {
             pos.z = oldPos.z;
         }
-        if (this.pos.z < (chunkRenderDistance * -16) + 0.5f){
+        if (pos.z < (chunkRenderDistance * -16) + 0.5f){
             pos.z = oldPos.z;
         }
         //END TODO: ID 1000
 
 
         if(mining && mineTimer <= 0) {
-            rayCast(camera.getPosition(), camera.getRotationVector(), 4f, true, false, this, false, soundMgr);
+            rayCast(camera.getPosition(), camera.getRotationVector(), 4f, true, false, false, soundMgr);
             mineTimer = 0.5f;
         } else if (placing && placeTimer <= 0){
-            rayCast(camera.getPosition(), camera.getRotationVector(), 4f, false, true, this, false, soundMgr);
+            rayCast(camera.getPosition(), camera.getRotationVector(), 4f, false, true, false, soundMgr);
             placeTimer = 0.5f;
         } /*else if (mining) {
             rayCast(camera.getPosition(), camera.getRotationVector(), 4f, false, false, this, true, soundMgr);
@@ -316,7 +290,7 @@ public class Player {
         if(playerIsMoving()){
             applyViewBobbing();
         } else {
-            returnViewBobbing();
+            returnPlayerViewBobbing();
         }
 
 //        blockPos = new int[]{(int)Math.floor(pos.x), (int)Math.floor(pos.y),(int)Math.floor(pos.z)};
@@ -328,12 +302,12 @@ public class Player {
 //
 //        oldBlockPos = blockPos.clone();
     }
-    private boolean xPositive = true;
-    private boolean yPositive = true;
-    private int xBobPos = 0;
-    private int yBobPos = 0;
+    private static boolean xPositive = true;
+    private static boolean yPositive = true;
+    private static int xBobPos = 0;
+    private static int yBobPos = 0;
 
-    private void applyViewBobbing() throws Exception {
+    private static void applyViewBobbing() throws Exception {
         if (xPositive) {
             xBobPos += 1;
             if (xBobPos >= 200){
@@ -364,7 +338,7 @@ public class Player {
         viewBobbing.y = yBobPos/2000f;
     }
 
-    private void returnViewBobbing(){
+    private static void returnPlayerViewBobbing(){
         if (xBobPos > 0){
             xBobPos -= 1;
         } else if (xBobPos < 0){
@@ -379,7 +353,7 @@ public class Player {
         viewBobbing.y = yBobPos/2000f;
     }
 
-    public void changeScrollSelection(int i){
+    public static void changeScrollSelection(int i){
         currentInventorySelection += i;
         if (currentInventorySelection < 0) {
             currentInventorySelection = 8;
@@ -391,7 +365,7 @@ public class Player {
         createSelection(currentInventorySelection);
     }
 
-    public int getCurrentInventorySelection(){
+    public static int getCurrentInventorySelection(){
         return currentInventorySelection;
     }
 }

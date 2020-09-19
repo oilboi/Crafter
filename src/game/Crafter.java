@@ -21,6 +21,7 @@ import static engine.TNTEntity.createTNTEntityMesh;
 import static game.ChunkHandling.ChunkMesh.generateChunkMesh;
 import static game.ChunkHandling.ChunkMesh.initializeChunkTextureAtlas;
 import static game.blocks.BlockDefinition.initializeBlocks;
+import static game.player.Player.*;
 import static org.lwjgl.glfw.GLFW.*;
 
 public class Crafter implements IGameLogic {
@@ -44,8 +45,6 @@ public class Crafter implements IGameLogic {
     private boolean cButtonPushed = false;
 
     private boolean eButtonPushed = false;
-
-    private Player player;
 
     public static int getChunkRenderDistance(){
         return chunkRenderDistance;
@@ -90,7 +89,6 @@ public class Crafter implements IGameLogic {
                 generateChunkMesh(x, z, false);
             }
         }
-        player = new Player("singleplayer");
 
         this.soundMgr.init();
         this.soundMgr.setAttenuationModel(AL11.AL_LINEAR_DISTANCE);
@@ -108,39 +106,39 @@ public class Crafter implements IGameLogic {
     public void input(Window window, MouseInput input){
 
 
-        if (!player.isInventoryOpen()) {
+        if (!isPlayerInventoryOpen()) {
             if (window.isKeyPressed(GLFW_KEY_W)) {
-                player.setForward(true);
+                setPlayerForward(true);
             } else {
-                player.setForward(false);
+                setPlayerForward(false);
             }
 
             if (window.isKeyPressed(GLFW_KEY_S)) {
-                player.setBackward(true);
+                setPlayerBackward(true);
             } else {
-                player.setBackward(false);
+                setPlayerBackward(false);
             }
             if (window.isKeyPressed(GLFW_KEY_A)) {
-                player.setLeft(true);
+                setPlayerLeft(true);
             } else {
-                player.setLeft(false);
+                setPlayerLeft(false);
             }
             if (window.isKeyPressed(GLFW_KEY_D)) {
-                player.setRight(true);
+                setPlayerRight(true);
             } else {
-                player.setRight(false);
+                setPlayerRight(false);
             }
 
             if (window.isKeyPressed(GLFW_KEY_LEFT_SHIFT)) { //sneaking
-                player.setSneaking(true);
+                setPlayerSneaking(true);
             } else {
-                player.setSneaking(false);
+                setPlayerSneaking(false);
             }
 
             if (window.isKeyPressed(GLFW_KEY_SPACE)) {
-                player.setJump(true);
+                setPlayerJump(true);
             } else {
-                player.setJump(false);
+                setPlayerJump(false);
             }
         }
 
@@ -191,7 +189,7 @@ public class Crafter implements IGameLogic {
         if (window.isKeyPressed(GLFW_KEY_E)) {
             if (!eButtonPushed) {
                 eButtonPushed = true;
-                player.toggleInventory();
+                togglePlayerInventory();
                 input.setMouseLocked(!input.isMouseLocked());
                 if(!input.isMouseLocked()) {
                     glfwSetInputMode(window.getWindowHandle(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
@@ -199,38 +197,38 @@ public class Crafter implements IGameLogic {
                     glfwSetInputMode(window.getWindowHandle(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
                 }
 
-                player.setForward(false);
-                player.setBackward(false);
-                player.setLeft(false);
-                player.setRight(false);
-                player.setSneaking(false);
-                player.setJump(false);
+                setPlayerForward(false);
+                setPlayerBackward(false);
+                setPlayerLeft(false);
+                setPlayerRight(false);
+                setPlayerSneaking(false);
+                setPlayerJump(false);
             }
         } else if (!window.isKeyPressed(GLFW_KEY_E)){
             eButtonPushed = false;
         }
 
 
-        if (!player.isInventoryOpen()) {
+        if (!isPlayerInventoryOpen()) {
             //mouse left button input
             if (input.isLeftButtonPressed()) {
-                player.setMining(true);
+                setPlayerMining(true);
             } else {
-                player.setMining(false);
+                setPlayerMining(false);
             }
 
             //mouse right button input
             if (input.isRightButtonPressed()) {
-                player.setPlacing(true);
+                setPlayerPlacing(true);
             } else {
-                player.setPlacing(false);
+                setPlayerPlacing(false);
             }
 
             float scroll = input.getScroll();
             if (scroll < 0) {
-                player.changeScrollSelection(1);
+                changeScrollSelection(1);
             } else if (scroll > 0) {
-                player.changeScrollSelection(-1);
+                changeScrollSelection(-1);
             }
         }
     }
@@ -240,8 +238,8 @@ public class Crafter implements IGameLogic {
 
         chunkUpdater();
 
-        camera.setPosition(player.getPosWithEyeHeight().x, player.getPosWithEyeHeight().y, player.getPosWithEyeHeight().z);
-        camera.movePosition(player.getViewBobbing().x,player.getViewBobbing().y, player.getViewBobbing().z);
+        camera.setPosition(getPlayerPosWithEyeHeight().x, getPlayerPosWithEyeHeight().y, getPlayerPosWithEyeHeight().z);
+        camera.movePosition(getPlayerViewBobbing().x,getPlayerViewBobbing().y, getPlayerViewBobbing().z);
 
         //update camera based on mouse
         Vector2f rotVec = mouseInput.getDisplVec();
@@ -262,7 +260,7 @@ public class Crafter implements IGameLogic {
             camera.moveRotation(0,-360, 0);
         }
 
-        player.onTick(camera, soundMgr);
+        playerOnTick(camera, soundMgr);
 
         soundMgr.updateListenerPosition(camera);
 
@@ -273,7 +271,7 @@ public class Crafter implements IGameLogic {
 
     @Override
     public void render(Window window){
-        renderer.render(window, camera, player);
+        renderer.render(window, camera);
     }
 
     @Override

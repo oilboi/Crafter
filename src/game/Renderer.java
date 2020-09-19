@@ -181,6 +181,13 @@ public class Renderer {
                 hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
                 thisMesh.render();
             }
+
+            {
+                Mesh thisMesh = getCrossHairMesh();
+                Matrix4f modelViewMatrix = transformation.getModelViewMatrix(hudViewMatrix);
+                hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+                thisMesh.render();
+            }
         }
 
         hudShaderProgram.unbind();

@@ -149,12 +149,9 @@ public class Renderer {
         //TODO: BEGIN HUD SHADER PROGRAM!
         hudShaderProgram.bind();
 
-        Matrix4f hudProjectionMatrix = transformation.getProjectionMatrix(90f, window.getWidth(), window.getHeight(), HUD_Z_NEAR, HUD_Z_FAR);
-
+        Matrix4f hudProjectionMatrix = transformation.getProjectionMatrix(FOV, window.getWidth(), window.getHeight(), HUD_Z_NEAR, HUD_Z_FAR);
         hudShaderProgram.setUniform("projectionMatrix", hudProjectionMatrix);
-
         Matrix4f hudViewMatrix = new Matrix4f();
-
         hudShaderProgram.setUniform("texture_sampler", 0);
 
         //todo this is debug!
@@ -172,18 +169,18 @@ public class Renderer {
                 hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
                 thisMesh.render();
             }
-        } else {
 
-
-            //todo DEBUG DEBUG
             {
                 Mesh thisMesh = getPlayerMesh();
-                Matrix4f modelViewMatrix = transformation.getGenericMatrixWithPosRotation(getPlayerHudPos(),getPlayerHudRot(),hudViewMatrix);
+                Matrix4f modelViewMatrix = transformation.getGenericMatrixWithPosRotationScale(getPlayerHudPos(),getPlayerHudRot(),getPlayerHudScale(),hudViewMatrix);
                 hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
                 thisMesh.render();
             }
 
             hudViewMatrix = new Matrix4f();
+
+        } else {
+
 
             {
                 Mesh thisMesh = getSelectionMesh();

@@ -19,12 +19,9 @@ public class Hud {
     private static final float FONT_HEIGHT = 16f;
     private static final float LETTER_HEIGHT = 8f;
 
-    private static Vector3f playerPos = new Vector3f(0,0,-5f);
+    private static Vector3f playerPos = new Vector3f(-4.2f,5.1f,-13f);
+    private static Vector3f playerScale = new Vector3f(0.7f,0.8f,0.7f);
     private static Vector3f playerRot = new Vector3f(0,0,0);
-
-    public static void hudOnStepTest(){
-        playerRot.y += 0.1f;
-    }
 
     private static Texture fontTextureAtlas;
     private static Texture hotBar;
@@ -88,6 +85,10 @@ public class Hud {
         return playerRot;
     }
 
+    public static Vector3f getPlayerHudScale(){
+        return playerScale;
+    }
+
     public static void createHudDebug(String text){
         createDebugHotbar();
         createInventory();
@@ -109,7 +110,7 @@ public class Hud {
         int indicesCount = 0;
 
 
-        float thisTest = -5f;
+        float thisTest = -14f;
 
         float yPos = (-7.1f * scale);
 
@@ -198,7 +199,7 @@ public class Hud {
 
         float yPos = (-7.1f * scale);
 
-        float thisTest = -5.f;
+        float thisTest = -14.f;
 
         float currentSelection = (currentInventorySelection-4f) * ((scale) * 1.815f);
         //front
@@ -283,7 +284,7 @@ public class Hud {
 
         float thisScale = 8f * scale;
 
-        float thisTest = -5f;
+        float thisTest = -14f;
 
         int indicesCount = 0;
 
@@ -693,7 +694,7 @@ public class Hud {
 
 
         int indicesCount = 0;
-        float thisTest = -5f;
+        float thisTest = -20f;
 
         //front
         positions.add(scale);
@@ -784,21 +785,115 @@ public class Hud {
         return texturePoints;
     }
 
+    public static void hudOnStepTest(){
+        playerRot.y += 0.1f;
+    }
+
     private static void createPlayerMesh(){
         float[][] oneBlockyBoi = new float[][]{
-                //head
-                {0f,0f,0f,1f,1f,1f},
+//                head
+                {-0.75f,-0.5f,-0.75f,0.75f,1.0f,0.75f},
+////                body
+                {-0.75f,-2.5f,-0.45f,0.75f,-0.5f,0.45f},
+//                //right arm
+                {0.75f,-2.75f,-0.45f, 1.65f,-0.5f,0.45f},
+//                //left arm
+                {-1.65f,-2.75f,-0.45f, -0.75f,-0.5f,0.45f},
+
+                //right leg
+                {-0.75f,-5.0f,-0.375f, 0.0f,-2.5f,0.375f},
+
+                //left leg
+                {0.0f,-5.0f,-0.375f,  0.75f,-2.5f,0.375f},
         };
 
         float[][] textureArrayArray = new float[][]{
                 //head
+                //front
                 calculateTexture(8,8,16,16),
-                calculateTexture(8,8,16,16),
-                calculateTexture(8,8,16,16),
-                calculateTexture(8,8,16,16),
-                calculateTexture(8,8,16,16),
-                calculateTexture(8,8,16,16),
-                //something else
+                //back
+                calculateTexture(24,8,32,16),
+                //right
+                calculateTexture(16,8,24,16),
+                //left
+                calculateTexture(0,8,8,16),
+                //top
+                calculateTexture(8,0,16,8),
+                //bottom
+                calculateTexture(16,0,24,8),
+
+                //body
+                //front
+                calculateTexture(20,20,28,30),
+                //back
+                calculateTexture(32,20,40,30),
+                //right
+                calculateTexture(28,20,32,30),
+                //left
+                calculateTexture(16,20,20,30),
+                //top
+                calculateTexture(20,16,28,20),
+                //bottom
+                calculateTexture(28,16,36,20),
+
+
+                //right arm
+                //front
+                calculateTexture(44,20,48,32), //light
+                //back
+                calculateTexture(48,20,52,32), //dark
+                //right
+                calculateTexture(48,20,52,32), //dark
+                //left
+                calculateTexture(44,20,48,32), //light
+                //top
+                calculateTexture(44,16,48,20), //shoulder
+                //bottom
+                calculateTexture(48,16,52,20), //palm
+
+                //left arm
+                //front
+                calculateTexture(44,20,48,32), //light
+                //back
+                calculateTexture(48,20,52,32), //dark
+                //right
+                calculateTexture(44,20,48,32), //light
+                //left
+                calculateTexture(48,20,52,32), //dark
+                //top
+                calculateTexture(44,16,48,20), //shoulder
+                //bottom
+                calculateTexture(48,16,52,20), //palm
+
+
+                //right leg
+                //front
+                calculateTexture(4,20,8,32), //light
+                //back
+                calculateTexture(0,20,4,32), //dark
+                //right
+                calculateTexture(8,20,12,32), //dark
+                //left
+                calculateTexture(12,20,16,32), //light
+                //top
+                calculateTexture(4,16,8,20), //top
+                //bottom
+                calculateTexture(8,16,12,20), //bottom
+
+                //left leg
+                //front
+                calculateTexture(4,20,8,32), //light
+                //back
+                calculateTexture(0,20,4,32), //dark
+                //right
+                calculateTexture(12,20,16,32), //light
+                //left
+                calculateTexture(8,20,12,32), //dark
+                //top
+                calculateTexture(4,16,8,20), //top
+                //bottom
+                calculateTexture(8,16,12,20), //bottom
+
         };
 
         ArrayList positions = new ArrayList();

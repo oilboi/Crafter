@@ -24,7 +24,7 @@ public class Renderer {
 
     private static final float FOV = (float) Math.toRadians(60.0f);
 
-    private static final float HUD_Z_NEAR = 0.0f;
+    private static final float HUD_Z_NEAR = 0.001f;
     private static final float HUD_Z_FAR = 1120.f;
 
     private static final float Z_NEAR = 0.1f;
@@ -144,21 +144,28 @@ public class Renderer {
 
         shaderProgram.unbind();
 
+        glClear(GL_DEPTH_BUFFER_BIT);
+
+
+
         //TODO: BEGIN HUD SHADER PROGRAM!
         hudShaderProgram.bind();
 
-        Matrix4f hudProjectionMatrix = transformation.getProjectionMatrix(90f, window.getWidth(), window.getHeight(), 0.0000001f, 0.1f);
-        hudShaderProgram.setUniform("projectionMatrix", hudProjectionMatrix);
-        Matrix4f hudViewMatrix = new Matrix4f();
-        hudShaderProgram.setUniform("texture_sampler", 0);
-        hudViewMatrix.translate(0,0,-0.0000001f/*0.9999999f*/);
+        Matrix4f hudProjectionMatrix = transformation.getProjectionMatrix(90f, window.getWidth(), window.getHeight(), HUD_Z_NEAR, HUD_Z_FAR);
 
-        {
-            Mesh thisMesh = testTextMesh();
-            Matrix4f modelViewMatrix = transformation.getModelViewMatrix(hudViewMatrix);
-            hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
-            thisMesh.render();
-        }
+        hudShaderProgram.setUniform("projectionMatrix", hudProjectionMatrix);
+
+        Matrix4f hudViewMatrix = new Matrix4f();
+
+        hudShaderProgram.setUniform("texture_sampler", 0);
+
+        //todo this is debug!
+//        {
+//            Mesh thisMesh = testTextMesh();
+//            Matrix4f modelViewMatrix = transformation.getModelViewMatrix(hudViewMatrix);
+//            hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+//            thisMesh.render();
+//        }
 
         if (isPlayerInventoryOpen()) {
             {
@@ -168,15 +175,16 @@ public class Renderer {
                 thisMesh.render();
             }
         } else {
+
             {
-                Mesh thisMesh = getHotBarMesh();
+                Mesh thisMesh = getSelectionMesh();
                 Matrix4f modelViewMatrix = transformation.getModelViewMatrix(hudViewMatrix);
                 hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
                 thisMesh.render();
             }
 
             {
-                Mesh thisMesh = getSelectionMesh();
+                Mesh thisMesh = getHotBarMesh();
                 Matrix4f modelViewMatrix = transformation.getModelViewMatrix(hudViewMatrix);
                 hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
                 thisMesh.render();
@@ -189,9 +197,7 @@ public class Renderer {
                 thisMesh.render();
             }
         }
-
         hudShaderProgram.unbind();
-
     }
 
     public void cleanup(){

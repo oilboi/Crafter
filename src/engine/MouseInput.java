@@ -29,6 +29,14 @@ public class MouseInput {
         displVec = new Vector2f();
     }
 
+    public void resetPosVector(Window window){
+        glfwSetCursorPos(window.getWindowHandle(),window.getWidth() / 2,window.getHeight() / 2 );
+        currentPos.x = window.getWidth() / 2;
+        currentPos.y = window.getHeight() / 2;
+        previousPos.x = currentPos.x;
+        previousPos.y = currentPos.y;
+    }
+
     public void init(Window window){
         glfwSetCursorPosCallback(window.getWindowHandle(), (windowHandle, xpos, ypos) -> {
             currentPos.x = xpos;
@@ -62,8 +70,8 @@ public class MouseInput {
             glfwSetCursorPos(window.getWindowHandle(), window.getWidth() / 2, window.getHeight() / 2);
 
             if (previousPos.x > 0 && previousPos.y > 0 && inWindow) {
-                double deltax = currentPos.x - window.getWidth() / 2;//previousPos.x;
-                double deltay = currentPos.y - window.getHeight() / 2;//previousPos.y;
+                double deltax = currentPos.x - window.getWidth() / 2;
+                double deltay = currentPos.y - window.getHeight() / 2;
 
                 boolean rotateX = deltax != 0;
                 boolean rotateY = deltay != 0;

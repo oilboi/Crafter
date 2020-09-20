@@ -194,6 +194,7 @@ public class Crafter implements IGameLogic {
                     glfwSetInputMode(window.getWindowHandle(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
                 } else{
                     glfwSetInputMode(window.getWindowHandle(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+                    input.resetPosVector(window);
                 }
 
                 setPlayerForward(false);
@@ -241,7 +242,9 @@ public class Crafter implements IGameLogic {
         camera.movePosition(getPlayerViewBobbing().x,getPlayerViewBobbing().y, getPlayerViewBobbing().z);
 
         //update camera based on mouse
+
         Vector2f rotVec = mouseInput.getDisplVec();
+
         camera.moveRotation(rotVec.x * MOUSE_SENSITIVITY, rotVec.y * MOUSE_SENSITIVITY, 0);
         //limit camera pitch
         if (camera.getRotation().x < -90f) {

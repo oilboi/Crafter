@@ -174,6 +174,17 @@ public class Renderer {
             }
         } else {
 
+
+            //todo DEBUG DEBUG
+            {
+                Mesh thisMesh = getPlayerMesh();
+                Matrix4f modelViewMatrix = transformation.getGenericMatrixWithPosRotation(getPlayerHudPos(),getPlayerHudRot(),hudViewMatrix);
+                hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+                thisMesh.render();
+            }
+
+            hudViewMatrix = new Matrix4f();
+
             {
                 Mesh thisMesh = getSelectionMesh();
                 Matrix4f modelViewMatrix = transformation.getModelViewMatrix(hudViewMatrix);

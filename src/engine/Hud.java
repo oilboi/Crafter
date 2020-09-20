@@ -2,6 +2,7 @@ package engine;
 
 import engine.graph.Mesh;
 import engine.graph.Texture;
+import org.joml.Vector3f;
 
 import java.util.ArrayList;
 
@@ -10,12 +11,28 @@ import static engine.Chunk.getLight;
 import static game.blocks.BlockDefinition.*;
 
 public class Hud {
+    private final static float scale = 1f;
+
+    private static final float FONT_WIDTH = 216f;
+    private static final float LETTER_WIDTH = 6f;
+
+    private static final float FONT_HEIGHT = 16f;
+    private static final float LETTER_HEIGHT = 8f;
+
+    private static Vector3f playerPos = new Vector3f(0,0,-5f);
+    private static Vector3f playerRot = new Vector3f(0,0,0);
+
+    public static void hudOnStepTest(){
+        playerRot.y += 0.1f;
+    }
+
     private static Texture fontTextureAtlas;
     private static Texture hotBar;
     private static Texture selection;
     private static Texture mainInventory;
     private static Texture worldSelection;
     private static Texture crossHair;
+    private static Texture playerTexture;
 
     private static Mesh thisHotBarMesh;
     private static Mesh thisSelectionMesh;
@@ -23,6 +40,7 @@ public class Hud {
     private static Mesh thisWorldSelectionMesh;
     private static Mesh thisCrossHairMesh;
     private static Mesh debugTestMesh;
+    private static Mesh playerMesh;
 
     public static void initializeFontTextureAtlas() throws Exception {
         fontTextureAtlas = new Texture("textures/font.png");
@@ -31,9 +49,8 @@ public class Hud {
         mainInventory = new Texture("textures/inventory.png");
         worldSelection = new Texture("textures/selection.png");
         crossHair = new Texture("textures/crosshair.png");
+        playerTexture = new Texture("textures/player.png");
     }
-
-    private final static float scale = 1f;
 
     public static Mesh getHotBarMesh(){
         return thisHotBarMesh;
@@ -59,6 +76,18 @@ public class Hud {
         return thisCrossHairMesh;
     }
 
+    public static Mesh getPlayerMesh(){
+        return playerMesh;
+    }
+
+    public static Vector3f getPlayerHudPos(){
+        return playerPos;
+    }
+
+    public static Vector3f getPlayerHudRot(){
+        return playerRot;
+    }
+
     public static void createHudDebug(String text){
         createDebugHotbar();
         createInventory();
@@ -66,6 +95,7 @@ public class Hud {
         createWorldSelectionMesh();
         createCrossHair();
         createCustomHudText("wow", 1,0,0);
+        createPlayerMesh();
     }
 
 
@@ -739,12 +769,399 @@ public class Hud {
         thisCrossHairMesh = new Mesh(positionsArray, lightArray, indicesArray, textureCoordArray, crossHair);
     }
 
-    private static final float FONT_WIDTH = 216f;
-    private static final float LETTER_WIDTH = 6f;
 
-    private static final float FONT_HEIGHT = 16f;
-    private static final float LETTER_HEIGHT = 8f;
-    //what have I done?
+    private static final float PLAYER_WIDTH = 64f;
+    private static final float PLAYER_HEIGHT = 32f;
+
+    private static float[] calculateTexture(int xMin, int yMin, int xMax, int yMax){
+        float[] texturePoints = new float[4];
+
+        texturePoints[0] = (float)xMin/PLAYER_WIDTH; //min x (-)
+        texturePoints[1] = (float)xMax/PLAYER_WIDTH; //max x (+)
+
+        texturePoints[2] = (float)yMin/PLAYER_HEIGHT; //min y (-)
+        texturePoints[3] = (float)yMax/PLAYER_HEIGHT; //max y (+)
+        return texturePoints;
+    }
+
+    private static void createPlayerMesh(){
+        float[][] oneBlockyBoi = new float[][]{
+                //head
+                {0f,0f,0f,1f,1f,1f},
+        };
+
+        float[][] textureArrayArray = new float[][]{
+                //head
+                calculateTexture(8,8,16,16),
+                calculateTexture(8,8,16,16),
+                calculateTexture(8,8,16,16),
+                calculateTexture(8,8,16,16),
+                calculateTexture(8,8,16,16),
+                calculateTexture(8,8,16,16),
+                //something else
+        };
+
+        ArrayList positions = new ArrayList();
+        ArrayList textureCoord = new ArrayList();
+        ArrayList indices = new ArrayList();
+        ArrayList light = new ArrayList();
+
+        int indicesCount = 0;
+        int textureCounter = 0;
+        for (float[] thisBlockBox : oneBlockyBoi) {
+            // 0, 1, 2, 3, 4, 5
+            //-x,-y,-z, x, y, z
+            // 0, 0, 0, 1, 1, 1
+
+            //front
+            positions.add(thisBlockBox[3]);
+            positions.add(thisBlockBox[4]);
+            positions.add(thisBlockBox[5]);
+            positions.add(thisBlockBox[0]);
+            positions.add(thisBlockBox[4]);
+            positions.add(thisBlockBox[5]);
+            positions.add(thisBlockBox[0]);
+            positions.add(thisBlockBox[1]);
+            positions.add(thisBlockBox[5]);
+            positions.add(thisBlockBox[3]);
+            positions.add(thisBlockBox[1]);
+            positions.add(thisBlockBox[5]);
+            //front
+            float frontLight = 1f;
+
+            //front
+            for (int i = 0; i < 12; i++) {
+                light.add(frontLight);
+            }
+            //front
+            indices.add(0 + indicesCount);
+            indices.add(1 + indicesCount);
+            indices.add(2 + indicesCount);
+            indices.add(0 + indicesCount);
+            indices.add(2 + indicesCount);
+            indices.add(3 + indicesCount);
+
+            indicesCount += 4;
+
+            // 0, 1,  2, 3
+            //-x,+x, -y,+y
+
+            float[] textureFront = textureArrayArray[textureCounter];
+
+            //front
+            textureCoord.add(textureFront[1]); //x positive
+            textureCoord.add(textureFront[2]); //y positive
+            textureCoord.add(textureFront[0]); //x negative
+            textureCoord.add(textureFront[2]); //y positive
+
+            textureCoord.add(textureFront[0]); //x negative
+            textureCoord.add(textureFront[3]);   //y negative
+            textureCoord.add(textureFront[1]); //x positive
+            textureCoord.add(textureFront[3]);   //y negative
+
+
+            textureCounter++;
+
+
+
+            //back
+            positions.add(thisBlockBox[0]);
+            positions.add(thisBlockBox[4]);
+            positions.add(thisBlockBox[2]);
+
+            positions.add(thisBlockBox[3]);
+            positions.add(thisBlockBox[4]);
+            positions.add(thisBlockBox[2]);
+
+            positions.add(thisBlockBox[3]);
+            positions.add(thisBlockBox[1]);
+            positions.add(thisBlockBox[2]);
+
+            positions.add(thisBlockBox[0]);
+            positions.add(thisBlockBox[1]);
+            positions.add(thisBlockBox[2]);
+
+            //back
+            float backLight = 1f;
+
+            //back
+            for (int i = 0; i < 12; i++) {
+                light.add(backLight);
+            }
+            //back
+            indices.add(0 + indicesCount);
+            indices.add(1 + indicesCount);
+            indices.add(2 + indicesCount);
+            indices.add(0 + indicesCount);
+            indices.add(2 + indicesCount);
+            indices.add(3 + indicesCount);
+            indicesCount += 4;
+
+            float[] textureBack = textureArrayArray[textureCounter];
+
+            // 0, 1, 2, 3, 4, 5
+            //-x,-y,-z, x, y, z
+            // 0, 0, 0, 1, 1, 1
+
+            // 0, 1,  2, 3
+            //-x,+x, -y,+y
+
+
+            //back
+            textureCoord.add(textureBack[1]);
+            textureCoord.add(textureBack[2]);
+            textureCoord.add(textureBack[0]);
+            textureCoord.add(textureBack[2]);
+
+            textureCoord.add(textureBack[0]);
+            textureCoord.add(textureBack[3]);
+            textureCoord.add(textureBack[1]);
+            textureCoord.add(textureBack[3]);
+
+            textureCounter++;
+
+
+
+            //right
+            positions.add(thisBlockBox[3]);
+            positions.add(thisBlockBox[4]);
+            positions.add(thisBlockBox[2]);
+
+            positions.add(thisBlockBox[3]);
+            positions.add(thisBlockBox[4]);
+            positions.add(thisBlockBox[5]);
+
+            positions.add(thisBlockBox[3]);
+            positions.add(thisBlockBox[1]);
+            positions.add(thisBlockBox[5]);
+
+            positions.add(thisBlockBox[3]);
+            positions.add(thisBlockBox[1]);
+            positions.add(thisBlockBox[2]);
+            //right
+            float rightLight = 1f;
+
+            //right
+            for (int i = 0; i < 12; i++) {
+                light.add(rightLight);
+            }
+            //right
+            indices.add(0 + indicesCount);
+            indices.add(1 + indicesCount);
+            indices.add(2 + indicesCount);
+            indices.add(0 + indicesCount);
+            indices.add(2 + indicesCount);
+            indices.add(3 + indicesCount);
+            indicesCount += 4;
+
+
+            // 0, 1, 2, 3, 4, 5
+            //-x,-y,-z, x, y, z
+            // 0, 0, 0, 1, 1, 1
+
+            // 0, 1,  2, 3
+            //-x,+x, -y,+y
+
+
+            float[] textureRight = textureArrayArray[textureCounter];
+            //right
+            textureCoord.add(textureRight[1]);
+            textureCoord.add(textureRight[2]);
+            textureCoord.add(textureRight[0]);
+            textureCoord.add(textureRight[2]);
+
+            textureCoord.add(textureRight[0]);
+            textureCoord.add(textureRight[3]);
+            textureCoord.add(textureRight[1]);
+            textureCoord.add(textureRight[3]);
+
+            textureCounter++;
+
+
+            //left
+            positions.add(thisBlockBox[0]);
+            positions.add(thisBlockBox[4]);
+            positions.add(thisBlockBox[5]);
+
+            positions.add(thisBlockBox[0]);
+            positions.add(thisBlockBox[4]);
+            positions.add(thisBlockBox[2]);
+
+            positions.add(thisBlockBox[0]);
+            positions.add(thisBlockBox[1]);
+            positions.add(thisBlockBox[2]);
+
+            positions.add(thisBlockBox[0]);
+            positions.add(thisBlockBox[1]);
+            positions.add(thisBlockBox[5]);
+
+            //left
+            float leftLight = 1f;
+
+            //left
+            for (int i = 0; i < 12; i++) {
+                light.add(leftLight);
+            }
+            //left
+            indices.add(0 + indicesCount);
+            indices.add(1 + indicesCount);
+            indices.add(2 + indicesCount);
+            indices.add(0 + indicesCount);
+            indices.add(2 + indicesCount);
+            indices.add(3 + indicesCount);
+            indicesCount += 4;
+
+            float[] textureLeft = textureArrayArray[textureCounter];
+            //left
+            textureCoord.add(textureLeft[1]);
+            textureCoord.add(textureLeft[2]);
+            textureCoord.add(textureLeft[0]);
+            textureCoord.add(textureLeft[2]);
+
+            textureCoord.add(textureLeft[0]);
+            textureCoord.add(textureLeft[3]);
+            textureCoord.add(textureLeft[1]);
+            textureCoord.add(textureLeft[3]);
+
+            textureCounter++;
+
+
+            //top
+            positions.add(thisBlockBox[0]);
+            positions.add(thisBlockBox[4]);
+            positions.add(thisBlockBox[2]);
+
+            positions.add(thisBlockBox[0]);
+            positions.add(thisBlockBox[4]);
+            positions.add(thisBlockBox[5]);
+
+            positions.add(thisBlockBox[3]);
+            positions.add(thisBlockBox[4]);
+            positions.add(thisBlockBox[5]);
+
+            positions.add(thisBlockBox[3]);
+            positions.add(thisBlockBox[4]);
+            positions.add(thisBlockBox[2]);
+            //top
+            float topLight = 1f;
+
+            //top
+            for (int i = 0; i < 12; i++) {
+                light.add(topLight);
+            }
+            //top
+            indices.add(0 + indicesCount);
+            indices.add(1 + indicesCount);
+            indices.add(2 + indicesCount);
+            indices.add(0 + indicesCount);
+            indices.add(2 + indicesCount);
+            indices.add(3 + indicesCount);
+            indicesCount += 4;
+
+            // 0, 1, 2, 3, 4, 5
+            //-x,-y,-z, x, y, z
+            // 0, 0, 0, 1, 1, 1
+
+            // 0, 1,  2, 3
+            //-x,+x, -y,+y
+
+            float[] textureTop = textureArrayArray[textureCounter];
+            //top
+            textureCoord.add(textureTop[1]);
+            textureCoord.add(textureTop[2]);
+            textureCoord.add(textureTop[0]);
+            textureCoord.add(textureTop[2]);
+
+            textureCoord.add(textureTop[0]);
+            textureCoord.add(textureTop[3]);
+            textureCoord.add(textureTop[1]);
+            textureCoord.add(textureTop[3]);
+
+            textureCounter++;
+
+
+            //bottom
+            positions.add(thisBlockBox[0]);
+            positions.add(thisBlockBox[1]);
+            positions.add(thisBlockBox[5]);
+
+            positions.add(thisBlockBox[0]);
+            positions.add(thisBlockBox[1]);
+            positions.add(thisBlockBox[2]);
+
+            positions.add(thisBlockBox[3]);
+            positions.add(thisBlockBox[1]);
+            positions.add(thisBlockBox[2]);
+
+            positions.add(thisBlockBox[3]);
+            positions.add(thisBlockBox[1]);
+            positions.add(thisBlockBox[5]);
+            //bottom
+            float bottomLight = 1f;
+
+            //bottom
+            for (int i = 0; i < 12; i++) {
+                light.add(bottomLight);
+            }
+            //bottom
+            indices.add(0 + indicesCount);
+            indices.add(1 + indicesCount);
+            indices.add(2 + indicesCount);
+            indices.add(0 + indicesCount);
+            indices.add(2 + indicesCount);
+            indices.add(3 + indicesCount);
+            indicesCount += 4;
+
+
+            // 0, 1, 2, 3, 4, 5
+            //-x,-y,-z, x, y, z
+            // 0, 0, 0, 1, 1, 1
+
+            // 0, 1,  2, 3
+            //-x,+x, -y,+y
+
+            float[] textureBottom = textureArrayArray[textureCounter];
+            //bottom
+            textureCoord.add(textureBottom[1]);
+            textureCoord.add(textureBottom[2]);
+            textureCoord.add(textureBottom[0]);
+            textureCoord.add(textureBottom[2]);
+
+            textureCoord.add(textureBottom[0]);
+            textureCoord.add(textureBottom[3]);
+            textureCoord.add(textureBottom[1]);
+            textureCoord.add(textureBottom[3]);
+
+            textureCounter++;
+        }
+
+        //convert the position objects into usable array
+        float[] positionsArray = new float[positions.size()];
+        for (int i = 0; i < positions.size(); i++) {
+            positionsArray[i] = (float) positions.get(i);
+        }
+
+        //convert the light objects into usable array
+        float[] lightArray = new float[light.size()];
+        for (int i = 0; i < light.size(); i++) {
+            lightArray[i] = (float) light.get(i);
+        }
+
+        //convert the indices objects into usable array
+        int[] indicesArray = new int[indices.size()];
+        for (int i = 0; i < indices.size(); i++) {
+            indicesArray[i] = (int) indices.get(i);
+        }
+
+        //convert the textureCoord objects into usable array
+        float[] textureCoordArray = new float[textureCoord.size()];
+        for (int i = 0; i < textureCoord.size(); i++) {
+            textureCoordArray[i] = (float) textureCoord.get(i);
+        }
+
+        playerMesh = new Mesh(positionsArray, lightArray, indicesArray, textureCoordArray, playerTexture);
+    }
+
     public static float[] translateCharToArray(char thisChar){
         float[] letterArray = new float[]{0,0};
         switch (thisChar){
@@ -1010,7 +1427,6 @@ public class Hud {
             case '9':
                 letterArray[0] = 35;
                 break;
-                //now you've learned to count, that will be 5 dollars
 
             case '.':
                 letterArray[0] = 26;

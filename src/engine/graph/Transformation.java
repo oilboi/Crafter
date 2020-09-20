@@ -82,4 +82,17 @@ public class Transformation {
     public static Matrix4f getWorldSelectionViewMatrix(Vector3f position, Matrix4f matrix){
         return matrix.translate(position.x, position.y, position.z);
     }
+
+
+    public static Matrix4f getGenericMatrixWithPos(Vector3f position, Matrix4f matrix){
+        return matrix.translate(position.x, position.y, position.z);
+    }
+
+    public static Matrix4f getGenericMatrixWithPosRotation(Vector3f position, Vector3f rotation, Matrix4f matrix){
+        return matrix.translate(position.x, position.y, position.z).
+                rotateX((float)Math.toRadians(-rotation.x)).
+                rotateY((float)Math.toRadians(-rotation.y)).
+                rotateZ((float)Math.toRadians(-rotation.z));
+    }
+
 }

@@ -13,8 +13,7 @@ import static engine.Chunk.genBiome;
 import static engine.Chunk.initializeChunkHandler;
 import static engine.ChunkUpdateHandler.chunkUpdater;
 import static engine.Entity.registerEntity;
-import static engine.Hud.createHudDebug;
-import static engine.Hud.initializeFontTextureAtlas;
+import static engine.Hud.*;
 import static engine.ItemEntity.clearItems;
 import static engine.ItemEntity.initializeItemTextureAtlas;
 import static engine.TNTEntity.createTNTEntityMesh;
@@ -267,6 +266,8 @@ public class Crafter implements IGameLogic {
         ItemEntity.onStep(soundMgr);
 
         TNTEntity.onTNTStep(soundMgr);
+
+        hudOnStepTest();
     }
 
     @Override

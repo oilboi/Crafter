@@ -17,7 +17,6 @@ public class Hud {
     private static Texture worldSelection;
     private static Texture crossHair;
 
-//    private static Mesh thisDebugMesh;
     private static Mesh thisHotBarMesh;
     private static Mesh thisSelectionMesh;
     private static Mesh thisInventoryMesh;
@@ -34,14 +33,8 @@ public class Hud {
         crossHair = new Texture("textures/crosshair.png");
     }
 
-    private final static float scale = 1f;//0.00000002f;
+    private final static float scale = 1f;
 
-    private static float currentScale = 1f;
-
-//    public static Mesh getHudMesh(){
-//        return thisDebugMesh;
-//    }
-//
     public static Mesh getHotBarMesh(){
         return thisHotBarMesh;
     }
@@ -72,7 +65,6 @@ public class Hud {
         createSelection(0);
         createWorldSelectionMesh();
         createCrossHair();
-
         createCustomHudText("wow", 1,0,0);
     }
 
@@ -89,23 +81,23 @@ public class Hud {
 
         float thisTest = -5f;
 
-        float yPos = (-7.1f * scale * currentScale);
+        float yPos = (-7.1f * scale);
 
         //front
-        positions.add(scale*8.27272727273f * currentScale);
-        positions.add((scale * currentScale) + yPos);
+        positions.add(scale*8.27272727273f);
+        positions.add((scale) + yPos);
         positions.add(thisTest);
 
-        positions.add(-scale*8.27272727273f * currentScale);
-        positions.add((scale * currentScale) + yPos);
+        positions.add(-scale*8.27272727273f);
+        positions.add((scale) + yPos);
         positions.add(thisTest);
 
-        positions.add(-scale*8.27272727273f * currentScale);
-        positions.add((-scale * currentScale) + yPos);
+        positions.add(-scale*8.27272727273f);
+        positions.add((-scale) + yPos);
         positions.add(thisTest);
 
-        positions.add(scale*8.27272727273f * currentScale);
-        positions.add((-scale * currentScale) + yPos);
+        positions.add(scale*8.27272727273f);
+        positions.add((-scale) + yPos);
         positions.add(thisTest);
         //front
         float frontLight = 1f;//getLight(x, y, z + 1, chunkX, chunkZ) / maxLight;
@@ -174,26 +166,26 @@ public class Hud {
 
         int indicesCount = 0;
 
-        float yPos = (-7.1f * scale * currentScale);
+        float yPos = (-7.1f * scale);
 
         float thisTest = -5.f;
 
-        float currentSelection = (currentInventorySelection-4f) * ((scale * currentScale) * 1.815f);
+        float currentSelection = (currentInventorySelection-4f) * ((scale) * 1.815f);
         //front
-        positions.add((scale * currentScale) + currentSelection);
-        positions.add((scale * currentScale) + yPos);
+        positions.add((scale) + currentSelection);
+        positions.add((scale) + yPos);
         positions.add(thisTest); //z (how close it is to screen)
 
-        positions.add((-scale * currentScale) + currentSelection);
-        positions.add((scale * currentScale) + yPos);
+        positions.add((-scale) + currentSelection);
+        positions.add((scale) + yPos);
         positions.add(thisTest);
 
-        positions.add((-scale * currentScale) + currentSelection);
-        positions.add((-scale * currentScale) + yPos);
+        positions.add((-scale) + currentSelection);
+        positions.add((-scale) + yPos);
         positions.add(thisTest);
 
-        positions.add((scale * currentScale) + currentSelection);
-        positions.add((-scale * currentScale) + yPos);
+        positions.add((scale) + currentSelection);
+        positions.add((-scale) + yPos);
         positions.add(thisTest);
         //front
         float frontLight = 1f;//getLight(x, y, z + 1, chunkX, chunkZ) / maxLight;
@@ -674,20 +666,20 @@ public class Hud {
         float thisTest = -5f;
 
         //front
-        positions.add(scale * currentScale);
-        positions.add(scale * currentScale);
+        positions.add(scale);
+        positions.add(scale);
         positions.add(thisTest); //z (how close it is to screen)
 
-        positions.add(-scale * currentScale);
-        positions.add(scale * currentScale);
+        positions.add(-scale);
+        positions.add(scale);
         positions.add(thisTest);
 
-        positions.add(-scale * currentScale);
-        positions.add(-scale * currentScale);
+        positions.add(-scale);
+        positions.add(-scale);
         positions.add(thisTest);
 
-        positions.add(scale * currentScale);
-        positions.add(-scale * currentScale);
+        positions.add(scale);
+        positions.add(-scale);
         positions.add(thisTest);
         //front
         float frontLight = 1f;//getLight(x, y, z + 1, chunkX, chunkZ) / maxLight;
@@ -1065,20 +1057,20 @@ public class Hud {
         for (char letter : text.toCharArray()) {
             System.out.println(letter);
             //front
-            positions.add((scale * currentScale) + (x * scale * 2.25f));
-            positions.add(scale * currentScale);
+            positions.add((scale) + (x * scale * 2.25f));
+            positions.add(scale);
             positions.add(thisTest); //z (how close it is to screen)
 
-            positions.add((-scale * currentScale) + (x * scale * 2.25f));
-            positions.add(scale * currentScale);
+            positions.add((-scale) + (x * scale * 2.25f));
+            positions.add(scale);
             positions.add(thisTest);
 
-            positions.add((-scale * currentScale) + (x * scale * 2.25f));
-            positions.add(-scale * currentScale);
+            positions.add((-scale) + (x * scale * 2.25f));
+            positions.add(-scale);
             positions.add(thisTest);
 
-            positions.add((scale * currentScale) + (x  * scale * 2.25f));
-            positions.add(-scale * currentScale);
+            positions.add((scale) + (x  * scale * 2.25f));
+            positions.add(-scale);
             positions.add(thisTest);
 
             //front

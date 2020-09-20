@@ -3,9 +3,7 @@ package game;
 import engine.Utils;
 import engine.Window;
 import engine.graph.*;
-import game.player.Player;
 import org.joml.Matrix4f;
-import org.joml.Vector3f;
 
 import static engine.Chunk.getChunkMesh;
 import static engine.Chunk.getLimit;

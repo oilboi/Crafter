@@ -1,7 +1,6 @@
 package game.player;
 
 import engine.graph.Camera;
-import engine.sound.SoundManager;
 import org.joml.Vector3f;
 
 //import static engine.Hud.createSelection;

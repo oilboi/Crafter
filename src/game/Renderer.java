@@ -168,13 +168,18 @@ public class Renderer {
         Matrix4f hudViewMatrix = new Matrix4f();
         hudShaderProgram.setUniform("texture_sampler", 0);
 
-        //todo this is debug!
-//        {
-//            Mesh thisMesh = testTextMesh();
-//            Matrix4f modelViewMatrix = transformation.getModelViewMatrix(hudViewMatrix);
-//            hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
-//            thisMesh.render();
-//        }
+
+
+        //draw wield hand
+        {
+            Mesh thisMesh = getWieldHandMesh();
+            Matrix4f modelViewMatrix = transformation.getGenericMatrixWithPosRotationScale(new Vector3f(14, -15, -14f), new Vector3f(-130, 10, -20), new Vector3f(6f, 6f, 6f), hudViewMatrix);
+            hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+            thisMesh.render();
+        }
+
+        glClear(GL_DEPTH_BUFFER_BIT);
+        hudViewMatrix = new Matrix4f();
 
         if (isPlayerInventoryOpen()) {
             {
@@ -235,7 +240,8 @@ public class Renderer {
 
         } else {
 
-
+            hudViewMatrix = new Matrix4f();
+            glClear(GL_DEPTH_BUFFER_BIT);
             {
                 Mesh thisMesh = getSelectionMesh();
                 Matrix4f modelViewMatrix = transformation.getModelViewMatrix(hudViewMatrix);
@@ -279,9 +285,26 @@ public class Renderer {
                 hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
                 thisMesh.render();
             }
-            glClear(GL_DEPTH_BUFFER_BIT);
 
-            hudViewMatrix = new Matrix4f();
+            //render items in hotbar
+            for (int x = 1; x <= 9; x++){
+
+                if (getItemInInventorySlot(x-1,0) != 0) {
+
+                    glClear(GL_DEPTH_BUFFER_BIT);
+                    hudViewMatrix = new Matrix4f();
+
+                    Mesh thisMesh = getItemMeshByBlock(getItemInInventorySlot(x-1,0));
+
+                    float xer = (float) (x - 1) * 1.8375f;
+
+                    float yer = (float) (- 1) * 1.715f;
+
+                    Matrix4f modelViewMatrix = transformation.getGenericMatrixWithPosRotationScale(new Vector3f(-7.35f + xer, -7.5f, -14f), new Vector3f(-10, 45, 0), new Vector3f(2.25f, 2.25f, 2.25f), hudViewMatrix);
+                    hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+                    thisMesh.render();
+                }
+            }
 
 
 

@@ -170,14 +170,14 @@ public class Renderer {
                 thisMesh.render();
             }
 
+            hudViewMatrix = new Matrix4f();
+
             {
                 Mesh thisMesh = getPlayerMesh();
                 Matrix4f modelViewMatrix = transformation.getGenericMatrixWithPosRotationScale(getPlayerHudPos(),getPlayerHudRot(),getPlayerHudScale(),hudViewMatrix);
                 hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
                 thisMesh.render();
             }
-
-            hudViewMatrix = new Matrix4f();
 
         } else {
 
@@ -189,6 +189,8 @@ public class Renderer {
                 thisMesh.render();
             }
 
+            hudViewMatrix = new Matrix4f();
+
             {
                 Mesh thisMesh = getHotBarMesh();
                 Matrix4f modelViewMatrix = transformation.getModelViewMatrix(hudViewMatrix);
@@ -196,12 +198,33 @@ public class Renderer {
                 thisMesh.render();
             }
 
+            hudViewMatrix = new Matrix4f();
+//            {
+//                Mesh thisMesh = getCrossHairMesh();
+//                Matrix4f modelViewMatrix = transformation.getModelViewMatrix(hudViewMatrix);
+//                hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+//                thisMesh.render();
+//            }
+
+
+            //THESE GO LAST!
             {
-                Mesh thisMesh = getCrossHairMesh();
-                Matrix4f modelViewMatrix = transformation.getModelViewMatrix(hudViewMatrix);
+                Mesh thisMesh = getVersionInfoTextShadow();
+                Matrix4f modelViewMatrix = transformation.getGenericMatrixWithPos(getVersionInfoShadowPos(), hudViewMatrix);
                 hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
                 thisMesh.render();
             }
+
+            hudViewMatrix = new Matrix4f();
+            glClear(GL_DEPTH_BUFFER_BIT);
+
+            {
+                Mesh thisMesh = getVersionInfoText();
+                Matrix4f modelViewMatrix = transformation.getGenericMatrixWithPos(getVersionInfoPos(), hudViewMatrix);
+                hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+                thisMesh.render();
+            }
+
         }
         hudShaderProgram.unbind();
     }

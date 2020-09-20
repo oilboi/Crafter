@@ -23,6 +23,9 @@ public class Hud {
     private static Vector3f playerScale = new Vector3f(0.7f,0.8f,0.7f);
     private static Vector3f playerRot = new Vector3f(0,0,0);
 
+    private static Vector3f versionInfoPos = new Vector3f(-5f,8f,-14f);
+    private static Vector3f versionInfoShadowPos = new Vector3f(-4.9f,7.9f,-14f);
+
     private static Texture fontTextureAtlas;
     private static Texture hotBar;
     private static Texture selection;
@@ -36,8 +39,9 @@ public class Hud {
     private static Mesh thisInventoryMesh;
     private static Mesh thisWorldSelectionMesh;
     private static Mesh thisCrossHairMesh;
-    private static Mesh debugTestMesh;
     private static Mesh playerMesh;
+    private static Mesh versionInfoText;
+    private static Mesh versionInfoTextShadow;
 
     public static void initializeFontTextureAtlas() throws Exception {
         fontTextureAtlas = new Texture("textures/font.png");
@@ -59,10 +63,6 @@ public class Hud {
 
     public static Mesh getInventoryMesh(){
         return thisInventoryMesh;
-    }
-
-    public static Mesh testTextMesh() {
-        return debugTestMesh;
     }
 
     public static Mesh getWorldSelectionMesh(){
@@ -89,13 +89,30 @@ public class Hud {
         return playerScale;
     }
 
+    public static Mesh getVersionInfoText(){
+        return versionInfoText;
+    }
+
+    public static Mesh getVersionInfoTextShadow(){
+        return versionInfoTextShadow;
+    }
+
+    public static Vector3f getVersionInfoPos(){
+        return versionInfoPos;
+    }
+
+    public static Vector3f getVersionInfoShadowPos(){
+        return versionInfoShadowPos;
+    }
+
     public static void createHudDebug(String text){
         createDebugHotbar();
         createInventory();
         createSelection(0);
         createWorldSelectionMesh();
         createCrossHair();
-        createCustomHudText("wow", 1,0,0);
+        versionInfoText = createCustomHudText("Crafter Pre-Alpha 0.001", 1,1,1,0.8f);
+        versionInfoTextShadow = createCustomHudText("Crafter Pre-Alpha 0.001", 0,0,0,0.8f);
         createPlayerMesh();
     }
 
@@ -1535,6 +1552,15 @@ public class Hud {
                 letterArray[0] = 28;
                 letterArray[1] = 1;
                 break;
+
+            case ' ':
+                letterArray[0] = 29;
+                letterArray[1] = 1;
+                break;
+            case '-':
+                letterArray[0] = 30;
+                letterArray[1] = 1;
+                break;
             default: //all unknown end up as "AAAAAAAAAA"  ¯\_(ツ)_/¯
                 break;
         }
@@ -1549,7 +1575,10 @@ public class Hud {
         return returningArray;
     }
 
-    public static void createCustomHudText(String text, float r, float g, float b){
+    public static Mesh createCustomHudText(String text, float r, float g, float b, float textScale){
+
+
+
 
         float x = 0f;
         float z = 0f;
@@ -1560,29 +1589,28 @@ public class Hud {
         ArrayList indices = new ArrayList();
         ArrayList light = new ArrayList();
 
+        float xAdjustment = (text.length() * textScale)/2;
 
         int indicesCount = 0;
 
-        float thisTest = -10f;
 
         for (char letter : text.toCharArray()) {
-            System.out.println(letter);
             //front
-            positions.add((scale) + (x * scale * 2.25f));
-            positions.add(scale);
-            positions.add(thisTest); //z (how close it is to screen)
+            positions.add(((x + 0.8f)  * textScale) - xAdjustment);
+            positions.add(0f);
+            positions.add(0f);
 
-            positions.add((-scale) + (x * scale * 2.25f));
-            positions.add(scale);
-            positions.add(thisTest);
+            positions.add((textScale * x) - xAdjustment);
+            positions.add(0f);
+            positions.add(0f);
 
-            positions.add((-scale) + (x * scale * 2.25f));
-            positions.add(-scale);
-            positions.add(thisTest);
+            positions.add((textScale * x) - xAdjustment);
+            positions.add(-textScale);
+            positions.add(0f);
 
-            positions.add((scale) + (x  * scale * 2.25f));
-            positions.add(-scale);
-            positions.add(thisTest);
+            positions.add(((x + 0.8f)  * textScale) - xAdjustment);
+            positions.add(-textScale);
+            positions.add(0f);
 
             //front
             for (int i = 0; i < 4; i++) {
@@ -1643,6 +1671,6 @@ public class Hud {
             textureCoordArray[i] = (float) textureCoord.get(i);
         }
 
-        debugTestMesh = new Mesh(positionsArray, lightArray, indicesArray, textureCoordArray, fontTextureAtlas);
+        return new Mesh(positionsArray, lightArray, indicesArray, textureCoordArray, fontTextureAtlas);
     }
 }

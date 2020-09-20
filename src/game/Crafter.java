@@ -156,22 +156,15 @@ public class Crafter implements IGameLogic {
 //            fButtonPushed = false;
 //        }
 
-        //prototype reset position - R KEY
-//        if (window.isKeyPressed(GLFW_KEY_R)) {
-//            if (!rButtonPushed) {
-//                rButtonPushed = true;
-//                player.setPos(new Vector3f(-48,57,-128));
-//
-//                if (Math.random() == 0.0001f){
-//                    System.out.println("Hey, Ben!");
-//                }
-//                else {
-//                    System.out.println("Position reset!");
-//                }
-//            }
-//        } else if (!window.isKeyPressed(GLFW_KEY_R)){
-//            rButtonPushed = false;
-//        }
+//        prototype reset position - R KEY
+        if (window.isKeyPressed(GLFW_KEY_R)) {
+            if (!rButtonPushed) {
+                rButtonPushed = true;
+                generateRandomInventory();
+            }
+        } else if (!window.isKeyPressed(GLFW_KEY_R)){
+            rButtonPushed = false;
+        }
 
         //prototype clear objects - C KEY
 //        if (window.isKeyPressed(GLFW_KEY_C)) {

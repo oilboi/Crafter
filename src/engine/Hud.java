@@ -105,7 +105,7 @@ public class Hud {
         return versionInfoShadowPos;
     }
 
-    public static void createHudDebug(String text){
+    public static void createHud(){
         createDebugHotbar();
         createInventory();
         createSelection(0);

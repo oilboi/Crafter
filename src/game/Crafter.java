@@ -4,7 +4,6 @@ import engine.*;
 import engine.graph.Camera;
 import engine.sound.SoundListener;
 import engine.sound.SoundManager;
-import game.player.Player;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.openal.AL11;
@@ -12,9 +11,7 @@ import org.lwjgl.openal.AL11;
 import static engine.Chunk.genBiome;
 import static engine.Chunk.initializeChunkHandler;
 import static engine.ChunkUpdateHandler.chunkUpdater;
-import static engine.Entity.registerEntity;
 import static engine.Hud.*;
-import static engine.ItemEntity.clearItems;
 import static engine.ItemEntity.initializeItemTextureAtlas;
 import static engine.TNTEntity.createTNTEntityMesh;
 import static game.ChunkHandling.ChunkMesh.generateChunkMesh;
@@ -94,7 +91,7 @@ public class Crafter implements IGameLogic {
 
         soundMgr.setListener(new SoundListener(new Vector3f()));
 
-        createHudDebug("fook");
+        createHud();
     }
 
     public static SoundManager getSoundManager(){

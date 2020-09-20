@@ -3,7 +3,6 @@ package game.player;
 import engine.graph.Camera;
 import org.joml.Vector3f;
 
-//import static engine.Hud.createSelection;
 import static engine.Hud.createSelection;
 import static engine.sound.SoundAPI.playSound;
 import static game.Crafter.chunkRenderDistance;

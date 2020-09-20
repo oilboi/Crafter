@@ -4,6 +4,8 @@ import engine.Utils;
 import engine.Window;
 import engine.graph.*;
 import org.joml.Matrix4f;
+import org.joml.Vector2d;
+import org.joml.Vector3f;
 
 import static engine.Chunk.getChunkMesh;
 import static engine.Chunk.getLimit;
@@ -28,6 +30,8 @@ public class Renderer {
     private static final float Z_NEAR = 0.1f;
     private static final float Z_FAR = 1120.f;
 
+    private static Vector2d windowSize = new Vector2d();
+
     private final Transformation transformation;
 
     private ShaderProgram shaderProgram;
@@ -36,6 +40,10 @@ public class Renderer {
 
     public Renderer(){
         transformation = new Transformation();
+    }
+
+    public static Vector2d getWindowSize(){
+        return windowSize;
     }
 
     public void init(Window window) throws Exception{
@@ -66,6 +74,9 @@ public class Renderer {
 
 
         window.setClearColor(0.53f,0.81f,0.92f,0.f);
+
+        windowSize.x = window.getWidth();
+        windowSize.y = window.getHeight();
     }
 
     public void clear(){
@@ -76,6 +87,8 @@ public class Renderer {
         clear();
 
         if (window.isResized()){
+            windowSize.x = window.getWidth();
+            windowSize.y = window.getHeight();
             glViewport(0,0, window.getWidth(), window.getHeight());
             window.setResized(false);
         }
@@ -179,6 +192,25 @@ public class Renderer {
                 thisMesh.render();
             }
 
+
+            glClear(GL_DEPTH_BUFFER_BIT);
+
+            hudViewMatrix = new Matrix4f();
+
+            {
+                if (getInvSelection() != null) {
+                    Mesh thisMesh = getInventorySelectionMesh();
+                    int[] invSelection = getInvSelection();
+                    float xer = (float)(invSelection[0]-1) * 1.8375f;
+                    float yer = (float)(invSelection[1]-1) * 1.715f;
+
+                    Matrix4f modelViewMatrix = transformation.getGenericMatrixWithPosRotationScale(new Vector3f(-7.35f + xer, -0.85f - yer, 0), new Vector3f(0,0,0), new Vector3f(0.75f,0.75f,1), hudViewMatrix);
+                    hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+                    thisMesh.render();
+                }
+            }
+
+
         } else {
 
 
@@ -199,12 +231,13 @@ public class Renderer {
             }
 
             hudViewMatrix = new Matrix4f();
-//            {
-//                Mesh thisMesh = getCrossHairMesh();
-//                Matrix4f modelViewMatrix = transformation.getModelViewMatrix(hudViewMatrix);
-//                hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
-//                thisMesh.render();
-//            }
+
+            {
+                Mesh thisMesh = getCrossHairMesh();
+                Matrix4f modelViewMatrix = transformation.getModelViewMatrix(hudViewMatrix);
+                hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+                thisMesh.render();
+            }
 
 
             //THESE GO LAST!

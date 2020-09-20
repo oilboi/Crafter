@@ -6,10 +6,9 @@ import org.joml.Vector2d;
 import org.joml.Vector3f;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
-import static engine.Chunk.getBlock;
-import static engine.Chunk.getLight;
-import static game.blocks.BlockDefinition.*;
+import static game.Renderer.getWindowSize;
 import static game.player.Player.isPlayerInventoryOpen;
 
 public class Hud {
@@ -44,6 +43,7 @@ public class Hud {
     private static Mesh playerMesh;
     private static Mesh versionInfoText;
     private static Mesh versionInfoTextShadow;
+    private static Mesh inventorySelectionMesh;
 
     public static void initializeFontTextureAtlas() throws Exception {
         fontTextureAtlas = new Texture("textures/font.png");
@@ -107,6 +107,10 @@ public class Hud {
         return versionInfoShadowPos;
     }
 
+    public static Mesh getInventorySelectionMesh(){
+        return inventorySelectionMesh;
+    }
+
     public static void createHud(){
         createDebugHotbar();
         createInventory();
@@ -116,6 +120,7 @@ public class Hud {
         versionInfoText = createCustomHudText("Crafter Pre-Alpha 0.001", 1,1,1,0.8f);
         versionInfoTextShadow = createCustomHudText("Crafter Pre-Alpha 0.001", 0,0,0,0.8f);
         createPlayerMesh();
+        createInventorySelection();
     }
 
 
@@ -787,6 +792,90 @@ public class Hud {
         }
 
         thisCrossHairMesh = new Mesh(positionsArray, lightArray, indicesArray, textureCoordArray, crossHair);
+    }
+
+    private static void createInventorySelection(){
+        ArrayList positions = new ArrayList();
+        ArrayList textureCoord = new ArrayList();
+        ArrayList indices = new ArrayList();
+        ArrayList light = new ArrayList();
+
+
+        int indicesCount = 0;
+        float thisTest = -14f;
+
+        //front
+        positions.add(scale);
+        positions.add(scale);
+        positions.add(thisTest); //z (how close it is to screen)
+
+        positions.add(-scale);
+        positions.add(scale);
+        positions.add(thisTest);
+
+        positions.add(-scale);
+        positions.add(-scale);
+        positions.add(thisTest);
+
+        positions.add(scale);
+        positions.add(-scale);
+        positions.add(thisTest);
+        //front
+        float frontLight = 1f;//getLight(x, y, z + 1, chunkX, chunkZ) / maxLight;
+
+        //front
+        for (int i = 0; i < 12; i++) {
+            light.add(frontLight);
+        }
+        //front
+        indices.add(0 + indicesCount);
+        indices.add(1 + indicesCount);
+        indices.add(2 + indicesCount);
+        indices.add(0 + indicesCount);
+        indices.add(2 + indicesCount);
+        indices.add(3 + indicesCount);
+
+        indicesCount += 4;
+
+        //-x +x   -y +y
+        // 0  1    2  3
+
+        //front
+        textureCoord.add(1f);//1
+        textureCoord.add(0f);//2
+        textureCoord.add(0f);//0
+        textureCoord.add(0f);//2
+        textureCoord.add(0f);//0
+        textureCoord.add(1f);//3
+        textureCoord.add(1f);//1
+        textureCoord.add(1f);//3
+
+
+        //convert the position objects into usable array
+        float[] positionsArray = new float[positions.size()];
+        for (int i = 0; i < positions.size(); i++) {
+            positionsArray[i] = (float) positions.get(i);
+        }
+
+        //convert the light objects into usable array
+        float[] lightArray = new float[light.size()];
+        for (int i = 0; i < light.size(); i++) {
+            lightArray[i] = (float) light.get(i);
+        }
+
+        //convert the indices objects into usable array
+        int[] indicesArray = new int[indices.size()];
+        for (int i = 0; i < indices.size(); i++) {
+            indicesArray[i] = (int) indices.get(i);
+        }
+
+        //convert the textureCoord objects into usable array
+        float[] textureCoordArray = new float[textureCoord.size()];
+        for (int i = 0; i < textureCoord.size(); i++) {
+            textureCoordArray[i] = (float) textureCoord.get(i);
+        }
+
+        inventorySelectionMesh = new Mesh(positionsArray, lightArray, indicesArray, textureCoordArray, selection);
     }
 
 
@@ -1673,12 +1762,57 @@ public class Hud {
         return new Mesh(positionsArray, lightArray, indicesArray, textureCoordArray, fontTextureAtlas);
     }
 
+
+
+    private static int[] invSelection;
+
+    public static int[] getInvSelection(){
+        return invSelection;
+    }
+
+    //todo: redo this mess
     public static void hudOnStepTest(MouseInput mouseInput){
         playerRot.y += 0.1f;
 
         if (isPlayerInventoryOpen()) {
-            Vector2d mousePos = mouseInput.getMousePos();
-            System.out.println(mousePos.x + " " + mousePos.y);
+            if (invSelection == null){
+                invSelection = new int[2];
+            }
+            for (int x = 1; x <= 9; x++) {
+                for (int y = 1; y <= 4; y++) {
+
+                    Vector2d mousePos = new Vector2d(mouseInput.getMousePos());
+                    Vector2d windowSize = getWindowSize();
+
+                    float boundaries = (float) ((windowSize.x - (windowSize.y * 1.0735)) / 2f);
+
+                    mousePos.y -= (windowSize.y / 1.98) - (windowSize.y / 32);
+
+                    float borderSize = 32f;
+                    float tileSize = 12f;
+
+
+//                    System.out.println(mousePos.y);
+                    if (mousePos.x > boundaries && mousePos.x < windowSize.x - boundaries && mousePos.y > 0) {
+                        mousePos.x -= boundaries;
+
+                        if (mousePos.x > (windowSize.y / borderSize) * (float) x + ((windowSize.y / tileSize) * (float) (x - 1)) &&
+                                mousePos.x < (windowSize.y / borderSize + windowSize.y / tileSize) * (float) x) {
+
+                            if (mousePos.y > (windowSize.y / borderSize / 1.5f) * (float) y + ((windowSize.y / tileSize) * (float) (y - 1)) &&
+                                    mousePos.y < (windowSize.y / borderSize / 1.5f + windowSize.y / tileSize) * (float) y) {
+                                invSelection[0] = x;
+                                invSelection[1] = y;
+                                return;
+                            }
+                        }
+                    }
+                }
+            }
+            invSelection = null;
+        }
+        else {
+            invSelection = null;
         }
     }
 }

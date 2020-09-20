@@ -111,4 +111,8 @@ public class MouseInput {
         scroll = 0.0f;
         return thisScroll;
     }
+
+    public Vector2d getMousePos(){
+        return currentPos;
+    }
 }

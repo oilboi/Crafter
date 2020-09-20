@@ -1,6 +1,7 @@
 package game.player;
 
 import engine.graph.Camera;
+import org.joml.Vector2d;
 import org.joml.Vector3f;
 
 import static engine.Hud.createSelection;
@@ -36,6 +37,20 @@ public class Player {
     private static int currentInventorySelection = 0;
     private static boolean inventoryOpen         = false;
     private static Vector3f worldSelectionPos    = null;
+
+    private static Vector3f wieldHandAnimationPos = new Vector3f(13, -12, -14f);
+    private static Vector3f wieldHandAnimationRot = new Vector3f(-130, 10, -20);
+
+
+
+
+    public static Vector3f getWieldHandAnimationPos(){
+        return wieldHandAnimationPos;
+    }
+
+    public static Vector3f getWieldHandAnimationRot(){
+        return wieldHandAnimationRot;
+    }
 
     public static void setPlayerWorldSelectionPos(Vector3f thePos){
         worldSelectionPos = thePos;

@@ -13,8 +13,7 @@ import static engine.Hud.*;
 import static engine.ItemEntity.*;
 import static engine.TNTEntity.*;
 import static game.player.Inventory.getItemInInventorySlot;
-import static game.player.Player.getPlayerWorldSelectionPos;
-import static game.player.Player.isPlayerInventoryOpen;
+import static game.player.Player.*;
 import static org.lwjgl.opengl.GL11.*;
 
 public class Renderer {
@@ -170,12 +169,32 @@ public class Renderer {
 
 
 
-        //draw wield hand
+        //draw wield hand or item
         {
-            Mesh thisMesh = getWieldHandMesh();
-            Matrix4f modelViewMatrix = transformation.getGenericMatrixWithPosRotationScale(new Vector3f(14, -15, -14f), new Vector3f(-130, 10, -20), new Vector3f(6f, 6f, 6f), hudViewMatrix);
-            hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
-            thisMesh.render();
+            if (getItemInInventorySlot(getPlayerInventorySelection(),0) == 0){
+                Mesh thisMesh = getWieldHandMesh();
+                Matrix4f modelViewMatrix = transformation.getGenericMatrixWithPosRotationScale(getWieldHandAnimationPos(), getWieldHandAnimationRot(), new Vector3f(20f, 20f, 20f), hudViewMatrix);
+                hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+                thisMesh.render();
+            } else {
+
+                Mesh thisMesh = getItemMeshByBlock(getItemInInventorySlot(getPlayerInventorySelection(),0));
+
+                Vector3f rot = new Vector3f(getWieldHandAnimationRot());
+                Vector3f pos = new Vector3f(getWieldHandAnimationPos());
+
+                rot.x += 130f;
+                rot.y += -10f;
+                rot.z += 20f;
+
+                pos.x += -2f;
+                pos.y += 0;
+
+                Matrix4f modelViewMatrix = transformation.getGenericMatrixWithPosRotationScale(pos, rot, new Vector3f(20f, 20f, 20f), hudViewMatrix);
+                hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+                thisMesh.render();
+            }
+
         }
 
         glClear(GL_DEPTH_BUFFER_BIT);
@@ -231,7 +250,7 @@ public class Renderer {
 
                         float yer = (float) (y - 1) * 1.715f;
 
-                        Matrix4f modelViewMatrix = transformation.getGenericMatrixWithPosRotationScale(new Vector3f(-7.35f + xer, -1.25f - yer, -14f), new Vector3f(-20 + (y * 3), 45, 0), new Vector3f(2.25f, 2.25f, 2.25f), hudViewMatrix);
+                        Matrix4f modelViewMatrix = transformation.getGenericMatrixWithPosRotationScale(new Vector3f(-7.35f + xer, -1.25f - yer, -14f), new Vector3f(-20 + (y * 3), -45, 0), new Vector3f(2.25f, 2.25f, 2.25f), hudViewMatrix);
                         hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
                         thisMesh.render();
                     }
@@ -300,7 +319,7 @@ public class Renderer {
 
                     float yer = (float) (- 1) * 1.715f;
 
-                    Matrix4f modelViewMatrix = transformation.getGenericMatrixWithPosRotationScale(new Vector3f(-7.35f + xer, -7.5f, -14f), new Vector3f(-10, 45, 0), new Vector3f(2.25f, 2.25f, 2.25f), hudViewMatrix);
+                    Matrix4f modelViewMatrix = transformation.getGenericMatrixWithPosRotationScale(new Vector3f(-7.35f + xer, -7.5f, -14f), new Vector3f(-10, -45, 0), new Vector3f(2.25f, 2.25f, 2.25f), hudViewMatrix);
                     hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
                     thisMesh.render();
                 }

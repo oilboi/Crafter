@@ -9,6 +9,7 @@ import static game.blocks.BlockDefinition.*;
 import static game.collision.Collision.wouldCollidePlacing;
 import static game.collision.CustomAABB.setAABB;
 import static game.collision.CustomBlockBox.setBlockBox;
+import static game.player.Inventory.getItemInInventorySlot;
 import static game.player.Player.*;
 
 public class Ray {
@@ -40,7 +41,7 @@ public class Ray {
                 setBlockBox((int)lastPos.x,(int)lastPos.y,(int)lastPos.z, getBlockShape(1)[0]);
 
                 if (!wouldCollidePlacing()) {
-                    placeBlock(lastPos, getCurrentInventorySelection()+11);
+                    placeBlock(lastPos, getItemInInventorySlot(getPlayerInventorySelection(),0));
                 }
             }
             else {

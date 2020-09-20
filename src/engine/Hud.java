@@ -900,9 +900,16 @@ public class Hud {
     }
 
     private static void createWieldHandMesh(){
+        float scalar = 0.275f;
         float[][] oneBlockyBoi = new float[][]{
 //                //right arm
-                {-0.45f,-2.75f,-0.45f, 0.45f,-0.5f,0.45f},
+                {       -0.45f*scalar,
+                        -2.25f*scalar,
+                        -0.45f*scalar,
+
+                         0.45f*scalar,
+                         0.5f *scalar,
+                         0.45f*scalar},
         };
 
         float[][] textureArrayArray = new float[][]{

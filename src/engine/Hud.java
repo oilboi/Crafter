@@ -2,6 +2,7 @@ package engine;
 
 import engine.graph.Mesh;
 import engine.graph.Texture;
+import org.joml.Vector2d;
 import org.joml.Vector3f;
 
 import java.util.ArrayList;
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 import static engine.Chunk.getBlock;
 import static engine.Chunk.getLight;
 import static game.blocks.BlockDefinition.*;
+import static game.player.Player.isPlayerInventoryOpen;
 
 public class Hud {
     private final static float scale = 1f;
@@ -802,9 +804,6 @@ public class Hud {
         return texturePoints;
     }
 
-    public static void hudOnStepTest(){
-        playerRot.y += 0.1f;
-    }
 
     private static void createPlayerMesh(){
         float[][] oneBlockyBoi = new float[][]{
@@ -1672,5 +1671,14 @@ public class Hud {
         }
 
         return new Mesh(positionsArray, lightArray, indicesArray, textureCoordArray, fontTextureAtlas);
+    }
+
+    public static void hudOnStepTest(MouseInput mouseInput){
+        playerRot.y += 0.1f;
+
+        if (isPlayerInventoryOpen()) {
+            Vector2d mousePos = mouseInput.getMousePos();
+            System.out.println(mousePos.x + " " + mousePos.y);
+        }
     }
 }

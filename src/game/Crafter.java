@@ -267,7 +267,7 @@ public class Crafter implements IGameLogic {
 
         TNTEntity.onTNTStep(soundMgr);
 
-        hudOnStepTest();
+        hudOnStepTest(mouseInput);
     }
 
     @Override

@@ -17,6 +17,7 @@ import static engine.TNTEntity.createTNTEntityMesh;
 import static game.ChunkHandling.ChunkMesh.generateChunkMesh;
 import static game.ChunkHandling.ChunkMesh.initializeChunkTextureAtlas;
 import static game.blocks.BlockDefinition.initializeBlocks;
+import static game.player.Inventory.generateRandomInventory;
 import static game.player.Player.*;
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -92,6 +93,8 @@ public class Crafter implements IGameLogic {
         soundMgr.setListener(new SoundListener(new Vector3f()));
 
         createHud();
+
+        generateRandomInventory();
     }
 
     public static SoundManager getSoundManager(){

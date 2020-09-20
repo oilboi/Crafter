@@ -12,6 +12,7 @@ import static engine.Chunk.getLimit;
 import static engine.Hud.*;
 import static engine.ItemEntity.*;
 import static engine.TNTEntity.*;
+import static game.player.Inventory.getItemInInventorySlot;
 import static game.player.Player.getPlayerWorldSelectionPos;
 import static game.player.Player.isPlayerInventoryOpen;
 import static org.lwjgl.opengl.GL11.*;
@@ -131,7 +132,7 @@ public class Renderer {
             }
             Matrix4f modelViewMatrix = transformation.getEntityModelViewMatrix(i, viewMatrix);
             shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
-            getMesh(i).render();
+            getItemMesh(i).render();
         }
 
         //render each TNT entity
@@ -211,6 +212,27 @@ public class Renderer {
             }
 
 
+            //render items in inventory
+            for (int x = 1; x <= 9; x++){
+                for (int y = 1; y <= 4; y++){
+
+                    if (getItemInInventorySlot(x-1,y-1) != 0) {
+                        glClear(GL_DEPTH_BUFFER_BIT);
+                        hudViewMatrix = new Matrix4f();
+
+                        Mesh thisMesh = getItemMeshByBlock(getItemInInventorySlot(x-1,y-1));
+
+                        float xer = (float) (x - 1) * 1.8375f;
+
+                        float yer = (float) (y - 1) * 1.715f;
+
+                        Matrix4f modelViewMatrix = transformation.getGenericMatrixWithPosRotationScale(new Vector3f(-7.35f + xer, -1.25f - yer, -14f), new Vector3f(-20 + (y * 3), 45, 0), new Vector3f(2.25f, 2.25f, 2.25f), hudViewMatrix);
+                        hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+                        thisMesh.render();
+                    }
+                }
+            }
+
         } else {
 
 
@@ -232,12 +254,12 @@ public class Renderer {
 
             hudViewMatrix = new Matrix4f();
 
-            {
-                Mesh thisMesh = getCrossHairMesh();
-                Matrix4f modelViewMatrix = transformation.getModelViewMatrix(hudViewMatrix);
-                hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
-                thisMesh.render();
-            }
+//            {
+//                Mesh thisMesh = getCrossHairMesh();
+//                Matrix4f modelViewMatrix = transformation.getModelViewMatrix(hudViewMatrix);
+//                hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+//                thisMesh.render();
+//            }
 
 
             //THESE GO LAST!
@@ -257,6 +279,11 @@ public class Renderer {
                 hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
                 thisMesh.render();
             }
+            glClear(GL_DEPTH_BUFFER_BIT);
+
+            hudViewMatrix = new Matrix4f();
+
+
 
         }
         hudShaderProgram.unbind();

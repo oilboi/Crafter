@@ -198,8 +198,12 @@ public class ItemEntity {
         rotation[ID].z = z;
     }
 
-    public static Mesh getMesh(int ID){
+    public static Mesh getItemMesh(int ID){
         return meshStorage[thisMeshID[ID]];
+    }
+
+    public static Mesh getItemMeshByBlock(int ID){
+        return meshStorage[ID];
     }
 
     public static void initializeItemTextureAtlas() throws Exception {

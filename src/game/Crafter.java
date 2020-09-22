@@ -139,6 +139,11 @@ public class Crafter {
         //this creates a TNT mesh (here for now)
         createTNTEntityMesh();
 
+        setAttenuationModel(AL11.AL_LINEAR_DISTANCE);
+        setListener(new SoundListener(new Vector3f()));
+        createHud();
+        generateRandomInventory();
+
         //create the initial map in memory
         int x;
         int z;
@@ -154,11 +159,6 @@ public class Crafter {
                 generateChunkMesh(x, z, false);
             }
         }
-
-        setAttenuationModel(AL11.AL_LINEAR_DISTANCE);
-        setListener(new SoundListener(new Vector3f()));
-        createHud();
-        generateRandomInventory();
     }
 
     private static void input(){

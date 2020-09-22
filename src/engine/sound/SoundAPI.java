@@ -6,8 +6,13 @@ import static engine.sound.SoundManager.playSoundSource;
 
 public class SoundAPI {
 
-    public static void playSound(String name, Vector3f pos) throws Exception {
-        SoundBuffer soundBuffer = new SoundBuffer("sounds/" + name + ".ogg");
+    public static void playSound(String name, Vector3f pos) {
+        SoundBuffer soundBuffer = null;
+        try {
+            soundBuffer = new SoundBuffer("sounds/" + name + ".ogg");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         SoundSource thisSource = new SoundSource(false, false);
 

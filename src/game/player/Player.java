@@ -264,76 +264,76 @@ public class Player {
     }
 
 
-    public static void playerOnTick() throws Exception {
+    public static void playerOnTick() {
 
         applyPlayerInertiaBuffer();
-
-        if(placeTimer > 0){
-            placeTimer -= 0.003f;
-            if (placeTimer < 0.1){
-                placeTimer = 0;
-            }
-        }
-
-        if(mineTimer > 0){
-            mineTimer -= 0.003f;
-            if (mineTimer < 0.1){
-                mineTimer = 0;
-            }
-        }
-
-
-        onGround = applyInertia(pos, inertia, true, width, height,true, sneaking, true);
-
-        //map boundary check TODO: ID 1000
-        if (pos.x > ((getChunkRenderDistance() + 1) * 16)-0.5f) {
-            pos.x = oldPos.x;
-        }
-        if (pos.x < (getChunkRenderDistance() * -16) + 0.5f){
-            pos.x = oldPos.x;
-        }
-        if (pos.z > ((getChunkRenderDistance() + 1) * 16)-0.5f) {
-            pos.z = oldPos.z;
-        }
-        if (pos.z < (getChunkRenderDistance() * -16) + 0.5f){
-            pos.z = oldPos.z;
-        }
-        //END TODO: ID 1000
-
-
-        if(mining && mineTimer <= 0) {
-            rayCast(getCameraPosition(), getCameraRotationVector(), 4f,  true, false);
-            mineTimer = 0.5f;
-        } else if (placing && placeTimer <= 0){
-            rayCast(getCameraPosition(), getCameraRotationVector(), 4f,  false, true);
-            placeTimer = 0.5f;
-        } else {
-            rayCast(getCameraPosition(), getCameraRotationVector(), 4f,  false, false);
-        }
-
-        oldPos = new Vector3f(pos);
-
-        if(playerIsMoving()){
-            applyViewBobbing();
-        } else {
-            returnPlayerViewBobbing();
-        }
-
-        blockPos = new int[]{(int)Math.floor(pos.x), (int)Math.floor(pos.y),(int)Math.floor(pos.z)};
-
-//        if(blockPos[0] != oldBlockPos[0] || blockPos[1] != oldBlockPos[1] || blockPos[2] != oldBlockPos[2]){
 //
-//            floodFillTest(blockPos[0], blockPos[1], blockPos[2], gameItems, chunkNames);
+//        if(placeTimer > 0){
+//            placeTimer -= 0.003f;
+//            if (placeTimer < 0.1){
+//                placeTimer = 0;
+//            }
 //        }
-
-        oldBlockPos = blockPos.clone();
+//
+//        if(mineTimer > 0){
+//            mineTimer -= 0.003f;
+//            if (mineTimer < 0.1){
+//                mineTimer = 0;
+//            }
+//        }
+//
+//
+        onGround = applyInertia(pos, inertia, true, width, height,true, sneaking, true);
+//
+//        //map boundary check TODO: ID 1000
+//        if (pos.x > ((getChunkRenderDistance() + 1) * 16)-0.5f) {
+//            pos.x = oldPos.x;
+//        }
+//        if (pos.x < (getChunkRenderDistance() * -16) + 0.5f){
+//            pos.x = oldPos.x;
+//        }
+//        if (pos.z > ((getChunkRenderDistance() + 1) * 16)-0.5f) {
+//            pos.z = oldPos.z;
+//        }
+//        if (pos.z < (getChunkRenderDistance() * -16) + 0.5f){
+//            pos.z = oldPos.z;
+//        }
+//        //END TODO: ID 1000
+//
+//
+//        if(mining && mineTimer <= 0) {
+//            rayCast(getCameraPosition(), getCameraRotationVector(), 4f,  true, false);
+//            mineTimer = 0.5f;
+//        } else if (placing && placeTimer <= 0){
+//            rayCast(getCameraPosition(), getCameraRotationVector(), 4f,  false, true);
+//            placeTimer = 0.5f;
+//        } else {
+//            rayCast(getCameraPosition(), getCameraRotationVector(), 4f,  false, false);
+//        }
+//
+//        oldPos = new Vector3f(pos);
+//
+//        if(playerIsMoving()){
+//            applyViewBobbing();
+//        } else {
+//            returnPlayerViewBobbing();
+//        }
+//
+//        blockPos = new int[]{(int)Math.floor(pos.x), (int)Math.floor(pos.y),(int)Math.floor(pos.z)};
+//
+////        if(blockPos[0] != oldBlockPos[0] || blockPos[1] != oldBlockPos[1] || blockPos[2] != oldBlockPos[2]){
+////
+////            floodFillTest(blockPos[0], blockPos[1], blockPos[2], gameItems, chunkNames);
+////        }
+//
+//        oldBlockPos = blockPos.clone();
     }
     private static boolean xPositive = true;
     private static boolean yPositive = true;
     private static int xBobPos = 0;
     private static int yBobPos = 0;
 
-    private static void applyViewBobbing() throws Exception {
+    private static void applyViewBobbing() {
         if (xPositive) {
             xBobPos += 1;
             if (xBobPos >= 200){

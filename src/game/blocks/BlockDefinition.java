@@ -75,13 +75,17 @@ public class BlockDefinition {
 
     }
 
-    public static void onDigCall(int ID, Vector3f pos) throws Exception {
+    public static void onDigCall(int ID, Vector3f pos) {
         if(blockIDs[ID] != null){
             if(blockIDs[ID].dropsItem){
                 createItem(ID, pos);
             }
             if(blockIDs[ID].blockModifier != null){
-                blockIDs[ID].blockModifier.onDig(pos);
+                try {
+                    blockIDs[ID].blockModifier.onDig(pos);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
             if (!blockIDs[ID].digSound.equals("")) {
                 playSound(blockIDs[ID].digSound, pos.add(0.5f, 0.5f, 0.5f));
@@ -89,9 +93,13 @@ public class BlockDefinition {
         }
     }
 
-    public static void onPlaceCall(int ID, Vector3f pos) throws Exception {
+    public static void onPlaceCall(int ID, Vector3f pos) {
         if(blockIDs[ID] != null && blockIDs[ID].blockModifier != null) {
-            blockIDs[ID].blockModifier.onPlace(pos);
+            try {
+                blockIDs[ID].blockModifier.onPlace(pos);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         if (!blockIDs[ID].placeSound.equals("")) {

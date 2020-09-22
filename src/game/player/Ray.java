@@ -13,7 +13,7 @@ import static game.player.Inventory.getItemInInventorySlot;
 import static game.player.Player.*;
 
 public class Ray {
-    public static void rayCast(Vector3f pos, Vector3f dir, float length, boolean mining, boolean placing) throws Exception {
+    public static void rayCast(Vector3f pos, Vector3f dir, float length, boolean mining, boolean placing) {
 
         Vector3f finalPos = null;
         Vector3f newPos   = null;
@@ -64,7 +64,7 @@ public class Ray {
         return getBlock((int)realPos.x, (int)realPos.y, (int)realPos.z, current[0], current[1]) != 0;
     }
 
-    private static void destroyBlock(Vector3f flooredPos) throws Exception {
+    private static void destroyBlock(Vector3f flooredPos) {
 
         int currentChunkX = (int)(Math.floor(flooredPos.x / 16f));
         int currentChunkZ = (int)(Math.floor(flooredPos.z / 16f));
@@ -87,7 +87,7 @@ public class Ray {
 
         onDigCall(thisBlock, flooredPos);
     }
-    private static void placeBlock(Vector3f flooredPos, int ID) throws Exception {
+    private static void placeBlock(Vector3f flooredPos, int ID) {
         int currentChunkX = (int)(Math.floor(flooredPos.x / 16f));
         int currentChunkZ = (int)(Math.floor(flooredPos.z / 16f));
         int chunkPosX = (int)flooredPos.x - (16*currentChunkX);

@@ -1,12 +1,10 @@
 package engine;
 
-import engine.graph.Importer;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
 
-import javax.swing.*;
 import java.awt.*;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
@@ -17,27 +15,27 @@ import static org.lwjgl.stb.STBImage.stbi_load;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Window {
-    private final String title;
+    private static String title;
 
-    private int width;
+    private static int width;
 
-    private int height;
+    private static int height;
 
-    private long windowHandle;
+    private static long windowHandle;
 
-    private boolean resized;
+    private static boolean resized;
 
-    private boolean vSync;
+    private static boolean vSync;
 
-    public Window( String title, int width, int height, boolean vSync){
-        this.title = title;
-        this.width = width;
-        this.height = height;
-        this.vSync = vSync;
-        this.resized = false;
+    public static void initWindow( String newTitle, int newWidth, int newHeight, boolean newVSync){
+        title   = newTitle;
+        width   = newWidth;
+        height  = newHeight;
+        vSync   = newVSync;
+        resized = false;
     }
 
-    public void init() throws Exception {
+    public static void init() {
         // setup an error callback. The default implementation
         // will print the error message in System.err.
         GLFWErrorCallback.createPrint(System.err).set();
@@ -62,10 +60,10 @@ public class Window {
         }
 
         // setup resize callback
-        glfwSetFramebufferSizeCallback(windowHandle, (window, width, height) -> {
-            this.width = width;
-            this.height = height;
-            this.setResized(true);
+        glfwSetFramebufferSizeCallback(windowHandle, (thisWindow, thisWidth, thisHeight) -> {
+            width = thisWidth;
+            height = thisHeight;
+            setResized(true);
         });
 
         // setup a key callback. it will be called every time a key is pressed, repeated or released.
@@ -86,7 +84,7 @@ public class Window {
         //center window
         Toolkit tk = Toolkit.getDefaultToolkit();
         Dimension d = tk.getScreenSize();
-        glfwSetWindowPos(windowHandle, (d.width - this.width) / 2, (d.height - this.height) / 2);
+        glfwSetWindowPos(windowHandle, (d.width - width) / 2, (d.height - height) / 2);
 
         //make the window visible
         glfwShowWindow(windowHandle);
@@ -108,7 +106,7 @@ public class Window {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         //hide cursor
-        glfwSetInputMode(this.windowHandle, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+        glfwSetInputMode(windowHandle, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
 
         //load icon todo: needs to be it's own class
         MemoryStack stack = MemoryStack.stackPush();
@@ -126,51 +124,51 @@ public class Window {
 
     }
 
-    public long getWindowHandle(){
+    public static long getWindowHandle(){
         return windowHandle;
     }
 
-    public void setClearColor(float r, float g, float b, float alpha){
+    public static void setClearColor(float r, float g, float b, float alpha){
         glClearColor(r, g, b, alpha);
     }
 
-    public boolean isKeyPressed(int keyCode){
+    public static boolean isKeyPressed(int keyCode){
         return glfwGetKey(windowHandle, keyCode) == GLFW_PRESS;
     }
 
-    public boolean windowShouldClose(){
+    public static boolean windowShouldClose(){
         return glfwWindowShouldClose(windowHandle);
     }
 
-    public String getTitle(){
+    public static String getTitle(){
         return title;
     }
 
-    public int getWidth(){
+    public static int getWidth(){
         return width;
     }
 
-    public int getHeight(){
+    public static int getHeight(){
         return height;
     }
 
-    public boolean isResized(){
+    public static boolean isResized(){
         return resized;
     }
 
-    public void setResized(boolean resized){
-        this.resized = resized;
+    public static void setResized(boolean newResized){
+        resized = newResized;
     }
 
-    public boolean isvSync(){
+    public static boolean isvSync(){
         return vSync;
     }
 
-    public void setvSync(boolean vSync){
-        this.vSync = vSync;
+    public static void setVSync(boolean newVSync){
+        vSync = newVSync;
     }
 
-    public void update(){
+    public static void update(){
         glfwSwapBuffers(windowHandle);
         glfwPollEvents();
     }

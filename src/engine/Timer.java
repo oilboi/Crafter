@@ -1,24 +1,20 @@
 package engine;
 
 public class Timer {
-    private double lastLoopTime;
+    private static double lastLoopTime;
 
-    public void init(){
-        lastLoopTime = getTime();
-    }
-
-    public double getTime(){
+    public static double timerGetTime(){
         return System.nanoTime();
     }
 
-    public double getElapsedTime(){
-        double time = getTime();
+    public static double timerGetElapsedTime(){
+        double time = timerGetTime();
         double elapsedTime = time - lastLoopTime;
         lastLoopTime = time;
         return elapsedTime;
     }
 
-    public double getLastLoopTime(){
+    public static double timerGetLastLoopTime(){
         return lastLoopTime;
     }
 }

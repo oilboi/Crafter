@@ -18,6 +18,7 @@ import static engine.Hud.*;
 import static engine.ItemEntity.initializeItemTextureAtlas;
 import static engine.MouseInput.*;
 import static engine.TNTEntity.createTNTEntityMesh;
+import static engine.Timer.*;
 import static engine.Window.*;
 import static engine.graph.Camera.*;
 import static engine.sound.SoundManager.*;
@@ -43,7 +44,6 @@ public class Crafter {
     //core game engine elements
     private static final int TARGET_FPS = 75;
     private static final int TARGET_UPS = 60; //TODO: IMPLEMENT THIS PROPERLY
-    private static Timer timer;
 
     public static void main(String[] args){
         try{
@@ -72,9 +72,6 @@ public class Crafter {
     }
 
     private static void initTheGame() throws Exception{
-
-        timer = new Timer();
-        timer.init();
         initMouseInput();
         initRenderer();
         initGame();
@@ -86,21 +83,14 @@ public class Crafter {
 //        float interval = 1f / TARGET_UPS;
         boolean running = true;
         while(running && !windowShouldClose()){
-
-            elapsedTime = timer.getElapsedTime();
+            elapsedTime = timerGetElapsedTime();
             accumulator += elapsedTime;
-
             input();
-
             while (accumulator >= 1_000_000){
-
                 update(0f);
-
                 accumulator -= 1_000_000;
             }
-
             renderGame();
-
             if (isvSync()){
                 sync();
             }
@@ -109,8 +99,8 @@ public class Crafter {
 
     private static void sync() {
         float loopSlot = 1f / TARGET_FPS;
-        double endTime = timer.getLastLoopTime() + loopSlot;
-        while(timer.getTime() < endTime){
+        double endTime = timerGetLastLoopTime() + loopSlot;
+        while(timerGetTime() < endTime){
             try {
                 Thread.sleep(1);
             } catch (InterruptedException ie){

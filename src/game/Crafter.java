@@ -61,15 +61,10 @@ public class Crafter {
     public static void runGameEngine(String windowTitle, int width, int height, boolean vSync){
         try{
             initWindow(windowTitle, width, height, vSync);
-
             initRenderer();
-
             initMouseInput();
-
             initSoundManager();
-
             initGame();
-
             gameLoop();
 
         } catch (Exception excp){
@@ -163,6 +158,7 @@ public class Crafter {
 
     private static void input(){
 
+        mouseInput();
 
         if (!isPlayerInventoryOpen()) {
             if (isKeyPressed(GLFW_KEY_W)) {
@@ -271,34 +267,31 @@ public class Crafter {
 
         Vector2f rotVec = getMouseDisplVec();
 
-//        System.out.println(rotVec.x + " " + rotVec.x);
-
         moveCameraRotation(rotVec.x * MOUSE_SENSITIVITY, rotVec.y * MOUSE_SENSITIVITY, 0);
 
 
 
-        //limit camera pitch
-//        if (getCameraRotation().x < -90f) {
-//            moveCameraRotation((90f + getCameraRotation().x) * -1f, 0, 0);
-//        }
-//        if (getCameraRotation().x > 90f){
-//            moveCameraRotation((getCameraRotation().x - 90f) * -1f , 0, 0);
-//        }
-//
-//        //loop camera yaw
-//        if (getCameraRotation().y < -180f){
-//            moveCameraRotation(0,360, 0);
-//        }
-//        if (getCameraRotation().y > 180f){
-//            moveCameraRotation(0,-360, 0);
-//        }
+//        limit camera pitch
+        if (getCameraRotation().x < -90f) {
+            moveCameraRotation((90f + getCameraRotation().x) * -1f, 0, 0);
+        }
+        if (getCameraRotation().x > 90f){
+            moveCameraRotation((getCameraRotation().x - 90f) * -1f , 0, 0);
+        }
+
+        //loop camera yaw
+        if (getCameraRotation().y < -180f){
+            moveCameraRotation(0,360, 0);
+        }
+        if (getCameraRotation().y > 180f){
+            moveCameraRotation(0,-360, 0);
+        }
 
         playerOnTick();
         updateListenerPosition();
         ItemEntity.onStep();
         TNTEntity.onTNTStep();
-//
-//        hudOnStepTest();
+        hudOnStepTest();
     }
 
     private static void cleanup(){

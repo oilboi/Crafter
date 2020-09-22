@@ -44,10 +44,12 @@ public class Crafter {
 
     public static void main(String[] args){
         try{
-            boolean vSync = true;
+            boolean vSync = false;
             Toolkit tk = Toolkit.getDefaultToolkit();
             Dimension d = tk.getScreenSize();
+
             runGameEngine("Crafter", d.width/2,d.height/2,false);
+
         } catch ( Exception excp ){
             excp.printStackTrace();
             System.exit(-1);
@@ -78,16 +80,25 @@ public class Crafter {
         double elapsedTime;
         double accumulator = 0d;
 //        float interval = 1f / TARGET_UPS;
+
         boolean running = true;
+
         while(running && !windowShouldClose()){
             elapsedTime = timerGetElapsedTime();
             accumulator += elapsedTime;
+
             input();
+
             while (accumulator >= 1_000_000){
-                update(0f);
+
+                gameUpdate();
+
                 accumulator -= 1_000_000;
             }
+
             renderGame();
+            windowUpdate();
+
             if (isvSync()){
                 sync();
             }
@@ -146,9 +157,7 @@ public class Crafter {
 
         setAttenuationModel(AL11.AL_LINEAR_DISTANCE);
         setListener(new SoundListener(new Vector3f()));
-
         createHud();
-
         generateRandomInventory();
     }
 
@@ -250,7 +259,7 @@ public class Crafter {
         }
     }
 
-    private static void update(float interval) throws Exception {
+    private static void gameUpdate() throws Exception {
 
         chunkUpdater();
 
@@ -278,12 +287,12 @@ public class Crafter {
             moveCameraRotation(0,-360, 0);
         }
 
-        playerOnTick();
-        updateListenerPosition();
-        ItemEntity.onStep();
-        TNTEntity.onTNTStep();
-
-        hudOnStepTest();
+//        playerOnTick();
+//        updateListenerPosition();
+//        ItemEntity.onStep();
+//        TNTEntity.onTNTStep();
+//
+//        hudOnStepTest();
     }
 
     private static void render(){

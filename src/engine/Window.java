@@ -33,6 +33,7 @@ public class Window {
         height  = newHeight;
         vSync   = newVSync;
         resized = false;
+
         // setup an error callback. The default implementation
         // will print the error message in System.err.
         GLFWErrorCallback.createPrint(System.err).set();

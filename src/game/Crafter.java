@@ -106,20 +106,23 @@ public class Crafter {
         boolean running = true;
         while(running && !windowShouldClose()){
 
-            System.out.println("running that loop :D");
             elapsedTime = timer.getElapsedTime();
             accumulator += elapsedTime;
 
             input();
 
             while (accumulator >= 1_000_000){
+//                System.out.println("this should work >:(");
+
                 update(0f);
+
                 accumulator -= 1_000_000;
             }
 
             render();
 
-            if (!isvSync()){
+            if (isvSync()){
+                System.out.printf("syncing!!!@");
                 sync();
             }
         }

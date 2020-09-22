@@ -5,16 +5,6 @@ import static engine.Window.*;
 
 public class GameEngine {
 
-    public static final int TARGET_FPS = 75;
-
-    public static final int TARGET_UPS = 60; //TODO: IMPLEMENT THIS PROPERLY
-
-    private static Timer timer;
-
-    public static void initializeGameEngine(String windowTitle, int width, int height, boolean vSync) {
-        createWindow(windowTitle, width, height, vSync);
-        timer = new Timer();
-    }
 
     public static void runGameEngine(){
         try{

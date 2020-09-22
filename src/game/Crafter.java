@@ -14,6 +14,7 @@ import static engine.ChunkUpdateHandler.chunkUpdater;
 import static engine.Hud.*;
 import static engine.ItemEntity.initializeItemTextureAtlas;
 import static engine.TNTEntity.createTNTEntityMesh;
+import static engine.Window.createWindow;
 import static game.ChunkHandling.ChunkMesh.generateChunkMesh;
 import static game.ChunkHandling.ChunkMesh.initializeChunkTextureAtlas;
 import static game.blocks.BlockDefinition.initializeBlocks;
@@ -32,10 +33,26 @@ public class Crafter {
     private boolean cButtonPushed = false;
     private boolean eButtonPushed = false;
 
+    //core game engine elements
+    public static final int TARGET_FPS = 75;
+    public static final int TARGET_UPS = 60; //TODO: IMPLEMENT THIS PROPERLY
+    private static Timer timer;
+
     //objects that need to be removed
     private final Renderer renderer;
     private static final SoundManager soundMgr = new SoundManager();
     private final Camera camera;
+
+
+    //the game engine elements
+    public static void initializeGameEngine(String windowTitle, int width, int height, boolean vSync) {
+        createWindow(windowTitle, width, height, vSync);
+        timer = new Timer();
+    }
+
+
+
+
 
     public static int getChunkRenderDistance(){
         return chunkRenderDistance;

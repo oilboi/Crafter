@@ -5,7 +5,6 @@ import org.joml.Vector3f;
 
 import static engine.Hud.createSelection;
 import static engine.graph.Camera.*;
-import static engine.graph.Camera.getCameraPosition;
 import static engine.sound.SoundAPI.playSound;
 import static game.Crafter.getChunkRenderDistance;
 import static game.collision.Collision.applyInertia;
@@ -320,14 +319,14 @@ public class Player {
             returnPlayerViewBobbing();
         }
 
-//        blockPos = new int[]{(int)Math.floor(pos.x), (int)Math.floor(pos.y),(int)Math.floor(pos.z)};
-//
+        blockPos = new int[]{(int)Math.floor(pos.x), (int)Math.floor(pos.y),(int)Math.floor(pos.z)};
+
 //        if(blockPos[0] != oldBlockPos[0] || blockPos[1] != oldBlockPos[1] || blockPos[2] != oldBlockPos[2]){
 //
 //            floodFillTest(blockPos[0], blockPos[1], blockPos[2], gameItems, chunkNames);
 //        }
-//
-//        oldBlockPos = blockPos.clone();
+
+        oldBlockPos = blockPos.clone();
     }
     private static boolean xPositive = true;
     private static boolean yPositive = true;

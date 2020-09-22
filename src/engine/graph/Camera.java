@@ -8,11 +8,6 @@ public class Camera {
 
     private static Vector3f rotation = new Vector3f();
 
-    public static void initializeCamera(Vector3f newPosition, Vector3f newRotation){
-        position = newPosition;
-        rotation = newRotation;
-    }
-
     public static Vector3f getCameraPosition(){
         return position;
     }

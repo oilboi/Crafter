@@ -71,8 +71,8 @@ public class Crafter {
     }
 
     private static void initTheGame() throws Exception{
-        initMouseInput();
         initRenderer();
+        initMouseInput();
         initGame();
     }
 
@@ -264,6 +264,7 @@ public class Crafter {
         chunkUpdater();
 
         setCameraPosition(getPlayerPosWithEyeHeight().x, getPlayerPosWithEyeHeight().y, getPlayerPosWithEyeHeight().z);
+
         moveCameraPosition(getPlayerViewBobbing().x,getPlayerViewBobbing().y, getPlayerViewBobbing().z);
 
         //update camera based on mouse
@@ -271,32 +272,31 @@ public class Crafter {
         Vector2f rotVec = getMouseDisplVec();
 
         moveCameraRotation(rotVec.x * MOUSE_SENSITIVITY, rotVec.y * MOUSE_SENSITIVITY, 0);
+
+
+
         //limit camera pitch
-        if (getCameraRotation().x < -90f) {
-            moveCameraRotation((90f + getCameraRotation().x) * -1f, 0, 0);
-        }
-        if (getCameraRotation().x > 90f){
-            moveCameraRotation((getCameraRotation().x - 90f) * -1f , 0, 0);
-        }
+//        if (getCameraRotation().x < -90f) {
+//            moveCameraRotation((90f + getCameraRotation().x) * -1f, 0, 0);
+//        }
+//        if (getCameraRotation().x > 90f){
+//            moveCameraRotation((getCameraRotation().x - 90f) * -1f , 0, 0);
+//        }
+//
+//        //loop camera yaw
+//        if (getCameraRotation().y < -180f){
+//            moveCameraRotation(0,360, 0);
+//        }
+//        if (getCameraRotation().y > 180f){
+//            moveCameraRotation(0,-360, 0);
+//        }
 
-        //loop camera yaw
-        if (getCameraRotation().y < -180f){
-            moveCameraRotation(0,360, 0);
-        }
-        if (getCameraRotation().y > 180f){
-            moveCameraRotation(0,-360, 0);
-        }
-
-//        playerOnTick();
+        playerOnTick();
 //        updateListenerPosition();
 //        ItemEntity.onStep();
 //        TNTEntity.onTNTStep();
 //
 //        hudOnStepTest();
-    }
-
-    private static void render(){
-        renderGame();
     }
 
     private static void cleanup(){

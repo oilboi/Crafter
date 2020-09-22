@@ -76,7 +76,7 @@ public class Renderer {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
-    public static void renderGame(Camera camera){
+    public static void renderGame(){
         clearScreen();
 
         if (isWindowResized()){
@@ -94,7 +94,7 @@ public class Renderer {
         shaderProgram.setUniform("projectionMatrix", projectionMatrix);
 
         //update the view matrix
-        Matrix4f viewMatrix = transformation.getViewMatrix(camera);
+        Matrix4f viewMatrix = transformation.getViewMatrix();
 
         shaderProgram.setUniform("texture_sampler", 0);
 

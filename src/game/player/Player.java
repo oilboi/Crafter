@@ -4,6 +4,8 @@ import engine.graph.Camera;
 import org.joml.Vector3f;
 
 import static engine.Hud.createSelection;
+import static engine.graph.Camera.*;
+import static engine.graph.Camera.getCameraPosition;
 import static engine.sound.SoundAPI.playSound;
 import static game.Crafter.getChunkRenderDistance;
 import static game.collision.Collision.applyInertia;
@@ -197,27 +199,27 @@ public class Player {
 
     private static float movementSpeed = 1.5f;
 
-    public static void setPlayerInertiaBuffer(Camera camera){
+    public static void setPlayerInertiaBuffer(){
         if (forward){
-            float yaw = (float)Math.toRadians(camera.getRotation().y) + (float)Math.PI;
+            float yaw = (float)Math.toRadians(getCameraRotation().y) + (float)Math.PI;
             inertia.x += (float)(Math.sin(-yaw) * accelerationMultiplier) * movementSpeed;
             inertia.z += (float)(Math.cos(yaw)  * accelerationMultiplier) * movementSpeed;
         }
         if (backward){
             //no mod needed
-            float yaw = (float)Math.toRadians(camera.getRotation().y);
+            float yaw = (float)Math.toRadians(getCameraRotation().y);
             inertia.x += (float)(Math.sin(-yaw) * accelerationMultiplier) * movementSpeed;
             inertia.z += (float)(Math.cos(yaw)  * accelerationMultiplier) * movementSpeed;
         }
 
         if (right){
-            float yaw = (float)Math.toRadians(camera.getRotation().y) - (float)(Math.PI /2);
+            float yaw = (float)Math.toRadians(getCameraRotation().y) - (float)(Math.PI /2);
             inertia.x += (float)(Math.sin(-yaw) * accelerationMultiplier) * movementSpeed;
             inertia.z += (float)(Math.cos(yaw)  * accelerationMultiplier) * movementSpeed;
         }
 
         if (left){
-            float yaw = (float)Math.toRadians(camera.getRotation().y) + (float)(Math.PI /2);
+            float yaw = (float)Math.toRadians(getCameraRotation().y) + (float)(Math.PI /2);
             inertia.x += (float)(Math.sin(-yaw) * accelerationMultiplier) * movementSpeed;
             inertia.z += (float)(Math.cos(yaw)  * accelerationMultiplier) * movementSpeed;
         }
@@ -231,8 +233,8 @@ public class Player {
         }
     }
 
-    private static void applyPlayerInertiaBuffer(Camera camera){
-        setPlayerInertiaBuffer(camera);
+    private static void applyPlayerInertiaBuffer(){
+        setPlayerInertiaBuffer();
 
         inertia.x += inertiaBuffer.x;
         inertia.y += inertiaBuffer.y;
@@ -263,9 +265,9 @@ public class Player {
     }
 
 
-    public static void playerOnTick(Camera camera) throws Exception {
+    public static void playerOnTick() throws Exception {
 
-        applyPlayerInertiaBuffer(camera);
+        applyPlayerInertiaBuffer();
 
         if(placeTimer > 0){
             placeTimer -= 0.003f;
@@ -301,13 +303,13 @@ public class Player {
 
 
         if(mining && mineTimer <= 0) {
-            rayCast(camera.getPosition(), camera.getRotationVector(), 4f,  true, false);
+            rayCast(getCameraPosition(), getCameraRotationVector(), 4f,  true, false);
             mineTimer = 0.5f;
         } else if (placing && placeTimer <= 0){
-            rayCast(camera.getPosition(), camera.getRotationVector(), 4f,  false, true);
+            rayCast(getCameraPosition(), getCameraRotationVector(), 4f,  false, true);
             placeTimer = 0.5f;
         } else {
-            rayCast(camera.getPosition(), camera.getRotationVector(), 4f,  false, false);
+            rayCast(getCameraPosition(), getCameraRotationVector(), 4f,  false, false);
         }
 
         oldPos = new Vector3f(pos);

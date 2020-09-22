@@ -6,6 +6,8 @@ import org.joml.Vector3f;
 import static engine.ItemEntity.*;
 import static engine.TNTEntity.getTNTPosition;
 import static engine.TNTEntity.getTNTScale;
+import static engine.graph.Camera.getCameraPosition;
+import static engine.graph.Camera.getCameraRotation;
 
 public class Transformation {
 
@@ -21,9 +23,9 @@ public class Transformation {
         viewMatrix = new Matrix4f();
     }
 
-    public Matrix4f getViewMatrix(Camera camera){
-        Vector3f cameraPos = camera.getPosition();
-        Vector3f rotation = camera.getRotation();
+    public Matrix4f getViewMatrix(){
+        Vector3f cameraPos = getCameraPosition();
+        Vector3f rotation = getCameraRotation();
         viewMatrix.identity();
         //first do the rotation so the camera rotates over it's position
         viewMatrix.rotate((float)Math.toRadians(rotation.x), new Vector3f(1,0,0)).rotate((float)Math.toRadians(rotation.y), new Vector3f(0,1,0));

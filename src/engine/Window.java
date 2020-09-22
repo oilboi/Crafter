@@ -28,7 +28,6 @@ public class Window {
     private static boolean vSync;
 
     public static void initWindow(String newTitle, int newWidth, int newHeight, boolean newVSync) {
-
         title   = newTitle;
         width   = newWidth;
         height  = newHeight;

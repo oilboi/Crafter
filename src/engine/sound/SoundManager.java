@@ -11,6 +11,8 @@ import org.lwjgl.openal.ALCCapabilities;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
+import static engine.graph.Camera.getCameraPosition;
+import static engine.graph.Camera.getCameraRotation;
 import static org.lwjgl.openal.AL10.alDistanceModel;
 import static org.lwjgl.openal.ALC10.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
@@ -79,10 +81,10 @@ public class SoundManager {
         listener = newListener;
     }
 
-    public static void updateListenerPosition(Camera camera) {
+    public static void updateListenerPosition() {
         // Update camera matrix with camera data
-        Transformation.updateGenericViewMatrix(camera.getPosition(), camera.getRotation(), cameraMatrix);
-        listener.setPosition(camera.getPosition());
+        Transformation.updateGenericViewMatrix(getCameraPosition(), getCameraRotation(), cameraMatrix);
+        listener.setPosition(getCameraPosition());
         Vector3f at = new Vector3f();
         cameraMatrix.positiveZ(at).negate();
         Vector3f up = new Vector3f();

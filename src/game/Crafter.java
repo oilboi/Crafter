@@ -19,6 +19,7 @@ import static engine.ItemEntity.initializeItemTextureAtlas;
 import static engine.MouseInput.*;
 import static engine.TNTEntity.createTNTEntityMesh;
 import static engine.Window.*;
+import static engine.graph.Camera.*;
 import static engine.sound.SoundManager.*;
 import static game.ChunkHandling.ChunkMesh.generateChunkMesh;
 import static game.ChunkHandling.ChunkMesh.initializeChunkTextureAtlas;
@@ -44,10 +45,6 @@ public class Crafter {
     private static final int TARGET_UPS = 60; //TODO: IMPLEMENT THIS PROPERLY
     private static Timer timer;
 
-    //objects that need to be removed
-    private static Camera camera= new Camera() ;
-
-
     public static void main(String[] args){
         try{
             boolean vSync = true;
@@ -64,38 +61,22 @@ public class Crafter {
 
     public static void runGameEngine(String windowTitle, int width, int height, boolean vSync){
         try{
-            System.out.println("got that window started up yo");
             initWindow(windowTitle, width, height, vSync);
-            System.out.printf("trying init");
             initTheGame();
-
-            System.out.println("here comes the game loop baby");
             gameLoop();
-
-            System.out.println("game loop is finished yo");
         } catch (Exception excp){
-            System.out.println("wow the loop crashed");
             excp.printStackTrace();
         } finally {
-            System.out.println("alright I'm cleaning this mess up");
             cleanup();
         }
     }
 
     private static void initTheGame() throws Exception{
 
-        System.out.println("sloop");
         timer = new Timer();
-        System.out.println("sloop 2");
-
-        System.out.println("well well well");
-        System.out.println("the timer is starting");
         timer.init();
-        System.out.println("I'm initializing mouse input yo");
         initMouseInput();
-        System.out.println("this is the part where the renderer starts up");
         initRenderer();
-        System.out.println("now I'm trying to start the game up");
         initGame();
     }
 
@@ -112,17 +93,15 @@ public class Crafter {
             input();
 
             while (accumulator >= 1_000_000){
-//                System.out.println("this should work >:(");
 
                 update(0f);
 
                 accumulator -= 1_000_000;
             }
 
-            render();
+            renderGame();
 
             if (isvSync()){
-                System.out.printf("syncing!!!@");
                 sync();
             }
         }
@@ -138,8 +117,6 @@ public class Crafter {
             }
         }
     }
-
-
     //todo ---------------------------------------------------------------------------------------------------------------END
 
 
@@ -290,32 +267,32 @@ public class Crafter {
 
         chunkUpdater();
 
-        camera.setPosition(getPlayerPosWithEyeHeight().x, getPlayerPosWithEyeHeight().y, getPlayerPosWithEyeHeight().z);
-        camera.movePosition(getPlayerViewBobbing().x,getPlayerViewBobbing().y, getPlayerViewBobbing().z);
+        setCameraPosition(getPlayerPosWithEyeHeight().x, getPlayerPosWithEyeHeight().y, getPlayerPosWithEyeHeight().z);
+        moveCameraPosition(getPlayerViewBobbing().x,getPlayerViewBobbing().y, getPlayerViewBobbing().z);
 
         //update camera based on mouse
 
         Vector2f rotVec = getMouseDisplVec();
 
-        camera.moveRotation(rotVec.x * MOUSE_SENSITIVITY, rotVec.y * MOUSE_SENSITIVITY, 0);
+        moveCameraRotation(rotVec.x * MOUSE_SENSITIVITY, rotVec.y * MOUSE_SENSITIVITY, 0);
         //limit camera pitch
-        if (camera.getRotation().x < -90f) {
-            camera.moveRotation((90f + camera.getRotation().x) * -1f, 0, 0);
+        if (getCameraRotation().x < -90f) {
+            moveCameraRotation((90f + getCameraRotation().x) * -1f, 0, 0);
         }
-        if (camera.getRotation().x > 90f){
-            camera.moveRotation((camera.getRotation().x - 90f) * -1f , 0, 0);
+        if (getCameraRotation().x > 90f){
+            moveCameraRotation((getCameraRotation().x - 90f) * -1f , 0, 0);
         }
 
         //loop camera yaw
-        if (camera.getRotation().y < -180f){
-            camera.moveRotation(0,360, 0);
+        if (getCameraRotation().y < -180f){
+            moveCameraRotation(0,360, 0);
         }
-        if (camera.getRotation().y > 180f){
-            camera.moveRotation(0,-360, 0);
+        if (getCameraRotation().y > 180f){
+            moveCameraRotation(0,-360, 0);
         }
 
-        playerOnTick(camera);
-        updateListenerPosition(camera);
+        playerOnTick();
+        updateListenerPosition();
         ItemEntity.onStep();
         TNTEntity.onTNTStep();
 
@@ -323,7 +300,7 @@ public class Crafter {
     }
 
     private static void render(){
-        renderGame(camera);
+        renderGame();
     }
 
     private static void cleanup(){

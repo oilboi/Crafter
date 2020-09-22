@@ -3,75 +3,71 @@ package engine;
 import org.joml.Vector2d;
 import org.joml.Vector2f;
 
+import static engine.Window.*;
 import static org.lwjgl.glfw.GLFW.*;
 
 public class MouseInput {
 
-    private final Vector2d previousPos;
+    private static Vector2d previousPos = new Vector2d(-1,-1);
 
-    private final Vector2d currentPos;
+    private static Vector2d currentPos  = new Vector2d(0,0);
 
-    private final Vector2f displVec;
+    private static Vector2f displVec    = new Vector2f();
 
-    private boolean inWindow = false;
+    private static boolean  inWindow    = false;
 
-    private boolean leftButtonPressed = false;
+    private static boolean  leftButtonPressed  = false;
 
-    private boolean rightButtonPressed = false;
+    private static boolean  rightButtonPressed = false;
 
-    private boolean mouseLocked = true;
+    private static boolean  mouseLocked = true;
 
-    private float scroll = 0;
+    private static float    scroll      = 0;
 
-    public MouseInput(){
-        previousPos = new Vector2d(-1,-1);
-        currentPos = new Vector2d(0,0);
-        displVec = new Vector2f();
-    }
 
-    public void resetPosVector(Window window){
-        glfwSetCursorPos(window.getWindowHandle(),window.getWidth() / 2,window.getHeight() / 2 );
-        currentPos.x = window.getWidth() / 2;
-        currentPos.y = window.getHeight() / 2;
+    public static void resetMousePosVector(){
+        glfwSetCursorPos(getWindowHandle(),getWindowWidth() / 2,getWindowHeight() / 2 );
+        currentPos.x = getWindowWidth() / 2;
+        currentPos.y = getWindowHeight() / 2;
         previousPos.x = currentPos.x;
         previousPos.y = currentPos.y;
     }
 
-    public void init(Window window){
-        glfwSetCursorPosCallback(window.getWindowHandle(), (windowHandle, xpos, ypos) -> {
+    public static void initMouseInput(){
+        glfwSetCursorPosCallback(getWindowHandle(), (windowHandle, xpos, ypos) -> {
             currentPos.x = xpos;
             currentPos.y = ypos;
         });
 
-        glfwSetCursorEnterCallback(window.getWindowHandle(), (windowHandle, entered) -> {
+        glfwSetCursorEnterCallback(getWindowHandle(), (windowHandle, entered) -> {
             inWindow = entered;
         });
 
-        glfwSetMouseButtonCallback(window.getWindowHandle(), (windowHandle, button, action, mode) -> {
+        glfwSetMouseButtonCallback(getWindowHandle(), (windowHandle, button, action, mode) -> {
             leftButtonPressed = button == GLFW_MOUSE_BUTTON_1 && action == GLFW_PRESS;
             rightButtonPressed = button == GLFW_MOUSE_BUTTON_2 && action == GLFW_PRESS;
         });
 
-        glfwSetScrollCallback(window.getWindowHandle(), (windowHandle, xOffset, yOffset) -> {
+        glfwSetScrollCallback(getWindowHandle(), (windowHandle, xOffset, yOffset) -> {
             scroll = (float)yOffset;
         });
 
     }
 
-    public Vector2f getDisplVec() {
+    public static Vector2f getDisplVec() {
         return displVec;
     }
 
-    public void input(Window window){
+    public static void mouseInput(){
         displVec.x = 0;
         displVec.y = 0;
 
         if (mouseLocked) {
-            glfwSetCursorPos(window.getWindowHandle(), window.getWidth() / 2, window.getHeight() / 2);
+            glfwSetCursorPos(getWindowHandle(), getWindowWidth() / 2, getWindowHeight() / 2);
 
             if (previousPos.x > 0 && previousPos.y > 0 && inWindow) {
-                double deltax = currentPos.x - window.getWidth() / 2;
-                double deltay = currentPos.y - window.getHeight() / 2;
+                double deltax = currentPos.x - getWindowWidth() / 2;
+                double deltay = currentPos.y - getWindowHeight() / 2;
 
                 boolean rotateX = deltax != 0;
                 boolean rotateY = deltay != 0;
@@ -90,29 +86,29 @@ public class MouseInput {
         previousPos.y = currentPos.y;
     }
 
-    public boolean isLeftButtonPressed(){
+    public static boolean isLeftButtonPressed(){
         return leftButtonPressed;
     }
 
-    public boolean isRightButtonPressed(){
+    public static boolean isRightButtonPressed(){
         return rightButtonPressed;
     }
 
-    public void setMouseLocked(boolean lock){
+    public static void setMouseLocked(boolean lock){
         mouseLocked = lock;
     }
 
-    public boolean isMouseLocked(){
+    public static boolean isMouseLocked(){
         return mouseLocked;
     }
 
-    public float getScroll(){
+    public static float getScroll(){
         float thisScroll = scroll;
         scroll = 0.0f;
         return thisScroll;
     }
 
-    public Vector2d getMousePos(){
+    public static Vector2d getMousePos(){
         return currentPos;
     }
 }

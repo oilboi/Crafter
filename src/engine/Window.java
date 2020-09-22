@@ -138,6 +138,11 @@ public class Window {
 
 
     private static boolean fullScreen = false;
+
+    public static boolean isFullScreen(){
+        return fullScreen;
+    }
+
     public static void toggleFullScreen(){
         Toolkit tk = Toolkit.getDefaultToolkit();
         Dimension d = tk.getScreenSize();

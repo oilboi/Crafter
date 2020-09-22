@@ -17,7 +17,9 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class Renderer {
 
-    private static float FOV = (float) Math.toRadians(60.0f); //todo: make this a calculator method ala calculateFOV(float);
+    private static float FOV = (float) Math.toRadians(72.0f); //todo: make this a calculator method ala calculateFOV(float);
+
+    private static float HUD_FOV = (float)Math.toRadians(60f);
 
     private static final float HUD_Z_NEAR = 0.001f;
     private static final float HUD_Z_FAR = 1120.f;
@@ -76,13 +78,13 @@ public class Renderer {
 
     public static void renderGame(){
         clearScreen();
-
         if (isWindowResized()){
             windowSize.x = getWindowWidth();
             windowSize.y = getWindowHeight();
             glViewport(0,0, getWindowWidth(), getWindowHeight());
             setWindowResized(false);
         }
+
 
         //todo: BEGIN WORLD SHADER PROGRAM!
         shaderProgram.bind();
@@ -153,7 +155,7 @@ public class Renderer {
         //TODO: BEGIN HUD SHADER PROGRAM!
         hudShaderProgram.bind();
 
-        Matrix4f hudProjectionMatrix = transformation.getProjectionMatrix(FOV, getWindowWidth(), getWindowHeight(), HUD_Z_NEAR, HUD_Z_FAR);
+        Matrix4f hudProjectionMatrix = transformation.getProjectionMatrix(HUD_FOV, getWindowWidth(), getWindowHeight(), HUD_Z_NEAR, HUD_Z_FAR);
         hudShaderProgram.setUniform("projectionMatrix", hudProjectionMatrix);
         Matrix4f hudViewMatrix = new Matrix4f();
         hudShaderProgram.setUniform("texture_sampler", 0);
@@ -270,12 +272,12 @@ public class Renderer {
 
             hudViewMatrix = new Matrix4f();
 
-//            {
-//                Mesh thisMesh = getCrossHairMesh();
-//                Matrix4f modelViewMatrix = transformation.getModelViewMatrix(hudViewMatrix);
-//                hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
-//                thisMesh.render();
-//            }
+            {
+                Mesh thisMesh = getCrossHairMesh();
+                Matrix4f modelViewMatrix = transformation.getModelViewMatrix(hudViewMatrix);
+                hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+                thisMesh.render();
+            }
 
 
             //THESE GO LAST!

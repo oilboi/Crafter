@@ -1,8 +1,9 @@
-package engine;
+package game.chunk;
 
+import engine.FastNoise;
 import engine.graph.Mesh;
 
-import static engine.ChunkUpdateHandler.chunkUpdate;
+import static game.chunk.ChunkUpdateHandler.chunkUpdate;
 import static game.Crafter.getChunkRenderDistance;
 
 public class Chunk {

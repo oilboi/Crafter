@@ -5,8 +5,8 @@ import org.joml.Matrix4f;
 import org.joml.Vector2d;
 import org.joml.Vector3f;
 
-import static engine.Chunk.getChunkMesh;
-import static engine.Chunk.getLimit;
+import static game.chunk.Chunk.getChunkMesh;
+import static game.chunk.Chunk.getLimit;
 import static engine.Hud.*;
 import static engine.ItemEntity.*;
 import static engine.TNTEntity.*;

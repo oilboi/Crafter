@@ -1,4 +1,4 @@
-package engine;
+package game.chunk;
 
 import static game.chunk.ChunkMesh.generateChunkMesh;
 import static game.Crafter.getChunkRenderDistance;
@@ -19,7 +19,6 @@ public class ChunkUpdateHandler {
         if (!found){
             addToQueue(x,z);
         }
-//        System.out.println("The new Array Size: " + Arrays.deepToString(queue));
     }
 
     private static void addToQueue(int x, int z){

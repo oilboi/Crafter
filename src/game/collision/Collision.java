@@ -2,9 +2,7 @@ package game.collision;
 
 import org.joml.Vector3f;
 
-import java.util.Arrays;
-
-import static engine.Chunk.getBlock;
+import static game.chunk.Chunk.getBlock;
 import static game.blocks.BlockDefinition.*;
 import static game.collision.CollisionMath.floorPos;
 import static game.collision.CustomAABB.*;

@@ -2,8 +2,8 @@ package game.player;
 
 import org.joml.Vector3f;
 
-import static engine.Chunk.getBlock;
-import static engine.Chunk.setBlock;
+import static game.chunk.Chunk.getBlock;
+import static game.chunk.Chunk.setBlock;
 import static engine.FancyMath.getDistance;
 import static engine.ItemEntity.createItem;
 import static engine.TNTEntity.createTNT;

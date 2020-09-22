@@ -2,15 +2,16 @@ package game;
 
 import engine.*;
 import engine.sound.SoundListener;
+import game.chunk.Chunk;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.openal.AL11;
 
 import java.awt.*;
 
-import static engine.Chunk.genBiome;
-import static engine.Chunk.initializeChunkHandler;
-import static engine.ChunkUpdateHandler.chunkUpdater;
+import static game.chunk.Chunk.genBiome;
+import static game.chunk.Chunk.initializeChunkHandler;
+import static game.chunk.ChunkUpdateHandler.chunkUpdater;
 import static engine.Hud.*;
 import static engine.ItemEntity.initializeItemTextureAtlas;
 import static engine.MouseInput.*;

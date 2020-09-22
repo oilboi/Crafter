@@ -5,7 +5,7 @@ import org.joml.Vector3f;
 import java.util.HashMap;
 import java.util.Map;
 
-import static engine.Chunk.setBlock;
+import static game.chunk.Chunk.setBlock;
 import static engine.ItemEntity.createBlockObjectMesh;
 import static engine.ItemEntity.createItem;
 import static engine.TNTEntity.createTNT;

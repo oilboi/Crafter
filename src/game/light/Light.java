@@ -1,9 +1,5 @@
 package game.light;
 
-import java.util.ArrayList;
-
-import static engine.Chunk.*;
-
 public class Light {
 
     private static final byte debugLightLevel = 15;

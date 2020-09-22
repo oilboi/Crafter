@@ -1,10 +1,8 @@
 package game.player;
 
-import engine.sound.SoundManager;
 import org.joml.Vector3f;
 
-import static engine.Chunk.*;
-import static engine.ItemEntity.createItem;
+import static game.chunk.Chunk.*;
 import static game.blocks.BlockDefinition.*;
 import static game.collision.Collision.wouldCollidePlacing;
 import static game.collision.CustomAABB.setAABB;

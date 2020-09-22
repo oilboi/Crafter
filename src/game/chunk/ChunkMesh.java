@@ -5,7 +5,7 @@ import engine.graph.Texture;
 
 import java.util.ArrayList;
 
-import static engine.Chunk.*;
+import static game.chunk.Chunk.*;
 import static game.blocks.BlockDefinition.*;
 
 public class ChunkMesh {

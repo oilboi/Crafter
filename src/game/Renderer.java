@@ -18,11 +18,7 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class Renderer {
 
-    /**
-     * Field of View in Radians
-     */
-
-    private static final float FOV = (float) Math.toRadians(60.0f);
+    private static float FOV = (float) Math.toRadians(60.0f); //todo: make this a calculator method ala calculateFOV(float);
 
     private static final float HUD_Z_NEAR = 0.001f;
     private static final float HUD_Z_FAR = 1120.f;

@@ -21,27 +21,21 @@ import static game.player.Inventory.generateRandomInventory;
 import static game.player.Player.*;
 import static org.lwjgl.glfw.GLFW.*;
 
-public class Crafter implements IGameLogic {
+public class Crafter {
 
+    //variables
     public static int chunkRenderDistance = 2;
-
     private static final float MOUSE_SENSITIVITY = 0.009f;
-
-    private final Renderer renderer;
-
-    private static final SoundManager soundMgr = new SoundManager();
-
-    private final Camera camera;
-
     private boolean fButtonPushed = false;
-
     private boolean rButtonPushed = false;
-
     private boolean tButtonPushed = false;
-
     private boolean cButtonPushed = false;
-
     private boolean eButtonPushed = false;
+
+    //objects that need to be removed
+    private final Renderer renderer;
+    private static final SoundManager soundMgr = new SoundManager();
+    private final Camera camera;
 
     public static int getChunkRenderDistance(){
         return chunkRenderDistance;
@@ -52,7 +46,6 @@ public class Crafter implements IGameLogic {
         camera = new Camera();
     }
 
-    @Override
     public void init(Window window) throws Exception{
         renderer.init(window);
 
@@ -101,7 +94,6 @@ public class Crafter implements IGameLogic {
         return soundMgr;
     }
 
-    @Override
     public void input(Window window, MouseInput input){
 
 
@@ -141,22 +133,6 @@ public class Crafter implements IGameLogic {
             }
         }
 
-        //prototype toggle locking mouse - F KEY
-//        if (window.isKeyPressed(GLFW_KEY_F)) {
-//            if (!fButtonPushed) {
-//                input.setMouseLocked(!input.isMouseLocked());
-//                fButtonPushed = true;
-//                if(!input.isMouseLocked()) {
-//                    glfwSetInputMode(window.getWindowHandle(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-//                } else{
-//                    glfwSetInputMode(window.getWindowHandle(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
-//                }
-//            }
-//        } else if (!window.isKeyPressed(GLFW_KEY_F)){
-//            fButtonPushed = false;
-//        }
-
-//        prototype reset position - R KEY
         if (window.isKeyPressed(GLFW_KEY_R)) {
             if (!rButtonPushed) {
                 rButtonPushed = true;
@@ -166,16 +142,6 @@ public class Crafter implements IGameLogic {
             rButtonPushed = false;
         }
 
-        //prototype clear objects - C KEY
-//        if (window.isKeyPressed(GLFW_KEY_C)) {
-//            if (!cButtonPushed) {
-//                cButtonPushed = true;
-//                clearItems();
-//                System.out.println("Cleared all items!");
-//            }
-//        } else if (!window.isKeyPressed(GLFW_KEY_C)){
-//            cButtonPushed = false;
-//        }
 
         //prototype clear objects - C KEY
         if (window.isKeyPressed(GLFW_KEY_E)) {
@@ -226,7 +192,6 @@ public class Crafter implements IGameLogic {
         }
     }
 
-    @Override
     public void update(float interval, MouseInput mouseInput) throws Exception {
 
         chunkUpdater();
@@ -266,12 +231,10 @@ public class Crafter implements IGameLogic {
         hudOnStepTest(mouseInput);
     }
 
-    @Override
     public void render(Window window){
         renderer.render(window, camera);
     }
 
-    @Override
     public void cleanup(){
         Chunk.cleanUp();
         soundMgr.cleanup();

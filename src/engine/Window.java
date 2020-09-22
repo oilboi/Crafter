@@ -27,7 +27,7 @@ public class Window {
 
     private static boolean vSync;
 
-    public static void initWindow( String newTitle, int newWidth, int newHeight, boolean newVSync){
+    public static void createWindow( String newTitle, int newWidth, int newHeight, boolean newVSync){
         title   = newTitle;
         width   = newWidth;
         height  = newHeight;
@@ -35,7 +35,7 @@ public class Window {
         resized = false;
     }
 
-    public static void init() {
+    public static void initWindow() {
         // setup an error callback. The default implementation
         // will print the error message in System.err.
         GLFWErrorCallback.createPrint(System.err).set();
@@ -63,7 +63,7 @@ public class Window {
         glfwSetFramebufferSizeCallback(windowHandle, (thisWindow, thisWidth, thisHeight) -> {
             width = thisWidth;
             height = thisHeight;
-            setResized(true);
+            setWindowResized(true);
         });
 
         // setup a key callback. it will be called every time a key is pressed, repeated or released.
@@ -144,19 +144,19 @@ public class Window {
         return title;
     }
 
-    public static int getWidth(){
+    public static int getWindowWidth(){
         return width;
     }
 
-    public static int getHeight(){
+    public static int getWindowHeight(){
         return height;
     }
 
-    public static boolean isResized(){
+    public static boolean isWindowResized(){
         return resized;
     }
 
-    public static void setResized(boolean newResized){
+    public static void setWindowResized(boolean newResized){
         resized = newResized;
     }
 
@@ -168,7 +168,7 @@ public class Window {
         vSync = newVSync;
     }
 
-    public static void update(){
+    public static void windowUpdate(){
         glfwSwapBuffers(windowHandle);
         glfwPollEvents();
     }

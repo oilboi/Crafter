@@ -1,28 +1,22 @@
 package engine;
 
-public class GameEngine implements Runnable{
+import static engine.MouseInput.initMouseInput;
+import static engine.Window.*;
+
+public class GameEngine {
 
     public static final int TARGET_FPS = 75;
 
-    public static final int TARGET_UPS = 60;
+    public static final int TARGET_UPS = 60; //TODO: IMPLEMENT THIS PROPERLY
 
-    private final Window window;
+    private static Timer timer;
 
-    private final Timer timer;
-
-    private final IGameLogic gameLogic;
-
-    private final MouseInput mouseInput;
-
-    public GameEngine(String windowTitle, int width, int height, boolean vSync, IGameLogic gameLogic) throws Exception{
-        window = new Window(windowTitle, width, height, vSync);
-        mouseInput = new MouseInput();
-        this.gameLogic = gameLogic;
+    public static void initializeGameEngine(String windowTitle, int width, int height, boolean vSync) {
+        createWindow(windowTitle, width, height, vSync);
         timer = new Timer();
     }
 
-    @Override
-    public void run(){
+    public static void runGameEngine(){
         try{
             init();
             gameLoop();
@@ -33,20 +27,19 @@ public class GameEngine implements Runnable{
         }
     }
 
-    protected void init() throws Exception{
-        window.init();
+    private static void init() throws Exception{
+        initWindow();
         timer.init();
-        mouseInput.init(window);
-        gameLogic.init(window);
+        initMouseInput();
     }
 
-    protected void gameLoop() throws Exception {
+    private static void gameLoop() throws Exception {
         double elapsedTime;
         double accumulator = 0d;
 //        float interval = 1f / TARGET_UPS;
 
         boolean running = true;
-        while(running && !window.windowShouldClose()){
+        while(running && !windowShouldClose()){
 
             elapsedTime = timer.getElapsedTime();
             accumulator += elapsedTime;
@@ -60,17 +53,13 @@ public class GameEngine implements Runnable{
 
             render();
 
-            if (!window.isvSync()){
+            if (!isvSync()){
                 sync();
             }
         }
     }
 
-    protected void cleanup(){
-        gameLogic.cleanup();
-    }
-
-    private void sync() {
+    private static void sync() {
         float loopSlot = 1f / TARGET_FPS;
         double endTime = timer.getLastLoopTime() + loopSlot;
         while(timer.getTime() < endTime){
@@ -81,17 +70,21 @@ public class GameEngine implements Runnable{
         }
     }
 
-    protected void input() {
+    private static void input() {
         mouseInput.input(window);
         gameLogic.input(window, mouseInput);
     }
 
-    protected void update(float interval) throws Exception {
+    private static void update(float interval) throws Exception {
         gameLogic.update(interval, mouseInput);
     }
 
-    protected void render() {
+    private static void render() {
         gameLogic.render(window);
         window.update();
+    }
+
+    private static void cleanup(){
+        gameLogic.cleanup();
     }
 }

@@ -1,10 +1,7 @@
 package game;
 
 import engine.*;
-import engine.Window;
-import engine.graph.Camera;
 import engine.sound.SoundListener;
-import engine.sound.SoundManager;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.openal.AL11;
@@ -24,7 +21,7 @@ import static engine.graph.Camera.*;
 import static engine.sound.SoundManager.*;
 import static game.ChunkHandling.ChunkMesh.generateChunkMesh;
 import static game.ChunkHandling.ChunkMesh.initializeChunkTextureAtlas;
-import static game.Renderer.*;
+import static engine.Renderer.*;
 import static game.blocks.BlockDefinition.initializeBlocks;
 import static game.player.Inventory.generateRandomInventory;
 import static game.player.Player.*;

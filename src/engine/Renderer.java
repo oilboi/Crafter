@@ -1,4 +1,4 @@
-package game;
+package engine;
 
 import engine.Utils;
 import engine.Window;

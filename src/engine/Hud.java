@@ -6,10 +6,9 @@ import org.joml.Vector2d;
 import org.joml.Vector3f;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import static engine.MouseInput.getMousePos;
-import static game.Renderer.getWindowSize;
+import static engine.Renderer.getWindowSize;
 import static game.player.Player.isPlayerInventoryOpen;
 
 public class Hud {

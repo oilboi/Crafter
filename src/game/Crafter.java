@@ -38,6 +38,7 @@ public class Crafter {
     private static boolean tButtonPushed       = false;
     private static boolean cButtonPushed       = false;
     private static boolean eButtonPushed       = false;
+    private static boolean F11Pushed           = false;
 
     //core game engine elements
     private static final int TARGET_FPS = 75;
@@ -207,6 +208,15 @@ public class Crafter {
             rButtonPushed = false;
         }
 
+        if (isKeyPressed(GLFW_KEY_F11)) {
+            if (!F11Pushed) {
+                F11Pushed = true;
+                toggleFullScreen();
+            }
+        } else if (!isKeyPressed(GLFW_KEY_F11)){
+            F11Pushed = false;
+        }
+
 
         //prototype clear objects - C KEY
         if (isKeyPressed(GLFW_KEY_E)) {
@@ -214,6 +224,7 @@ public class Crafter {
                 eButtonPushed = true;
                 togglePlayerInventory();
                 setMouseLocked(!isMouseLocked());
+
                 if(!isMouseLocked()) {
                     glfwSetInputMode(getWindowHandle(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
                 } else{

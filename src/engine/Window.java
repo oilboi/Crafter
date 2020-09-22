@@ -136,6 +136,25 @@ public class Window {
         return title;
     }
 
+
+    private static boolean fullScreen = false;
+    public static void toggleFullScreen(){
+        Toolkit tk = Toolkit.getDefaultToolkit();
+        Dimension d = tk.getScreenSize();
+        if (!fullScreen) {
+            glfwSetWindowMonitor(windowHandle, glfwGetPrimaryMonitor(), d.width / 2, d.height / 2, d.width, d.height, glfwGetVideoMode(glfwGetPrimaryMonitor()).refreshRate());
+            width = d.width;
+            height = d.height;
+        }
+        else {
+            glfwSetWindowMonitor(windowHandle, NULL, d.width / 4, d.height / 4,d.width / 2, d.height / 2, glfwGetVideoMode(glfwGetPrimaryMonitor()).refreshRate());
+            width = d.width / 2;
+            height = d.height / 2;
+        }
+
+        fullScreen = !fullScreen;
+    }
+
     public static int getWindowWidth(){
         return width;
     }

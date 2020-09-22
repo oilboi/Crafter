@@ -13,8 +13,10 @@ import static engine.Chunk.initializeChunkHandler;
 import static engine.ChunkUpdateHandler.chunkUpdater;
 import static engine.Hud.*;
 import static engine.ItemEntity.initializeItemTextureAtlas;
+import static engine.MouseInput.*;
 import static engine.TNTEntity.createTNTEntityMesh;
-import static engine.Window.createWindow;
+import static engine.Window.*;
+import static engine.Window.isvSync;
 import static game.ChunkHandling.ChunkMesh.generateChunkMesh;
 import static game.ChunkHandling.ChunkMesh.initializeChunkTextureAtlas;
 import static game.blocks.BlockDefinition.initializeBlocks;
@@ -25,32 +27,89 @@ import static org.lwjgl.glfw.GLFW.*;
 public class Crafter {
 
     //variables
-    public static int chunkRenderDistance = 2;
-    private static final float MOUSE_SENSITIVITY = 0.009f;
-    private boolean fButtonPushed = false;
-    private boolean rButtonPushed = false;
-    private boolean tButtonPushed = false;
-    private boolean cButtonPushed = false;
-    private boolean eButtonPushed = false;
+    private static int     chunkRenderDistance = 2;
+    private static float   MOUSE_SENSITIVITY   = 0.009f;
+    private static boolean fButtonPushed       = false;
+    private static boolean rButtonPushed       = false;
+    private static boolean tButtonPushed       = false;
+    private static boolean cButtonPushed       = false;
+    private static boolean eButtonPushed       = false;
 
     //core game engine elements
-    public static final int TARGET_FPS = 75;
-    public static final int TARGET_UPS = 60; //TODO: IMPLEMENT THIS PROPERLY
+    private static final int TARGET_FPS = 75;
+    private static final int TARGET_UPS = 60; //TODO: IMPLEMENT THIS PROPERLY
     private static Timer timer;
 
     //objects that need to be removed
-    private final Renderer renderer;
+    private static Renderer renderer = new Renderer();
     private static final SoundManager soundMgr = new SoundManager();
-    private final Camera camera;
+    private static Camera camera= new Camera() ;
 
 
-    //the game engine elements
-    public static void initializeGameEngine(String windowTitle, int width, int height, boolean vSync) {
+    //the game engine elements //todo ------------------------------------------------------------------------------------
+    public static void initializeGameEngine(String windowTitle, int width, int height, boolean vSync) throws Exception {
         createWindow(windowTitle, width, height, vSync);
         timer = new Timer();
+        init();
+    }
+
+    public static void runGameEngine(){
+        try{
+            init();
+            gameLoop();
+        } catch (Exception excp){
+            excp.printStackTrace();
+        } finally {
+            cleanup();
+        }
+    }
+
+    private static void init() throws Exception{
+        initWindow();
+        timer.init();
+        initMouseInput();
+        initGame();
+    }
+
+    private static void gameLoop() throws Exception {
+        double elapsedTime;
+        double accumulator = 0d;
+//        float interval = 1f / TARGET_UPS;
+
+        boolean running = true;
+        while(running && !windowShouldClose()){
+
+            elapsedTime = timer.getElapsedTime();
+            accumulator += elapsedTime;
+
+            input();
+
+            while (accumulator >= 1_000_000){
+                update(0f);
+                accumulator -= 1_000_000;
+            }
+
+            render();
+
+            if (!isvSync()){
+                sync();
+            }
+        }
+    }
+
+    private static void sync() {
+        float loopSlot = 1f / TARGET_FPS;
+        double endTime = timer.getLastLoopTime() + loopSlot;
+        while(timer.getTime() < endTime){
+            try {
+                Thread.sleep(1);
+            } catch (InterruptedException ie){
+            }
+        }
     }
 
 
+    //todo ------------------------------------------------------------------------------------
 
 
 
@@ -58,12 +117,7 @@ public class Crafter {
         return chunkRenderDistance;
     }
 
-    public Crafter(){
-        renderer = new Renderer();
-        camera = new Camera();
-    }
-
-    public void init(Window window) throws Exception{
+    public static void initGame(Window window) throws Exception{
         renderer.init(window);
 
         soundMgr.init();
@@ -111,66 +165,66 @@ public class Crafter {
         return soundMgr;
     }
 
-    public void input(Window window, MouseInput input){
+    private static void input(){
 
 
         if (!isPlayerInventoryOpen()) {
-            if (window.isKeyPressed(GLFW_KEY_W)) {
+            if (isKeyPressed(GLFW_KEY_W)) {
                 setPlayerForward(true);
             } else {
                 setPlayerForward(false);
             }
 
-            if (window.isKeyPressed(GLFW_KEY_S)) {
+            if (isKeyPressed(GLFW_KEY_S)) {
                 setPlayerBackward(true);
             } else {
                 setPlayerBackward(false);
             }
-            if (window.isKeyPressed(GLFW_KEY_A)) {
+            if (isKeyPressed(GLFW_KEY_A)) {
                 setPlayerLeft(true);
             } else {
                 setPlayerLeft(false);
             }
-            if (window.isKeyPressed(GLFW_KEY_D)) {
+            if (isKeyPressed(GLFW_KEY_D)) {
                 setPlayerRight(true);
             } else {
                 setPlayerRight(false);
             }
 
-            if (window.isKeyPressed(GLFW_KEY_LEFT_SHIFT)) { //sneaking
+            if (isKeyPressed(GLFW_KEY_LEFT_SHIFT)) { //sneaking
                 setPlayerSneaking(true);
             } else {
                 setPlayerSneaking(false);
             }
 
-            if (window.isKeyPressed(GLFW_KEY_SPACE)) {
+            if (isKeyPressed(GLFW_KEY_SPACE)) {
                 setPlayerJump(true);
             } else {
                 setPlayerJump(false);
             }
         }
 
-        if (window.isKeyPressed(GLFW_KEY_R)) {
+        if (isKeyPressed(GLFW_KEY_R)) {
             if (!rButtonPushed) {
                 rButtonPushed = true;
                 generateRandomInventory();
             }
-        } else if (!window.isKeyPressed(GLFW_KEY_R)){
+        } else if (!isKeyPressed(GLFW_KEY_R)){
             rButtonPushed = false;
         }
 
 
         //prototype clear objects - C KEY
-        if (window.isKeyPressed(GLFW_KEY_E)) {
+        if (isKeyPressed(GLFW_KEY_E)) {
             if (!eButtonPushed) {
                 eButtonPushed = true;
                 togglePlayerInventory();
-                input.setMouseLocked(!input.isMouseLocked());
-                if(!input.isMouseLocked()) {
-                    glfwSetInputMode(window.getWindowHandle(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+                setMouseLocked(!isMouseLocked());
+                if(!isMouseLocked()) {
+                    glfwSetInputMode(getWindowHandle(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
                 } else{
-                    glfwSetInputMode(window.getWindowHandle(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
-                    input.resetPosVector(window);
+                    glfwSetInputMode(getWindowHandle(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+                    resetMousePosVector();
                 }
 
                 setPlayerForward(false);
@@ -180,27 +234,27 @@ public class Crafter {
                 setPlayerSneaking(false);
                 setPlayerJump(false);
             }
-        } else if (!window.isKeyPressed(GLFW_KEY_E)){
+        } else if (!isKeyPressed(GLFW_KEY_E)){
             eButtonPushed = false;
         }
 
 
         if (!isPlayerInventoryOpen()) {
             //mouse left button input
-            if (input.isLeftButtonPressed()) {
+            if (isLeftButtonPressed()) {
                 setPlayerMining(true);
             } else {
                 setPlayerMining(false);
             }
 
             //mouse right button input
-            if (input.isRightButtonPressed()) {
+            if (isRightButtonPressed()) {
                 setPlayerPlacing(true);
             } else {
                 setPlayerPlacing(false);
             }
 
-            float scroll = input.getScroll();
+            float scroll = getMouseScroll();
             if (scroll < 0) {
                 changeScrollSelection(1);
             } else if (scroll > 0) {
@@ -209,7 +263,7 @@ public class Crafter {
         }
     }
 
-    public void update(float interval, MouseInput mouseInput) throws Exception {
+    private static void update(float interval, MouseInput mouseInput) throws Exception {
 
         chunkUpdater();
 
@@ -248,11 +302,11 @@ public class Crafter {
         hudOnStepTest(mouseInput);
     }
 
-    public void render(Window window){
+    private static void render(Window window){
         renderer.render(window, camera);
     }
 
-    public void cleanup(){
+    private static void cleanup(){
         Chunk.cleanUp();
         soundMgr.cleanup();
         ItemEntity.cleanUp();

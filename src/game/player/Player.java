@@ -6,7 +6,6 @@ import org.joml.Vector3f;
 
 import static engine.Hud.createSelection;
 import static engine.sound.SoundAPI.playSound;
-import static game.Crafter.chunkRenderDistance;
 import static game.Crafter.getChunkRenderDistance;
 import static game.collision.Collision.applyInertia;
 import static game.player.Ray.rayCast;

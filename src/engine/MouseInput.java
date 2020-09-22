@@ -102,7 +102,7 @@ public class MouseInput {
         return mouseLocked;
     }
 
-    public static float getScroll(){
+    public static float getMouseScroll(){
         float thisScroll = scroll;
         scroll = 0.0f;
         return thisScroll;

@@ -2,8 +2,8 @@ package game;
 
 import java.awt.*;
 
-import static engine.GameEngine.initializeGameEngine;
-import static engine.GameEngine.runGameEngine;
+import static game.Crafter.initializeGameEngine;
+import static game.Crafter.runGameEngine;
 
 public class Main {
     public static void main(String[] args){

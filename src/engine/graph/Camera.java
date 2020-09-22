@@ -54,7 +54,6 @@ public class Camera {
         rotationVector.z = xzLen * (float)Math.cos(Math.toRadians(rotation.y));
         rotationVector.y = (float)Math.sin(Math.toRadians(rotation.x + 180));
         rotationVector.x = xzLen * (float)Math.sin(Math.toRadians(-rotation.y));
-
         return rotationVector;
     }
 }

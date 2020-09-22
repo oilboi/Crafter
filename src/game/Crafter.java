@@ -161,9 +161,7 @@ public class Crafter {
     }
 
     private static void input(){
-
         mouseInput();
-
         if (!isPlayerInventoryOpen()) {
             if (isKeyPressed(GLFW_KEY_W)) {
                 setPlayerForward(true);
@@ -239,6 +237,7 @@ public class Crafter {
             //mouse left button input
             if (isLeftButtonPressed()) {
                 setPlayerMining(true);
+                startDiggingAnimation();
             } else {
                 setPlayerMining(false);
             }
@@ -246,6 +245,7 @@ public class Crafter {
             //mouse right button input
             if (isRightButtonPressed()) {
                 setPlayerPlacing(true);
+                startDiggingAnimation();
             } else {
                 setPlayerPlacing(false);
             }
@@ -273,7 +273,7 @@ public class Crafter {
 
         moveCameraRotation(rotVec.x * MOUSE_SENSITIVITY, rotVec.y * MOUSE_SENSITIVITY, 0);
 
-
+        testPlayerDiggingAnimation();
 
 //        limit camera pitch
         if (getCameraRotation().x < -90f) {

@@ -8,6 +8,7 @@ import org.joml.Vector3f;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static engine.MouseInput.getMousePos;
 import static game.Renderer.getWindowSize;
 import static game.player.Player.isPlayerInventoryOpen;
 
@@ -2168,7 +2169,7 @@ public class Hud {
     }
 
     //todo: redo this mess
-    public static void hudOnStepTest(MouseInput mouseInput){
+    public static void hudOnStepTest(){
         playerRot.y += 0.1f;
 
         if (isPlayerInventoryOpen()) {
@@ -2178,7 +2179,7 @@ public class Hud {
             for (int x = 1; x <= 9; x++) {
                 for (int y = 1; y <= 4; y++) {
 
-                    Vector2d mousePos = new Vector2d(mouseInput.getMousePos());
+                    Vector2d mousePos = new Vector2d(getMousePos());
                     Vector2d windowSize = getWindowSize();
 
                     float boundaries = (float) ((windowSize.x - (windowSize.y * 1.0735)) / 2f);

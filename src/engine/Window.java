@@ -128,7 +128,7 @@ public class Window {
         return windowHandle;
     }
 
-    public static void setClearColor(float r, float g, float b, float alpha){
+    public static void setWindowClearColor(float r, float g, float b, float alpha){
         glClearColor(r, g, b, alpha);
     }
 

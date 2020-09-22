@@ -54,7 +54,7 @@ public class MouseInput {
 
     }
 
-    public static Vector2f getDisplVec() {
+    public static Vector2f getMouseDisplVec() {
         return displVec;
     }
 

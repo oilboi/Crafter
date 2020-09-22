@@ -3,7 +3,7 @@ package engine;
 import engine.graph.Mesh;
 
 import static engine.ChunkUpdateHandler.chunkUpdate;
-import static game.Crafter.chunkRenderDistance;
+import static game.Crafter.getChunkRenderDistance;
 
 public class Chunk {
 
@@ -24,8 +24,8 @@ public class Chunk {
     }
 
     public static void setChunkMesh(int chunkX, int chunkZ, Mesh newMesh){
-        chunkX += chunkRenderDistance;
-        chunkZ += chunkRenderDistance;
+        chunkX += getChunkRenderDistance();
+        chunkZ += getChunkRenderDistance();
 
         if(chunkX < 0 || chunkZ < 0 || chunkX >= limit || chunkZ >= limit){
             return;
@@ -46,8 +46,8 @@ public class Chunk {
     }
 
     public static byte getRotation(int x,int y,int z, int chunkX, int chunkZ){
-        chunkX += chunkRenderDistance;
-        chunkZ += chunkRenderDistance;
+        chunkX += getChunkRenderDistance();
+        chunkZ += getChunkRenderDistance();
 
         return getInternalRotation(x,y,z,chunkX,chunkZ);
     }
@@ -79,8 +79,8 @@ public class Chunk {
     }
 
     public static void setRotation(int x,int y,int z, int chunkX, int chunkZ, byte newRotation){
-        chunkX += chunkRenderDistance;
-        chunkZ += chunkRenderDistance;
+        chunkX += getChunkRenderDistance();
+        chunkZ += getChunkRenderDistance();
 
         if(chunkX < 0 || chunkZ < 0 || chunkX >= limit || chunkZ >= limit){
             return;
@@ -103,8 +103,8 @@ public class Chunk {
 
 
     public static int getBlock(int x,int y,int z, int chunkX, int chunkZ){
-        chunkX += chunkRenderDistance;
-        chunkZ += chunkRenderDistance;
+        chunkX += getChunkRenderDistance();
+        chunkZ += getChunkRenderDistance();
 
         return getInternalBlock(x,y,z,chunkX,chunkZ);
     }
@@ -136,8 +136,8 @@ public class Chunk {
     }
 
     public static void setBlock(int x,int y,int z, int chunkX, int chunkZ, int newBlock){
-        chunkX += chunkRenderDistance;
-        chunkZ += chunkRenderDistance;
+        chunkX += getChunkRenderDistance();
+        chunkZ += getChunkRenderDistance();
 
         if(chunkX < 0 || chunkZ < 0 || chunkX >= limit || chunkZ >= limit){
             return;
@@ -163,8 +163,8 @@ public class Chunk {
         int currentPosX = x - (16 * currentChunkX);
         int currentPosZ = z - (16 * currentChunkZ);
 
-        currentChunkX += chunkRenderDistance;
-        currentChunkZ += chunkRenderDistance;
+        currentChunkX += getChunkRenderDistance();
+        currentChunkZ += getChunkRenderDistance();
         if(currentChunkX < 0 || currentChunkZ < 0 || currentChunkX >= limit || currentChunkZ >= limit){
             return;
         }
@@ -178,8 +178,8 @@ public class Chunk {
     }
 
     public static byte getLight(int x,int y,int z, int chunkX, int chunkZ){
-        chunkX += chunkRenderDistance;
-        chunkZ += chunkRenderDistance;
+        chunkX += getChunkRenderDistance();
+        chunkZ += getChunkRenderDistance();
         return getInternalLight(x,y,z,chunkX,chunkZ);
     }
 
@@ -215,8 +215,8 @@ public class Chunk {
 
 
     public static void setLight(int x,int y,int z, int chunkX, int chunkZ, byte newLight){
-        chunkX += chunkRenderDistance;
-        chunkZ += chunkRenderDistance;
+        chunkX += getChunkRenderDistance();
+        chunkZ += getChunkRenderDistance();
 
         if(chunkX < 0 || chunkZ < 0 || chunkX >= limit || chunkZ >= limit){
             return;
@@ -250,8 +250,8 @@ public class Chunk {
     private static byte waterHeight = 50;
     //a basic biome test for terrain generation
     public static void genBiome(int chunkX, int chunkZ){
-        chunkX += chunkRenderDistance;
-        chunkZ += chunkRenderDistance;
+        chunkX += getChunkRenderDistance();
+        chunkZ += getChunkRenderDistance();
         short currBlock;
 
         byte height = (byte)(Math.abs(noise.GetCubicFractal((chunkX*16),(chunkZ*16)))*127+heightAdder);
@@ -301,8 +301,8 @@ public class Chunk {
 
     public static boolean underSunlight(int x, int y, int z, int chunkX, int chunkZ){
 
-        chunkX += chunkRenderDistance;
-        chunkZ += chunkRenderDistance;
+        chunkX += getChunkRenderDistance();
+        chunkZ += getChunkRenderDistance();
 
         if(chunkX < 0 || chunkZ < 0 || chunkX >= limit || chunkZ >= limit){
             return false;

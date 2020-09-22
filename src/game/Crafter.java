@@ -1,12 +1,15 @@
 package game;
 
 import engine.*;
+import engine.Window;
 import engine.graph.Camera;
 import engine.sound.SoundListener;
 import engine.sound.SoundManager;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.openal.AL11;
+
+import java.awt.*;
 
 import static engine.Chunk.genBiome;
 import static engine.Chunk.initializeChunkHandler;
@@ -19,6 +22,8 @@ import static engine.Window.*;
 import static engine.Window.isvSync;
 import static game.ChunkHandling.ChunkMesh.generateChunkMesh;
 import static game.ChunkHandling.ChunkMesh.initializeChunkTextureAtlas;
+import static game.Renderer.initRenderer;
+import static game.Renderer.renderGame;
 import static game.blocks.BlockDefinition.initializeBlocks;
 import static game.player.Inventory.generateRandomInventory;
 import static game.player.Player.*;
@@ -41,10 +46,24 @@ public class Crafter {
     private static Timer timer;
 
     //objects that need to be removed
-    private static Renderer renderer = new Renderer();
     private static final SoundManager soundMgr = new SoundManager();
     private static Camera camera= new Camera() ;
 
+
+
+    public static void main(String[] args){
+        try{
+            boolean vSync = true;
+            Toolkit tk = Toolkit.getDefaultToolkit();
+            Dimension d = tk.getScreenSize();
+            initializeGameEngine("Crafter", d.width/2,d.height/2,false);
+            runGameEngine();
+
+        } catch ( Exception excp ){
+            excp.printStackTrace();
+            System.exit(-1);
+        }
+    }
 
     //the game engine elements //todo ------------------------------------------------------------------------------------
     public static void initializeGameEngine(String windowTitle, int width, int height, boolean vSync) throws Exception {
@@ -68,6 +87,7 @@ public class Crafter {
         initWindow();
         timer.init();
         initMouseInput();
+        initRenderer();
         initGame();
     }
 
@@ -117,9 +137,7 @@ public class Crafter {
         return chunkRenderDistance;
     }
 
-    public static void initGame(Window window) throws Exception{
-        renderer.init(window);
-
+    public static void initGame() throws Exception{
         soundMgr.init();
 
         initializeChunkTextureAtlas();
@@ -263,7 +281,7 @@ public class Crafter {
         }
     }
 
-    private static void update(float interval, MouseInput mouseInput) throws Exception {
+    private static void update(float interval) throws Exception {
 
         chunkUpdater();
 
@@ -272,7 +290,7 @@ public class Crafter {
 
         //update camera based on mouse
 
-        Vector2f rotVec = mouseInput.getDisplVec();
+        Vector2f rotVec = getMouseDisplVec();
 
         camera.moveRotation(rotVec.x * MOUSE_SENSITIVITY, rotVec.y * MOUSE_SENSITIVITY, 0);
         //limit camera pitch
@@ -299,11 +317,11 @@ public class Crafter {
 
         TNTEntity.onTNTStep(soundMgr);
 
-        hudOnStepTest(mouseInput);
+        hudOnStepTest();
     }
 
-    private static void render(Window window){
-        renderer.render(window, camera);
+    private static void render(){
+        renderGame(camera);
     }
 
     private static void cleanup(){

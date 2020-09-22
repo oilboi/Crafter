@@ -12,6 +12,7 @@ import static engine.Chunk.getLimit;
 import static engine.Hud.*;
 import static engine.ItemEntity.*;
 import static engine.TNTEntity.*;
+import static engine.Window.*;
 import static game.player.Inventory.getItemInInventorySlot;
 import static game.player.Player.*;
 import static org.lwjgl.opengl.GL11.*;
@@ -28,21 +29,17 @@ public class Renderer {
 
     private static Vector2d windowSize = new Vector2d();
 
-    private final Transformation transformation;
+    private static Transformation transformation = new Transformation();
 
-    private ShaderProgram shaderProgram;
+    private static ShaderProgram shaderProgram;
 
-    private ShaderProgram hudShaderProgram;
-
-    public Renderer(){
-        transformation = new Transformation();
-    }
+    private static ShaderProgram hudShaderProgram;
 
     public static Vector2d getWindowSize(){
         return windowSize;
     }
 
-    public void init(Window window) throws Exception{
+    public static void initRenderer() throws Exception{
         shaderProgram = new ShaderProgram();
         shaderProgram.createVertexShader(Utils.loadResource("/resources/vertex.vs"));
         shaderProgram.createFragmentShader(Utils.loadResource("/resources/fragment.fs"));
@@ -69,31 +66,31 @@ public class Renderer {
         hudShaderProgram.createUniform("texture_sampler");
 
 
-        window.setClearColor(0.53f,0.81f,0.92f,0.f);
+        setWindowClearColor(0.53f,0.81f,0.92f,0.f);
 
-        windowSize.x = window.getWidth();
-        windowSize.y = window.getHeight();
+        windowSize.x = getWindowWidth();
+        windowSize.y = getWindowHeight();
     }
 
-    public void clear(){
+    public static void clearScreen(){
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
 
-    public void render(Window window, Camera camera){
-        clear();
+    public static void renderGame(Camera camera){
+        clearScreen();
 
-        if (window.isResized()){
-            windowSize.x = window.getWidth();
-            windowSize.y = window.getHeight();
-            glViewport(0,0, window.getWidth(), window.getHeight());
-            window.setResized(false);
+        if (isWindowResized()){
+            windowSize.x = getWindowWidth();
+            windowSize.y = getWindowHeight();
+            glViewport(0,0, getWindowWidth(), getWindowHeight());
+            setWindowResized(false);
         }
 
         //todo: BEGIN WORLD SHADER PROGRAM!
         shaderProgram.bind();
 
         //update projection matrix
-        Matrix4f projectionMatrix = transformation.getProjectionMatrix(FOV, window.getWidth(), window.getHeight(), Z_NEAR, Z_FAR);
+        Matrix4f projectionMatrix = transformation.getProjectionMatrix(FOV, getWindowWidth(), getWindowHeight(), Z_NEAR, Z_FAR);
         shaderProgram.setUniform("projectionMatrix", projectionMatrix);
 
         //update the view matrix
@@ -158,7 +155,7 @@ public class Renderer {
         //TODO: BEGIN HUD SHADER PROGRAM!
         hudShaderProgram.bind();
 
-        Matrix4f hudProjectionMatrix = transformation.getProjectionMatrix(FOV, window.getWidth(), window.getHeight(), HUD_Z_NEAR, HUD_Z_FAR);
+        Matrix4f hudProjectionMatrix = transformation.getProjectionMatrix(FOV, getWindowWidth(), getWindowHeight(), HUD_Z_NEAR, HUD_Z_FAR);
         hudShaderProgram.setUniform("projectionMatrix", hudProjectionMatrix);
         Matrix4f hudViewMatrix = new Matrix4f();
         hudShaderProgram.setUniform("texture_sampler", 0);
@@ -327,7 +324,7 @@ public class Renderer {
         hudShaderProgram.unbind();
     }
 
-    public void cleanup(){
+    public static void cleanup(){
         if (shaderProgram != null){
             shaderProgram.cleanup();
         }

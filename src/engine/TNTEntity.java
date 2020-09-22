@@ -42,7 +42,7 @@ public class TNTEntity {
         System.out.println("Created new TNT. Total TNT: " + totalTNT);
     }
 
-    public static void createTNT(Vector3f pos, float timer, boolean punched, SoundManager soundMgr) throws Exception {
+    public static void createTNT(Vector3f pos, float timer, boolean punched) throws Exception {
         pos.x += 0.5f;
         pos.y += 0.5f;
         pos.z += 0.5f;
@@ -63,7 +63,7 @@ public class TNTEntity {
 //        System.out.println("Created new TNT. Total TNT: " + totalTNT);
     }
 
-    public static void onTNTStep(SoundManager soundMgr) throws Exception {
+    public static void onTNTStep() throws Exception {
         for (int i = 0; i < totalTNT; i++){
             tntTimer[i] += 0.001f;
             applyInertia(tntPos[i], tntInertia[i], true, tntSize, tntSize * 2, true, false, true);
@@ -76,7 +76,7 @@ public class TNTEntity {
 
             if (tntTimer[i] > 2.6f){
 
-                boom((int)tntPos[i].x, (int)tntPos[i].y, (int)tntPos[i].z, 5, soundMgr);
+                boom((int)tntPos[i].x, (int)tntPos[i].y, (int)tntPos[i].z, 5);
 
 //                soundMgr.playSoundSource(Crafter.Sounds.TNT.toString());
                 playSound("tnt_explode", tntPos[i]);

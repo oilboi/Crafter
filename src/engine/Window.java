@@ -27,15 +27,13 @@ public class Window {
 
     private static boolean vSync;
 
-    public static void createWindow( String newTitle, int newWidth, int newHeight, boolean newVSync){
+    public static void initWindow(String newTitle, int newWidth, int newHeight, boolean newVSync) {
+
         title   = newTitle;
         width   = newWidth;
         height  = newHeight;
         vSync   = newVSync;
         resized = false;
-    }
-
-    public static void initWindow() {
         // setup an error callback. The default implementation
         // will print the error message in System.err.
         GLFWErrorCallback.createPrint(System.err).set();

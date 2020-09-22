@@ -1,7 +1,6 @@
 package game.player;
 
 import engine.graph.Camera;
-import org.joml.Vector2d;
 import org.joml.Vector3f;
 
 import static engine.Hud.createSelection;
@@ -286,16 +285,16 @@ public class Player {
         onGround = applyInertia(pos, inertia, true, width, height,true, sneaking, true);
 
         //map boundary check TODO: ID 1000
-        if (pos.x > ((chunkRenderDistance + 1) * 16)-0.5f) {
+        if (pos.x > ((getChunkRenderDistance() + 1) * 16)-0.5f) {
             pos.x = oldPos.x;
         }
-        if (pos.x < (chunkRenderDistance * -16) + 0.5f){
+        if (pos.x < (getChunkRenderDistance() * -16) + 0.5f){
             pos.x = oldPos.x;
         }
-        if (pos.z > ((chunkRenderDistance + 1) * 16)-0.5f) {
+        if (pos.z > ((getChunkRenderDistance() + 1) * 16)-0.5f) {
             pos.z = oldPos.z;
         }
-        if (pos.z < (chunkRenderDistance * -16) + 0.5f){
+        if (pos.z < (getChunkRenderDistance() * -16) + 0.5f){
             pos.z = oldPos.z;
         }
         //END TODO: ID 1000

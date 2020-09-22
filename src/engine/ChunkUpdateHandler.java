@@ -3,7 +3,7 @@ package engine;
 import java.util.Arrays;
 
 import static game.ChunkHandling.ChunkMesh.generateChunkMesh;
-import static game.Crafter.chunkRenderDistance;
+import static game.Crafter.getChunkRenderDistance;
 
 public class ChunkUpdateHandler {
     private static int[][] queue = new int[0][2];
@@ -56,7 +56,7 @@ public class ChunkUpdateHandler {
             timers[i] += 1;
             if(timers[i] > 50){
 //                System.out.println("Generating chunk mesh: " + (queue[i][0]-chunkRenderDistance) + " " + (queue[i][1]-chunkRenderDistance));
-                generateChunkMesh(queue[i][0]-chunkRenderDistance, queue[i][1]-chunkRenderDistance, false);
+                generateChunkMesh(queue[i][0]-getChunkRenderDistance(), queue[i][1]-getChunkRenderDistance(), false);
                 removeFromQueue(i);
                 return;
             }

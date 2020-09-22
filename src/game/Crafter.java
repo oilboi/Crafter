@@ -19,11 +19,10 @@ import static engine.ItemEntity.initializeItemTextureAtlas;
 import static engine.MouseInput.*;
 import static engine.TNTEntity.createTNTEntityMesh;
 import static engine.Window.*;
-import static engine.Window.isvSync;
+import static engine.sound.SoundManager.*;
 import static game.ChunkHandling.ChunkMesh.generateChunkMesh;
 import static game.ChunkHandling.ChunkMesh.initializeChunkTextureAtlas;
-import static game.Renderer.initRenderer;
-import static game.Renderer.renderGame;
+import static game.Renderer.*;
 import static game.blocks.BlockDefinition.initializeBlocks;
 import static game.player.Inventory.generateRandomInventory;
 import static game.player.Player.*;
@@ -46,9 +45,7 @@ public class Crafter {
     private static Timer timer;
 
     //objects that need to be removed
-    private static final SoundManager soundMgr = new SoundManager();
     private static Camera camera= new Camera() ;
-
 
 
     public static void main(String[] args){
@@ -56,38 +53,49 @@ public class Crafter {
             boolean vSync = true;
             Toolkit tk = Toolkit.getDefaultToolkit();
             Dimension d = tk.getScreenSize();
-            initializeGameEngine("Crafter", d.width/2,d.height/2,false);
-            runGameEngine();
-
+            runGameEngine("Crafter", d.width/2,d.height/2,false);
         } catch ( Exception excp ){
             excp.printStackTrace();
             System.exit(-1);
         }
     }
 
-    //the game engine elements //todo ------------------------------------------------------------------------------------
-    public static void initializeGameEngine(String windowTitle, int width, int height, boolean vSync) throws Exception {
-        createWindow(windowTitle, width, height, vSync);
-        timer = new Timer();
-        init();
-    }
+    //the game engine elements //todo ------------------------------------------------------------------------------------ START
 
-    public static void runGameEngine(){
+    public static void runGameEngine(String windowTitle, int width, int height, boolean vSync){
         try{
-            init();
+            System.out.println("got that window started up yo");
+            initWindow(windowTitle, width, height, vSync);
+            System.out.printf("trying init");
+            initTheGame();
+
+            System.out.println("here comes the game loop baby");
             gameLoop();
+
+            System.out.println("game loop is finished yo");
         } catch (Exception excp){
+            System.out.println("wow the loop crashed");
             excp.printStackTrace();
         } finally {
+            System.out.println("alright I'm cleaning this mess up");
             cleanup();
         }
     }
 
-    private static void init() throws Exception{
-        initWindow();
+    private static void initTheGame() throws Exception{
+
+        System.out.println("sloop");
+        timer = new Timer();
+        System.out.println("sloop 2");
+
+        System.out.println("well well well");
+        System.out.println("the timer is starting");
         timer.init();
+        System.out.println("I'm initializing mouse input yo");
         initMouseInput();
+        System.out.println("this is the part where the renderer starts up");
         initRenderer();
+        System.out.println("now I'm trying to start the game up");
         initGame();
     }
 
@@ -95,10 +103,10 @@ public class Crafter {
         double elapsedTime;
         double accumulator = 0d;
 //        float interval = 1f / TARGET_UPS;
-
         boolean running = true;
         while(running && !windowShouldClose()){
 
+            System.out.println("running that loop :D");
             elapsedTime = timer.getElapsedTime();
             accumulator += elapsedTime;
 
@@ -129,7 +137,7 @@ public class Crafter {
     }
 
 
-    //todo ------------------------------------------------------------------------------------
+    //todo ---------------------------------------------------------------------------------------------------------------END
 
 
 
@@ -138,14 +146,14 @@ public class Crafter {
     }
 
     public static void initGame() throws Exception{
-        soundMgr.init();
+        initSoundManager();
 
         initializeChunkTextureAtlas();
         initializeItemTextureAtlas();
         initializeFontTextureAtlas();
 
         //this initializes the block definitions
-        initializeBlocks(soundMgr);
+        initializeBlocks();
 
         //this creates arrays for the engine to handle the objects
         initializeChunkHandler(chunkRenderDistance);
@@ -169,18 +177,12 @@ public class Crafter {
             }
         }
 
-        this.soundMgr.init();
-        this.soundMgr.setAttenuationModel(AL11.AL_LINEAR_DISTANCE);
-
-        soundMgr.setListener(new SoundListener(new Vector3f()));
+        setAttenuationModel(AL11.AL_LINEAR_DISTANCE);
+        setListener(new SoundListener(new Vector3f()));
 
         createHud();
 
         generateRandomInventory();
-    }
-
-    public static SoundManager getSoundManager(){
-        return soundMgr;
     }
 
     private static void input(){
@@ -310,12 +312,9 @@ public class Crafter {
         }
 
         playerOnTick(camera);
-
-        soundMgr.updateListenerPosition(camera);
-
-        ItemEntity.onStep(soundMgr);
-
-        TNTEntity.onTNTStep(soundMgr);
+        updateListenerPosition(camera);
+        ItemEntity.onStep();
+        TNTEntity.onTNTStep();
 
         hudOnStepTest();
     }
@@ -326,8 +325,8 @@ public class Crafter {
 
     private static void cleanup(){
         Chunk.cleanUp();
-        soundMgr.cleanup();
+        cleanupSoundManager();
         ItemEntity.cleanUp();
-        renderer.cleanup();
+        cleanupRenderer();
     }
 }

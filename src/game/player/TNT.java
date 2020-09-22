@@ -22,7 +22,7 @@ public class TNT {
     private static boolean found = false;
     private static int x,y,z;
 
-    public static void boom(int posX, int posY, int posZ, int boomDistance, SoundManager soundMgr) throws Exception {
+    public static void boom(int posX, int posY, int posZ, int boomDistance) throws Exception {
         chunkBufferIndex = 0;
         chunkBuffer = new int[boomDistance][2];
 
@@ -47,7 +47,7 @@ public class TNT {
                             if (currentBlock != 0 && currentBlock != 6 && Math.random() > 0.98) {
                                 createItem(currentBlock, new Vector3f(currentPosX+(currentChunkX*16), y, currentPosZ+(currentChunkZ*16)));
                             } else if (currentBlock == 6){
-                                createTNT(new Vector3f(x, y, z), (float)(1f+Math.random()), false, soundMgr);
+                                createTNT(new Vector3f(x, y, z), (float)(1f+Math.random()), false);
                             }
 
                         }

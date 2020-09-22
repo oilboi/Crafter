@@ -1,12 +1,10 @@
 package engine.sound;
 
-import game.Crafter;
 import org.joml.Vector3f;
 
-import static game.Crafter.getSoundManager;
+import static engine.sound.SoundManager.playSoundSource;
 
 public class SoundAPI {
-    private static SoundManager soundManager = getSoundManager();
 
     public static void playSound(String name, Vector3f pos) throws Exception {
         SoundBuffer soundBuffer = new SoundBuffer("sounds/" + name + ".ogg");
@@ -17,6 +15,6 @@ public class SoundAPI {
 
         thisSource.setPosition(pos);
 
-        soundManager.playSoundSource(soundBuffer, thisSource);
+        playSoundSource(soundBuffer, thisSource);
     }
 }

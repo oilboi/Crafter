@@ -55,7 +55,7 @@ public class ItemEntity {
         System.out.println("Created new Item. Total items: " + totalObjects);
     }
 
-    public static void onStep(SoundManager soundMgr) throws Exception {
+    public static void onStep() throws Exception {
         for (int i = 0; i < totalObjects; i++){
             timer[i] += 0.001f;
 

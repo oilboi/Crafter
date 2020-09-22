@@ -324,7 +324,7 @@ public class Renderer {
         hudShaderProgram.unbind();
     }
 
-    public static void cleanup(){
+    public static void cleanupRenderer(){
         if (shaderProgram != null){
             shaderProgram.cleanup();
         }

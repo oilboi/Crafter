@@ -16,27 +16,21 @@ import static org.lwjgl.openal.ALC10.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class SoundManager {
-    private long device;
-    private long context;
-    private SoundListener listener;
+    private static long device;
+    private static long context;
+    private static int currentIndex = 0;
+    private static final int maxSounds = 64;
 
-    private SoundBuffer[] soundBufferList;
+    private static SoundListener listener;
 
-    private SoundSource[] soundSourceArray;
+    private static SoundBuffer[] soundBufferList = new SoundBuffer[maxSounds];
 
-    private final Matrix4f cameraMatrix;
+    private static SoundSource[] soundSourceArray = new SoundSource[maxSounds];
 
-    private int currentIndex = 0;
-    private final int maxSounds = 64;
+    private static final Matrix4f cameraMatrix = new Matrix4f();
 
-    public SoundManager(){
-        soundBufferList = new SoundBuffer[maxSounds];
-        soundSourceArray = new SoundSource[maxSounds];
-        cameraMatrix = new Matrix4f();
-    }
-
-    public void init() throws Exception{
-        this.device = alcOpenDevice((ByteBuffer) null);
+    public static void initSoundManager() {
+        device = alcOpenDevice((ByteBuffer) null);
 
         if(device == NULL){
             throw new IllegalStateException("Failed to open the default OpenAL device");
@@ -44,7 +38,7 @@ public class SoundManager {
 
         ALCCapabilities deviceCaps = ALC.createCapabilities(device);
 
-        this.context = alcCreateContext(device, (IntBuffer) null);
+        context = alcCreateContext(device, (IntBuffer) null);
 
         if(context == NULL){
             throw new IllegalStateException("Failed to create OpenAL context");
@@ -55,7 +49,7 @@ public class SoundManager {
         AL.createCapabilities(deviceCaps);
     }
 
-    public void playSoundSource(SoundBuffer soundBuffer, SoundSource soundSource) {
+    public static void playSoundSource(SoundBuffer soundBuffer, SoundSource soundSource) {
 
         if (soundBufferList[currentIndex] != null){
             soundBufferList[currentIndex].cleanUp();
@@ -67,8 +61,8 @@ public class SoundManager {
             soundSourceArray[currentIndex].stop();
             soundSourceArray[currentIndex].cleanUp();
         }
-        this.soundSourceArray[currentIndex] = soundSource;
-        this.soundSourceArray[currentIndex].play();
+        soundSourceArray[currentIndex] = soundSource;
+        soundSourceArray[currentIndex].play();
 
         currentIndex++;
         if (currentIndex >= maxSounds){
@@ -77,15 +71,15 @@ public class SoundManager {
     }
 
 
-    public SoundListener getListener() {
-        return this.listener;
+    public static SoundListener getListener() {
+        return listener;
     }
 
-    public void setListener(SoundListener listener) {
-        this.listener = listener;
+    public static void setListener(SoundListener newListener) {
+        listener = newListener;
     }
 
-    public void updateListenerPosition(Camera camera) {
+    public static void updateListenerPosition(Camera camera) {
         // Update camera matrix with camera data
         Transformation.updateGenericViewMatrix(camera.getPosition(), camera.getRotation(), cameraMatrix);
         listener.setPosition(camera.getPosition());
@@ -96,11 +90,11 @@ public class SoundManager {
         listener.setOrientation(at, up);
     }
 
-    public void setAttenuationModel(int model) {
+    public static void setAttenuationModel(int model) {
         alDistanceModel(model);
     }
 
-    public void cleanup() {
+    public static void cleanupSoundManager() {
         for (SoundSource soundSource : soundSourceArray) {
             if (soundSource != null) {
                 soundSource.cleanUp();

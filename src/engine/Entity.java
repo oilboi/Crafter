@@ -12,7 +12,7 @@ public class Entity {
 
     private static String[]          entityIDList     = new String          [MAX_ID_AMOUNT];
     private static Mesh[]            meshStorage      = new Mesh            [MAX_ID_AMOUNT];
-    private static EntityInterface[] interfaceStorage = new EntityInterface [MAX_ID_AMOUNT];
+
     private static int currentEntityID = 0;
     private static int totalObjects = 0;
 
@@ -27,10 +27,9 @@ public class Entity {
     private static Vector3f[]        rotation         = new Vector3f        [MAX_ID_AMOUNT];
     private static Vector3f[]        inertia          = new Vector3f        [MAX_ID_AMOUNT];
 
-    public static void registerEntity(String thisName, Mesh thisMesh, EntityInterface thisInterface){
+    public static void registerEntity(String thisName, Mesh thisMesh){
         entityIDList[currentEntityID]     = thisName;
         meshStorage[currentEntityID]      = thisMesh;
-        interfaceStorage[currentEntityID] = thisInterface;
         currentEntityID++;
     }
 }

@@ -1,6 +1,5 @@
 package game.blocks;
 
-import engine.sound.SoundManager;
 import org.joml.Vector3f;
 
 import java.util.HashMap;
@@ -130,7 +129,7 @@ public class BlockDefinition {
         return blockIDs[ID].steppable;
     }
 
-    public static void initializeBlocks(SoundManager soundMgr) throws Exception {
+    public static void initializeBlocks() throws Exception {
 
         blockShapeMap.put("air",
                 new BlockShape(new float[][]{{0f,0f,0f,1f,1f,1f}})
@@ -300,7 +299,7 @@ public class BlockDefinition {
         BlockModifier kaboom = new BlockModifier() {
             @Override
             public void onDig(Vector3f pos) throws Exception {
-                createTNT(pos, 0, true, soundMgr);
+                createTNT(pos, 0, true);
             }
         };
 

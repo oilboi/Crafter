@@ -1,6 +1,5 @@
 package game.player;
 
-import engine.sound.SoundManager;
 import org.joml.Vector3f;
 
 import static engine.Chunk.getBlock;
@@ -8,7 +7,6 @@ import static engine.Chunk.setBlock;
 import static engine.FancyMath.getDistance;
 import static engine.ItemEntity.createItem;
 import static engine.TNTEntity.createTNT;
-import static game.ChunkHandling.ChunkMesh.generateChunkMesh;
 //import static game.light.Light.floodFill;
 
 public class TNT {

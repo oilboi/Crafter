@@ -1,10 +1,9 @@
-package game.ChunkHandling;
+package game.chunk;
 
 import engine.graph.Mesh;
 import engine.graph.Texture;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import static engine.Chunk.*;
 import static game.blocks.BlockDefinition.*;

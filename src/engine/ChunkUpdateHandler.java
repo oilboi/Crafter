@@ -1,8 +1,6 @@
 package engine;
 
-import java.util.Arrays;
-
-import static game.ChunkHandling.ChunkMesh.generateChunkMesh;
+import static game.chunk.ChunkMesh.generateChunkMesh;
 import static game.Crafter.getChunkRenderDistance;
 
 public class ChunkUpdateHandler {

@@ -114,7 +114,6 @@ public class Window {
 
         //set icon
         glfwSetWindowIcon(windowHandle, images);
-
     }
 
     public static long getWindowHandle(){
@@ -161,6 +160,9 @@ public class Window {
         vSync = newVSync;
     }
 
+    public static void updateWindowTitle(String newTitle){
+        glfwSetWindowTitle(windowHandle, newTitle);
+    }
     public static void windowUpdate(){
         glfwSwapBuffers(windowHandle);
         glfwPollEvents();

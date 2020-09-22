@@ -61,19 +61,22 @@ public class Crafter {
     public static void runGameEngine(String windowTitle, int width, int height, boolean vSync){
         try{
             initWindow(windowTitle, width, height, vSync);
-            initTheGame();
+
+            initRenderer();
+
+            initMouseInput();
+
+            initSoundManager();
+
+            initGame();
+
             gameLoop();
+
         } catch (Exception excp){
             excp.printStackTrace();
         } finally {
             cleanup();
         }
-    }
-
-    private static void initTheGame() throws Exception{
-        initRenderer();
-        initMouseInput();
-        initGame();
     }
 
     private static void gameLoop() throws Exception {
@@ -90,7 +93,6 @@ public class Crafter {
             input();
 
             while (accumulator >= 1_000_000){
-
                 gameUpdate();
 
                 accumulator -= 1_000_000;
@@ -124,8 +126,6 @@ public class Crafter {
     }
 
     public static void initGame() throws Exception{
-        initSoundManager();
-
         initializeChunkTextureAtlas();
         initializeItemTextureAtlas();
         initializeFontTextureAtlas();
@@ -271,6 +271,8 @@ public class Crafter {
 
         Vector2f rotVec = getMouseDisplVec();
 
+//        System.out.println(rotVec.x + " " + rotVec.x);
+
         moveCameraRotation(rotVec.x * MOUSE_SENSITIVITY, rotVec.y * MOUSE_SENSITIVITY, 0);
 
 
@@ -292,9 +294,9 @@ public class Crafter {
 //        }
 
         playerOnTick();
-//        updateListenerPosition();
-//        ItemEntity.onStep();
-//        TNTEntity.onTNTStep();
+        updateListenerPosition();
+        ItemEntity.onStep();
+        TNTEntity.onTNTStep();
 //
 //        hudOnStepTest();
     }

@@ -16,15 +16,10 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class Window {
     private static String title;
-
     private static int width;
-
     private static int height;
-
     private static long windowHandle;
-
     private static boolean resized;
-
     private static boolean vSync;
 
     public static void initWindow(String newTitle, int newWidth, int newHeight, boolean newVSync) {

@@ -1,7 +1,7 @@
 package engine;
 
 public class Timer {
-    private static double lastLoopTime;
+    private static double lastLoopTime = System.nanoTime();
 
     public static double timerGetTime(){
         return System.nanoTime();

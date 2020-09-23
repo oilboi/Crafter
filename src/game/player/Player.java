@@ -437,6 +437,10 @@ public class Player {
             yBobPos -= 1;
         }
 
+        if (yBobPos < 0){
+            yBobPos = 0;
+        }
+
         viewBobbing.x = xBobPos/2000f;
         viewBobbing.y = yBobPos/2000f;
     }

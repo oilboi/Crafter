@@ -3,6 +3,7 @@ package engine;
 import engine.graph.*;
 import org.joml.Matrix4f;
 import org.joml.Vector2d;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 
 import static game.chunk.Chunk.getChunkMesh;
@@ -27,7 +28,7 @@ public class Renderer {
     private static final float Z_NEAR = 0.1f;
     private static final float Z_FAR = 1120.f;
 
-    private static Vector2d windowSize = new Vector2d();
+    private static Vector2f windowSize = new Vector2f();
 
     private static Transformation transformation = new Transformation();
 
@@ -35,7 +36,7 @@ public class Renderer {
 
     private static ShaderProgram hudShaderProgram;
 
-    public static Vector2d getWindowSize(){
+    public static Vector2f getWindowSize(){
         return windowSize;
     }
 

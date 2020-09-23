@@ -4,6 +4,7 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 import static engine.ItemEntity.*;
+import static engine.Renderer.getWindowSize;
 import static engine.TNTEntity.getTNTPosition;
 import static engine.TNTEntity.getTNTScale;
 import static engine.graph.Camera.getCameraPosition;
@@ -12,15 +13,17 @@ import static engine.graph.Camera.getCameraRotation;
 public class Transformation {
 
     private final Matrix4f projectionMatrix;
-
     private final Matrix4f modelViewMatrix;
-
     private final Matrix4f viewMatrix;
+    private final Matrix4f orthoMatrix;
+    private final Matrix4f orthoModelMatrix;
 
     public Transformation(){
         projectionMatrix = new Matrix4f();
         modelViewMatrix = new Matrix4f();
         viewMatrix = new Matrix4f();
+        orthoMatrix = new Matrix4f();
+        orthoModelMatrix = new Matrix4f();
     }
 
     public Matrix4f getViewMatrix(){
@@ -101,6 +104,21 @@ public class Transformation {
                 rotateX((float)Math.toRadians(-rotation.x)).
                 rotateY((float)Math.toRadians(-rotation.y)).
                 rotateZ((float)Math.toRadians(-rotation.z)).scale(scale);
+    }
+
+    //TODO--begin ortho creation
+    public final Matrix4f getOrthoProjectionMatrix() {
+        orthoMatrix.identity();
+        orthoMatrix.setOrtho2D(0, getWindowSize().x, getWindowSize().y, 0);
+        return orthoMatrix;
+    }
+
+    public Matrix4f buildOrthoProjModelMatrix(Vector3f position, Vector3f rotation,Vector3f scale, Matrix4f orthoMatrix) {
+        return orthoMatrix.translate(position).
+                rotateX((float) Math.toRadians(-rotation.x)).
+                rotateY((float) Math.toRadians(-rotation.y)).
+                rotateZ((float) Math.toRadians(-rotation.z)).
+                scale(scale);
     }
 
 }

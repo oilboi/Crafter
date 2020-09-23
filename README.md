@@ -4,7 +4,7 @@ A blocky game written in java with LWJGL 3
 
 Discord: https://discord.gg/ZfCNFhD
 
-#Todo List:
+# Todo List:
 
 1. Create 2D ortho hud matrix
 2. Create non-positional sound listener switch for playing sounds

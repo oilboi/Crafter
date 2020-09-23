@@ -724,6 +724,7 @@ public class Hud {
 
 
         int indicesCount = 0;
+
         float thisZDepth = 0;
 
         float thisScale = 100f;

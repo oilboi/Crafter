@@ -724,24 +724,26 @@ public class Hud {
 
 
         int indicesCount = 0;
-        float thisTest = -20f;
+        float thisZDepth = 0;
+
+        float thisScale = 100f;
 
         //front
-        positions.add(scale);
-        positions.add(scale);
-        positions.add(thisTest); //z (how close it is to screen)
+        positions.add(thisScale);
+        positions.add(thisScale);
+        positions.add(thisZDepth); //z (how close it is to screen)
 
-        positions.add(-scale);
-        positions.add(scale);
-        positions.add(thisTest);
+        positions.add(-thisScale);
+        positions.add(thisScale);
+        positions.add(thisZDepth);
 
-        positions.add(-scale);
-        positions.add(-scale);
-        positions.add(thisTest);
+        positions.add(-thisScale);
+        positions.add(-thisScale);
+        positions.add(thisZDepth);
 
-        positions.add(scale);
-        positions.add(-scale);
-        positions.add(thisTest);
+        positions.add(thisScale);
+        positions.add(-thisScale);
+        positions.add(thisZDepth);
         //front
         float frontLight = 1f;//getLight(x, y, z + 1, chunkX, chunkZ) / maxLight;
 

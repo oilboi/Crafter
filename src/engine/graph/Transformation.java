@@ -109,7 +109,11 @@ public class Transformation {
     //TODO--begin ortho creation
     public final Matrix4f getOrthoProjectionMatrix() {
         orthoMatrix.identity();
-        orthoMatrix.setOrtho2D(0, getWindowSize().x, getWindowSize().y, 0);
+        orthoMatrix.setOrtho2D(0, (float)getWindowSize().x, (float)getWindowSize().y, 0);
+        return orthoMatrix;
+    }
+
+    public Matrix4f buildOrthoProjModelMatrixGeneric(Matrix4f orthoMatrix) {
         return orthoMatrix;
     }
 

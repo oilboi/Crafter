@@ -12,21 +12,13 @@ import static engine.graph.Camera.getCameraRotation;
 
 public class Transformation {
 
-    private final Matrix4f projectionMatrix;
-    private final Matrix4f modelViewMatrix;
-    private final Matrix4f viewMatrix;
-    private final Matrix4f orthoMatrix;
-    private final Matrix4f orthoModelMatrix;
+    private static Matrix4f projectionMatrix = new Matrix4f();
+    private static Matrix4f modelViewMatrix = new Matrix4f();
+    private static Matrix4f viewMatrix = new Matrix4f();
+    private static Matrix4f orthoMatrix = new Matrix4f();
+    private static Matrix4f orthoModelMatrix = new Matrix4f();
 
-    public Transformation(){
-        projectionMatrix = new Matrix4f();
-        modelViewMatrix = new Matrix4f();
-        viewMatrix = new Matrix4f();
-        orthoMatrix = new Matrix4f();
-        orthoModelMatrix = new Matrix4f();
-    }
-
-    public Matrix4f getViewMatrix(){
+    public static Matrix4f getViewMatrix(){
         Vector3f cameraPos = getCameraPosition();
         Vector3f rotation = getCameraRotation();
         viewMatrix.identity();
@@ -37,14 +29,14 @@ public class Transformation {
         return viewMatrix;
     }
 
-    public final Matrix4f getProjectionMatrix(float fov, float width, float height, float zNear, float zFar){
+    public static Matrix4f getProjectionMatrix(float fov, float width, float height, float zNear, float zFar){
         float aspectRatio = width / height;
         projectionMatrix.identity();
         projectionMatrix.perspective(fov, aspectRatio, zNear, zFar);
         return projectionMatrix;
     }
 
-    public Matrix4f getEntityModelViewMatrix(int ID, Matrix4f viewMatrix){
+    public static Matrix4f getEntityModelViewMatrix(int ID, Matrix4f viewMatrix){
         Vector3f rotation = getRotation(ID);
         modelViewMatrix.identity().translate(getPositionWithHover(ID)).
                 rotateX((float)Math.toRadians(-rotation.x)).
@@ -55,7 +47,7 @@ public class Transformation {
         return viewCurr.mul(modelViewMatrix);
     }
 
-    public Matrix4f getTNTModelViewMatrix(int ID, Matrix4f viewMatrix){
+    public static Matrix4f getTNTModelViewMatrix(int ID, Matrix4f viewMatrix){
         modelViewMatrix.identity().translate(getTNTPosition(ID)).
                 rotateX((float)Math.toRadians(0)).
                 rotateY((float)Math.toRadians(0)).
@@ -66,7 +58,7 @@ public class Transformation {
     }
 
 
-    public Matrix4f getModelViewMatrix(Matrix4f viewMatrix){
+    public static Matrix4f getModelViewMatrix(Matrix4f viewMatrix){
         Vector3f rotation = new Vector3f(0,0,0);
         modelViewMatrix.identity().translate(new Vector3f(0,0,0)).
                 rotateX((float)Math.toRadians(-rotation.x)).
@@ -107,17 +99,17 @@ public class Transformation {
     }
 
     //TODO--begin ortho creation
-    public final Matrix4f getOrthoProjectionMatrix() {
+    public static Matrix4f getOrthoProjectionMatrix() {
         orthoMatrix.identity();
         orthoMatrix.setOrtho2D(0, (float)getWindowSize().x, (float)getWindowSize().y, 0);
         return orthoMatrix;
     }
 
-    public Matrix4f buildOrthoProjModelMatrixGeneric(Matrix4f orthoMatrix) {
+    public static Matrix4f buildOrthoProjModelMatrixGeneric(Matrix4f orthoMatrix) {
         return orthoMatrix;
     }
 
-    public Matrix4f buildOrthoProjModelMatrix(Vector3f position, Vector3f rotation,Vector3f scale, Matrix4f orthoMatrix) {
+    public static Matrix4f buildOrthoProjModelMatrix(Vector3f position, Vector3f rotation,Vector3f scale, Matrix4f orthoMatrix) {
         return orthoMatrix.translate(position).
                 rotateX((float) Math.toRadians(-rotation.x)).
                 rotateY((float) Math.toRadians(-rotation.y)).

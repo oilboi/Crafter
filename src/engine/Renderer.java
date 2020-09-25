@@ -6,6 +6,7 @@ import org.joml.Vector2d;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
+import static engine.graph.Transformation.*;
 import static game.chunk.Chunk.getChunkMesh;
 import static game.chunk.Chunk.getLimit;
 import static engine.Hud.*;
@@ -29,8 +30,6 @@ public class Renderer {
     private static final float Z_FAR = 1120.f;
 
     private static Vector2d windowSize = new Vector2d();
-
-    private static Transformation transformation = new Transformation();
 
     private static ShaderProgram shaderProgram;
 
@@ -91,11 +90,11 @@ public class Renderer {
         shaderProgram.bind();
 
         //update projection matrix
-        Matrix4f projectionMatrix = transformation.getProjectionMatrix(FOV, getWindowWidth(), getWindowHeight(), Z_NEAR, Z_FAR);
+        Matrix4f projectionMatrix = getProjectionMatrix(FOV, getWindowWidth(), getWindowHeight(), Z_NEAR, Z_FAR);
         shaderProgram.setUniform("projectionMatrix", projectionMatrix);
 
         //update the view matrix
-        Matrix4f viewMatrix = transformation.getViewMatrix();
+        Matrix4f viewMatrix = getViewMatrix();
 
         shaderProgram.setUniform("texture_sampler", 0);
 
@@ -110,7 +109,7 @@ public class Renderer {
                     continue;
                 }
 
-                Matrix4f modelViewMatrix = transformation.getModelViewMatrix(viewMatrix);
+                Matrix4f modelViewMatrix = getModelViewMatrix(viewMatrix);
                 shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
 
                 thisMesh.render();
@@ -123,7 +122,7 @@ public class Renderer {
             if (!itemExists(i)){
                 continue;
             }
-            Matrix4f modelViewMatrix = transformation.getEntityModelViewMatrix(i, viewMatrix);
+            Matrix4f modelViewMatrix = getEntityModelViewMatrix(i, viewMatrix);
             shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
             getItemMesh(i).render();
         }
@@ -134,7 +133,7 @@ public class Renderer {
             if (!tntExists(i)){
                 continue;
             }
-            Matrix4f modelViewMatrix = transformation.getTNTModelViewMatrix(i, viewMatrix);
+            Matrix4f modelViewMatrix = getTNTModelViewMatrix(i, viewMatrix);
             shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
             tntMesh.render();
         }
@@ -142,7 +141,7 @@ public class Renderer {
         //render world selection mesh
         if (getPlayerWorldSelectionPos() != null){
             Mesh selectionMesh = getWorldSelectionMesh();
-            Matrix4f modelViewMatrix = transformation.getWorldSelectionViewMatrix(getPlayerWorldSelectionPos(), viewMatrix);
+            Matrix4f modelViewMatrix = getWorldSelectionViewMatrix(getPlayerWorldSelectionPos(), viewMatrix);
             shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
             selectionMesh.render();
         }
@@ -156,7 +155,7 @@ public class Renderer {
         //TODO: BEGIN HUD SHADER PROGRAM!
         hudShaderProgram.bind();
 
-        Matrix4f hudProjectionMatrix = transformation.getOrthoProjectionMatrix();
+        Matrix4f hudProjectionMatrix = getOrthoProjectionMatrix();
         hudShaderProgram.setUniform("projectionMatrix", hudProjectionMatrix);
         Matrix4f hudViewMatrix = new Matrix4f();
         hudShaderProgram.setUniform("texture_sampler", 0);
@@ -275,7 +274,7 @@ public class Renderer {
 
             {
                 Mesh thisMesh = getCrossHairMesh();
-                Matrix4f modelViewMatrix = transformation.buildOrthoProjModelMatrix(new Vector3f(0,0,-1), new Vector3f(1,1,1), new Vector3f(1,1,1), hudViewMatrix);
+                Matrix4f modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f(0,0,-1), new Vector3f(1,1,1), new Vector3f(1,1,1), hudViewMatrix);
                 hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
                 thisMesh.render();
             }

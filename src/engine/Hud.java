@@ -20,8 +20,7 @@ public class Hud {
     private static final float FONT_HEIGHT = 16f;
     private static final float LETTER_HEIGHT = 8f;
 
-    private static Vector3f playerPos = new Vector3f(-4.2f,5.1f,-13f);
-    private static Vector3f playerScale = new Vector3f(0.7f,0.8f,0.7f);
+        private static Vector3f playerScale = new Vector3f(0.7f,0.8f,0.7f);
     private static Vector3f playerRot = new Vector3f(0,0,0);
 
     public static Vector3f getPlayerHudRotation(){
@@ -84,10 +83,6 @@ public class Hud {
         return playerMesh;
     }
 
-    public static Vector3f getPlayerHudPos(){
-        return playerPos;
-    }
-
     public static Vector3f getPlayerHudRot(){
         return playerRot;
     }
@@ -126,8 +121,8 @@ public class Hud {
         createSelection(0);
         createWorldSelectionMesh();
         createCrossHair();
-        versionInfoText = createCustomHudText("Crafter Pre-Alpha 0.001", 1,1,1,0.8f);
-        versionInfoTextShadow = createCustomHudText("Crafter Pre-Alpha 0.001", 0,0,0,0.8f);
+        versionInfoText = createCustomHudText("Crafter Pre-Alpha 0.001", 1,1,1);
+        versionInfoTextShadow = createCustomHudText("Crafter Pre-Alpha 0.001", 0,0,0);
         createPlayerMesh();
         createInventorySelection();
         createWieldHandMesh();
@@ -2059,10 +2054,7 @@ public class Hud {
         return returningArray;
     }
 
-    public static Mesh createCustomHudText(String text, float r, float g, float b, float textScale){
-
-
-
+    public static Mesh createCustomHudText(String text, float r, float g, float b){
 
         float x = 0f;
         float z = 0f;
@@ -2073,27 +2065,25 @@ public class Hud {
         ArrayList indices = new ArrayList();
         ArrayList light = new ArrayList();
 
-        float xAdjustment = (text.length() * textScale)/2;
-
         int indicesCount = 0;
 
 
         for (char letter : text.toCharArray()) {
             //front
-            positions.add(((x + 0.8f)  * textScale) - xAdjustment);
+            positions.add(x + 0.8f);
             positions.add(0f);
             positions.add(0f);
 
-            positions.add((textScale * x) - xAdjustment);
+            positions.add(x);
             positions.add(0f);
             positions.add(0f);
 
-            positions.add((textScale * x) - xAdjustment);
-            positions.add(-textScale);
+            positions.add(x);
+            positions.add(-1f);
             positions.add(0f);
 
-            positions.add(((x + 0.8f)  * textScale) - xAdjustment);
-            positions.add(-textScale);
+            positions.add(x + 0.8f);
+            positions.add(-1f);
             positions.add(0f);
 
             //front

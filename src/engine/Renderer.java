@@ -286,25 +286,24 @@ public class Renderer {
 
 
 
-//
-//            //THESE GO LAST!
-//            {
-//                Mesh thisMesh = getVersionInfoTextShadow();
-//                Matrix4f modelViewMatrix = transformation.getGenericMatrixWithPos(getVersionInfoShadowPos(), hudViewMatrix);
-//                hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
-//                thisMesh.render();
-//            }
-//
-//            hudViewMatrix = new Matrix4f();
-//            glClear(GL_DEPTH_BUFFER_BIT);
-//
-//            {
-//                Mesh thisMesh = getVersionInfoText();
-//                Matrix4f modelViewMatrix = transformation.getGenericMatrixWithPos(getVersionInfoPos(), hudViewMatrix);
-//                hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
-//                thisMesh.render();
-//            }
-//
+
+            //THESE GO LAST!
+            {
+                Mesh thisMesh = getVersionInfoTextShadow();
+                Matrix4f modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f((float)-windowSize.x/2f+3f,(float)(windowSize.y/2f)-3f,0),new Vector3f(0,0,0), new Vector3f(25,25,25));
+                hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+                thisMesh.render();
+            }
+
+            glClear(GL_DEPTH_BUFFER_BIT);
+
+            {
+                Mesh thisMesh = getVersionInfoText();
+                Matrix4f modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f((float)-windowSize.x/2f,(float)(windowSize.y/2f),0),new Vector3f(0,0,0), new Vector3f(25,25,25));
+                hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+                thisMesh.render();
+            }
+
             //render items in hotbar
             for (int x = 1; x <= 9; x++){
 
@@ -319,7 +318,6 @@ public class Renderer {
                     thisMesh.render();
                 }
             }
-
 
 
 //        }

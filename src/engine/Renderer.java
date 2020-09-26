@@ -7,6 +7,7 @@ import org.joml.Vector2f;
 import org.joml.Vector3f;
 
 import static engine.graph.Transformation.*;
+import static engine.graph.Transformation.buildOrthoProjModelMatrix;
 import static game.chunk.Chunk.getChunkMesh;
 import static game.chunk.Chunk.getLimit;
 import static engine.Hud.*;
@@ -169,8 +170,8 @@ public class Renderer {
         resetOrthoProjectionMatrix();
 
         {
-            Mesh thisMesh = getPlayerMesh();
-            Matrix4f modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f(0,0,0),getPlayerHudRotation(), new Vector3f(50,50,50));
+            Mesh thisMesh = getCrossHairMesh();
+            Matrix4f modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f(0,0,0),new Vector3f(0,0,0), new Vector3f(1,1,1));
             hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
             thisMesh.render();
         }
@@ -266,23 +267,22 @@ public class Renderer {
 //
 //        } else {
 //
-//            hudViewMatrix = new Matrix4f();
-//            glClear(GL_DEPTH_BUFFER_BIT);
-//            {
-//                Mesh thisMesh = getSelectionMesh();
-//                Matrix4f modelViewMatrix = transformation.getModelViewMatrix(hudViewMatrix);
-//                hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
-//                thisMesh.render();
-//            }
-//
-//            hudViewMatrix = new Matrix4f();
-//
-//            {
-//                Mesh thisMesh = getHotBarMesh();
-//                Matrix4f modelViewMatrix = transformation.getModelViewMatrix(hudViewMatrix);
-//                hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
-//                thisMesh.render();
-//            }
+
+        {
+            Mesh thisMesh = getHotBarMesh();
+            Matrix4f modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f(0,(float)(-windowSize.y/2f)+50f,0),new Vector3f(0,0,0), new Vector3f(50,50,50));
+            hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+            thisMesh.render();
+        }
+
+        glClear(GL_DEPTH_BUFFER_BIT);
+
+        {
+            Mesh thisMesh = getSelectionMesh();
+            Matrix4f modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f(0,(float)(-windowSize.y/2f)+50f,0),new Vector3f(0,0,0), new Vector3f(50,50,50));
+            hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+            thisMesh.render();
+        }
 
 
 

@@ -143,27 +143,22 @@ public class Hud {
 
         int indicesCount = 0;
 
-
-        float thisTest = -14f;
-
-        float yPos = (-7.1f * scale);
-
         //front
-        positions.add(scale*8.27272727273f);
-        positions.add((scale) + yPos);
-        positions.add(thisTest);
+        positions.add(8.27272727273f);
+        positions.add(1f);
+        positions.add(-1f);
 
-        positions.add(-scale*8.27272727273f);
-        positions.add((scale) + yPos);
-        positions.add(thisTest);
+        positions.add(-8.27272727273f);
+        positions.add(1f);
+        positions.add(-1f);
 
-        positions.add(-scale*8.27272727273f);
-        positions.add((-scale) + yPos);
-        positions.add(thisTest);
+        positions.add(-8.27272727273f);
+        positions.add(-1f);
+        positions.add(-1f);
 
-        positions.add(scale*8.27272727273f);
-        positions.add((-scale) + yPos);
-        positions.add(thisTest);
+        positions.add(8.27272727273f);
+        positions.add(-1f);
+        positions.add(-1f);
         //front
         float frontLight = 1f;//getLight(x, y, z + 1, chunkX, chunkZ) / maxLight;
 
@@ -231,27 +226,24 @@ public class Hud {
 
         int indicesCount = 0;
 
-        float yPos = (-7.1f * scale);
-
-        float thisTest = -14.f;
 
         float currentSelection = (currentInventorySelection-4f) * ((scale) * 1.815f);
         //front
-        positions.add((scale) + currentSelection);
-        positions.add((scale) + yPos);
-        positions.add(thisTest); //z (how close it is to screen)
+        positions.add(1f + currentSelection);
+        positions.add(1f);
+        positions.add(-1f);
 
-        positions.add((-scale) + currentSelection);
-        positions.add((scale) + yPos);
-        positions.add(thisTest);
+        positions.add(-1f + currentSelection);
+        positions.add(1f);
+        positions.add(-1f);
 
-        positions.add((-scale) + currentSelection);
-        positions.add((-scale) + yPos);
-        positions.add(thisTest);
+        positions.add(-1f + currentSelection);
+        positions.add(-1f);
+        positions.add(-1f);
 
-        positions.add((scale) + currentSelection);
-        positions.add((-scale) + yPos);
-        positions.add(thisTest);
+        positions.add(1f + currentSelection);
+        positions.add(-1f);
+        positions.add(-1f);
         //front
         float frontLight = 1f;//getLight(x, y, z + 1, chunkX, chunkZ) / maxLight;
 
@@ -731,7 +723,7 @@ public class Hud {
 
         float thisZDepth = 0;
 
-        float thisScale = 100f;
+        float thisScale = 20f;
 
         //front
         positions.add(thisScale);
@@ -2177,6 +2169,9 @@ public class Hud {
     //todo: redo this mess
     public static void hudOnStepTest(){
         playerRot.y += 0.1f;
+        playerRot.x += 0.1f;
+        playerRot.z += 0.1f;
+
 
         if (isPlayerInventoryOpen()) {
             if (invSelection == null){

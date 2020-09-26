@@ -305,25 +305,20 @@ public class Renderer {
 //                thisMesh.render();
 //            }
 //
-//            //render items in hotbar
-//            for (int x = 1; x <= 9; x++){
-//
-//                if (getItemInInventorySlot(x-1,0) != 0) {
-//
-//                    glClear(GL_DEPTH_BUFFER_BIT);
-//                    hudViewMatrix = new Matrix4f();
-//
-//                    Mesh thisMesh = getItemMeshByBlock(getItemInInventorySlot(x-1,0));
-//
-//                    float xer = (float) (x - 1) * 1.8375f;
-//
-//                    float yer = (float) (- 1) * 1.715f;
-//
-//                    Matrix4f modelViewMatrix = transformation.getGenericMatrixWithPosRotationScale(new Vector3f(-7.35f + xer, -7.5f, -14f), new Vector3f(-10, -45, 0), new Vector3f(2.25f, 2.25f, 2.25f), hudViewMatrix);
-//                    hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
-//                    thisMesh.render();
-//                }
-//            }
+            //render items in hotbar
+            for (int x = 1; x <= 9; x++){
+
+                if (getItemInInventorySlot(x-1,0) != 0) {
+
+                    glClear(GL_DEPTH_BUFFER_BIT);
+
+                    Mesh thisMesh = getItemMeshByBlock(getItemInInventorySlot(x-1,0));
+
+                    Matrix4f modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f(((x - 5f) * 91f), (float)(-windowSize.y/2f)+35f, 0), new Vector3f(45, 45, 0), new Vector3f(100, 100, 100));
+                    hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+                    thisMesh.render();
+                }
+            }
 
 
 

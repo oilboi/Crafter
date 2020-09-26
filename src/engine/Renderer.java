@@ -208,7 +208,7 @@ public class Renderer {
 //        glClear(GL_DEPTH_BUFFER_BIT);
 //        hudViewMatrix = new Matrix4f();
 
-//        if (isPlayerInventoryOpen()) {
+        if (isPlayerInventoryOpen()) {
 //            {
 //                Mesh thisMesh = getInventoryMesh();
 //                Matrix4f modelViewMatrix = transformation.getModelViewMatrix(hudViewMatrix);
@@ -265,27 +265,23 @@ public class Renderer {
 //                }
 //            }
 //
-//        } else {
-//
+        } else {
 
-        {
-            Mesh thisMesh = getHotBarMesh();
-            Matrix4f modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f(0,(float)(-windowSize.y/2f)+50f,0),new Vector3f(0,0,0), new Vector3f(50,50,50));
-            hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
-            thisMesh.render();
-        }
+            {
+                Mesh thisMesh = getHotBarMesh();
+                Matrix4f modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f(0,(float)(-windowSize.y/2f)+50f,0),new Vector3f(0,0,0), new Vector3f(50,50,50));
+                hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+                thisMesh.render();
+            }
 
-        glClear(GL_DEPTH_BUFFER_BIT);
+            glClear(GL_DEPTH_BUFFER_BIT);
 
-        {
-            Mesh thisMesh = getSelectionMesh();
-            Matrix4f modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f(0,(float)(-windowSize.y/2f)+50f,0),new Vector3f(0,0,0), new Vector3f(50,50,50));
-            hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
-            thisMesh.render();
-        }
-
-
-
+            {
+                Mesh thisMesh = getSelectionMesh();
+                Matrix4f modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f(0,(float)(-windowSize.y/2f)+50f,0),new Vector3f(0,0,0), new Vector3f(50,50,50));
+                hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+                thisMesh.render();
+            }
 
             //THESE GO LAST!
             {
@@ -320,7 +316,7 @@ public class Renderer {
             }
 
 
-//        }
+        }
         hudShaderProgram.unbind();
     }
 

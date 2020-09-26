@@ -12,11 +12,11 @@ import static engine.graph.Camera.getCameraRotation;
 
 public class Transformation {
 
-    private static Matrix4f projectionMatrix = new Matrix4f();
-    private static Matrix4f modelViewMatrix = new Matrix4f();
-    private static Matrix4f viewMatrix = new Matrix4f();
-    private static Matrix4f orthoMatrix = new Matrix4f();
-    private static Matrix4f orthoModelMatrix = new Matrix4f();
+    private static final Matrix4f projectionMatrix = new Matrix4f();
+    private static final Matrix4f modelViewMatrix = new Matrix4f();
+    private static final Matrix4f viewMatrix = new Matrix4f();
+    private static final Matrix4f orthoMatrix = new Matrix4f();
+    private static final Matrix4f orthoModelMatrix = new Matrix4f();
 
     public static Matrix4f getViewMatrix(){
         Vector3f cameraPos = getCameraPosition();
@@ -98,23 +98,27 @@ public class Transformation {
                 rotateZ((float)Math.toRadians(-rotation.z)).scale(scale);
     }
 
+
+
     //TODO--begin ortho creation
-    public static Matrix4f getOrthoProjectionMatrix() {
+
+    public static void resetOrthoProjectionMatrix() {
         orthoMatrix.identity();
-        orthoMatrix.setOrtho2D(0, (float)getWindowSize().x, (float)getWindowSize().y, 0);
-        return orthoMatrix;
+        orthoMatrix.setOrtho(-(float)getWindowSize().x/2f, (float)getWindowSize().x/2f, -(float)getWindowSize().y/2f, (float)getWindowSize().y/2f, -1000f, 1000f);
     }
 
-    public static Matrix4f buildOrthoProjModelMatrixGeneric(Matrix4f orthoMatrix) {
-        return orthoMatrix;
-    }
-
-    public static Matrix4f buildOrthoProjModelMatrix(Vector3f position, Vector3f rotation,Vector3f scale, Matrix4f orthoMatrix) {
-        return orthoMatrix.translate(position).
-                rotateX((float) Math.toRadians(-rotation.x)).
-                rotateY((float) Math.toRadians(-rotation.y)).
-                rotateZ((float) Math.toRadians(-rotation.z)).
+    public static Matrix4f buildOrthoProjModelMatrix(Vector3f position, Vector3f rotation, Vector3f scale) {
+        modelViewMatrix.identity().translate(position.x, position.y, position.z).
+                rotateX((float) Math.toRadians(rotation.x)).
+                rotateY((float) Math.toRadians(rotation.y)).
+                rotateZ((float) Math.toRadians(rotation.z)).
                 scale(scale);
+
+        orthoModelMatrix.set(orthoMatrix);
+
+        orthoModelMatrix.mul(modelViewMatrix);
+
+        return orthoModelMatrix;
     }
 
 }

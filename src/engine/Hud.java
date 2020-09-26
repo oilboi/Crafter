@@ -24,6 +24,10 @@ public class Hud {
     private static Vector3f playerScale = new Vector3f(0.7f,0.8f,0.7f);
     private static Vector3f playerRot = new Vector3f(0,0,0);
 
+    public static Vector3f getPlayerHudRotation(){
+        return playerRot;
+    }
+
     private static Vector3f versionInfoPos = new Vector3f(-5f,8f,-14f);
     private static Vector3f versionInfoShadowPos = new Vector3f(-4.9f,7.9f,-14f);
 

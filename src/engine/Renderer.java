@@ -59,7 +59,7 @@ public class Renderer {
         hudShaderProgram.link();
 
         //create uniforms for world and projection matrices
-        hudShaderProgram.createUniform("projectionMatrix");
+//        hudShaderProgram.createUniform("projectionMatrix");
         //create uniforms for model view matrix
         hudShaderProgram.createUniform("modelViewMatrix");
         //create uniforms for texture sampler
@@ -155,11 +155,25 @@ public class Renderer {
         //TODO: BEGIN HUD SHADER PROGRAM!
         hudShaderProgram.bind();
 
-        Matrix4f hudProjectionMatrix = getOrthoProjectionMatrix();
-        hudShaderProgram.setUniform("projectionMatrix", hudProjectionMatrix);
-        Matrix4f hudViewMatrix = new Matrix4f();
+//        Matrix4f hudProjectionMatrix = getOrthoProjectionMatrix();
+
+//        hudShaderProgram.setUniform("projectionMatrix", hudProjectionMatrix);
+
+//        Matrix4f hudViewMatrix = new Matrix4f();
+
         hudShaderProgram.setUniform("texture_sampler", 0);
 
+
+//        hudViewMatrix = new Matrix4f();
+
+        resetOrthoProjectionMatrix();
+
+        {
+            Mesh thisMesh = getPlayerMesh();
+            Matrix4f modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f(0,0,0),getPlayerHudRotation(), new Vector3f(50,50,50));
+            hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+            thisMesh.render();
+        }
 
 
         //draw wield hand or item
@@ -190,8 +204,8 @@ public class Renderer {
 //
 //        }
 
-        glClear(GL_DEPTH_BUFFER_BIT);
-        hudViewMatrix = new Matrix4f();
+//        glClear(GL_DEPTH_BUFFER_BIT);
+//        hudViewMatrix = new Matrix4f();
 
 //        if (isPlayerInventoryOpen()) {
 //            {
@@ -270,14 +284,7 @@ public class Renderer {
 //                thisMesh.render();
 //            }
 
-            hudViewMatrix = new Matrix4f();
 
-            {
-                Mesh thisMesh = getCrossHairMesh();
-                Matrix4f modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f(0,0,-1), new Vector3f(1,1,1), new Vector3f(1,1,1), hudViewMatrix);
-                hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
-                thisMesh.render();
-            }
 
 //
 //            //THESE GO LAST!

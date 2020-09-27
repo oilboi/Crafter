@@ -212,12 +212,19 @@ public class Renderer {
             {
 
                 Mesh thisMesh = getInventorySlotMesh();
+                Mesh selectionMesh = getInventorySlotSelectedMesh();
                 //render the actual inventory
                 for (int x = 1; x <= 9; x++) {
                     for (int y = -2; y > -5; y--) {
                         Matrix4f modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f((x - 5) * 115f, (y+0.3f) * 115f, 0), new Vector3f(0, 0, 0), new Vector3f(50, 50, 50));
                         hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
-                        thisMesh.render();
+
+                        if (getInvSelection() != null && (x-1) == getInvSelection()[0] && ((y*-1) - 1) == getInvSelection()[1]) {
+                            selectionMesh.render();
+                        } else {
+                            thisMesh.render();
+                        }
+
                     }
                 }
 
@@ -225,7 +232,12 @@ public class Renderer {
                 for (int x = 1; x <= 9; x++) {
                     Matrix4f modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f((x - 5) * 115f, -0.5f * 115f, 0), new Vector3f(0, 0, 0), new Vector3f(50, 50, 50));
                     hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
-                    thisMesh.render();
+
+                    if (getInvSelection() != null && (x-1) == getInvSelection()[0] && 0 == getInvSelection()[1]) {
+                        selectionMesh.render();
+                    } else {
+                        thisMesh.render();
+                    }
                 }
             }
 

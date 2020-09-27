@@ -127,8 +127,6 @@ public class Player {
         if ((!diggingAnimationBuffer || diggingAnimation >= 1f) && handSetUp){
             diggingAnimationGo = false;
             diggingAnimation = 0f;
-
-            System.out.println("digging animation reset");
             return;
         }
 

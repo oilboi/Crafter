@@ -2,6 +2,7 @@ package engine;
 
 import engine.graph.Mesh;
 import engine.graph.Texture;
+import org.joml.Matrix4f;
 import org.joml.Vector2d;
 import org.joml.Vector3f;
 
@@ -9,6 +10,7 @@ import java.util.ArrayList;
 
 import static engine.MouseInput.getMousePos;
 import static engine.Renderer.getWindowSize;
+import static engine.graph.Transformation.buildOrthoProjModelMatrix;
 import static game.player.Player.isPlayerInventoryOpen;
 
 public class Hud {
@@ -38,6 +40,7 @@ public class Hud {
     private static Texture crossHair;
     private static Texture playerTexture;
     private static Texture inventorySlot;
+    private static Texture inventorySlotSelected;
 
     private static Mesh thisHotBarMesh;
     private static Mesh thisSelectionMesh;
@@ -50,6 +53,7 @@ public class Hud {
     private static Mesh inventorySelectionMesh;
     private static Mesh wieldHandMesh;
     private static Mesh inventorySlotMesh;
+    private static Mesh inventorySlotSelectedMesh;
 
     public static void initializeFontTextureAtlas() throws Exception {
         fontTextureAtlas = new Texture("textures/font.png");
@@ -60,6 +64,7 @@ public class Hud {
         crossHair = new Texture("textures/crosshair.png");
         playerTexture = new Texture("textures/player.png");
         inventorySlot = new Texture("textures/inventory_slot.png");
+        inventorySlotSelected = new Texture("textures/inventory_slot_selected.png");
     }
 
     public static Mesh getHotBarMesh(){
@@ -121,6 +126,9 @@ public class Hud {
     public static Mesh getInventorySlotMesh(){
         return inventorySlotMesh;
     }
+    public static Mesh getInventorySlotSelectedMesh(){
+        return inventorySlotSelectedMesh;
+    }
 
     public static void createHud(){
         createDebugHotbar();
@@ -134,6 +142,7 @@ public class Hud {
         createInventorySelection();
         createWieldHandMesh();
         createInventorySlot();
+        createInventorySlotSelected();
     }
 
 
@@ -383,6 +392,88 @@ public class Hud {
         }
 
         inventorySlotMesh = new Mesh(positionsArray, lightArray, indicesArray, textureCoordArray, inventorySlot);
+    }
+
+    private static void createInventorySlotSelected(){
+        ArrayList positions = new ArrayList();
+        ArrayList textureCoord = new ArrayList();
+        ArrayList indices = new ArrayList();
+        ArrayList light = new ArrayList();
+
+        int indicesCount = 0;
+
+        //front
+        positions.add(1f);
+        positions.add(1f);
+        positions.add(0f);
+
+        positions.add(-1f);
+        positions.add(1f);
+        positions.add(0f);
+
+        positions.add(-1f);
+        positions.add(-1f);
+        positions.add(0f);
+
+        positions.add(1f);
+        positions.add(-1f);
+        positions.add(0f);
+        //front
+        float frontLight = 1f;//getLight(x, y, z + 1, chunkX, chunkZ) / maxLight;
+
+        //front
+        for (int i = 0; i < 12; i++) {
+            light.add(frontLight);
+        }
+        //front
+        indices.add(0 + indicesCount);
+        indices.add(1 + indicesCount);
+        indices.add(2 + indicesCount);
+        indices.add(0 + indicesCount);
+        indices.add(2 + indicesCount);
+        indices.add(3 + indicesCount);
+
+        indicesCount += 4;
+
+        //-x +x   -y +y
+        // 0  1    2  3
+
+        //front
+        textureCoord.add(1f);//1
+        textureCoord.add(0f);//2
+        textureCoord.add(0f);//0
+        textureCoord.add(0f);//2
+        textureCoord.add(0f);//0
+        textureCoord.add(1f);//3
+        textureCoord.add(1f);//1
+        textureCoord.add(1f);//3
+
+
+        //convert the position objects into usable array
+        float[] positionsArray = new float[positions.size()];
+        for (int i = 0; i < positions.size(); i++) {
+            positionsArray[i] = (float) positions.get(i);
+        }
+
+        //convert the light objects into usable array
+        float[] lightArray = new float[light.size()];
+        for (int i = 0; i < light.size(); i++) {
+            lightArray[i] = (float) light.get(i);
+        }
+
+        //convert the indices objects into usable array
+        int[] indicesArray = new int[indices.size()];
+        for (int i = 0; i < indices.size(); i++) {
+            indicesArray[i] = (int) indices.get(i);
+        }
+
+        //convert the textureCoord objects into usable array
+        float[] textureCoordArray = new float[textureCoord.size()];
+        for (int i = 0; i < textureCoord.size(); i++) {
+            textureCoordArray[i] = (float) textureCoord.get(i);
+        }
+
+        inventorySlotSelectedMesh = new Mesh(positionsArray, lightArray, indicesArray, textureCoordArray, inventorySlotSelected);
     }
 
     private static void createInventory(){
@@ -2241,48 +2332,51 @@ public class Hud {
 
     //todo: redo this mess
     public static void hudOnStepTest(){
-        playerRot.y += 0.1f;
-
-
         if (isPlayerInventoryOpen()) {
+
+            playerRot.y += 0.1f;
+
             if (invSelection == null){
                 invSelection = new int[2];
             }
+
+            //need to create new object or the mouse position gets messed up
+            Vector2d mousePos = new Vector2d(getMousePos());
+
+            //work from the center
+            mousePos.x -= (getWindowSize().x/2f);
+            mousePos.y -= (getWindowSize().y/2f);
+            //invert the Y position to follow rendering coordinate system
+            mousePos.y *= -1f;
+
+            //collision detect the actual inventory
             for (int x = 1; x <= 9; x++) {
-                for (int y = 1; y <= 4; y++) {
-
-                    Vector2d mousePos = new Vector2d(getMousePos());
-                    Vector2d windowSize = getWindowSize();
-
-                    float boundaries = (float) ((windowSize.x - (windowSize.y * 1.0735)) / 2f);
-
-                    mousePos.y -= (windowSize.y / 1.98) - (windowSize.y / 32);
-
-                    float borderSize = 32f;
-                    float tileSize = 12f;
-
-
-//                    System.out.println(mousePos.y);
-                    if (mousePos.x > boundaries && mousePos.x < windowSize.x - boundaries && mousePos.y > 0) {
-                        mousePos.x -= boundaries;
-
-                        if (mousePos.x > (windowSize.y / borderSize) * (float) x + ((windowSize.y / tileSize) * (float) (x - 1)) &&
-                                mousePos.x < (windowSize.y / borderSize + windowSize.y / tileSize) * (float) x) {
-
-                            if (mousePos.y > (windowSize.y / borderSize / 1.5f) * (float) y + ((windowSize.y / tileSize) * (float) (y - 1)) &&
-                                    mousePos.y < (windowSize.y / borderSize / 1.5f + windowSize.y / tileSize) * (float) y) {
-                                invSelection[0] = x;
-                                invSelection[1] = y;
-                                return;
-                            }
-                        }
+                for (int y = -2; y > -5; y--) {
+                    if (
+                            mousePos.x > ((x - 5) * 115f) - 50f && mousePos.x < ((x - 5) * 115f) + 50f && //x axis
+                            mousePos.y > ((y+0.3f) * 115f) - 50f && mousePos.y < ((y+0.3f) * 115f) + 50f //y axis
+                    ){
+//                        System.out.println("mouse colliding with " + (x-1) + " " + ((y*-1) - 1));
+                        invSelection[0] = (x-1);
+                        invSelection[1] = ((y*-1) - 1);
+                        return;
                     }
                 }
             }
-            invSelection = null;
+
+            //collision detect the hotbar
+            for (int x = 1; x <= 9; x++) {
+                if (
+                        mousePos.x > ((x - 5) * 115f) - 50f && mousePos.x < ((x - 5) * 115f) + 50f && //x axis
+                        mousePos.y > (-0.5f * 115f) - 50f && mousePos.y < (-0.5f * 115f) + 50f //y axis
+                ){
+//                    System.out.println("mouse colliding with " + (x-1) + " 0");
+                    invSelection[0] = (x-1);
+                    invSelection[1] = 0;
+                    return;
+                }
+            }
         }
-        else {
-            invSelection = null;
-        }
+        invSelection = null;
     }
 }

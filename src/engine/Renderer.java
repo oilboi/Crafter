@@ -30,6 +30,8 @@ public class Renderer {
     private static final float Z_NEAR = 0.1f;
     private static final float Z_FAR = 1120.f;
 
+    private static float itemRotation = 0f;
+
     private static Vector2d windowSize = new Vector2d();
 
     private static ShaderProgram shaderProgram;
@@ -242,45 +244,53 @@ public class Renderer {
             }
 
 
-//            glClear(GL_DEPTH_BUFFER_BIT);
-//
-//            hudViewMatrix = new Matrix4f();
-//
-//            {
-//                if (getInvSelection() != null) {
-//                    Mesh thisMesh = getInventorySelectionMesh();
-//                    int[] invSelection = getInvSelection();
-//                    float xer = (float)(invSelection[0]-1) * 1.8375f;
-//                    float yer = (float)(invSelection[1]-1) * 1.715f;
-//
-//                    Matrix4f modelViewMatrix = transformation.getGenericMatrixWithPosRotationScale(new Vector3f(-7.35f + xer, -0.85f - yer, 0), new Vector3f(0,0,0), new Vector3f(0.75f,0.75f,1), hudViewMatrix);
-//                    hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
-//                    thisMesh.render();
-//                }
-//            }
-//
-//
-//            //render items in inventory
-//            for (int x = 1; x <= 9; x++){
-//                for (int y = 1; y <= 4; y++){
-//
-//                    if (getItemInInventorySlot(x-1,y-1) != 0) {
-//                        glClear(GL_DEPTH_BUFFER_BIT);
-//                        hudViewMatrix = new Matrix4f();
-//
-//                        Mesh thisMesh = getItemMeshByBlock(getItemInInventorySlot(x-1,y-1));
-//
-//                        float xer = (float) (x - 1) * 1.8375f;
-//
-//                        float yer = (float) (y - 1) * 1.715f;
-//
-//                        Matrix4f modelViewMatrix = transformation.getGenericMatrixWithPosRotationScale(new Vector3f(-7.35f + xer, -1.25f - yer, -14f), new Vector3f(-20 + (y * 3), -45, 0), new Vector3f(2.25f, 2.25f, 2.25f), hudViewMatrix);
-//                        hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
-//                        thisMesh.render();
-//                    }
-//                }
-//            }
-//
+            glClear(GL_DEPTH_BUFFER_BIT);
+
+
+            boolean itemSelected = false;
+
+            //render items in inventory
+            for (int x = 1; x <= 9; x++) {
+                for (int y = -2; y > -5; y--) {
+                    glClear(GL_DEPTH_BUFFER_BIT);
+
+                    Matrix4f modelViewMatrix;
+
+                    if (getInvSelection() != null && (x-1) == getInvSelection()[0] && ((y*-1) - 1) == getInvSelection()[1]) {
+                        itemSelected = true;
+                        modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f((x - 5) * 115f, ((y+0.3f) * 115f)-18f, 0), new Vector3f(45, 45 + itemRotation, 0), new Vector3f(135, 135, 135));
+                    } else {
+                        modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f((x - 5) * 115f, ((y+0.3f) * 115f)-18f, 0), new Vector3f(45, 45, 0), new Vector3f(135, 135, 135));
+                    }
+                    hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+                    Mesh thisMesh = getItemMeshByBlock(getItemInInventorySlot(x-1,((y*-1) - 1)));
+                    thisMesh.render();
+
+                }
+            }
+
+            //render items in inventory hotbar
+
+            for (int x = 1; x <= 9; x++) {
+                glClear(GL_DEPTH_BUFFER_BIT);
+                Matrix4f modelViewMatrix;
+
+                if (getInvSelection() != null && (x-1) == getInvSelection()[0] && 0 == getInvSelection()[1]) {
+                    itemSelected = true;
+                    modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f((x - 5) * 115f, (-0.5f * 115f)-18f, 0), new Vector3f(45, 45 + itemRotation, 0), new Vector3f(135, 135, 135));
+                } else {
+                    modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f((x - 5) * 115f, (-0.5f * 115f)-18f, 0), new Vector3f(45, 45, 0), new Vector3f(135, 135, 135));
+                }
+
+                hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+                Mesh thisMesh = getItemMeshByBlock(getItemInInventorySlot(x-1,0));
+                thisMesh.render();
+            }
+            if (!itemSelected){
+                itemRotation = 0f;
+            } else {
+                itemRotation += 1f;
+            }
         } else {
 
             {

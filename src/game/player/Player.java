@@ -152,13 +152,15 @@ public class Player {
             wieldHandAnimationRot = wieldHandAnimationRot;
 
         } else {
-            wieldHandAnimationPos.x = (float) (-5f * Math.sin(Math.pow(diggingAnimation, 0.8f) * Math.PI)) + wieldHandAnimationPosBaseEmpty.x;
-            wieldHandAnimationPos.y = (float) (5f * Math.sin(diggingAnimation * 2f * Math.PI)) + wieldHandAnimationPosBaseEmpty.y;
+            wieldHandAnimationPos.x = wieldHandAnimationPosBaseEmpty.x;
+            wieldHandAnimationPos.y = wieldHandAnimationPosBaseEmpty.y;
             wieldHandAnimationPos.z = wieldHandAnimationPosBaseEmpty.z;
             wieldHandAnimationRot.x = 180f;
-            Vector3f wieldRotation = new Vector3f((float) Math.toRadians(30f), 0f, (float) Math.toRadians(-10f));
+
+            Vector3f wieldRotation = new Vector3f((float)Math.toRadians(0f), (float)Math.toRadians(45f), (float)Math.toRadians(0f));
             Quaternionf quatBegin = new Quaternionf().rotateXYZ(wieldRotation.x, wieldRotation.y, wieldRotation.z);
-            Quaternionf quatEnd = new Quaternionf().rotateXYZ((float) Math.toRadians(40f), (float) Math.toRadians(20f), (float) Math.toRadians(20f));
+            Quaternionf quatEnd = new Quaternionf().rotateXYZ((float) Math.toRadians(90f), (float) Math.toRadians(45f), (float) Math.toRadians(0f));
+
             quatEnd = quatBegin.slerp(quatEnd, (float) Math.sin(diggingAnimation * Math.PI));
 
             wieldRotation = quatEnd.getEulerAnglesXYZ(wieldRotation);

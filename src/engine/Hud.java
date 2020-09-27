@@ -20,7 +20,7 @@ public class Hud {
     private static final float FONT_HEIGHT = 16f;
     private static final float LETTER_HEIGHT = 8f;
 
-        private static Vector3f playerScale = new Vector3f(0.7f,0.8f,0.7f);
+    private static Vector3f playerScale = new Vector3f(0.7f,0.8f,0.7f);
     private static Vector3f playerRot = new Vector3f(0,0,0);
 
     public static Vector3f getPlayerHudRotation(){

@@ -282,7 +282,7 @@ public class Renderer {
 
             {
                 Mesh thisMesh = getSelectionMesh();
-                Matrix4f modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f(0,(float)(-windowSize.y/2f)+50f,0),new Vector3f(0,0,0), new Vector3f(50,50,50));
+                Matrix4f modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f((getPlayerInventorySelection()-4)*91f,(float)(-windowSize.y/2f)+50f,0),new Vector3f(0,0,0), new Vector3f(50,50,50));
                 hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
                 thisMesh.render();
             }

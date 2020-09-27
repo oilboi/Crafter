@@ -125,7 +125,7 @@ public class Hud {
     public static void createHud(){
         createDebugHotbar();
         createInventory();
-        createSelection(0);
+        createSelection();
         createWorldSelectionMesh();
         createCrossHair();
         versionInfoText = createCustomHudText("Crafter Pre-Alpha 0.001", 1,1,1);
@@ -220,7 +220,7 @@ public class Hud {
         thisHotBarMesh = new Mesh(positionsArray, lightArray, indicesArray, textureCoordArray, hotBar);
     }
 
-    public static void createSelection(int currentInventorySelection){
+    private static void createSelection(){
         ArrayList positions = new ArrayList();
         ArrayList textureCoord = new ArrayList();
         ArrayList indices = new ArrayList();
@@ -230,21 +230,20 @@ public class Hud {
         int indicesCount = 0;
 
 
-        float currentSelection = (currentInventorySelection-4f) * ((scale) * 1.815f);
         //front
-        positions.add(1f + currentSelection);
+        positions.add(1f);
         positions.add(1f);
         positions.add(-1f);
 
-        positions.add(-1f + currentSelection);
+        positions.add(-1f);
         positions.add(1f);
         positions.add(-1f);
 
-        positions.add(-1f + currentSelection);
+        positions.add(-1f);
         positions.add(-1f);
         positions.add(-1f);
 
-        positions.add(1f + currentSelection);
+        positions.add(1f);
         positions.add(-1f);
         positions.add(-1f);
         //front

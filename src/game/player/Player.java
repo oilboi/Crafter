@@ -4,7 +4,6 @@ import org.joml.*;
 
 import java.lang.Math;
 
-import static engine.Hud.createSelection;
 import static engine.graph.Camera.*;
 import static engine.sound.SoundAPI.playSound;
 import static game.Crafter.getChunkRenderDistance;
@@ -481,8 +480,6 @@ public class Player {
         if (currentInventorySelection > 8) {
             currentInventorySelection = 0;
         }
-
-        createSelection(currentInventorySelection);
 
         resetWieldHandSetupTrigger();
     }

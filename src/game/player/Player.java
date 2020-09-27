@@ -116,20 +116,26 @@ public class Player {
 
     private static boolean diggingAnimationGo = false;
     private static boolean diggingAnimationBuffer = false;
-
+    private static boolean handSetUp = false;
     public static void startDiggingAnimation(){
         diggingAnimationGo = true;
         diggingAnimationBuffer = true;
+
     }
+
+
+
     public static void testPlayerDiggingAnimation(){
 
-        if (!diggingAnimationGo){
+        if (!diggingAnimationGo && handSetUp){
             return;
         }
 
-        diggingAnimation += 0.0035f;
+        if (handSetUp) {
+            diggingAnimation += 0.0035f;
+        }
 
-        if (!diggingAnimationBuffer || diggingAnimation >= 1f){
+        if ((!diggingAnimationBuffer || diggingAnimation >= 1f) && handSetUp){
             diggingAnimationGo = false;
             diggingAnimation = 0f;
 
@@ -137,9 +143,11 @@ public class Player {
             return;
         }
 
+        if(!handSetUp){
+            handSetUp = true;
+        }
 
         if (getItemInInventorySlot(getPlayerInventorySelection(),0) == 0) {
-
             wieldHandAnimationPos.x = (float) (-5f * Math.sin(Math.pow(diggingAnimation, 0.8f) * Math.PI)) + wieldHandAnimationPosBase.x;
             wieldHandAnimationPos.y = (float) (5f * Math.sin(diggingAnimation * 2f * Math.PI)) + wieldHandAnimationPosBase.y;
             wieldHandAnimationPos.z = -14f;

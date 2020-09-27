@@ -38,23 +38,6 @@ public class Player {
     private static Vector3f worldSelectionPos    = null;
 
 
-    private static final Vector3f wieldHandAnimationPosBase = new Vector3f(13, -12, -14f);
-    private static final Vector3f wieldHandAnimationRotBase = new Vector3f(-130, 10, -20);
-
-    private static Vector3f wieldHandAnimationPos = new Vector3f(13, -12, -14f);
-    private static Vector3f wieldHandAnimationRot = new Vector3f(-130, 10, -20);
-
-
-
-
-    public static Vector3f getWieldHandAnimationPos(){
-        return wieldHandAnimationPos;
-    }
-
-    public static Vector3f getWieldHandAnimationRot(){
-        return wieldHandAnimationRot;
-    }
-
     public static void setPlayerWorldSelectionPos(Vector3f thePos){
         worldSelectionPos = thePos;
     }
@@ -109,77 +92,52 @@ public class Player {
     }
 
 
-    private static Vector3f wieldAnimationSmoothMovement = new Vector3f(0,0,0);
-    private static Vector3f wieldAnimationSmoothRotation = new Vector3f(0,0,0);
+    //TODO --- begin wield hand stuff!
 
-    public static Vector3f getWieldMovementVector(){
-        Vector3f rotationVector = new Vector3f();
+    private static final Vector3f wieldHandAnimationPosBase = new Vector3f(13, -12, -14f);
+    private static final Vector3f wieldHandAnimationRotBase = new Vector3f(-130, 10, -20);
 
-        float xzLen = (float)Math.cos(Math.toRadians(wieldAnimationSmoothMovement.x + 180));
-        rotationVector.z = xzLen * (float)Math.cos(Math.toRadians(wieldAnimationSmoothMovement.y));
-        rotationVector.y = (float)Math.sin(Math.toRadians(wieldAnimationSmoothMovement.x + 180));
-        rotationVector.x = xzLen * (float)Math.sin(Math.toRadians(-wieldAnimationSmoothMovement.y));
+    private static Vector3f wieldHandAnimationPos = new Vector3f(0, 0, 0);
+    private static Vector3f wieldHandAnimationRot = new Vector3f(0, 0, 0);
 
-        return rotationVector;
-    }
-    public static Vector3f getWieldRotationVector(){
-        Vector3f rotationVector = new Vector3f();
+    private static float diggingAnimation = 0f;
 
-        float xzLen = (float)Math.cos(Math.toRadians(wieldAnimationSmoothRotation.x + 180));
-        rotationVector.z = xzLen * (float)Math.cos(Math.toRadians(wieldAnimationSmoothRotation.y));
-        rotationVector.y = (float)Math.sin(Math.toRadians(wieldAnimationSmoothRotation.x + 180));
-        rotationVector.x = xzLen * (float)Math.sin(Math.toRadians(-wieldAnimationSmoothRotation.y));
-
-        return rotationVector;
+    public static Vector3f getWieldHandAnimationPos(){
+        return wieldHandAnimationPosBase.add(wieldHandAnimationPos);
     }
 
-    private static boolean diggingAnimation = false;
+    public static Vector3f getWieldHandAnimationRot(){
+        return wieldHandAnimationRotBase.add(wieldHandAnimationRot);
+    }
+
+
+    private static boolean diggingAnimationGo = false;
     private static boolean diggingAnimationBuffer = false;
 
     public static void startDiggingAnimation(){
-        diggingAnimation = true;
+        diggingAnimationGo = true;
         diggingAnimationBuffer = true;
     }
     public static void testPlayerDiggingAnimation(){
 
-        if (!diggingAnimation){
+        if (!diggingAnimationGo){
             return;
         }
 
-        wieldAnimationSmoothMovement.x += 1f;
-
-        if (!diggingAnimationBuffer && wieldAnimationSmoothMovement.x == 0.0f){
-            diggingAnimation = false;
-            wieldHandAnimationPos.x = wieldHandAnimationPosBase.x;
-            wieldHandAnimationPos.y = wieldHandAnimationPosBase.y;
-            wieldHandAnimationPos.z = wieldHandAnimationPosBase.z;
-
-            wieldAnimationSmoothMovement = new Vector3f();
+        if (!diggingAnimationBuffer || diggingAnimation >= 1f){
+            diggingAnimationGo = false;
+            diggingAnimation = 0f;
+            System.out.println("digging animation reset");
             return;
         }
 
-        if (wieldAnimationSmoothMovement.x > 180f){
-            wieldAnimationSmoothMovement.x -= 360f;
-            diggingAnimationBuffer = false;
-        }
+        diggingAnimation += 0.01f;
+        System.out.println("digging animation cycle: " + diggingAnimation);
 
-        wieldAnimationSmoothMovement.z += 1f;
-        if (wieldAnimationSmoothMovement.z > 180f) {
-            wieldAnimationSmoothMovement.z -= 360f;
-        }
-
-        float multiplier = 3f;
-        float multiplier2 = 20f;
-
-        wieldHandAnimationPos.x = wieldHandAnimationPosBase.x + (getWieldMovementVector().x * multiplier);
-        wieldHandAnimationPos.y = wieldHandAnimationPosBase.y + (getWieldMovementVector().y * multiplier);
-        wieldHandAnimationPos.z = wieldHandAnimationPosBase.z + (getWieldMovementVector().z * multiplier);
-
-
-//        wieldHandAnimationRot.x = wieldHandAnimationRotBase.x + (getWieldRotationVector().x * multiplier2);
-//        wieldHandAnimationRot.y = wieldHandAnimationRotBase.y + (getWieldRotationVector().y * multiplier2);
-//        wieldHandAnimationRot.z = wieldHandAnimationRotBase.z + (getWieldRotationVector().z * multiplier2);
     }
+
+    //TODO ----- end hand stuff!
+
 
     public static float getPlayerHeight(){
         return height;

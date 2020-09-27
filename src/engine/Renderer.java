@@ -160,18 +160,7 @@ public class Renderer {
             } else {
 
                 Mesh thisMesh = getItemMeshByBlock(getItemInInventorySlot(getPlayerInventorySelection(),0));
-
-                Vector3f rot = new Vector3f(getWieldHandAnimationRot());
-                Vector3f pos = new Vector3f(getWieldHandAnimationPos());
-
-//                rot.x += 130f;
-//                rot.y += -10f;
-//                rot.z = -14;
-//
-//                pos.x += -2f;
-//                pos.y += 0;
-
-                Matrix4f modelViewMatrix = getGenericMatrixWithPosRotationScale(pos, rot, new Vector3f(20f, 20f, 20f), new Matrix4f());
+                Matrix4f modelViewMatrix = getGenericMatrixWithPosRotationScale(getWieldHandAnimationPos(), getWieldHandAnimationRot(), new Vector3f(20f, 20f, 20f), new Matrix4f());
                 hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
                 thisMesh.render();
             }
@@ -217,6 +206,8 @@ public class Renderer {
                 hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
                 thisMesh.render();
             }
+
+            //getInventorySlotMesh();
 //
 //
 //            glClear(GL_DEPTH_BUFFER_BIT);

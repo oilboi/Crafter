@@ -193,7 +193,7 @@ public class Renderer {
         if (isPlayerInventoryOpen()) {
             {
                 Mesh thisMesh = getInventoryMesh();
-                Matrix4f modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f(0,0,0),new Vector3f(0,0,0), new Vector3f(500,500,500));
+                Matrix4f modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f(0, 0, 0), new Vector3f(0, 0, 0), new Vector3f(500, 500, 500));
                 hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
                 thisMesh.render();
             }
@@ -202,14 +202,34 @@ public class Renderer {
 
             {
                 Mesh thisMesh = getPlayerMesh();
-                Matrix4f modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f(-287,370,0),getPlayerHudRotation(), new Vector3f(60,60,60));
+                Matrix4f modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f(-287, 370, 0), getPlayerHudRotation(), new Vector3f(60, 60, 60));
                 hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
                 thisMesh.render();
             }
 
-            //getInventorySlotMesh();
-//
-//
+            glClear(GL_DEPTH_BUFFER_BIT);
+
+            {
+
+                Mesh thisMesh = getInventorySlotMesh();
+                //render the actual inventory
+                for (int x = 1; x <= 9; x++) {
+                    for (int y = -2; y > -5; y--) {
+                        Matrix4f modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f((x - 5) * 115f, (y+0.3f) * 115f, 0), new Vector3f(0, 0, 0), new Vector3f(50, 50, 50));
+                        hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+                        thisMesh.render();
+                    }
+                }
+
+                //render the hotbar
+                for (int x = 1; x <= 9; x++) {
+                    Matrix4f modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f((x - 5) * 115f, -0.5f * 115f, 0), new Vector3f(0, 0, 0), new Vector3f(50, 50, 50));
+                    hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+                    thisMesh.render();
+                }
+            }
+
+
 //            glClear(GL_DEPTH_BUFFER_BIT);
 //
 //            hudViewMatrix = new Matrix4f();

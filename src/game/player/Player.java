@@ -94,7 +94,7 @@ public class Player {
 
     //TODO --- begin wield hand stuff!
 
-    private static final Vector3f wieldHandAnimationPosBase = new Vector3f(13, -12, -14f);
+    private static final Vector3f wieldHandAnimationPosBase = new Vector3f(13, -15, -14f);
     private static final Vector3f wieldHandAnimationRotBase = new Vector3f(-130, 10, -20);
 
     private static Vector3f wieldHandAnimationPos = new Vector3f(0, 0, 0);
@@ -103,11 +103,11 @@ public class Player {
     private static float diggingAnimation = 0f;
 
     public static Vector3f getWieldHandAnimationPos(){
-        return wieldHandAnimationPosBase.add(wieldHandAnimationPos);
+        return wieldHandAnimationPos;
     }
 
     public static Vector3f getWieldHandAnimationRot(){
-        return wieldHandAnimationRotBase.add(wieldHandAnimationRot);
+        return wieldHandAnimationRot;
     }
 
 
@@ -127,12 +127,24 @@ public class Player {
         if (!diggingAnimationBuffer || diggingAnimation >= 1f){
             diggingAnimationGo = false;
             diggingAnimation = 0f;
+
+            wieldHandAnimationPos.x = (float)(50f * Math.sin(Math.pow(diggingAnimation, 0.8f) * Math.PI)) + wieldHandAnimationPosBase.x;
+            wieldHandAnimationPos.y = (float)(12f * Math.sin(diggingAnimation * 1.8f * Math.PI)) + wieldHandAnimationPosBase.y;
+            wieldHandAnimationPos.z = -14f;
             System.out.println("digging animation reset");
             return;
         }
 
-        diggingAnimation += 0.01f;
+        diggingAnimation += 0.0025f;
         System.out.println("digging animation cycle: " + diggingAnimation);
+
+        wieldHandAnimationPos.x = (float)(-10f * Math.sin(Math.pow(diggingAnimation, 0.8f) * Math.PI)) + wieldHandAnimationPosBase.x;
+        wieldHandAnimationPos.y = (float)(10f * Math.sin(diggingAnimation * 1.8f * Math.PI)) + wieldHandAnimationPosBase.y;
+        wieldHandAnimationPos.z = -14f;
+
+
+        wieldHandAnimationRot.x = 180f;
+
 
     }
 

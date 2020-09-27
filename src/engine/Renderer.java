@@ -154,7 +154,7 @@ public class Renderer {
         {
             if (getItemInInventorySlot(getPlayerInventorySelection(),0) == 0){
                 Mesh thisMesh = getWieldHandMesh();
-                Matrix4f modelViewMatrix = getGenericMatrixWithPosRotationScale(getWieldHandAnimationPos(), getWieldHandAnimationRot(), new Vector3f(20f, 20f, 20f), new Matrix4f());
+                Matrix4f modelViewMatrix = getGenericMatrixWithPosRotationScale(getWieldHandAnimationPos(), getWieldHandAnimationRot(), new Vector3f(5f, 5f, 5f), new Matrix4f());
                 hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
                 thisMesh.render();
             } else {
@@ -166,7 +166,7 @@ public class Renderer {
 
                 rot.x += 130f;
                 rot.y += -10f;
-                rot.z += 20f;
+                rot.z = -14;
 
                 pos.x += -2f;
                 pos.y += 0;

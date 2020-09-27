@@ -7,7 +7,7 @@ public class Inventory {
     public static void generateRandomInventory(){
         for (int x = 0; x < 9; x++){
             for (int y = 0; y < 4; y++){
-                inventoryNumbers[y][x] =(int)(Math.floor(Math.random() * 0)); //23
+                inventoryNumbers[y][x] =(int)(Math.floor(Math.random() * 23)); //23
             }
         }
     }

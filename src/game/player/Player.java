@@ -95,9 +95,6 @@ public class Player {
 
 
     //TODO --- begin wield hand stuff!
-
-    private static Vector3f handRotationWorker = new Vector3f();
-
     private static final Vector3f wieldHandAnimationPosBaseEmpty = new Vector3f(13, -15, -14f);
     private static final Vector3f wieldHandAnimationPosBaseItem = new Vector3f(13, -15, -14f);
 
@@ -142,20 +139,18 @@ public class Player {
             wieldHandAnimationPos.z = wieldHandAnimationPosBaseEmpty.z;
             wieldHandAnimationRot.x = 180f;
 
-
-
             Quaternionf quatBegin = new Quaternionf().rotateXYZ(wieldRotationEmptyBegin.x, wieldRotationEmptyBegin.y, wieldRotationEmptyBegin.z);
-
             Quaternionf quatEnd = new Quaternionf().rotateXYZ(wieldRotationEmptyEnd.x, wieldRotationEmptyEnd.y, wieldRotationEmptyEnd.z);
-
             quatEnd = quatBegin.slerp(quatEnd, (float) Math.sin(diggingAnimation * Math.PI));
 
-            handRotationWorker = quatEnd.getEulerAnglesXYZ(handRotationWorker);
-            handRotationWorker.x = (float) Math.toDegrees(handRotationWorker.x);
-            handRotationWorker.y = (float) Math.toDegrees(handRotationWorker.y);
-            handRotationWorker.z = (float) Math.toDegrees(handRotationWorker.z);
-            handRotationWorker.x += 180f;
-            wieldHandAnimationRot = handRotationWorker;
+            wieldHandAnimationRot = quatEnd.getEulerAnglesXYZ(wieldHandAnimationRot);
+            wieldHandAnimationRot.x = (float) Math.toDegrees(wieldHandAnimationRot.x);
+            wieldHandAnimationRot.y = (float) Math.toDegrees(wieldHandAnimationRot.y);
+            wieldHandAnimationRot.z = (float) Math.toDegrees(wieldHandAnimationRot.z);
+            wieldHandAnimationRot.x += 180f;
+
+            wieldHandAnimationRot = wieldHandAnimationRot;
+
         } else {
             wieldHandAnimationPos.x = (float) (-5f * Math.sin(Math.pow(diggingAnimation, 0.8f) * Math.PI)) + wieldHandAnimationPosBaseEmpty.x;
             wieldHandAnimationPos.y = (float) (5f * Math.sin(diggingAnimation * 2f * Math.PI)) + wieldHandAnimationPosBaseEmpty.y;

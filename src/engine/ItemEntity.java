@@ -12,6 +12,7 @@ import static engine.sound.SoundAPI.playSound;
 import static game.blocks.BlockDefinition.*;
 import static game.blocks.BlockDefinition.getBottomTexturePoints;
 import static game.collision.Collision.applyInertia;
+import static game.player.Inventory.addItemToInventory;
 import static game.player.Player.getPlayerPosWithCollectionHeight;
 
 public class ItemEntity {
@@ -65,7 +66,8 @@ public class ItemEntity {
             if (itemExists(i) && timer[i] > 3){
                 if (getDistance(position[i], getPlayerPosWithCollectionHeight()) < 3f){
                     if (collecting[i] == false){
-                        /*soundMgr.playSoundSource(*/playSound("pickup", position[i])/*Crafter.Sounds.PICKUP.toString())*/;
+                        playSound("pickup", position[i]);
+                        addItemToInventory(thisMeshID[i]);
                     }
                     collecting[i] = true;
                     Vector3f normalizedPos = new Vector3f(getPlayerPosWithCollectionHeight());

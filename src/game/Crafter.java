@@ -25,6 +25,7 @@ import static game.chunk.ChunkMesh.initializeChunkTextureAtlas;
 import static engine.Renderer.*;
 import static game.blocks.BlockDefinition.initializeBlocks;
 import static game.player.Inventory.generateRandomInventory;
+import static game.player.Inventory.resetInventory;
 import static game.player.Player.*;
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -142,7 +143,6 @@ public class Crafter {
         setAttenuationModel(AL11.AL_LINEAR_DISTANCE);
         setListener(new SoundListener(new Vector3f()));
         createHud();
-        generateRandomInventory();
 
         //create the initial map in memory
         int x;
@@ -202,7 +202,7 @@ public class Crafter {
         if (isKeyPressed(GLFW_KEY_R)) {
             if (!rButtonPushed) {
                 rButtonPushed = true;
-                generateRandomInventory();
+                resetInventory();
             }
         } else if (!isKeyPressed(GLFW_KEY_R)){
             rButtonPushed = false;

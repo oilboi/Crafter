@@ -187,18 +187,9 @@ public class Renderer {
         //TODO: BEGIN HUD SHADER PROGRAM!
         hudShaderProgram.bind();
 
-//        Matrix4f hudProjectionMatrix = getOrthoProjectionMatrix();
-
-//        hudShaderProgram.setUniform("projectionMatrix", hudProjectionMatrix);
-
-//        Matrix4f hudViewMatrix = new Matrix4f();
-
         hudShaderProgram.setUniform("texture_sampler", 0);
 
-
-//        hudViewMatrix = new Matrix4f();
-
-        resetOrthoProjectionMatrix();
+        resetOrthoProjectionMatrix(); // needed to get current screen size
 
         {
             Mesh thisMesh = getCrossHairMesh();
@@ -208,26 +199,24 @@ public class Renderer {
         }
 
 
-
-
         glClear(GL_DEPTH_BUFFER_BIT);
 
         if (isPlayerInventoryOpen()) {
-//            {
-//                Mesh thisMesh = getInventoryMesh();
-//                Matrix4f modelViewMatrix = transformation.getModelViewMatrix(hudViewMatrix);
-//                hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
-//                thisMesh.render();
-//            }
-//
-//            hudViewMatrix = new Matrix4f();
-//
-//            {
-//                Mesh thisMesh = getPlayerMesh();
-//                Matrix4f modelViewMatrix = transformation.getGenericMatrixWithPosRotationScale(getPlayerHudPos(),getPlayerHudRot(),getPlayerHudScale(),hudViewMatrix);
-//                hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
-//                thisMesh.render();
-//            }
+            {
+                Mesh thisMesh = getInventoryMesh();
+                Matrix4f modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f(0,0,0),new Vector3f(0,0,0), new Vector3f(500,500,500));
+                hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+                thisMesh.render();
+            }
+
+            glClear(GL_DEPTH_BUFFER_BIT);
+
+            {
+                Mesh thisMesh = getPlayerMesh();
+                Matrix4f modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f(-287,370,0),getPlayerHudRotation(), new Vector3f(60,60,60));
+                hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+                thisMesh.render();
+            }
 //
 //
 //            glClear(GL_DEPTH_BUFFER_BIT);

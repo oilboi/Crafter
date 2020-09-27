@@ -302,31 +302,24 @@ public class Hud {
         ArrayList indices = new ArrayList();
         ArrayList light = new ArrayList();
 
-
-        float thisScale = 8f * scale;
-
-        float thisTest = -14f;
-
         int indicesCount = 0;
 
-        float yPos = (0 * thisScale);
-
         //front
-        positions.add(1.07908163265f * thisScale);
-        positions.add(thisScale + yPos);
-        positions.add(thisTest);
+        positions.add(1.07908163265f);
+        positions.add(1f);
+        positions.add(0f);
 
-        positions.add(1.07908163265f * -thisScale);
-        positions.add(thisScale + yPos);
-        positions.add(thisTest);
+        positions.add(-1.07908163265f);
+        positions.add(1f);
+        positions.add(0f);
 
-        positions.add(1.07908163265f * -thisScale);
-        positions.add(-thisScale + yPos);
-        positions.add(thisTest);
+        positions.add(-1.07908163265f);
+        positions.add(-1f);
+        positions.add(0f);
 
-        positions.add(1.07908163265f * thisScale);
-        positions.add(-thisScale + yPos);
-        positions.add(thisTest);
+        positions.add(1.07908163265f);
+        positions.add(-1f);
+        positions.add(0f);
         //front
         float frontLight = 1f;//getLight(x, y, z + 1, chunkX, chunkZ) / maxLight;
 
@@ -2160,8 +2153,6 @@ public class Hud {
     //todo: redo this mess
     public static void hudOnStepTest(){
         playerRot.y += 0.1f;
-        playerRot.x += 0.1f;
-        playerRot.z += 0.1f;
 
 
         if (isPlayerInventoryOpen()) {

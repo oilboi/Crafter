@@ -9,12 +9,11 @@ import org.joml.Vector3f;
 import static engine.MouseInput.getMousePos;
 import static engine.graph.Transformation.*;
 import static engine.graph.Transformation.buildOrthoProjModelMatrix;
-import static game.chunk.Chunk.getChunkMesh;
-import static game.chunk.Chunk.getLimit;
 import static engine.Hud.*;
 import static engine.ItemEntity.*;
 import static engine.TNTEntity.*;
 import static engine.Window.*;
+import static game.chunk.Chunk.*;
 import static game.player.Inventory.getItemInInventorySlot;
 import static game.player.Inventory.getMouseInventorySlot;
 import static game.player.Player.*;
@@ -26,9 +25,6 @@ public class Renderer {
     private static float FOV = (float) Math.toRadians(72.0f); //todo: make this a calculator method ala calculateFOV(float);
 
     private static float HUD_FOV = (float)Math.toRadians(60f);
-
-    private static final float HUD_Z_NEAR = 0.001f;
-    private static final float HUD_Z_FAR = 1120.f;
 
     private static final float Z_NEAR = 0.1f;
     private static final float Z_FAR = 1120.f;
@@ -98,7 +94,9 @@ public class Renderer {
     }
 
     public static void renderGame(){
+
         clearScreen();
+
         if (isWindowResized()){
             windowSize.x = getWindowWidth();
             windowSize.y = getWindowHeight();
@@ -120,11 +118,11 @@ public class Renderer {
 
         shaderProgram.setUniform("texture_sampler", 0);
 
-        //render each chunk
+        //render each chunk (standard blocks)
         for(int x = 0; x < getLimit(); x++) {
             for (int z = 0; z < getLimit(); z++) {
-                Mesh thisMesh = getChunkMesh(x,z);
 
+                Mesh thisMesh = getChunkMesh(x,z);
                 if (thisMesh == null) {
                     System.out.println("wow that doesn't exist!");
                     continue;
@@ -137,6 +135,24 @@ public class Renderer {
             }
         }
 
+        //render each chunk liquid mesh
+        glDisable(GL_DEPTH_TEST);
+        for(int x = 0; x < getLimit(); x++) {
+            for (int z = 0; z < getLimit(); z++) {
+
+                Mesh thisMesh = getChunkLiquidMesh(x,z);
+                if (thisMesh == null) {
+                    System.out.println("wow that doesn't exist!");
+                    continue;
+                }
+
+                Matrix4f modelViewMatrix = getModelViewMatrix(viewMatrix);
+                shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+
+                thisMesh.render();
+            }
+        }
+        glEnable(GL_DEPTH_TEST);
 
         //render each item entity
         for (int i = 0; i < getTotalObjects(); i++){
@@ -209,7 +225,6 @@ public class Renderer {
             Matrix4f modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f(0,0,0),new Vector3f(0,0,0), new Vector3f(windowScale/20f,windowScale/20f,windowScale/20f));
             hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
             thisMesh.render();
-
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         }

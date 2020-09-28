@@ -51,7 +51,7 @@ public class Crafter {
             Toolkit tk = Toolkit.getDefaultToolkit();
             Dimension d = tk.getScreenSize();
 
-            runGameEngine("Crafter Pre-Alpha 0.01", d.width/2,d.height/2,false);
+            runGameEngine("Crafter Pre-Alpha 0.01", d.width/2,d.height/2,vSync);
 
         } catch ( Exception excp ){
             excp.printStackTrace();
@@ -102,7 +102,6 @@ public class Crafter {
             windowUpdate();
 
             if (isvSync()){
-                System.out.println("syncinc");
                 sync();
             }
         }

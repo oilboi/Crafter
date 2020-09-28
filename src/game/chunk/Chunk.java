@@ -12,6 +12,7 @@ public class Chunk {
     private static byte [][][][][] rotation;
     private static byte[][][][][] light;
     private static Mesh[][]   mesh;
+    private static Mesh[][]   liquidMesh;
 
     private static int limit = 0;
 
@@ -20,6 +21,7 @@ public class Chunk {
         light = new byte[((chunkRenderDistance * 2) + 1)][((chunkRenderDistance * 2) + 1)][128][16][16];
         rotation = new byte[((chunkRenderDistance * 2) + 1)][((chunkRenderDistance * 2) + 1)][128][16][16];
         mesh  = new Mesh[((chunkRenderDistance * 2) + 1)][((chunkRenderDistance * 2) + 1)];
+        liquidMesh  = new Mesh[((chunkRenderDistance * 2) + 1)][((chunkRenderDistance * 2) + 1)];
         limit = ((chunkRenderDistance * 2) + 1);
 
     }
@@ -38,12 +40,30 @@ public class Chunk {
         mesh[chunkX][chunkZ] = newMesh;
     }
 
+    public static void setChunkLiquidMesh(int chunkX, int chunkZ, Mesh newMesh){
+        chunkX += getChunkRenderDistance();
+        chunkZ += getChunkRenderDistance();
+
+        if(chunkX < 0 || chunkZ < 0 || chunkX >= limit || chunkZ >= limit){
+            return;
+        }
+
+        if (liquidMesh[chunkX][chunkZ] != null){
+            liquidMesh[chunkX][chunkZ].cleanUp(false);
+        }
+        liquidMesh[chunkX][chunkZ] = newMesh;
+    }
+
     public static int getLimit(){
         return limit;
     }
 
     public static Mesh getChunkMesh(int chunkX, int chunkZ){
         return mesh[chunkX][chunkZ];
+    }
+
+    public static Mesh getChunkLiquidMesh(int chunkX, int chunkZ){
+        return liquidMesh[chunkX][chunkZ];
     }
 
     public static byte getRotation(int x,int y,int z, int chunkX, int chunkZ){

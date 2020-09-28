@@ -46,6 +46,10 @@ public class Hud {
     private static Texture playerTexture;
     private static Texture inventorySlot;
     private static Texture inventorySlotSelected;
+    private static Texture button;
+    private static Texture buttonSelected;
+    private static Texture buttonPushed;
+
 
     private static Mesh thisHotBarMesh;
     private static Mesh thisSelectionMesh;
@@ -59,6 +63,10 @@ public class Hud {
     private static Mesh wieldHandMesh;
     private static Mesh inventorySlotMesh;
     private static Mesh inventorySlotSelectedMesh;
+    private static Mesh buttonMesh;
+    private static Mesh buttonSelectedMesh;
+    private static Mesh buttonPushedMesh;
+
 
     public static void initializeFontTextureAtlas() throws Exception {
         fontTextureAtlas = new Texture("textures/font.png");
@@ -70,6 +78,9 @@ public class Hud {
         playerTexture = new Texture("textures/player.png");
         inventorySlot = new Texture("textures/inventory_slot.png");
         inventorySlotSelected = new Texture("textures/inventory_slot_selected.png");
+        button = new Texture("textures/button.png");
+        buttonSelected = new Texture("textures/button_selected.png");
+        buttonPushed = new Texture("textures/button_pushed.png");
     }
 
     public static Mesh getHotBarMesh(){
@@ -128,6 +139,16 @@ public class Hud {
         return wieldHandMesh;
     }
 
+    public static Mesh getButtonMesh(){
+        return buttonMesh;
+    }
+    public static Mesh getButtonSelectedMesh(){
+        return buttonSelectedMesh;
+    }
+    public static Mesh getButtonPushedMesh(){
+        return buttonSelectedMesh;
+    }
+
     public static Mesh getInventorySlotMesh(){
         return inventorySlotMesh;
     }
@@ -149,7 +170,6 @@ public class Hud {
         createInventorySlot();
         createInventorySlotSelected();
     }
-
 
     private static void createDebugHotbar(){
         ArrayList positions = new ArrayList();
@@ -894,26 +914,23 @@ public class Hud {
 
         int indicesCount = 0;
 
-        float thisZDepth = 0;
-
-        float thisScale = 20f;
 
         //front
-        positions.add(thisScale);
-        positions.add(thisScale);
-        positions.add(thisZDepth); //z (how close it is to screen)
+        positions.add(0.5f);
+        positions.add(0.5f);
+        positions.add(0f);
 
-        positions.add(-thisScale);
-        positions.add(thisScale);
-        positions.add(thisZDepth);
+        positions.add(-0.5f);
+        positions.add(0.5f);
+        positions.add(0f);
 
-        positions.add(-thisScale);
-        positions.add(-thisScale);
-        positions.add(thisZDepth);
+        positions.add(-0.5f);
+        positions.add(-0.5f);
+        positions.add(0f);
 
-        positions.add(thisScale);
-        positions.add(-thisScale);
-        positions.add(thisZDepth);
+        positions.add(0.5f);
+        positions.add(-0.5f);
+        positions.add(0f);
         //front
         float frontLight = 1f;//getLight(x, y, z + 1, chunkX, chunkZ) / maxLight;
 

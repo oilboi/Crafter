@@ -32,6 +32,7 @@ public class BlockDefinition {
     private final float[] bottomTexture; //bottom
     private final boolean walkable;
     private final boolean steppable;
+    private final boolean isLiquid;
     private final String drawType;
     private final String placeSound;
     private final String digSound;
@@ -49,6 +50,7 @@ public class BlockDefinition {
             String drawType,
             boolean walkable,
             boolean steppable,
+            boolean isLiquid,
             BlockModifier blockModifier,
             String placeSound,
             String digSound
@@ -66,6 +68,7 @@ public class BlockDefinition {
         this.drawType = drawType;
         this.walkable = walkable;
         this.steppable = steppable;
+        this.isLiquid = isLiquid;
         this.blockModifier = blockModifier;
         this.placeSound = placeSound;
         this.digSound = digSound;
@@ -123,6 +126,10 @@ public class BlockDefinition {
 
     public static String getBlockDrawType(int ID){
         return blockIDs[ID].drawType;
+    }
+
+    public static boolean getIfLiquid(int ID){
+        return blockIDs[ID].isLiquid;
     }
 
     public static float[][] getBlockShape(int ID){
@@ -206,6 +213,7 @@ public class BlockDefinition {
                 "air",
                 false,
                 false,
+                false,
                 null,
                 "",
                 ""
@@ -223,6 +231,7 @@ public class BlockDefinition {
                 new int[]{0,0},  //bottom
                 "normal",
                 true,
+                false,
                 false,
                 null,
                 "dirt_1",
@@ -242,6 +251,7 @@ public class BlockDefinition {
                 "normal",
                 true,
                 false,
+                false,
                 null,
                 "dirt_1",
                 "dirt_2"
@@ -259,6 +269,7 @@ public class BlockDefinition {
                 new int[]{1,0},  //bottom
                 "normal",
                 true,
+                false,
                 false,
                 null,
                 "stone_1",
@@ -278,6 +289,7 @@ public class BlockDefinition {
                 "normal",
                 true,
                 false,
+                false,
                 null,
                 "stone_3",
                 "stone_2"
@@ -295,6 +307,7 @@ public class BlockDefinition {
                 new int[]{6,0},  //bottom
                 "normal",
                 true,
+                false,
                 false,
                 null,
                 "stone_1",
@@ -322,6 +335,7 @@ public class BlockDefinition {
                 new int[]{9,0},  //bottom
                 "normal",
                 true,
+                false,
                 false,
                 kaboom,
                 "dirt_1",
@@ -356,6 +370,7 @@ public class BlockDefinition {
                 "normal",
                 true,
                 false,
+                true,
                 splash,
                 "",
                 ""
@@ -373,6 +388,7 @@ public class BlockDefinition {
                 new int[]{11,0},  //bottom
                 "normal",
                 true,
+                false,
                 false,
                 null,
                 "stone_1",
@@ -392,6 +408,7 @@ public class BlockDefinition {
                 "normal",
                 true,
                 false,
+                false,
                 null,
                 "stone_1",
                 "stone_2"
@@ -409,6 +426,7 @@ public class BlockDefinition {
                 new int[]{13,0},  //bottom
                 "normal",
                 true,
+                false,
                 false,
                 null,
                 "stone_1",
@@ -428,6 +446,7 @@ public class BlockDefinition {
                 "normal",
                 true,
                 false,
+                false,
                 null,
                 "stone_1",
                 "stone_2"
@@ -445,6 +464,7 @@ public class BlockDefinition {
                 new int[]{15,0},  //bottom
                 "normal",
                 true,
+                false,
                 false,
                 null,
                 "stone_1",
@@ -464,6 +484,7 @@ public class BlockDefinition {
                 "normal",
                 true,
                 false,
+                false,
                 null,
                 "stone_1",
                 "stone_2"
@@ -481,6 +502,7 @@ public class BlockDefinition {
                 new int[]{17,0},  //bottom
                 "normal",
                 true,
+                false,
                 false,
                 null,
                 "stone_1",
@@ -500,6 +522,7 @@ public class BlockDefinition {
                 "normal",
                 true,
                 false,
+                false,
                 null,
                 "stone_1",
                 "stone_2"
@@ -518,6 +541,7 @@ public class BlockDefinition {
                 "stair 1",
                 true,
                 true,
+                false,
                 null,
                 "stone_3",
                 "stone_2"
@@ -536,6 +560,7 @@ public class BlockDefinition {
                 "stair 2",
                 true,
                 true,
+                false,
                 null,
                 "stone_3",
                 "stone_2"
@@ -554,6 +579,7 @@ public class BlockDefinition {
                 "stair 3",
                 true,
                 true,
+                false,
                 null,
                 "stone_3",
                 "stone_2"
@@ -572,6 +598,7 @@ public class BlockDefinition {
                 "stair 4",
                 true,
                 true,
+                false,
                 null,
                 "stone_3",
                 "stone_2"
@@ -590,6 +617,7 @@ public class BlockDefinition {
                 "normal",
                 true,
                 false,
+                false,
                 null,
                 "wood_1",
                 "wood_2"
@@ -607,6 +635,7 @@ public class BlockDefinition {
                 "normal",
                 true,
                 false,
+                false,
                 null,
                 "wood_1",
                 "wood_2"
@@ -623,6 +652,7 @@ public class BlockDefinition {
                 new int[]{20,0},  //bottom
                 "normal",
                 true,
+                false,
                 false,
                 null,
                 "wood_1",

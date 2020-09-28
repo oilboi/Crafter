@@ -19,6 +19,7 @@ import static game.player.Inventory.getItemInInventorySlot;
 import static game.player.Inventory.getMouseInventorySlot;
 import static game.player.Player.*;
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL14.*;
 
 public class Renderer {
 
@@ -90,8 +91,6 @@ public class Renderer {
 
         windowSize.x = getWindowWidth();
         windowSize.y = getWindowHeight();
-
-        resetWindowScale();
     }
 
     public static void clearScreen(){
@@ -124,7 +123,6 @@ public class Renderer {
         //render each chunk
         for(int x = 0; x < getLimit(); x++) {
             for (int z = 0; z < getLimit(); z++) {
-
                 Mesh thisMesh = getChunkMesh(x,z);
 
                 if (thisMesh == null) {
@@ -203,10 +201,17 @@ public class Renderer {
         resetOrthoProjectionMatrix(); // needed to get current screen size
 
         {
+            //render inverted crosshair
+
+            glBlendFunc(GL_ONE_MINUS_DST_COLOR, GL_ONE_MINUS_SRC_COLOR);
+
             Mesh thisMesh = getCrossHairMesh();
             Matrix4f modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f(0,0,0),new Vector3f(0,0,0), new Vector3f(windowScale/20f,windowScale/20f,windowScale/20f));
             hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
             thisMesh.render();
+
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
         }
 
 

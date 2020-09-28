@@ -8,6 +8,7 @@ import static game.collision.Collision.wouldCollidePlacing;
 import static game.collision.CustomAABB.setAABB;
 import static game.collision.CustomBlockBox.setBlockBox;
 import static game.player.Inventory.getItemInInventorySlot;
+import static game.player.Inventory.removeItemFromInventory;
 import static game.player.Player.*;
 
 public class Ray {
@@ -96,5 +97,7 @@ public class Ray {
         setBlock((int)realPos.x, (int)realPos.y, (int)realPos.z, currentChunkX, currentChunkZ, ID);
 
         onPlaceCall(ID, flooredPos);
+
+        removeItemFromInventory(getCurrentInventorySelection(), 0);
     }
 }

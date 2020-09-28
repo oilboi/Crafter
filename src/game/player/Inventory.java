@@ -30,6 +30,10 @@ public class Inventory {
         }
     }
 
+    public static void removeItemFromInventory(int x, int y){
+        inventoryNumbers[y][x] = 0;
+    }
+
     public static int getItemInInventorySlot(int x, int y){
         return inventoryNumbers[y][x];
     }

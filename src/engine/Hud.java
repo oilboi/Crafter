@@ -2339,7 +2339,6 @@ public class Hud {
         if (getItemInInventorySlot(getCurrentInventorySelection(), 0) != oldSelection) {
             resetWieldHandSetupTrigger();
             oldSelection = getItemInInventorySlot(getCurrentInventorySelection(), 0);
-            System.out.println("resetting the hud hand position thingy");
         }
 
         if (isPlayerInventoryOpen()) {

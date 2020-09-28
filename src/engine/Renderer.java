@@ -204,7 +204,7 @@ public class Renderer {
 
         {
             Mesh thisMesh = getCrossHairMesh();
-            Matrix4f modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f(0,0,0),new Vector3f(0,0,0), new Vector3f(1,1,1));
+            Matrix4f modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f(0,0,0),new Vector3f(0,0,0), new Vector3f(windowScale/20f,windowScale/20f,windowScale/20f));
             hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
             thisMesh.render();
         }

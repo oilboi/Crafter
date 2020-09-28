@@ -136,7 +136,6 @@ public class Renderer {
         }
 
         //render each chunk liquid mesh
-        glDisable(GL_DEPTH_TEST);
         for(int x = 0; x < getLimit(); x++) {
             for (int z = 0; z < getLimit(); z++) {
 
@@ -152,7 +151,6 @@ public class Renderer {
                 thisMesh.render();
             }
         }
-        glEnable(GL_DEPTH_TEST);
 
         //render each item entity
         for (int i = 0; i < getTotalObjects(); i++){

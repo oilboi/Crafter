@@ -22,19 +22,31 @@ public class ChunkMesh {
     private static int offsetX;
     private static int offsetZ;
 
+    private static ArrayList positions = new ArrayList();
+    private static ArrayList textureCoord = new ArrayList();
+    private static ArrayList indices = new ArrayList();
+    private static ArrayList light = new ArrayList();
+
+    private static ArrayList liquidPositions = new ArrayList();
+    private static ArrayList liquidTextureCoord = new ArrayList();
+    private static ArrayList liquidIndices = new ArrayList();
+    private static ArrayList liquidLight = new ArrayList();
+
     public static void generateChunkMesh(int chunkX, int chunkZ, boolean updating) throws Exception {
         indicesCount = 0;
         liquidIndicesCount = 0;
 
-        ArrayList positions = new ArrayList();
-        ArrayList textureCoord = new ArrayList();
-        ArrayList indices = new ArrayList();
-        ArrayList light = new ArrayList();
+        positions.clear();
+        textureCoord.clear();
+        indices.clear();
+        light.clear();
 
-        ArrayList liquidPositions = new ArrayList();
-        ArrayList liquidTextureCoord = new ArrayList();
-        ArrayList liquidIndices = new ArrayList();
-        ArrayList liquidLight = new ArrayList();
+        liquidPositions.clear();
+        liquidTextureCoord.clear();
+        liquidIndices.clear();
+        liquidLight.clear();
+
+
 
         offsetX = chunkX * 16;
         offsetZ = chunkZ * 16;
@@ -1004,6 +1016,16 @@ public class ChunkMesh {
         Mesh liquidMesh = new Mesh(liquidPositionsArray, liquidLightArray, liquidIndicesArray, liquidTextureCoordArray, textureAtlas);
 
         setChunkLiquidMesh(chunkX, chunkZ, liquidMesh);
+
+        positions.clear();
+        textureCoord.clear();
+        indices.clear();
+        light.clear();
+
+        liquidPositions.clear();
+        liquidTextureCoord.clear();
+        liquidIndices.clear();
+        liquidLight.clear();
 
     }
 

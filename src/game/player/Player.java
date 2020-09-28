@@ -115,7 +115,6 @@ public class Player {
     }
 
     public static void testPlayerDiggingAnimation(){
-
         if (!diggingAnimationGo && handSetUp){
             return;
         }
@@ -478,8 +477,6 @@ public class Player {
         if (currentInventorySelection > 8) {
             currentInventorySelection = 0;
         }
-
-        resetWieldHandSetupTrigger();
     }
 
     public static int getCurrentInventorySelection(){

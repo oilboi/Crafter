@@ -11,7 +11,8 @@ import java.util.ArrayList;
 import static engine.MouseInput.getMousePos;
 import static engine.Renderer.getWindowSize;
 import static engine.graph.Transformation.buildOrthoProjModelMatrix;
-import static game.player.Player.isPlayerInventoryOpen;
+import static game.player.Inventory.getItemInInventorySlot;
+import static game.player.Player.*;
 
 public class Hud {
     private final static float scale = 1f;
@@ -2330,8 +2331,17 @@ public class Hud {
         return invSelection;
     }
 
+    private static int oldSelection;
+
     //todo: redo this mess
     public static void hudOnStepTest(){
+
+        if (getItemInInventorySlot(getCurrentInventorySelection(), 0) != oldSelection) {
+            resetWieldHandSetupTrigger();
+            oldSelection = getItemInInventorySlot(getCurrentInventorySelection(), 0);
+            System.out.println("resetting the hud hand position thingy");
+        }
+
         if (isPlayerInventoryOpen()) {
 
             playerRot.y += 0.1f;

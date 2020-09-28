@@ -6,6 +6,7 @@ import org.joml.Vector2d;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 
+import static engine.MouseInput.getMousePos;
 import static engine.graph.Transformation.*;
 import static engine.graph.Transformation.buildOrthoProjModelMatrix;
 import static game.chunk.Chunk.getChunkMesh;
@@ -290,6 +291,26 @@ public class Renderer {
                 itemRotation = 0f;
             } else {
                 itemRotation += 1f;
+            }
+
+
+            //debug testing for rendered item
+            {
+                glClear(GL_DEPTH_BUFFER_BIT);
+                //need to create new object or the mouse position gets messed up
+                Vector2d mousePos = new Vector2d(getMousePos());
+
+                //work from the center
+                mousePos.x -= (getWindowSize().x/2f);
+                mousePos.y -= (getWindowSize().y/2f);
+                mousePos.y *= -1f;
+
+                Mesh thisMesh = getItemMeshByBlock(1);
+
+                Matrix4f modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f((float)mousePos.x, (float)mousePos.y-20f, 0), new Vector3f(45, 45, 0), new Vector3f(135, 135, 135));
+                hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+                thisMesh.render();
+
             }
         } else {
 

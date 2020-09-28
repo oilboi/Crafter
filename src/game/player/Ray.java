@@ -74,7 +74,7 @@ public class Ray {
 
         Vector3f realPos = new Vector3f(chunkPosX, flooredPos.y, chunkPosZ);
 
-        System.out.println(getRotation((int)realPos.x, (int)realPos.y, (int)realPos.z, currentChunkX,currentChunkZ));
+//        System.out.println(getRotation((int)realPos.x, (int)realPos.y, (int)realPos.z, currentChunkX,currentChunkZ));
 
         int thisBlock = getBlock((int)realPos.x, (int)realPos.y, (int)realPos.z, currentChunkX,currentChunkZ);
 

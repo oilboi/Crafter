@@ -51,7 +51,7 @@ public class ItemEntity {
         scale[totalObjects] = 1f;
         timer[totalObjects] = 0f;
         totalObjects++;
-        System.out.println("Created new Item. Total items: " + totalObjects);
+//        System.out.println("Created new Item. Total items: " + totalObjects);
     }
 
     public static void onStep() throws Exception {
@@ -65,7 +65,7 @@ public class ItemEntity {
 
             if (itemExists(i) && timer[i] > 3){
                 if (getDistance(position[i], getPlayerPosWithCollectionHeight()) < 3f){
-                    if (collecting[i] == false){
+                    if (!collecting[i]){
                         playSound("pickup", position[i]);
                         addItemToInventory(thisMeshID[i]);
                     }

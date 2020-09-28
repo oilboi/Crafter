@@ -70,6 +70,7 @@ public class Window {
         glfwMakeContextCurrent(windowHandle);
 
         if (isvSync()){
+            System.out.println("vsync is enabled");
             //enable v-sync
             glfwSwapInterval(1);
         }

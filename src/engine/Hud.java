@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 import static engine.MouseInput.getMousePos;
 import static engine.MouseInput.isLeftButtonPressed;
+import static engine.Renderer.getWindowScale;
 import static engine.Renderer.getWindowSize;
 import static engine.Window.isKeyPressed;
 import static engine.graph.Transformation.buildOrthoProjModelMatrix;
@@ -160,21 +161,21 @@ public class Hud {
         int indicesCount = 0;
 
         //front
-        positions.add(8.27272727273f);
-        positions.add(1f);
-        positions.add(-1f);
+        positions.add(0.5f);
+        positions.add(0.06043956043f);
+        positions.add(0f);
 
-        positions.add(-8.27272727273f);
-        positions.add(1f);
-        positions.add(-1f);
+        positions.add(-0.5f);
+        positions.add(0.06043956043f);
+        positions.add(0f);
 
-        positions.add(-8.27272727273f);
-        positions.add(-1f);
-        positions.add(-1f);
+        positions.add(-0.5f);
+        positions.add(-0.06043956043f);
+        positions.add(0f);
 
-        positions.add(8.27272727273f);
-        positions.add(-1f);
-        positions.add(-1f);
+        positions.add(0.5f);
+        positions.add(-0.06043956043f);
+        positions.add(0f);
         //front
         float frontLight = 1f;//getLight(x, y, z + 1, chunkX, chunkZ) / maxLight;
 
@@ -244,21 +245,21 @@ public class Hud {
 
 
         //front
-        positions.add(1f);
-        positions.add(1f);
-        positions.add(-1f);
+        positions.add(0.5f);
+        positions.add(0.5f);
+        positions.add(0f);
 
-        positions.add(-1f);
-        positions.add(1f);
-        positions.add(-1f);
+        positions.add(-0.5f);
+        positions.add(0.5f);
+        positions.add(0f);
 
-        positions.add(-1f);
-        positions.add(-1f);
-        positions.add(-1f);
+        positions.add(-0.5f);
+        positions.add(-0.5f);
+        positions.add(0f);
 
-        positions.add(1f);
-        positions.add(-1f);
-        positions.add(-1f);
+        positions.add(0.5f);
+        positions.add(-0.5f);
+        positions.add(0f);
         //front
         float frontLight = 1f;//getLight(x, y, z + 1, chunkX, chunkZ) / maxLight;
 
@@ -325,20 +326,20 @@ public class Hud {
         int indicesCount = 0;
 
         //front
-        positions.add(1f);
-        positions.add(1f);
+        positions.add(0.5f);
+        positions.add(0.5f);
         positions.add(0f);
 
-        positions.add(-1f);
-        positions.add(1f);
+        positions.add(-0.5f);
+        positions.add(0.5f);
         positions.add(0f);
 
-        positions.add(-1f);
-        positions.add(-1f);
+        positions.add(-0.5f);
+        positions.add(-0.5f);
         positions.add(0f);
 
-        positions.add(1f);
-        positions.add(-1f);
+        positions.add(0.5f);
+        positions.add(-0.5f);
         positions.add(0f);
         //front
         float frontLight = 1f;//getLight(x, y, z + 1, chunkX, chunkZ) / maxLight;
@@ -407,20 +408,20 @@ public class Hud {
         int indicesCount = 0;
 
         //front
-        positions.add(1f);
-        positions.add(1f);
+        positions.add(0.5f);
+        positions.add(0.5f);
         positions.add(0f);
 
-        positions.add(-1f);
-        positions.add(1f);
+        positions.add(-0.5f);
+        positions.add(0.5f);
         positions.add(0f);
 
-        positions.add(-1f);
-        positions.add(-1f);
+        positions.add(-0.5f);
+        positions.add(-0.5f);
         positions.add(0f);
 
-        positions.add(1f);
-        positions.add(-1f);
+        positions.add(0.5f);
+        positions.add(-0.5f);
         positions.add(0f);
         //front
         float frontLight = 1f;//getLight(x, y, z + 1, chunkX, chunkZ) / maxLight;
@@ -489,20 +490,20 @@ public class Hud {
         int indicesCount = 0;
 
         //front
-        positions.add(1.07908163265f);
-        positions.add(1f);
+        positions.add(0.5f);
+        positions.add(0.46335697399f);
         positions.add(0f);
 
-        positions.add(-1.07908163265f);
-        positions.add(1f);
+        positions.add(-0.5f);
+        positions.add(0.46335697399f);
         positions.add(0f);
 
-        positions.add(-1.07908163265f);
-        positions.add(-1f);
+        positions.add(-0.5f);
+        positions.add(-0.46335697399f);
         positions.add(0f);
 
-        positions.add(1.07908163265f);
-        positions.add(-1f);
+        positions.add(0.5f);
+        positions.add(-0.46335697399f);
         positions.add(0f);
         //front
         float frontLight = 1f;//getLight(x, y, z + 1, chunkX, chunkZ) / maxLight;
@@ -2383,12 +2384,12 @@ public class Hud {
             //invert the Y position to follow rendering coordinate system
             mousePos.y *= -1f;
 
-            //collision detect the actual inventory
+            //collision detect the lower inventory
             for (int x = 1; x <= 9; x++) {
                 for (int y = -2; y > -5; y--) {
                     if (
-                            mousePos.x > ((x - 5) * 115f) - 50f && mousePos.x < ((x - 5) * 115f) + 50f && //x axis
-                            mousePos.y > ((y+0.3f) * 115f) - 50f && mousePos.y < ((y+0.3f) * 115f) + 50f //y axis
+                            mousePos.x > ((x - 5) * (getWindowScale() / 9.5f)) - ((getWindowScale()/10.5f) / 2f) && mousePos.x < ((x - 5) * (getWindowScale() / 9.5f)) + ((getWindowScale()/10.5f) / 2f) && //x axis
+                            mousePos.y > ((y+0.3f) * (getWindowScale() / 9.5f)) - ((getWindowScale()/10.5f) / 2f) && mousePos.y < ((y+0.3f) * (getWindowScale() / 9.5f)) + ((getWindowScale()/10.5f) / 2f) //y axis
                     ){
 //                        System.out.println("mouse colliding with " + (x-1) + " " + ((y*-1) - 1));
                         invSelection[0] = (x-1);
@@ -2398,11 +2399,11 @@ public class Hud {
                 }
             }
 
-            //collision detect the hotbar
+            //collision detect the inventory hotbar (upper part)
             for (int x = 1; x <= 9; x++) {
                 if (
-                        mousePos.x > ((x - 5) * 115f) - 50f && mousePos.x < ((x - 5) * 115f) + 50f && //x axis
-                        mousePos.y > (-0.5f * 115f) - 50f && mousePos.y < (-0.5f * 115f) + 50f //y axis
+                        mousePos.x > ((x - 5) * (getWindowScale() / 9.5f)) - ((getWindowScale()/10.5f) / 2f) && mousePos.x < ((x - 5) * (getWindowScale() / 9.5f)) + ((getWindowScale()/10.5f) / 2f) && //x axis
+                        mousePos.y > (-0.5f * (getWindowScale() / 9.5f)) - ((getWindowScale()/10.5f) / 2f) && mousePos.y < (-0.5f * (getWindowScale() / 9.5f)) + ((getWindowScale()/10.5f) / 2f) //y axis
                 ){
 //                    System.out.println("mouse colliding with " + (x-1) + " 0");
                     invSelection[0] = (x-1);

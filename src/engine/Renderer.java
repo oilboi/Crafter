@@ -16,6 +16,7 @@ import static engine.ItemEntity.*;
 import static engine.TNTEntity.*;
 import static engine.Window.*;
 import static game.player.Inventory.getItemInInventorySlot;
+import static game.player.Inventory.getMouseInventorySlot;
 import static game.player.Player.*;
 import static org.lwjgl.opengl.GL11.*;
 
@@ -296,21 +297,22 @@ public class Renderer {
 
             //debug testing for rendered item
             {
-                glClear(GL_DEPTH_BUFFER_BIT);
-                //need to create new object or the mouse position gets messed up
-                Vector2d mousePos = new Vector2d(getMousePos());
+                if (getMouseInventorySlot() != 0) {
+                    glClear(GL_DEPTH_BUFFER_BIT);
+                    //need to create new object or the mouse position gets messed up
+                    Vector2d mousePos = new Vector2d(getMousePos());
 
-                //work from the center
-                mousePos.x -= (getWindowSize().x/2f);
-                mousePos.y -= (getWindowSize().y/2f);
-                mousePos.y *= -1f;
+                    //work from the center
+                    mousePos.x -= (getWindowSize().x / 2f);
+                    mousePos.y -= (getWindowSize().y / 2f);
+                    mousePos.y *= -1f;
 
-                Mesh thisMesh = getItemMeshByBlock(1);
+                    Mesh thisMesh = getItemMeshByBlock(getMouseInventorySlot());
 
-                Matrix4f modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f((float)mousePos.x, (float)mousePos.y-20f, 0), new Vector3f(45, 45, 0), new Vector3f(135, 135, 135));
-                hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
-                thisMesh.render();
-
+                    Matrix4f modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f((float) mousePos.x, (float) mousePos.y - 20f, 0), new Vector3f(45, 45, 0), new Vector3f(135, 135, 135));
+                    hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+                    thisMesh.render();
+                }
             }
         } else {
 

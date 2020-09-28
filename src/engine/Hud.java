@@ -9,10 +9,13 @@ import org.joml.Vector3f;
 import java.util.ArrayList;
 
 import static engine.MouseInput.getMousePos;
+import static engine.MouseInput.isLeftButtonPressed;
 import static engine.Renderer.getWindowSize;
+import static engine.Window.isKeyPressed;
 import static engine.graph.Transformation.buildOrthoProjModelMatrix;
-import static game.player.Inventory.getItemInInventorySlot;
+import static game.player.Inventory.*;
 import static game.player.Player.*;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_R;
 
 public class Hud {
     private final static float scale = 1f;
@@ -2333,6 +2336,8 @@ public class Hud {
 
     private static int oldSelection;
 
+    private static boolean mouseButtonPushed = false;
+
     //todo: redo this mess
     public static void hudOnStepTest(){
 
@@ -2347,6 +2352,26 @@ public class Hud {
 
             if (invSelection == null){
                 invSelection = new int[2];
+            } else {
+                if (isLeftButtonPressed()) {
+                    if (!mouseButtonPushed) {
+                        mouseButtonPushed = true;
+
+                        if (getMouseInventorySlot() == 0) {
+                            setMouseInventorySlot(getItemInInventorySlot(invSelection[0], invSelection[1]));
+                            removeItemFromInventory(invSelection[0], invSelection[1]);
+                        } else {
+                            int bufferItemMouse = getMouseInventorySlot();
+                            int bufferItemInv  = getItemInInventorySlot(invSelection[0], invSelection[1]);
+                            setItemInInventory(invSelection[0], invSelection[1], bufferItemMouse);
+
+                            setMouseInventorySlot(bufferItemInv);
+                        }
+
+                    }
+                } else if (!isLeftButtonPressed()){
+                    mouseButtonPushed = false;
+                }
             }
 
             //need to create new object or the mouse position gets messed up

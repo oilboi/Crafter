@@ -24,7 +24,6 @@ import static game.chunk.ChunkMesh.generateChunkMesh;
 import static game.chunk.ChunkMesh.initializeChunkTextureAtlas;
 import static engine.Renderer.*;
 import static game.blocks.BlockDefinition.initializeBlocks;
-import static game.player.Inventory.generateRandomInventory;
 import static game.player.Inventory.resetInventory;
 import static game.player.Player.*;
 import static org.lwjgl.glfw.GLFW.*;

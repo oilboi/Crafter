@@ -4,6 +4,9 @@ public class Inventory {
     private static String[][] inventoryNames = new String[4][9];
     private static int[][] inventoryNumbers = new int[4][9];
 
+    private static String mouseInventoryName;
+    private static int mouseInventoryNumber;
+
     public static void generateRandomInventory(){
         for (int x = 0; x < 9; x++){
             for (int y = 0; y < 4; y++){
@@ -30,11 +33,24 @@ public class Inventory {
         }
     }
 
+    public static void setItemInInventory(int x, int y, int ID){
+        inventoryNumbers[y][x] = ID;
+    }
+
     public static void removeItemFromInventory(int x, int y){
         inventoryNumbers[y][x] = 0;
     }
 
     public static int getItemInInventorySlot(int x, int y){
         return inventoryNumbers[y][x];
+    }
+
+
+    public static int getMouseInventorySlot(){
+        return mouseInventoryNumber;
+    }
+
+    public static void setMouseInventorySlot(int ID){
+        mouseInventoryNumber = ID;
     }
 }

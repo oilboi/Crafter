@@ -1,7 +1,5 @@
 package game.player;
 
-import org.joml.Vector3f;
-
 import static engine.ItemEntity.createItem;
 import static engine.graph.Camera.getCameraRotationVector;
 import static game.player.Player.*;

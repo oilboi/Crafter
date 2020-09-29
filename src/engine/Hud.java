@@ -210,8 +210,10 @@ public class Hud {
     public static void toggleVsyncMesh(){
         if (isvSync()) {
             toggleVsyncMesh = createCustomHudText("VSYNC:ON", 1, 1, 1);
+            System.out.println("vsync on");
         } else {
             toggleVsyncMesh = createCustomHudText("VSYNC:OFF", 1, 1, 1);
+            System.out.println("vsync off");
         }
     }
 

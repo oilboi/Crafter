@@ -99,9 +99,9 @@ public class ItemEntity {
             }
             if (itemExists(i)) {
                 if (collecting[i]) {
-                    applyInertia(position[i], inertia[i], true, itemSize, itemSize * 2, false, false, false);
+                    applyInertia(position[i], inertia[i], true, itemSize, itemSize * 2, false, false, false, false);
                 } else {
-                    applyInertia(position[i], inertia[i], true, itemSize, itemSize * 2, true, false, true);
+                    applyInertia(position[i], inertia[i], true, itemSize, itemSize * 2, true, false, true, false);
                 }
                 rotation[i].y += 0.1f;
                 if (floatUp[i]){

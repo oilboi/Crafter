@@ -11,9 +11,9 @@ import static game.collision.CustomBlockBox.*;
 public class Collision {
     final private static float gameSpeed = 0.001f;
 
-    public static boolean applyInertia(Vector3f pos, Vector3f inertia, boolean onGround, float width, float height, boolean gravity, boolean sneaking, boolean applyCollision){
+    public static boolean applyInertia(Vector3f pos, Vector3f inertia, boolean onGround, float width, float height, boolean gravity, boolean sneaking, boolean applyCollision, boolean airFriction){
 
-        if(gravity && !sneaking) {
+        if(gravity) {
             inertia.y -= 40f * gameSpeed; //gravity
         }
 
@@ -25,8 +25,33 @@ public class Collision {
         }
 
         if (applyCollision) {
-            onGround = collisionDetect(pos, inertia, width, height);
-            
+            if (sneaking) {
+
+                Vector3f oldPos = new Vector3f(pos);
+
+                onGround = collisionDetect(pos, inertia, width, height);
+
+                if (onGround && inertia.y < 0.f){
+                    int axisFallingOff = sneakCollisionDetect(pos, inertia, width, height);
+
+                    if(axisFallingOff == 1){
+                        pos.x = oldPos.x;
+                        inertia.x = 0;
+                    } else if (axisFallingOff == 2) {
+                        pos.z = oldPos.z;
+                        inertia.z = 0;
+                    } else if (axisFallingOff == 3){
+                        pos.x = oldPos.x;
+                        inertia.x = 0;
+                        pos.z = oldPos.z;
+                        inertia.z = 0;
+                    }
+                }
+
+            } else {
+                onGround = collisionDetect(pos, inertia, width, height);
+            }
+
         } else {
             pos.x += inertia.x * gameSpeed;
             pos.y += inertia.y * gameSpeed;
@@ -34,7 +59,7 @@ public class Collision {
         }
 
         //apply friction
-        if (onGround) {
+        if (onGround || airFriction) {
             inertia.x += -inertia.x * gameSpeed * 10; // do (10 - 9.5f) for slippery!
             inertia.z += -inertia.z * gameSpeed * 10;
         }
@@ -49,10 +74,159 @@ public class Collision {
     private static int cachedBlock;
     private static Vector3f cachedPos = new Vector3f(0,0,0);
 
+
+
+
+
+//TODO: ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//TODO: ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//TODO: ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//TODO: ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//TODO: ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//TODO: ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//TODO: ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//TODO: ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//TODO: ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//TODO: ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//TODO: ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//TODO: ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//TODO: ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//TODO: ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//TODO: ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+    private static int sneakCollisionDetect(Vector3f pos, Vector3f inertia, float width, float height){
+
+        int binaryReturn = 0;
+
+        boolean onGround = false;
+
+        Vector3f clonedInertia = new Vector3f(inertia);
+        Vector3f clonedPos = new Vector3f(pos);
+        //todo: begin X collision detection
+        clonedPos.y -= 0.05f;
+        clonedPos.x += 0.1f * inertiaToDir(clonedInertia.x);
+
+        fPos = floorPos(new Vector3f(clonedPos));
+
+        for (x = -1; x <= 1; x++) {
+            for (z = -1; z <= 1; z++) {
+
+                Vector3f cachedPos = new Vector3f();
+                cachedPos.x = fPos.x + x;
+                cachedPos.y = fPos.y;
+                cachedPos.z = fPos.z + z;
+
+                cachedBlock = detectBlock(cachedPos);
+
+                if (isWalkable(cachedBlock)) {
+                    onGround = sneakCollideYNegative((int) fPos.x + x, (int)fPos.y, (int) fPos.z + z, clonedPos, clonedInertia, width, height, onGround, cachedBlock);
+                }
+            }
+        }
+
+        if (!onGround) {
+            binaryReturn += 1;
+        }
+
+        //reset position vectors
+        clonedPos = new Vector3f(pos);
+        clonedInertia = new Vector3f(inertia);
+
+        onGround = false;
+
+        //todo: Begin Z collision detection
+        clonedPos.y -= 0.05f;
+        clonedPos.z += 0.1f * inertiaToDir(clonedInertia.z);
+
+        fPos = floorPos(new Vector3f(clonedPos));
+
+        for (x = -1; x <= 1; x++) {
+            for (z = -1; z <= 1; z++) {
+
+                Vector3f cachedPos = new Vector3f();
+                cachedPos.x = fPos.x + x;
+                cachedPos.y = fPos.y;
+                cachedPos.z = fPos.z + z;
+
+                cachedBlock = detectBlock(cachedPos);
+
+                if (isWalkable(cachedBlock)) {
+                    onGround = sneakCollideYNegative((int) fPos.x + x, (int)fPos.y, (int) fPos.z + z, clonedPos, clonedInertia, width, height, onGround, cachedBlock);
+                }
+            }
+        }
+
+
+        if (!onGround) {
+            binaryReturn += 2;
+        }
+
+
+        return binaryReturn;
+    }
+
+
+
+
+
+    public static boolean sneakCollideYNegative(int blockPosX, int blockPosY, int blockPosz, Vector3f pos, Vector3f inertia, float width, float height, boolean onGround, int blockID){
+        for (float[] thisBlockBox : getBlockShape(blockID)) {
+            setAABB(pos.x, pos.y, pos.z, width, height);
+            setBlockBox(blockPosX,blockPosY,blockPosz,thisBlockBox);
+
+            if (isWithin()) {
+                return true;
+            }
+        }
+        return onGround;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//TODO: ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//TODO: ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//TODO: ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//TODO: ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//TODO: ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//TODO: ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//TODO: ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//TODO: ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//TODO: ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//TODO: ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//TODO: ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//TODO: ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//TODO: ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//TODO: ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+//TODO: ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
     private static boolean collisionDetect(Vector3f pos, Vector3f inertia, float width, float height){
         onGround = false;
 
         Vector3f oldPos = new Vector3f();
+
         oldPos.x = pos.x;
         oldPos.y = pos.y;
         oldPos.z = pos.z;

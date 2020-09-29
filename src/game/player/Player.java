@@ -379,7 +379,7 @@ public class Player {
         }
 
 
-        onGround = applyInertia(pos, inertia, true, width, height,true, sneaking, true);
+        onGround = applyInertia(pos, inertia, true, width, height,true, sneaking, true, true);
 
         //map boundary check TODO: ID 1000
         if (pos.x > ((getChunkRenderDistance() + 1) * 16)-0.5f) {
@@ -409,7 +409,7 @@ public class Player {
 
         oldPos = new Vector3f(pos);
 
-        if(playerIsMoving()){
+        if(playerIsMoving() && !sneaking){
             applyViewBobbing();
         } else {
             returnPlayerViewBobbing();

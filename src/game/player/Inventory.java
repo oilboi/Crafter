@@ -1,5 +1,11 @@
 package game.player;
 
+import org.joml.Vector3f;
+
+import static engine.ItemEntity.createItem;
+import static engine.graph.Camera.getCameraRotationVector;
+import static game.player.Player.*;
+
 public class Inventory {
     private static String[][] inventoryNames = new String[4][9];
     private static int[][] inventoryNumbers = new int[4][9];
@@ -41,6 +47,10 @@ public class Inventory {
         }
     }
 
+    public static void throwItem(){
+        createItem(getItemInInventorySlot(getPlayerInventorySelection(), 0), getPlayerPosWithEyeHeight(), getCameraRotationVector().mul(30f));
+        removeItemFromInventory(getPlayerInventorySelection(), 0);
+    }
     public static void setItemInInventory(int x, int y, int ID){
         inventoryNumbers[y][x] = ID;
     }

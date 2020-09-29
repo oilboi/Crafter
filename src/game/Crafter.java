@@ -29,7 +29,7 @@ public class Crafter {
 
     //variables
     private static int     chunkRenderDistance = 2;
-    private static boolean fButtonPushed       = false;
+    private static boolean qButtonPushed       = false;
     private static boolean rButtonPushed       = false;
     private static boolean tButtonPushed       = false;
     private static boolean cButtonPushed       = false;
@@ -206,6 +206,15 @@ public class Crafter {
             }
         } else if (!isKeyPressed(GLFW_KEY_R)){
             rButtonPushed = false;
+        }
+
+        if (isKeyPressed(GLFW_KEY_Q)) {
+            if (!qButtonPushed) {
+                qButtonPushed = true;
+                throwItem();
+            }
+        } else if (!isKeyPressed(GLFW_KEY_Q)){
+            qButtonPushed = false;
         }
 
         if (isKeyPressed(GLFW_KEY_F11)) {

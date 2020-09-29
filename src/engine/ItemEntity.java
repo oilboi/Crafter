@@ -47,9 +47,6 @@ public class ItemEntity {
 
     public static void createItem(int blockID, Vector3f pos){
         thisMeshID[totalObjects] = blockID;
-        pos.x+=0.5f;
-        pos.y+=0.5f;
-        pos.z+=0.5f;
         position[totalObjects] = new Vector3f(pos);
         inertia[totalObjects] = new Vector3f(randomForceValue(9f),(float)Math.random()*10f,randomForceValue(9f));
         rotation[totalObjects] = new Vector3f(0,0,0);
@@ -59,7 +56,19 @@ public class ItemEntity {
         scale[totalObjects] = 1f;
         timer[totalObjects] = 0f;
         totalObjects++;
-//        System.out.println("Created new Item. Total items: " + totalObjects);
+    }
+
+    public static void createItem(int blockID, Vector3f pos, Vector3f newInertia){
+        thisMeshID[totalObjects] = blockID;
+        position[totalObjects] = new Vector3f(pos);
+        inertia[totalObjects] = new Vector3f(newInertia.x,newInertia.y,newInertia.z);
+        rotation[totalObjects] = new Vector3f(0,0,0);
+        floatUp[totalObjects] = true;
+        exists[totalObjects] = true;
+        collecting[totalObjects] = false;
+        scale[totalObjects] = 1f;
+        timer[totalObjects] = 0f;
+        totalObjects++;
     }
 
     public static void onStep() throws Exception {

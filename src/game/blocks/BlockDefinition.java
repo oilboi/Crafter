@@ -81,7 +81,7 @@ public class BlockDefinition {
     public static void onDigCall(int ID, Vector3f pos) {
         if(blockIDs[ID] != null){
             if(blockIDs[ID].dropsItem){
-                createItem(ID, pos);
+                createItem(ID, pos.add(0.5f,0.5f,0.5f));
             }
             if(blockIDs[ID].blockModifier != null){
                 try {

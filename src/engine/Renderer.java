@@ -121,34 +121,36 @@ public class Renderer {
         //render each chunk (standard blocks)
         for(int x = 0; x < getLimit(); x++) {
             for (int z = 0; z < getLimit(); z++) {
-
-                Mesh thisMesh = getChunkMesh(x,z);
-                if (thisMesh == null) {
+                for (int y = 0; y < 8; y++) {
+                    Mesh thisMesh = getChunkMesh(x, z, y);
+                    if (thisMesh == null) {
 //                    System.out.println("wow that doesn't exist!");
-                    continue;
+                        continue;
+                    }
+
+                    Matrix4f modelViewMatrix = getModelViewMatrix(viewMatrix);
+                    shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+
+                    thisMesh.render();
                 }
-
-                Matrix4f modelViewMatrix = getModelViewMatrix(viewMatrix);
-                shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
-
-                thisMesh.render();
             }
         }
 
         //render each chunk liquid mesh
         for(int x = 0; x < getLimit(); x++) {
             for (int z = 0; z < getLimit(); z++) {
-
-                Mesh thisMesh = getChunkLiquidMesh(x,z);
-                if (thisMesh == null) {
+                for (int y = 0; y < 8; y++) {
+                    Mesh thisMesh = getChunkLiquidMesh(x, z, y);
+                    if (thisMesh == null) {
 //                    System.out.println("wow that doesn't exist!");
-                    continue;
+                        continue;
+                    }
+
+                    Matrix4f modelViewMatrix = getModelViewMatrix(viewMatrix);
+                    shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+
+                    thisMesh.render();
                 }
-
-                Matrix4f modelViewMatrix = getModelViewMatrix(viewMatrix);
-                shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
-
-                thisMesh.render();
             }
         }
 

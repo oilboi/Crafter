@@ -11,8 +11,8 @@ public class Chunk {
     private static int [][][][][] block;
     private static byte [][][][][] rotation;
     private static byte[][][][][] light;
-    private static Mesh[][]   mesh;
-    private static Mesh[][]   liquidMesh;
+    private static Mesh[][][]   mesh;
+    private static Mesh[][][]   liquidMesh;
 
     private static int limit = 0;
 
@@ -20,13 +20,14 @@ public class Chunk {
         block = new  int[((chunkRenderDistance * 2) + 1)][((chunkRenderDistance * 2) + 1)][128][16][16];
         light = new byte[((chunkRenderDistance * 2) + 1)][((chunkRenderDistance * 2) + 1)][128][16][16];
         rotation = new byte[((chunkRenderDistance * 2) + 1)][((chunkRenderDistance * 2) + 1)][128][16][16];
-        mesh  = new Mesh[((chunkRenderDistance * 2) + 1)][((chunkRenderDistance * 2) + 1)];
-        liquidMesh  = new Mesh[((chunkRenderDistance * 2) + 1)][((chunkRenderDistance * 2) + 1)];
+
+        mesh  = new Mesh[((chunkRenderDistance * 2) + 1)][((chunkRenderDistance * 2) + 1)][8];
+        liquidMesh  = new Mesh[((chunkRenderDistance * 2) + 1)][((chunkRenderDistance * 2) + 1)][8];
         limit = ((chunkRenderDistance * 2) + 1);
 
     }
 
-    public static void setChunkMesh(int chunkX, int chunkZ, Mesh newMesh){
+    public static void setChunkMesh(int chunkX, int chunkZ, int yHeight, Mesh newMesh){
         chunkX += getChunkRenderDistance();
         chunkZ += getChunkRenderDistance();
 
@@ -34,13 +35,13 @@ public class Chunk {
             return;
         }
 
-        if (mesh[chunkX][chunkZ] != null){
-            mesh[chunkX][chunkZ].cleanUp(false);
+        if (mesh[chunkX][chunkZ][yHeight] != null){
+            mesh[chunkX][chunkZ][yHeight].cleanUp(false);
         }
-        mesh[chunkX][chunkZ] = newMesh;
+        mesh[chunkX][chunkZ][yHeight] = newMesh;
     }
 
-    public static void setChunkLiquidMesh(int chunkX, int chunkZ, Mesh newMesh){
+    public static void setChunkLiquidMesh(int chunkX, int chunkZ, int yHeight, Mesh newMesh){
         chunkX += getChunkRenderDistance();
         chunkZ += getChunkRenderDistance();
 
@@ -48,22 +49,22 @@ public class Chunk {
             return;
         }
 
-        if (liquidMesh[chunkX][chunkZ] != null){
-            liquidMesh[chunkX][chunkZ].cleanUp(false);
+        if (liquidMesh[chunkX][chunkZ][yHeight] != null){
+            liquidMesh[chunkX][chunkZ][yHeight].cleanUp(false);
         }
-        liquidMesh[chunkX][chunkZ] = newMesh;
+        liquidMesh[chunkX][chunkZ][yHeight] = newMesh;
     }
 
     public static int getLimit(){
         return limit;
     }
 
-    public static Mesh getChunkMesh(int chunkX, int chunkZ){
-        return mesh[chunkX][chunkZ];
+    public static Mesh getChunkMesh(int chunkX, int chunkZ, int yHeight){
+        return mesh[chunkX][chunkZ][yHeight];
     }
 
-    public static Mesh getChunkLiquidMesh(int chunkX, int chunkZ){
-        return liquidMesh[chunkX][chunkZ];
+    public static Mesh getChunkLiquidMesh(int chunkX, int chunkZ, int yHeight){
+        return liquidMesh[chunkX][chunkZ][yHeight];
     }
 
     public static byte getRotation(int x,int y,int z, int chunkX, int chunkZ){
@@ -117,7 +118,9 @@ public class Chunk {
         }
 
         rotation[chunkX][chunkZ][y][x][z] = newRotation;
-        chunkUpdate(chunkX,chunkZ);
+
+//        chunkUpdate(chunkX,chunkZ);
+
         updateNeighbor(chunkX, chunkZ,x,y,z);
     }
 
@@ -160,6 +163,12 @@ public class Chunk {
         chunkX += getChunkRenderDistance();
         chunkZ += getChunkRenderDistance();
 
+        int yPillar = (int)Math.floor(y/16f);
+
+        if (yPillar > 7 || yPillar < 0){
+            return;
+        }
+
         if(chunkX < 0 || chunkZ < 0 || chunkX >= limit || chunkZ >= limit){
             return;
         }
@@ -174,7 +183,7 @@ public class Chunk {
         }
 
         block[chunkX][chunkZ][y][x][z] = newBlock;
-        chunkUpdate(chunkX,chunkZ);
+        chunkUpdate(chunkX,chunkZ,yPillar);
         updateNeighbor(chunkX, chunkZ,x,y,z);
     }
 
@@ -193,8 +202,16 @@ public class Chunk {
             return;
         }
 
+        int yPillar = (int)Math.floor(y/16f);
+
+        if (yPillar > 7 || yPillar < 0){
+            return;
+        }
+
         block[currentChunkX][currentChunkZ][y][currentPosX][currentPosZ] = newBlock;
-        chunkUpdate(currentChunkX,currentChunkZ);
+
+        chunkUpdate(currentChunkX,currentChunkZ,yPillar);
+
         updateNeighbor(currentChunkX, currentChunkZ,x,y,z);
     }
 
@@ -244,24 +261,33 @@ public class Chunk {
         }
 
         light[chunkX][chunkZ][y][x][z] = newLight;
-        chunkUpdate(chunkX,chunkZ);
+
+//        chunkUpdate(chunkX,chunkZ);
+
         updateNeighbor(chunkX, chunkZ,x,y,z);
     }
 
     private static void updateNeighbor(int chunkX, int chunkZ, int x, int y, int z){
+
+        int yPillar = (int)Math.floor(y/16f);
+
+        if (yPillar > 7 || yPillar < 0){
+            return;
+        }
+
         if (x == 15){ //update neighbor
-            chunkUpdate(chunkX+1, chunkZ);
+            chunkUpdate(chunkX+1, chunkZ, yPillar);
         }
 
         if (x == 0){
-            chunkUpdate(chunkX-1, chunkZ);
+            chunkUpdate(chunkX-1, chunkZ, yPillar);
         }
 
         if (z == 15){
-            chunkUpdate(chunkX, chunkZ+1);
+            chunkUpdate(chunkX, chunkZ+1, yPillar);
         }
         if (z == 0){
-            chunkUpdate(chunkX, chunkZ-1);
+            chunkUpdate(chunkX, chunkZ-1, yPillar);
         }
     }
 
@@ -337,10 +363,12 @@ public class Chunk {
     }
 
     public static void cleanUp(){
-        for (Mesh[] thisMeshArray : mesh){
-            for (Mesh thisMesh : thisMeshArray) {
-                if (thisMesh != null) {
-                    thisMesh.cleanUp(true);
+        for (Mesh[][] thisMeshArray1 : mesh){
+            for (Mesh[] thisMeshArray : thisMeshArray1) {
+                for (Mesh thisMesh : thisMeshArray) {
+                    if (thisMesh != null) {
+                        thisMesh.cleanUp(true);
+                    }
                 }
             }
         }

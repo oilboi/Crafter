@@ -50,42 +50,42 @@ public class ChunkMesh {
     private static float[] liquidLight;
     private static int liquidLightCount;
 
-    public static void generateChunkMesh(int chunkX, int chunkZ) {
+    public static void generateChunkMesh(int chunkX, int chunkZ, int yHeight) {
 
         offsetX = chunkX * 16;
         offsetZ = chunkZ * 16;
 
-        positions = new float[4_718_592];
+        positions = new float[589_824];
         positionsCount = 0;
 
-        textureCoord = new float[4_718_592];
+        textureCoord = new float[589_824];
         textureCoordCount = 0;
 
-        indices = new int[4_718_592];
+        indices = new int[589_824];
         indicesTableCount = 0;
         indicesCount = 0;
 
-        light = new float[4_718_592];
+        light = new float[589_824];
         lightCount = 0;
 
 
 
         //liquid stuff
-        liquidPositions = new float[196608];
+        liquidPositions = new float[24_576];
         liquidPositionsCount = 0;
 
-        liquidTextureCoord = new float[131072];
+        liquidTextureCoord = new float[24_576];
         liquidTextureCoordCount = 0;
 
-        liquidIndices = new int[98304];
+        liquidIndices = new int[24_576];
         liquidIndicesCount = 0;
         liquidIndicesTableCount = 0;
 
-        liquidLight = new float[196608];
+        liquidLight = new float[24_576];
         liquidLightCount = 0;
 
 
-        for (int y = 0; y < 128; y++) {
+        for (int y = yHeight * 16; y < (yHeight+1) * 16; y++) {
             for (int x = 0; x < 16; x++) {
                 for (int z = 0; z < 16; z++) {
                     int thisBlock = getBlock(x, y, z, chunkX, chunkZ);
@@ -1126,46 +1126,55 @@ public class ChunkMesh {
                 }
             }
         }
+//        if (positionsCount > 0) {
 //        convert the position objects into usable array
-        float[] positionsArray = new float[positionsCount];
-        if (positionsCount >= 0) System.arraycopy(positions, 0, positionsArray, 0, positionsCount);
+            float[] positionsArray = new float[positionsCount];
+            if (positionsCount >= 0) System.arraycopy(positions, 0, positionsArray, 0, positionsCount);
 
-        //convert the light objects into usable array
-        float[] lightArray = new float[lightCount];
-        if (lightCount >= 0) System.arraycopy(light, 0, lightArray, 0, lightCount);
+            //convert the light objects into usable array
+            float[] lightArray = new float[lightCount];
+            if (lightCount >= 0) System.arraycopy(light, 0, lightArray, 0, lightCount);
 
-        //convert the indices objects into usable array
-        int[] indicesArray = new int[indicesTableCount];
-        if (indicesTableCount >= 0) System.arraycopy(indices, 0, indicesArray, 0, indicesTableCount);
+            //convert the indices objects into usable array
+            int[] indicesArray = new int[indicesTableCount];
+            if (indicesTableCount >= 0) System.arraycopy(indices, 0, indicesArray, 0, indicesTableCount);
 
-        //convert the textureCoord objects into usable array
-        float[] textureCoordArray = new float[textureCoordCount];
-        if (textureCoordCount >= 0) System.arraycopy(textureCoord, 0, textureCoordArray, 0, textureCoordCount);
+            //convert the textureCoord objects into usable array
+            float[] textureCoordArray = new float[textureCoordCount];
+            if (textureCoordCount >= 0) System.arraycopy(textureCoord, 0, textureCoordArray, 0, textureCoordCount);
 
-        setChunkMesh(chunkX, chunkZ, new Mesh(positionsArray, lightArray, indicesArray, textureCoordArray, textureAtlas));
+            setChunkMesh(chunkX, chunkZ, yHeight, new Mesh(positionsArray, lightArray, indicesArray, textureCoordArray, textureAtlas));
+//        } else {
+//            setChunkMesh(chunkX, chunkZ, yHeight, null);
+//        }
 
         //do the same thing for liquids
 
+        if (liquidPositionsCount > 0) {
 //        convert the position objects into usable array
-        float[] liquidPositionsArray = new float[liquidPositionsCount];
-        if (liquidPositionsCount >= 0)
-            System.arraycopy(liquidPositions, 0, liquidPositionsArray, 0, liquidPositionsCount);
+            float[] liquidPositionsArray = new float[liquidPositionsCount];
+            if (liquidPositionsCount >= 0)
+                System.arraycopy(liquidPositions, 0, liquidPositionsArray, 0, liquidPositionsCount);
 
-        //convert the light objects into usable array
-        float[] liquidLightArray = new float[liquidLightCount];
-        if (liquidLightCount >= 0) System.arraycopy(liquidLight, 0, liquidLightArray, 0, liquidLightCount);
+            //convert the light objects into usable array
+            float[] liquidLightArray = new float[liquidLightCount];
+            if (liquidLightCount >= 0) System.arraycopy(liquidLight, 0, liquidLightArray, 0, liquidLightCount);
 
-        //convert the indices objects into usable array
-        int[] liquidIndicesArray = new int[liquidIndicesTableCount];
-        if (liquidIndicesTableCount >= 0)
-            System.arraycopy(liquidIndices, 0, liquidIndicesArray, 0, liquidIndicesTableCount);
+            //convert the indices objects into usable array
+            int[] liquidIndicesArray = new int[liquidIndicesTableCount];
+            if (liquidIndicesTableCount >= 0)
+                System.arraycopy(liquidIndices, 0, liquidIndicesArray, 0, liquidIndicesTableCount);
 
-        //convert the textureCoord objects into usable array
-        float[] liquidTextureCoordArray = new float[liquidTextureCoordCount];
-        if (liquidTextureCoordCount >= 0)
-            System.arraycopy(liquidTextureCoord, 0, liquidTextureCoordArray, 0, liquidTextureCoordCount);
+            //convert the textureCoord objects into usable array
+            float[] liquidTextureCoordArray = new float[liquidTextureCoordCount];
+            if (liquidTextureCoordCount >= 0)
+                System.arraycopy(liquidTextureCoord, 0, liquidTextureCoordArray, 0, liquidTextureCoordCount);
 
-        setChunkLiquidMesh(chunkX, chunkZ, new Mesh(liquidPositionsArray, liquidLightArray, liquidIndicesArray, liquidTextureCoordArray, textureAtlas));
+            setChunkLiquidMesh(chunkX, chunkZ, yHeight, new Mesh(liquidPositionsArray, liquidLightArray, liquidIndicesArray, liquidTextureCoordArray, textureAtlas));
+        }
+        else {
+            setChunkLiquidMesh(chunkX, chunkZ, yHeight, null);
+        }
     }
 
     private static float convertLight(float lightByte){

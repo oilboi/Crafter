@@ -155,12 +155,14 @@ public class Crafter {
         //create chunk meshes
         for (x = -chunkRenderDistance; x <= chunkRenderDistance; x++){
             for (z = -chunkRenderDistance; z<= chunkRenderDistance; z++){
-                generateChunkMesh(x, z);
+                for (int y = 0; y < 8; y++) {
+                    generateChunkMesh(x, z, y);
+                }
             }
         }
 
         generateRandomInventory();
-        tntFillErUp();
+//        tntFillErUp();
     }
 
     private static void input(){
@@ -204,7 +206,8 @@ public class Crafter {
         if (isKeyPressed(GLFW_KEY_R)) {
             if (!rButtonPushed) {
                 rButtonPushed = true;
-                resetInventory();
+//                resetInventory();
+                generateRandomInventory();
             }
         } else if (!isKeyPressed(GLFW_KEY_R)){
             rButtonPushed = false;

@@ -26,6 +26,7 @@ public class Collision {
 
         if (applyCollision) {
             onGround = collisionDetect(pos, inertia, width, height);
+            
         } else {
             pos.x += inertia.x * gameSpeed;
             pos.y += inertia.y * gameSpeed;
@@ -33,11 +34,9 @@ public class Collision {
         }
 
         //apply friction
-        inertia.x += -inertia.x * gameSpeed * 10; // do (10 - 9.5f) for slippery!
-        inertia.z += -inertia.z * gameSpeed * 10;
-
-        if (sneaking) {
-            inertia.y = 0;
+        if (onGround) {
+            inertia.x += -inertia.x * gameSpeed * 10; // do (10 - 9.5f) for slippery!
+            inertia.z += -inertia.z * gameSpeed * 10;
         }
 
         return onGround;
@@ -231,9 +230,14 @@ public class Collision {
         for (float[] thisBlockBox : getBlockShape(blockID)) {
             setAABB(pos.x, pos.y, pos.z, width, height);
             setBlockBox(blockPosX,blockPosY,blockPosz,thisBlockBox);
+
+            float onGroundTester = AABBGetBottom() - BlockBoxGetTop();
+
             if (isWithin() && BlockBoxGetTop() > AABBGetBottom() && AABBGetBottom() - BlockBoxGetTop() > -0.1f) {
                 pos.y = BlockBoxGetTop() + 0.0001f;
-                inertia.y = 0;
+                inertia.y = -0.1f;
+            }
+            if (onGroundTester > - 0.1f && onGroundTester < 0.1f){
                 onGround = true;
             }
         }

@@ -381,8 +381,6 @@ public class Player {
 
         onGround = applyInertia(pos, inertia, true, width, height,true, sneaking, true);
 
-        System.out.println(onGround);
-
         //map boundary check TODO: ID 1000
         if (pos.x > ((getChunkRenderDistance() + 1) * 16)-0.5f) {
             pos.x = oldPos.x;

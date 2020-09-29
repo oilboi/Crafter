@@ -48,7 +48,7 @@ public class Inventory {
     }
 
     public static void throwItem(){
-        createItem(getItemInInventorySlot(getPlayerInventorySelection(), 0), getPlayerPosWithEyeHeight(), getCameraRotationVector().mul(30f));
+        createItem(getItemInInventorySlot(getPlayerInventorySelection(), 0), getPlayerPosWithEyeHeight(), getCameraRotationVector().mul(10f,5f,10f));
         removeItemFromInventory(getPlayerInventorySelection(), 0);
     }
     public static void setItemInInventory(int x, int y, int ID){

@@ -203,8 +203,16 @@ public class Hud {
         createButtons();
 
         continueMesh = createCustomHudText("CONTINUE", 1,1,1);
-        toggleVsyncMesh = createCustomHudText("VSYNC", 1,1,1);
+        toggleVsyncMesh = createCustomHudText("VSYNC:ON", 1,1,1);
         quitGameMesh = createCustomHudText("QUIT", 1,1,1);
+    }
+
+    public static void toggleVsyncMesh(){
+        if (isvSync()) {
+            toggleVsyncMesh = createCustomHudText("VSYNC:ON", 1, 1, 1);
+        } else {
+            toggleVsyncMesh = createCustomHudText("VSYNC:OFF", 1, 1, 1);
+        }
     }
 
     private static void createDebugHotbar(){
@@ -2440,6 +2448,10 @@ public class Hud {
                 letterArray[0] = 30;
                 letterArray[1] = 1;
                 break;
+            case ':':
+                letterArray[0] = 31;
+                letterArray[1] = 1;
+                break;
             default: //all unknown end up as "AAAAAAAAAA"  ¯\_(ツ)_/¯
                 break;
         }
@@ -2651,16 +2663,11 @@ public class Hud {
                 clicking = true;
                 playSound("button");
                 if (pauseButtonSelection == 0){
-                    setMouseLocked(!isMouseLocked());
-                    if(!isMouseLocked()) {
-                        glfwSetInputMode(getWindowHandle(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-                    } else{
-                        glfwSetInputMode(getWindowHandle(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
-                        resetMousePosVector();
-                    }
+                    toggleMouseLock();
                     setPaused(false);
                 }else if (pauseButtonSelection == 1) {
                     setVSync(!isvSync());
+                    toggleVsyncMesh();
                 } else if (pauseButtonSelection == 2){
                     glfwSetWindowShouldClose(getWindowHandle(), true);
                 }

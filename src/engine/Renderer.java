@@ -444,7 +444,7 @@ public class Renderer {
 
             {
                 Mesh thisMesh = getToggleVsyncMesh();
-                Matrix4f modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f(-windowScale / 9.5f, windowScale / 50f, 0), new Vector3f(0, 0, 0), new Vector3f(windowScale / 20f, windowScale / 20f, windowScale / 20f));
+                Matrix4f modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f(-windowScale / 4.5f, windowScale / 50f, 0), new Vector3f(0, 0, 0), new Vector3f(windowScale / 20f, windowScale / 20f, windowScale / 20f));
                 hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
                 thisMesh.render();
             }

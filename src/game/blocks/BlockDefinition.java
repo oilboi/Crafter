@@ -658,6 +658,40 @@ public class BlockDefinition {
                 "wood_1",
                 "wood_2"
         );
+
+        //water thing
+        BlockModifier debug = new BlockModifier() {
+            @Override
+            public void onPlace(Vector3f pos) throws Exception {
+                int currentChunkX = (int) (Math.floor((float) pos.x / 16f));
+                int currentChunkZ = (int) (Math.floor((float) pos.z / 16f));
+                int currentPosX = (int) (pos.x - (16 * currentChunkX));
+                int currentPosZ = (int) (pos.z - (16 * currentChunkZ));
+
+                for(int y = 0; y < 128; y++){
+                    setBlock(currentPosX, y, currentPosZ, currentChunkX, currentChunkZ,23);
+                }
+            }
+        };
+
+        new BlockDefinition(
+                23,
+                "debug",
+                true,
+                new int[]{22,0}, //front
+                new int[]{19,0}, //back
+                new int[]{19,0}, //right
+                new int[]{19,0}, //left
+                new int[]{20,0}, //top
+                new int[]{20,0},  //bottom
+                "normal",
+                true,
+                false,
+                true,
+                debug,
+                "",
+                ""
+        );
     }
 
     public static BlockDefinition getID(int ID){

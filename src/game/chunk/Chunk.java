@@ -274,6 +274,29 @@ public class Chunk {
         if (yPillar > 7 || yPillar < 0){
             return;
         }
+        
+        switch (y){
+            case 112:
+            case 96:
+            case 80:
+            case 64:
+            case 48:
+            case 32:
+            case 16:
+                chunkUpdate(chunkX, chunkZ, yPillar-1);
+                break;
+
+
+            case 111:
+            case 95:
+            case 79:
+            case 63:
+            case 47:
+            case 31:
+            case 15:
+                chunkUpdate(chunkX, chunkZ, yPillar+1);
+                break;
+        }
 
         if (x == 15){ //update neighbor
             chunkUpdate(chunkX+1, chunkZ, yPillar);

@@ -162,7 +162,7 @@ public class Crafter {
         }
 
         generateRandomInventory();
-//        tntFillErUp();
+        tntFillErUp();
     }
 
     private static void input(){

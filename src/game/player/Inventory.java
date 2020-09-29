@@ -25,7 +25,7 @@ public class Inventory {
     public static void tntFillErUp(){
         for (int x = 0; x < 9; x++){
             for (int y = 0; y < 4; y++){
-                inventoryNumbers[y][x] = 6;
+                inventoryNumbers[y][x] = 23;
             }
         }
     }

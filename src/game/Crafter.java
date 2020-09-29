@@ -225,22 +225,10 @@ public class Crafter {
                 escapePushed = true;
                 if(isPlayerInventoryOpen()){
                     togglePlayerInventory();
-                    setMouseLocked(!isMouseLocked());
-                    if(!isMouseLocked()) {
-                        glfwSetInputMode(getWindowHandle(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-                    } else{
-                        glfwSetInputMode(getWindowHandle(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
-                        resetMousePosVector();
-                    }
-                } else {
-                    setMouseLocked(!isMouseLocked());
-                    if(!isMouseLocked()) {
-                        glfwSetInputMode(getWindowHandle(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-                    } else{
-                        glfwSetInputMode(getWindowHandle(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
-                        resetMousePosVector();
-                    }
+                    toggleMouseLock();
 
+                } else {
+                    toggleMouseLock();
                     if (isPaused()) {
                         setPaused(false);
                     } else {
@@ -255,25 +243,14 @@ public class Crafter {
 
 
         //prototype clear objects - C KEY
-        if (isKeyPressed(GLFW_KEY_E)) {
+        if (isKeyPressed(GLFW_KEY_E) && !isPaused()) {
             if (!eButtonPushed) {
                 eButtonPushed = true;
                 togglePlayerInventory();
 
-                setMouseLocked(!isMouseLocked());
-                if(!isMouseLocked()) {
-                    glfwSetInputMode(getWindowHandle(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-                } else{
-                    glfwSetInputMode(getWindowHandle(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
-                    resetMousePosVector();
-                }
+                toggleMouseLock();
 
-                setPlayerForward(false);
-                setPlayerBackward(false);
-                setPlayerLeft(false);
-                setPlayerRight(false);
-                setPlayerSneaking(false);
-                setPlayerJump(false);
+                resetPlayerInputs();
             }
         } else if (!isKeyPressed(GLFW_KEY_E)){
             eButtonPushed = false;

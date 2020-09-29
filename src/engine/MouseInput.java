@@ -51,7 +51,6 @@ public class MouseInput {
         glfwSetScrollCallback(getWindowHandle(), (windowHandle, xOffset, yOffset) -> {
             scroll = (float)yOffset;
         });
-
     }
 
     public static Vector2f getMouseDisplVec() {
@@ -110,5 +109,16 @@ public class MouseInput {
 
     public static Vector2d getMousePos(){
         return currentPos;
+    }
+
+    public static void toggleMouseLock(){
+        setMouseLocked(!isMouseLocked());
+
+        if(!isMouseLocked()) {
+            glfwSetInputMode(getWindowHandle(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        } else{
+            glfwSetInputMode(getWindowHandle(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+        }
+        resetMousePosVector();
     }
 }

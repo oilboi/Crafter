@@ -38,6 +38,16 @@ public class Player {
     private static boolean inventoryOpen         = false;
     private static Vector3f worldSelectionPos    = null;
 
+    public static void resetPlayerInputs(){
+        setPlayerForward(false);
+        setPlayerBackward(false);
+        setPlayerLeft(false);
+        setPlayerRight(false);
+        setPlayerSneaking(false);
+        setPlayerJump(false);
+        mining = false;
+        placing = false;
+    }
 
     public static void setPlayerWorldSelectionPos(Vector3f thePos){
         worldSelectionPos = thePos;

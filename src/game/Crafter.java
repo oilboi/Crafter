@@ -226,16 +226,11 @@ public class Crafter {
                 if(isPlayerInventoryOpen()){
                     togglePlayerInventory();
                     toggleMouseLock();
-
                 } else {
                     toggleMouseLock();
-                    if (isPaused()) {
-                        setPaused(false);
-                    } else {
-                        setPaused(true);
-                    }
-
+                    togglePauseMenu();
                 }
+                resetPlayerInputs();
             }
         } else if (!isKeyPressed(GLFW_KEY_ESCAPE)){
             escapePushed = false;
@@ -247,9 +242,7 @@ public class Crafter {
             if (!eButtonPushed) {
                 eButtonPushed = true;
                 togglePlayerInventory();
-
                 toggleMouseLock();
-
                 resetPlayerInputs();
             }
         } else if (!isKeyPressed(GLFW_KEY_E)){

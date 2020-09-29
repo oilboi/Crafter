@@ -2691,4 +2691,8 @@ public class Hud {
             pauseButtonSelection = -1;
         }
     }
+
+    public static void togglePauseMenu(){
+        setPaused(!isPaused());
+    }
 }

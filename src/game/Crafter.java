@@ -32,7 +32,6 @@ public class Crafter {
 
     //variables
     private static int     chunkRenderDistance = 2;
-    private static float   MOUSE_SENSITIVITY   = 0.009f;
     private static boolean fButtonPushed       = false;
     private static boolean rButtonPushed       = false;
     private static boolean tButtonPushed       = false;
@@ -277,28 +276,9 @@ public class Crafter {
     }
 
     private static void gameUpdate() throws Exception {
-
         chunkUpdater();
-        setCameraPosition(getPlayerPosWithEyeHeight().x, getPlayerPosWithEyeHeight().y, getPlayerPosWithEyeHeight().z);
-        moveCameraPosition(getPlayerViewBobbing().x,getPlayerViewBobbing().y, getPlayerViewBobbing().z);
-        //update camera based on mouse
-        Vector2f rotVec = getMouseDisplVec();
-        moveCameraRotation(rotVec.x * MOUSE_SENSITIVITY, rotVec.y * MOUSE_SENSITIVITY, 0);
+        updateCamera();
         testPlayerDiggingAnimation();
-//        limit camera pitch
-        if (getCameraRotation().x < -90f) {
-            moveCameraRotation((90f + getCameraRotation().x) * -1f, 0, 0);
-        }
-        if (getCameraRotation().x > 90f){
-            moveCameraRotation((getCameraRotation().x - 90f) * -1f , 0, 0);
-        }
-        //loop camera yaw
-        if (getCameraRotation().y < -180f){
-            moveCameraRotation(0,360, 0);
-        }
-        if (getCameraRotation().y > 180f){
-            moveCameraRotation(0,-360, 0);
-        }
         playerOnTick();
         updateListenerPosition();
         ItemEntity.onStep();

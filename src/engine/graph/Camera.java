@@ -1,12 +1,18 @@
 package engine.graph;
 
+import org.joml.Vector2f;
 import org.joml.Vector3f;
+
+import static engine.MouseInput.getMouseDisplVec;
+import static game.player.Player.*;
 
 public class Camera {
 
     private static Vector3f position = new Vector3f();
 
     private static Vector3f rotation = new Vector3f();
+
+    private static float   MOUSE_SENSITIVITY   = 0.009f;
 
     public static Vector3f getCameraPosition(){
         return position;
@@ -55,5 +61,28 @@ public class Camera {
         rotationVector.y = (float)Math.sin(Math.toRadians(rotation.x + 180));
         rotationVector.x = xzLen * (float)Math.sin(Math.toRadians(-rotation.y));
         return rotationVector;
+    }
+
+    public static void updateCamera(){
+        setCameraPosition(getPlayerPosWithEyeHeight().x, getPlayerPosWithEyeHeight().y, getPlayerPosWithEyeHeight().z);
+        moveCameraPosition(getPlayerViewBobbing().x,getPlayerViewBobbing().y, getPlayerViewBobbing().z);
+//        update camera based on mouse
+        Vector2f rotVec = getMouseDisplVec();
+        moveCameraRotation(rotVec.x * MOUSE_SENSITIVITY, rotVec.y * MOUSE_SENSITIVITY, 0);
+
+//        limit camera pitch
+        if (getCameraRotation().x < -90f) {
+            moveCameraRotation((90f + getCameraRotation().x) * -1f, 0, 0);
+        }
+        if (getCameraRotation().x > 90f){
+            moveCameraRotation((getCameraRotation().x - 90f) * -1f , 0, 0);
+        }
+//        loop camera yaw
+        if (getCameraRotation().y < -180f){
+            moveCameraRotation(0,360, 0);
+        }
+        if (getCameraRotation().y > 180f){
+            moveCameraRotation(0,-360, 0);
+        }
     }
 }

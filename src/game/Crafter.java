@@ -3,7 +3,6 @@ package game;
 import engine.*;
 import engine.sound.SoundListener;
 import game.chunk.Chunk;
-import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.lwjgl.openal.AL11;
 
@@ -13,7 +12,6 @@ import static game.chunk.Chunk.genBiome;
 import static game.chunk.Chunk.initializeChunkHandler;
 import static game.chunk.ChunkUpdateHandler.chunkUpdater;
 import static engine.Hud.*;
-import static engine.ItemEntity.initializeItemTextureAtlas;
 import static engine.MouseInput.*;
 import static engine.TNTEntity.createTNTEntityMesh;
 import static engine.Timer.*;
@@ -21,7 +19,6 @@ import static engine.Window.*;
 import static engine.graph.Camera.*;
 import static engine.sound.SoundManager.*;
 import static game.chunk.ChunkMesh.generateChunkMesh;
-import static game.chunk.ChunkMesh.initializeChunkTextureAtlas;
 import static engine.Renderer.*;
 import static game.blocks.BlockDefinition.initializeBlocks;
 import static game.player.Inventory.*;
@@ -126,9 +123,7 @@ public class Crafter {
     }
 
     public static void initGame() throws Exception{
-        initializeChunkTextureAtlas();
-        initializeItemTextureAtlas();
-        initializeFontTextureAtlas();
+        initializeHudAtlas();
 
         //this initializes the block definitions
         initializeBlocks();
@@ -162,7 +157,7 @@ public class Crafter {
         }
 
         generateRandomInventory();
-        tntFillErUp();
+//        tntFillErUp();
     }
 
     private static void input(){

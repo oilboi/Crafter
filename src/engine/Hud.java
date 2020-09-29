@@ -84,7 +84,7 @@ public class Hud {
     private static Mesh quitGameMesh;
 
 
-    public static void initializeFontTextureAtlas() throws Exception {
+    public static void initializeHudAtlas() throws Exception {
         fontTextureAtlas = new Texture("textures/font.png");
         hotBar = new Texture("textures/hotbar.png");
         selection = new Texture("textures/hotbar_selected.png");

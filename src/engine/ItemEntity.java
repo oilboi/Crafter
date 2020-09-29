@@ -20,6 +20,14 @@ public class ItemEntity {
     public final static int MAX_ID_AMOUNT = 126_000;
     private static Texture textureAtlas;
 
+    static {
+        try {
+            textureAtlas = new Texture("textures/textureAtlas.png");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private static int totalObjects       = 0;
     //TODO: pseudo object holder
     private static Mesh[] meshStorage  =     new Mesh[MAX_ID_AMOUNT];
@@ -204,10 +212,6 @@ public class ItemEntity {
 
     public static Mesh getItemMeshByBlock(int ID){
         return meshStorage[ID];
-    }
-
-    public static void initializeItemTextureAtlas() throws Exception {
-        textureAtlas = new Texture("textures/textureAtlas.png");
     }
 
     public static void createBlockObjectMesh(int thisBlock) throws Exception {

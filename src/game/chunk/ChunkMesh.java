@@ -13,10 +13,17 @@ import static game.blocks.BlockDefinition.*;
 public class ChunkMesh {
 
     private static Texture textureAtlas;
-    private final static float maxLight = 15;
-    public static void initializeChunkTextureAtlas() throws Exception {
-         textureAtlas = new Texture("textures/textureAtlas.png");
+
+    static {
+        try {
+            textureAtlas = new Texture("textures/textureAtlas.png");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
+
+    private final static float maxLight = 15;
+
     //normal block stuff
     private static float offsetX;
     private static float offsetZ;

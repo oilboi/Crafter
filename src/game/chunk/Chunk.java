@@ -274,7 +274,7 @@ public class Chunk {
         if (yPillar > 7 || yPillar < 0){
             return;
         }
-        
+
         switch (y){
             case 112:
             case 96:

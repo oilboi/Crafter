@@ -39,6 +39,8 @@ public class Crafter {
     private static boolean cButtonPushed       = false;
     private static boolean eButtonPushed       = false;
     private static boolean F11Pushed           = false;
+    private static boolean escapePushed        = false;
+
 
     //core game engine elements
     private static final int TARGET_FPS = 75;
@@ -164,7 +166,7 @@ public class Crafter {
 
     private static void input(){
         mouseInput();
-        if (!isPlayerInventoryOpen()) {
+        if (!isPlayerInventoryOpen() && !isPaused()) {
             if (isKeyPressed(GLFW_KEY_W)) {
                 setPlayerForward(true);
             } else {
@@ -218,14 +220,47 @@ public class Crafter {
             F11Pushed = false;
         }
 
+        if (isKeyPressed(GLFW_KEY_ESCAPE)) {
+            if (!escapePushed) {
+                escapePushed = true;
+                if(isPlayerInventoryOpen()){
+                    togglePlayerInventory();
+                    setMouseLocked(!isMouseLocked());
+                    if(!isMouseLocked()) {
+                        glfwSetInputMode(getWindowHandle(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+                    } else{
+                        glfwSetInputMode(getWindowHandle(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+                        resetMousePosVector();
+                    }
+                } else {
+                    setMouseLocked(!isMouseLocked());
+                    if(!isMouseLocked()) {
+                        glfwSetInputMode(getWindowHandle(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+                    } else{
+                        glfwSetInputMode(getWindowHandle(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+                        resetMousePosVector();
+                    }
+
+                    if (isPaused()) {
+                        setPaused(false);
+                    } else {
+                        setPaused(true);
+                    }
+
+                }
+            }
+        } else if (!isKeyPressed(GLFW_KEY_ESCAPE)){
+            escapePushed = false;
+        }
+
 
         //prototype clear objects - C KEY
         if (isKeyPressed(GLFW_KEY_E)) {
             if (!eButtonPushed) {
                 eButtonPushed = true;
                 togglePlayerInventory();
-                setMouseLocked(!isMouseLocked());
 
+                setMouseLocked(!isMouseLocked());
                 if(!isMouseLocked()) {
                     glfwSetInputMode(getWindowHandle(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
                 } else{
@@ -245,7 +280,7 @@ public class Crafter {
         }
 
 
-        if (!isPlayerInventoryOpen()) {
+        if (!isPlayerInventoryOpen() && !isPaused()) {
             //mouse left button input
             if (isLeftButtonPressed()) {
                 setPlayerMining(true);

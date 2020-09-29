@@ -22,4 +22,19 @@ public class SoundAPI {
 
         playSoundSource(soundBuffer, thisSource);
     }
+
+    public static void playSound(String name) {
+        SoundBuffer soundBuffer = null;
+        try {
+            soundBuffer = new SoundBuffer("sounds/" + name + ".ogg");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        SoundSource thisSource = new SoundSource(false, true);
+
+        thisSource.setBuffer(soundBuffer.getBufferId());
+
+        playSoundSource(soundBuffer, thisSource);
+    }
 }

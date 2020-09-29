@@ -62,9 +62,9 @@ public class Window {
 
         // setup a key callback. it will be called every time a key is pressed, repeated or released.
         glfwSetKeyCallback(windowHandle, (window, key, scancode, action, mods) -> {
-            if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE){
-                glfwSetWindowShouldClose(window, true); //we will detect this in the rendering loop
-            }
+//            if (key == GLFW_KEY_ESCAPE && action == GLFW_RELEASE){
+//                glfwSetWindowShouldClose(window, true); //we will detect this in the rendering loop
+//            }
         });
 
         // make the OpenGL context current
@@ -185,6 +185,11 @@ public class Window {
 
     public static void setVSync(boolean newVSync){
         vSync = newVSync;
+        if (vSync){
+            glfwSwapInterval(1);
+        } else {
+            glfwSwapInterval(0);
+        }
     }
 
     public static void updateWindowTitle(String newTitle){

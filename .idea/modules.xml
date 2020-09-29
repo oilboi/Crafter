@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/lwjgltest.iml" filepath="$PROJECT_DIR$/lwjgltest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Crafter.iml" filepath="$PROJECT_DIR$/Crafter.iml" />
     </modules>
   </component>
 </project>

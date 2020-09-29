@@ -8,15 +8,15 @@ import org.joml.Vector3f;
 
 import java.util.ArrayList;
 
-import static engine.MouseInput.getMousePos;
-import static engine.MouseInput.isLeftButtonPressed;
+import static engine.MouseInput.*;
 import static engine.Renderer.getWindowScale;
 import static engine.Renderer.getWindowSize;
-import static engine.Window.isKeyPressed;
+import static engine.Window.*;
 import static engine.graph.Transformation.buildOrthoProjModelMatrix;
+import static engine.sound.SoundAPI.playSound;
 import static game.player.Inventory.*;
 import static game.player.Player.*;
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_R;
+import static org.lwjgl.glfw.GLFW.*;
 
 public class Hud {
     private final static float scale = 1f;
@@ -37,6 +37,16 @@ public class Hud {
     private static Vector3f versionInfoPos = new Vector3f(-5f,8f,-14f);
     private static Vector3f versionInfoShadowPos = new Vector3f(-4.9f,7.9f,-14f);
 
+    private static boolean paused = false;
+
+    public static boolean isPaused(){
+        return paused;
+    }
+
+    public static void setPaused(boolean truth){
+        paused = truth;
+    }
+
     private static Texture fontTextureAtlas;
     private static Texture hotBar;
     private static Texture selection;
@@ -49,6 +59,7 @@ public class Hud {
     private static Texture button;
     private static Texture buttonSelected;
     private static Texture buttonPushed;
+    private static Texture menuBg;
 
 
     private static Mesh thisHotBarMesh;
@@ -66,6 +77,11 @@ public class Hud {
     private static Mesh buttonMesh;
     private static Mesh buttonSelectedMesh;
     private static Mesh buttonPushedMesh;
+    private static Mesh menuBgMesh;
+
+    private static Mesh continueMesh;
+    private static Mesh toggleVsyncMesh;
+    private static Mesh quitGameMesh;
 
 
     public static void initializeFontTextureAtlas() throws Exception {
@@ -81,6 +97,7 @@ public class Hud {
         button = new Texture("textures/button.png");
         buttonSelected = new Texture("textures/button_selected.png");
         buttonPushed = new Texture("textures/button_pushed.png");
+        menuBg = new Texture("textures/menu_bg.png");
     }
 
     public static Mesh getHotBarMesh(){
@@ -146,7 +163,20 @@ public class Hud {
         return buttonSelectedMesh;
     }
     public static Mesh getButtonPushedMesh(){
-        return buttonSelectedMesh;
+        return buttonPushedMesh;
+    }
+    public static Mesh getMenuBgMesh(){
+        return menuBgMesh;
+    }
+
+    public static Mesh getContinueMesh(){
+        return continueMesh;
+    }
+    public static Mesh getToggleVsyncMesh(){
+        return toggleVsyncMesh;
+    }
+    public static Mesh getQuitGameMesh(){
+        return quitGameMesh;
     }
 
     public static Mesh getInventorySlotMesh(){
@@ -169,6 +199,12 @@ public class Hud {
         createWieldHandMesh();
         createInventorySlot();
         createInventorySlotSelected();
+        createMenuBg();
+        createButtons();
+
+        continueMesh = createCustomHudText("CONTINUE", 1,1,1);
+        toggleVsyncMesh = createCustomHudText("VSYNC", 1,1,1);
+        quitGameMesh = createCustomHudText("QUIT", 1,1,1);
     }
 
     private static void createDebugHotbar(){
@@ -335,6 +371,174 @@ public class Hud {
             textureCoordArray[i] = (float) textureCoord.get(i);
         }
         thisSelectionMesh = new Mesh(positionsArray, lightArray, indicesArray, textureCoordArray, selection);
+    }
+
+    private static void createMenuBg(){
+        ArrayList positions = new ArrayList();
+        ArrayList textureCoord = new ArrayList();
+        ArrayList indices = new ArrayList();
+        ArrayList light = new ArrayList();
+
+
+        int indicesCount = 0;
+
+
+        //front
+        positions.add(0.5f);
+        positions.add(0.5f);
+        positions.add(0f);
+
+        positions.add(-0.5f);
+        positions.add(0.5f);
+        positions.add(0f);
+
+        positions.add(-0.5f);
+        positions.add(-0.5f);
+        positions.add(0f);
+
+        positions.add(0.5f);
+        positions.add(-0.5f);
+        positions.add(0f);
+        //front
+        float frontLight = 1f;//getLight(x, y, z + 1, chunkX, chunkZ) / maxLight;
+
+        //front
+        for (int i = 0; i < 12; i++) {
+            light.add(frontLight);
+        }
+        //front
+        indices.add(0 + indicesCount);
+        indices.add(1 + indicesCount);
+        indices.add(2 + indicesCount);
+        indices.add(0 + indicesCount);
+        indices.add(2 + indicesCount);
+        indices.add(3 + indicesCount);
+
+        indicesCount += 4;
+
+        //-x +x   -y +y
+        // 0  1    2  3
+
+        //front
+        textureCoord.add(1f);//1
+        textureCoord.add(0f);//2
+        textureCoord.add(0f);//0
+        textureCoord.add(0f);//2
+        textureCoord.add(0f);//0
+        textureCoord.add(1f);//3
+        textureCoord.add(1f);//1
+        textureCoord.add(1f);//3
+
+
+        //convert the position objects into usable array
+        float[] positionsArray = new float[positions.size()];
+        for (int i = 0; i < positions.size(); i++) {
+            positionsArray[i] = (float) positions.get(i);
+        }
+
+        //convert the light objects into usable array
+        float[] lightArray = new float[light.size()];
+        for (int i = 0; i < light.size(); i++) {
+            lightArray[i] = (float) light.get(i);
+        }
+
+        //convert the indices objects into usable array
+        int[] indicesArray = new int[indices.size()];
+        for (int i = 0; i < indices.size(); i++) {
+            indicesArray[i] = (int) indices.get(i);
+        }
+
+        //convert the textureCoord objects into usable array
+        float[] textureCoordArray = new float[textureCoord.size()];
+        for (int i = 0; i < textureCoord.size(); i++) {
+            textureCoordArray[i] = (float) textureCoord.get(i);
+        }
+        menuBgMesh = new Mesh(positionsArray, lightArray, indicesArray, textureCoordArray, menuBg);
+    }
+
+    private static void createButtons(){
+        ArrayList positions = new ArrayList();
+        ArrayList textureCoord = new ArrayList();
+        ArrayList indices = new ArrayList();
+        ArrayList light = new ArrayList();
+
+
+        int indicesCount = 0;
+
+
+        //front
+        positions.add(0.5f);
+        positions.add(0.125f);
+        positions.add(0f);
+
+        positions.add(-0.5f);
+        positions.add(0.125f);
+        positions.add(0f);
+
+        positions.add(-0.5f);
+        positions.add(-0.125f);
+        positions.add(0f);
+
+        positions.add(0.5f);
+        positions.add(-0.125f);
+        positions.add(0f);
+        //front
+        float frontLight = 1f;//getLight(x, y, z + 1, chunkX, chunkZ) / maxLight;
+
+        //front
+        for (int i = 0; i < 12; i++) {
+            light.add(frontLight);
+        }
+        //front
+        indices.add(0 + indicesCount);
+        indices.add(1 + indicesCount);
+        indices.add(2 + indicesCount);
+        indices.add(0 + indicesCount);
+        indices.add(2 + indicesCount);
+        indices.add(3 + indicesCount);
+
+        indicesCount += 4;
+
+        //-x +x   -y +y
+        // 0  1    2  3
+
+        //front
+        textureCoord.add(1f);//1
+        textureCoord.add(0f);//2
+        textureCoord.add(0f);//0
+        textureCoord.add(0f);//2
+        textureCoord.add(0f);//0
+        textureCoord.add(1f);//3
+        textureCoord.add(1f);//1
+        textureCoord.add(1f);//3
+
+
+        //convert the position objects into usable array
+        float[] positionsArray = new float[positions.size()];
+        for (int i = 0; i < positions.size(); i++) {
+            positionsArray[i] = (float) positions.get(i);
+        }
+
+        //convert the light objects into usable array
+        float[] lightArray = new float[light.size()];
+        for (int i = 0; i < light.size(); i++) {
+            lightArray[i] = (float) light.get(i);
+        }
+
+        //convert the indices objects into usable array
+        int[] indicesArray = new int[indices.size()];
+        for (int i = 0; i < indices.size(); i++) {
+            indicesArray[i] = (int) indices.get(i);
+        }
+
+        //convert the textureCoord objects into usable array
+        float[] textureCoordArray = new float[textureCoord.size()];
+        for (int i = 0; i < textureCoord.size(); i++) {
+            textureCoordArray[i] = (float) textureCoord.get(i);
+        }
+        buttonMesh = new Mesh(positionsArray, lightArray, indicesArray, textureCoordArray, button);
+        buttonSelectedMesh = new Mesh(positionsArray, lightArray, indicesArray, textureCoordArray, buttonSelected);
+        buttonPushedMesh = new Mesh(positionsArray, lightArray, indicesArray, textureCoordArray, buttonPushed);
     }
 
     private static void createInventorySlot(){
@@ -2356,6 +2560,18 @@ public class Hud {
 
     private static boolean mouseButtonPushed = false;
 
+    private static int pauseButtonSelection;
+
+    public static int getPauseButtonSelection(){
+        return pauseButtonSelection;
+    }
+
+    private static boolean clicking = false;
+
+    public static boolean getIfClicking(){
+        return clicking;
+    }
+
     //todo: redo this mess
     public static void hudOnStepTest(){
 
@@ -2428,7 +2644,51 @@ public class Hud {
                     return;
                 }
             }
+            invSelection = null;
+        } else if (isPaused()){
+
+            if (pauseButtonSelection != -1 && isLeftButtonPressed() && !clicking){
+                clicking = true;
+                playSound("button");
+                if (pauseButtonSelection == 0){
+                    setMouseLocked(!isMouseLocked());
+                    if(!isMouseLocked()) {
+                        glfwSetInputMode(getWindowHandle(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+                    } else{
+                        glfwSetInputMode(getWindowHandle(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+                        resetMousePosVector();
+                    }
+                    setPaused(false);
+                }else if (pauseButtonSelection == 1) {
+                    setVSync(!isvSync());
+                } else if (pauseButtonSelection == 2){
+                    glfwSetWindowShouldClose(getWindowHandle(), true);
+                }
+
+            } else if (!isLeftButtonPressed() && clicking) {
+                clicking = false;
+            }
+
+            //need to create new object or the mouse position gets messed up
+            Vector2d mousePos = new Vector2d(getMousePos());
+
+            //work from the center
+            mousePos.x -= (getWindowSize().x/2f);
+            mousePos.y -= (getWindowSize().y/2f);
+            //invert the Y position to follow rendering coordinate system
+            mousePos.y *= -1f;
+
+            for (int y = 0; y > -3; y --){
+//                Matrix4f modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f(0, (y+1) * getWindowScale()/3f, 0), new Vector3f(0, 0, 0), new Vector3f(windowScale/2f, windowScale/2f, windowScale/2f));
+
+                if (mousePos.x > -(getWindowScale()/2f * 0.5f) && mousePos.x < (getWindowScale()/2f * 0.5f) && //x axis\
+                    mousePos.y > ((y+1) * getWindowScale()/3f) - ((getWindowScale()/2f) * 0.125f) && mousePos.y < ((y+1) * getWindowScale()/3f) + ((getWindowScale()/2f) * 0.125f)) { //y axis
+                    pauseButtonSelection = (y * -1);
+                    return;
+                }
+            }
+
+            pauseButtonSelection = -1;
         }
-        invSelection = null;
     }
 }

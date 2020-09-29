@@ -22,6 +22,14 @@ public class Inventory {
         }
     }
 
+    public static void tntFillErUp(){
+        for (int x = 0; x < 9; x++){
+            for (int y = 0; y < 4; y++){
+                inventoryNumbers[y][x] = 6;
+            }
+        }
+    }
+
     public static void addItemToInventory(int ID){
         for (int y = 0; y < 4; y++) {
             for (int x = 0; x < 9; x++) {

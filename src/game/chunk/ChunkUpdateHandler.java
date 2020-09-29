@@ -53,7 +53,7 @@ public class ChunkUpdateHandler {
             timers[i] += 1;
             if(timers[i] > 50){
 //                System.out.println("Generating chunk mesh: " + (queue[i][0]-chunkRenderDistance) + " " + (queue[i][1]-chunkRenderDistance));
-                generateChunkMesh(queue[i][0]-getChunkRenderDistance(), queue[i][1]-getChunkRenderDistance(), false);
+                generateChunkMesh(queue[i][0]-getChunkRenderDistance(), queue[i][1]-getChunkRenderDistance());
                 removeFromQueue(i);
                 return;
             }

@@ -124,7 +124,7 @@ public class Renderer {
 
                 Mesh thisMesh = getChunkMesh(x,z);
                 if (thisMesh == null) {
-                    System.out.println("wow that doesn't exist!");
+//                    System.out.println("wow that doesn't exist!");
                     continue;
                 }
 
@@ -141,7 +141,7 @@ public class Renderer {
 
                 Mesh thisMesh = getChunkLiquidMesh(x,z);
                 if (thisMesh == null) {
-                    System.out.println("wow that doesn't exist!");
+//                    System.out.println("wow that doesn't exist!");
                     continue;
                 }
 

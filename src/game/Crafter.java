@@ -24,8 +24,7 @@ import static game.chunk.ChunkMesh.generateChunkMesh;
 import static game.chunk.ChunkMesh.initializeChunkTextureAtlas;
 import static engine.Renderer.*;
 import static game.blocks.BlockDefinition.initializeBlocks;
-import static game.player.Inventory.generateRandomInventory;
-import static game.player.Inventory.resetInventory;
+import static game.player.Inventory.*;
 import static game.player.Player.*;
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -47,7 +46,7 @@ public class Crafter {
 
     public static void main(String[] args){
         try{
-            boolean vSync = false;
+            boolean vSync = true;
             Toolkit tk = Toolkit.getDefaultToolkit();
             Dimension d = tk.getScreenSize();
 
@@ -155,11 +154,12 @@ public class Crafter {
         //create chunk meshes
         for (x = -chunkRenderDistance; x <= chunkRenderDistance; x++){
             for (z = -chunkRenderDistance; z<= chunkRenderDistance; z++){
-                generateChunkMesh(x, z, false);
+                generateChunkMesh(x, z);
             }
         }
 
         generateRandomInventory();
+        tntFillErUp();
     }
 
     private static void input(){

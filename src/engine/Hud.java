@@ -2608,13 +2608,12 @@ public class Hud {
 
                         if (getMouseInventory() == null) {
                             setMouseInventory(getItemInInventorySlot(invSelection[0], invSelection[1]));
-                            removeItemFromInventory(invSelection[0], invSelection[1]);
+
+                            removeStackFromInventory(invSelection[0], invSelection[1]);
                         } else {
                             Item bufferItemMouse = getMouseInventory();
                             Item bufferItemInv  = getItemInInventorySlot(invSelection[0], invSelection[1]);
-
                             setItemInInventory(invSelection[0], invSelection[1], bufferItemMouse.name, bufferItemMouse.stack);
-
                             setMouseInventory(bufferItemInv);
                         }
 

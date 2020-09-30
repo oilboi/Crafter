@@ -67,7 +67,7 @@ public class Inventory {
             if (layer2 != null) {
                 String name = layer2.name;
                 if (name != null) {
-                    createItem(name, getPlayerPosWithEyeHeight(), getCameraRotationVector().mul(10f), 1);
+                    createItem(name, getPlayerPosWithEyeHeight(), getCameraRotationVector().mul(10f), test.stack);
                     removeItemFromInventory(getPlayerInventorySelection(), 0);
                 }
             }
@@ -82,6 +82,10 @@ public class Inventory {
         if (inventory[y][x].stack == 0){
             inventory[y][x] = null;
         }
+    }
+
+    public static void removeStackFromInventory(int x, int y){
+        inventory[y][x] = null;
     }
 
     public static Item getItemInInventorySlot(int x, int y){
@@ -103,5 +107,19 @@ public class Inventory {
 
     public static void setMouseInventory(Item newItem){
         mouseInventory = newItem;
+    }
+
+    public static void emptyMouseInventory(){
+        Item test = getMouseInventory();
+        if (test != null) {
+            BlockDefinition layer2 = getBlockDefinition(test.name);
+            if (layer2 != null) {
+                String name = layer2.name;
+                if (name != null) {
+                    createItem(name, getPlayerPosWithEyeHeight(), getCameraRotationVector().mul(10f), 1);
+                    setMouseInventory(null);
+                }
+            }
+        }
     }
 }

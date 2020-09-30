@@ -234,9 +234,11 @@ public class Crafter {
                 if(isPlayerInventoryOpen()){
                     togglePlayerInventory();
                     toggleMouseLock();
+                    emptyMouseInventory();
                 } else {
                     toggleMouseLock();
                     togglePauseMenu();
+                    emptyMouseInventory();
                 }
                 resetPlayerInputs();
             }
@@ -252,6 +254,7 @@ public class Crafter {
                 togglePlayerInventory();
                 toggleMouseLock();
                 resetPlayerInputs();
+                emptyMouseInventory();
             }
         } else if (!isKeyPressed(GLFW_KEY_E)){
             eButtonPushed = false;

@@ -3,7 +3,7 @@ package engine.graph;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
-import static engine.ItemEntity.*;
+import static game.item.ItemEntity.*;
 import static engine.Renderer.getWindowSize;
 import static engine.TNTEntity.getTNTPosition;
 import static engine.TNTEntity.getTNTScale;

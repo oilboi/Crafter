@@ -22,6 +22,10 @@ public class ChunkMesh {
         }
     }
 
+    public static Texture getTextureAtlas(){
+        return textureAtlas;
+    }
+
     private final static float maxLight = 15;
 
     //normal block stuff

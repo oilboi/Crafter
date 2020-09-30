@@ -3,14 +3,13 @@ package engine;
 import engine.graph.*;
 import org.joml.Matrix4f;
 import org.joml.Vector2d;
-import org.joml.Vector2f;
 import org.joml.Vector3f;
 
 import static engine.MouseInput.getMousePos;
 import static engine.graph.Transformation.*;
 import static engine.graph.Transformation.buildOrthoProjModelMatrix;
 import static engine.Hud.*;
-import static engine.ItemEntity.*;
+import static game.item.ItemEntity.*;
 import static engine.TNTEntity.*;
 import static engine.Window.*;
 import static game.chunk.Chunk.*;
@@ -18,7 +17,6 @@ import static game.player.Inventory.getItemInInventorySlot;
 import static game.player.Inventory.getMouseInventorySlot;
 import static game.player.Player.*;
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL14.*;
 
 public class Renderer {
 

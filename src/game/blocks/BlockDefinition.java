@@ -6,8 +6,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static game.chunk.Chunk.setBlock;
-import static engine.ItemEntity.createBlockObjectMesh;
-import static engine.ItemEntity.createItem;
+import static game.item.ItemDefinition.registerItem;
+import static game.item.ItemEntity.createBlockObjectMesh;
+import static game.item.ItemEntity.createItem;
 import static engine.TNTEntity.createTNT;
 import static engine.sound.SoundAPI.playSound;
 
@@ -76,6 +77,7 @@ public class BlockDefinition {
         //TODO: INITIALIZE NEW OBJECT MESH FOR THIS BLOCK
         createBlockObjectMesh(ID);
 
+        registerItem(name, ID);
     }
 
     public static void onDigCall(int ID, Vector3f pos) {
@@ -91,7 +93,7 @@ public class BlockDefinition {
                 }
             }
             if (!blockIDs[ID].digSound.equals("")) {
-                playSound(blockIDs[ID].digSound, pos.add(0.5f, 0.5f, 0.5f));
+                playSound(blockIDs[ID].digSound);
             }
         }
     }
@@ -106,7 +108,7 @@ public class BlockDefinition {
         }
 
         if (!blockIDs[ID].placeSound.equals("")) {
-            playSound(blockIDs[ID].placeSound, pos.add(0.5f, 0.5f, 0.5f));
+            playSound(blockIDs[ID].placeSound);
         }
     }
 

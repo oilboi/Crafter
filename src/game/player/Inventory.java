@@ -1,6 +1,6 @@
 package game.player;
 
-import static engine.ItemEntity.createItem;
+import static game.item.ItemEntity.createItem;
 import static engine.graph.Camera.getCameraRotationVector;
 import static game.player.Player.*;
 

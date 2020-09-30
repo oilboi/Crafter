@@ -3,6 +3,7 @@ package game;
 import engine.*;
 import engine.sound.SoundListener;
 import game.chunk.Chunk;
+import game.item.ItemEntity;
 import org.joml.Vector3f;
 import org.lwjgl.openal.AL11;
 

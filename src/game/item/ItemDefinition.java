@@ -1,230 +1,37 @@
-package engine;
+package game.item;
 
 import engine.graph.Mesh;
 import engine.graph.Texture;
 
-import org.joml.Vector3f;
-
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
-import static engine.FancyMath.*;
-import static engine.sound.SoundAPI.playSound;
 import static game.blocks.BlockDefinition.*;
-import static game.blocks.BlockDefinition.getBottomTexturePoints;
-import static game.collision.Collision.applyInertia;
-import static game.player.Inventory.addItemToInventory;
-import static game.player.Player.getPlayerPosWithCollectionHeight;
+import static game.chunk.ChunkMesh.getTextureAtlas;
 
-public class ItemEntity {
+public class ItemDefinition {
     private final static float itemSize   = 0.4f;
-    public final static int MAX_ID_AMOUNT = 126_000;
-    private static Texture textureAtlas;
+    private final static Map<String, ItemDefinition> definitions = new HashMap<>();
 
-    static {
-        try {
-            textureAtlas = new Texture("textures/textureAtlas.png");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    private final String name;
+    private final boolean block;
+    private final int blockID;
+    private final Mesh mesh;
+
+    public ItemDefinition(String name, int blockID){
+        this.name = name;
+        this.blockID = blockID;
+        this.block = true;
+        this.mesh = createBlockObjectMesh(blockID);
     }
 
-    private static int totalObjects       = 0;
-    //TODO: pseudo object holder
-    private static Mesh[] meshStorage  =     new Mesh[MAX_ID_AMOUNT];
-    private static int[] thisMeshID    =      new int[MAX_ID_AMOUNT];
-    private static Vector3f[] position = new Vector3f[MAX_ID_AMOUNT];
-    private static float[] scale       =    new float[MAX_ID_AMOUNT];
-    private static float[] hover       =    new float[MAX_ID_AMOUNT];
-    private static float[] timer       =    new float[MAX_ID_AMOUNT];
-    private static boolean[] floatUp =    new boolean[MAX_ID_AMOUNT];
-    private static boolean[] exists =    new boolean[MAX_ID_AMOUNT];
-    private static boolean[] collecting =    new boolean[MAX_ID_AMOUNT];
-    private static Vector3f[] rotation = new Vector3f[MAX_ID_AMOUNT];
-    private static Vector3f[] inertia  = new Vector3f[MAX_ID_AMOUNT];
-    public static int getTotalObjects(){
-        return totalObjects;
-    }
-
-    public static void createItem(int blockID, Vector3f pos){
-        thisMeshID[totalObjects] = blockID;
-        position[totalObjects] = new Vector3f(pos);
-        inertia[totalObjects] = new Vector3f(randomForceValue(9f),(float)Math.random()*10f,randomForceValue(9f));
-        rotation[totalObjects] = new Vector3f(0,0,0);
-        floatUp[totalObjects] = true;
-        exists[totalObjects] = true;
-        collecting[totalObjects] = false;
-        scale[totalObjects] = 1f;
-        timer[totalObjects] = 0f;
-        totalObjects++;
-    }
-
-    public static void createItem(int blockID, Vector3f pos, Vector3f newInertia){
-        thisMeshID[totalObjects] = blockID;
-        position[totalObjects] = new Vector3f(pos);
-        inertia[totalObjects] = new Vector3f(newInertia.x,newInertia.y,newInertia.z);
-        rotation[totalObjects] = new Vector3f(0,0,0);
-        floatUp[totalObjects] = true;
-        exists[totalObjects] = true;
-        collecting[totalObjects] = false;
-        scale[totalObjects] = 1f;
-        timer[totalObjects] = 0f;
-        totalObjects++;
-    }
-
-    public static void onStep() throws Exception {
-        for (int i = 0; i < totalObjects; i++){
-            timer[i] += 0.001f;
-
-            //delete items that are too old
-            if (timer[i] > 10f){
-                deleteItem(i);
-            }
-
-            if (itemExists(i) && timer[i] > 3){
-                if (getDistance(position[i], getPlayerPosWithCollectionHeight()) < 3f){
-                    if (!collecting[i]){
-                        playSound("pickup", position[i]);
-                        addItemToInventory(thisMeshID[i]);
-                    }
-                    collecting[i] = true;
-                    Vector3f normalizedPos = new Vector3f(getPlayerPosWithCollectionHeight());
-                    normalizedPos.sub(position[i]).normalize().mul(15f);
-                    inertia[i] = normalizedPos;
-                }
-
-                if (getDistance(position[i], getPlayerPosWithCollectionHeight()) < 0.2f){
-                    deleteItem(i);
-                    continue;
-                }
-            }
-            if (itemExists(i)) {
-                if (collecting[i]) {
-                    applyInertia(position[i], inertia[i], true, itemSize, itemSize * 2, false, false, false, false);
-                } else {
-                    applyInertia(position[i], inertia[i], true, itemSize, itemSize * 2, true, false, true, false);
-                }
-                rotation[i].y += 0.1f;
-                if (floatUp[i]){
-                    hover[i] += 0.00025f;
-                    if (hover[i] >= 0.5f){
-                        floatUp[i] = false;
-                    }
-                } else {
-                    hover[i] -= 0.00025f;
-                    if (hover[i] <= 0.0f){
-                        floatUp[i] = true;
-                    }
-                }
-            }
-
-            if (itemExists(i) && position[i].y < 0){
-                deleteItem(i);
-            }
-        }
+    public static void registerItem(String name, int blockID){
+        definitions.put(name, new ItemDefinition(name, blockID));
     }
 
 
-    private static void deleteItem(int ID){
-        thisMeshID[ID] = 0;
-        position[ID] = null;
-        inertia[ID] = null;
-        rotation[ID] = null;
-        floatUp[ID] = false;
-        collecting[ID] = false;
-        exists[ID] = false;
-        scale[ID] = 0;
-        timer[ID] = 0;
-
-        for ( int i = ID; i < totalObjects; i ++){
-            thisMeshID[i] = thisMeshID[i+1];
-            position[i] = position[i+1];
-            inertia[i] = inertia[i+1];
-            rotation[i] = rotation[i+1];
-            floatUp[i] = floatUp[i+1];
-            exists[i] = exists[i+1];
-            collecting[i] = collecting[i+1];
-            scale[i] = scale[i+1];
-            timer[i] = timer[i+1];
-            hover[i] = hover[i+1];
-        }
-
-        thisMeshID[totalObjects - 1] = 0;
-        position[totalObjects - 1] = null;
-        inertia[totalObjects - 1] = null;
-        rotation[totalObjects - 1] = null;
-        floatUp[totalObjects - 1] = false;
-        collecting[totalObjects - 1] = false;
-        exists[totalObjects - 1] = false;
-        scale[totalObjects - 1] = 0;
-        timer[totalObjects - 1] = 0;
-
-        totalObjects -= 1;
-//        System.out.println("An Item was Deleted. Remaining: " + totalObjects);
-    }
-
-    public static void clearItems(){
-        for (int i = 0; i < totalObjects; i++){
-            if(exists[i]){
-                thisMeshID[i] = 0;
-                position[i] = null;
-                inertia[i] = null;
-                rotation[i] = null;
-                floatUp[i] = false;
-                collecting[i] = false;
-                exists[i] = false;
-                scale[i] = 0;
-                timer[i] = 0;
-            }
-        }
-        totalObjects = 0;
-    }
-
-    public static boolean itemExists(int ID){
-        return exists[ID];
-    }
-
-    public static Vector3f getPosition(int ID){
-        return position[ID];
-    }
-
-    public static Vector3f getPositionWithHover(int ID){
-        return new Vector3f(position[ID].x, position[ID].y + hover[ID], position[ID].z);
-    }
-
-    public static void setPosition(float x, float y, float z, int ID){
-        position[ID].x = x;
-        position[ID].y = y;
-        position[ID].z = z;
-    }
-
-    public static float getScale(int ID){
-        return scale[ID];
-    }
-
-    public static void setScale(float newScale, int ID){
-        scale[ID] = newScale;
-    }
-
-    public static Vector3f getRotation(int ID){
-        return rotation[ID];
-    }
-
-    public static void setRotation(float x, float y, float z, int ID){
-        rotation[ID].x = x;
-        rotation[ID].y = y;
-        rotation[ID].z = z;
-    }
-
-    public static Mesh getItemMesh(int ID){
-        return meshStorage[thisMeshID[ID]];
-    }
-
-    public static Mesh getItemMeshByBlock(int ID){
-        return meshStorage[ID];
-    }
-
-    public static void createBlockObjectMesh(int thisBlock) throws Exception {
-
+    public static Mesh createBlockObjectMesh(int blockID) {
         int indicesCount = 0;
 
         ArrayList positions     = new ArrayList();
@@ -238,11 +45,7 @@ public class ItemEntity {
 
 
 
-        for (float[] thisBlockBox : getBlockShape(thisBlock)) {
-            // 0, 1, 2, 3, 4, 5
-            //-x,-y,-z, x, y, z
-            // 0, 0, 0, 1, 1, 1
-
+        for (float[] thisBlockBox : getBlockShape(blockID)) {
             //front
             positions.add((thisBlockBox[3] - 0.5f) * itemSize);
             positions.add((thisBlockBox[4] - 0.5f) * itemSize + (itemSize/2));
@@ -273,10 +76,7 @@ public class ItemEntity {
             indices.add(3 + indicesCount);
             indicesCount += 4;
 
-            // 0, 1,  2, 3
-            //-x,+x, -y,+y
-
-            float[] textureFront = getFrontTexturePoints(thisBlock);
+            float[] textureFront = getFrontTexturePoints(blockID);
 
             //front
             textureCoord.add(textureFront[1] - ((1-thisBlockBox[3])/32f)); //x positive
@@ -322,15 +122,7 @@ public class ItemEntity {
             indices.add(3 + indicesCount);
             indicesCount += 4;
 
-            float[] textureBack = getBackTexturePoints(thisBlock);
-
-            // 0, 1, 2, 3, 4, 5
-            //-x,-y,-z, x, y, z
-            // 0, 0, 0, 1, 1, 1
-
-            // 0, 1,  2, 3
-            //-x,+x, -y,+y
-
+            float[] textureBack = getBackTexturePoints(blockID);
 
             //back
             textureCoord.add(textureBack[1] - ((1-thisBlockBox[0])/32f));
@@ -378,15 +170,8 @@ public class ItemEntity {
             indicesCount += 4;
 
 
-            // 0, 1, 2, 3, 4, 5
-            //-x,-y,-z, x, y, z
-            // 0, 0, 0, 1, 1, 1
 
-            // 0, 1,  2, 3
-            //-x,+x, -y,+y
-
-
-            float[] textureRight = getRightTexturePoints(thisBlock);
+            float[] textureRight = getRightTexturePoints(blockID);
             //right
             textureCoord.add(textureRight[1] - ((1-thisBlockBox[2])/32f));
             textureCoord.add(textureRight[2] + ((1-thisBlockBox[4])/32f));
@@ -431,7 +216,7 @@ public class ItemEntity {
             indices.add(3 + indicesCount);
             indicesCount += 4;
 
-            float[] textureLeft = getLeftTexturePoints(thisBlock);
+            float[] textureLeft = getLeftTexturePoints(blockID);
             //left
             textureCoord.add(textureLeft[1] - ((1-thisBlockBox[5])/32f));
             textureCoord.add(textureLeft[2] + ((1-thisBlockBox[4])/32f));
@@ -483,7 +268,7 @@ public class ItemEntity {
             // 0, 1,  2, 3
             //-x,+x, -y,+y
 
-            float[] textureTop = getTopTexturePoints(thisBlock);
+            float[] textureTop = getTopTexturePoints(blockID);
             //top
             textureCoord.add(textureTop[1] - ((1-thisBlockBox[5])/32f));
             textureCoord.add(textureTop[2] + ((1-thisBlockBox[0])/32f));
@@ -535,7 +320,7 @@ public class ItemEntity {
             // 0, 1,  2, 3
             //-x,+x, -y,+y
 
-            float[] textureBottom = getBottomTexturePoints(thisBlock);
+            float[] textureBottom = getBottomTexturePoints(blockID);
             //bottom
             textureCoord.add(textureBottom[1] - ((1-thisBlockBox[5])/32f));
             textureCoord.add(textureBottom[2] + ((1-thisBlockBox[0])/32f));
@@ -575,16 +360,7 @@ public class ItemEntity {
             textureCoordArray[i] = (float)textureCoord.get(i);
         }
 
-        Mesh mesh = new Mesh(positionsArray, lightArray, indicesArray, textureCoordArray, textureAtlas);
-
-        meshStorage[thisBlock] = mesh;
+       return new Mesh(positionsArray, lightArray, indicesArray, textureCoordArray, getTextureAtlas());
     }
 
-    public static void cleanUp(){
-        for (Mesh thisMesh : meshStorage){
-            if (thisMesh != null){
-                thisMesh.cleanUp(true);
-            }
-        }
-    }
 }

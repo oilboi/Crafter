@@ -435,14 +435,14 @@ public class Player {
             if (xBobPos >= 200){
                 xPositive = false;
                 yPositive = false;
-                playSound("dirt_" + (int)(Math.ceil(Math.random()*3)), pos);
+                playSound("dirt_" + (int)(Math.ceil(Math.random()*3)));
             }
         } else {
             xBobPos -= 1;
             if (xBobPos <= -200){
                 xPositive = true;
                 yPositive = false;
-                playSound("dirt_"  + (int)(Math.ceil(Math.random()*3)), pos);
+                playSound("dirt_"  + (int)(Math.ceil(Math.random()*3)));
             }
         }
 

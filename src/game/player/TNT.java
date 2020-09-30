@@ -5,7 +5,7 @@ import org.joml.Vector3f;
 import static game.chunk.Chunk.getBlock;
 import static game.chunk.Chunk.setBlock;
 import static engine.FancyMath.getDistance;
-import static engine.ItemEntity.createItem;
+import static game.item.ItemEntity.createItem;
 import static engine.TNTEntity.createTNT;
 //import static game.light.Light.floodFill;
 

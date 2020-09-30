@@ -18,7 +18,12 @@ public class Inventory {
     public static void generateRandomInventory(){
         for (int x = 0; x < 9; x++){
             for (int y = 0; y < 4; y++){
-                inventory[y][x] = new Item(getRandomItemDefinition().name, (int)Math.floor(Math.random() * 65));
+                String thisItem = getRandomItemDefinition().name;
+                if (thisItem.equals("air")){
+                    inventory[y][x] = null;
+                } else {
+                    inventory[y][x] = new Item(thisItem, (int) Math.floor(Math.random() * 65));
+                }
             }
         }
     }

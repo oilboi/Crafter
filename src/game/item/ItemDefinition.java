@@ -366,11 +366,7 @@ public class ItemDefinition {
 
     public static ItemDefinition getRandomItemDefinition(){
         Object[] definitionsArray = definitions.values().toArray();
-
         int thisItem = (int)Math.floor(Math.random() * definitionsArray.length);
-        if (thisItem == 0) {
-            thisItem = 2;
-        }
         return (ItemDefinition)definitionsArray[thisItem];
     }
 

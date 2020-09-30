@@ -18,7 +18,7 @@ public class Transformation {
     private static final Matrix4f orthoMatrix = new Matrix4f();
     private static final Matrix4f orthoModelMatrix = new Matrix4f();
 
-    public static Matrix4f getViewMatrix(){
+    public static final Matrix4f getViewMatrix(){
         Vector3f cameraPos = getCameraPosition();
         Vector3f rotation = getCameraRotation();
         viewMatrix.identity();
@@ -36,16 +36,16 @@ public class Transformation {
         return projectionMatrix;
     }
 
-    public static Matrix4f getEntityModelViewMatrix(int ID, Matrix4f viewMatrix){
-        Vector3f rotation = getRotation(ID);
-        modelViewMatrix.identity().translate(getPositionWithHover(ID)).
-                rotateX((float)Math.toRadians(-rotation.x)).
-                rotateY((float)Math.toRadians(-rotation.y)).
-                rotateZ((float)Math.toRadians(-rotation.z)).
-                scale(getScale(ID));
-        Matrix4f viewCurr = new Matrix4f(viewMatrix);
-        return viewCurr.mul(modelViewMatrix);
-    }
+//    public static Matrix4f getEntityModelViewMatrix(Matrix4f viewMatrix){
+//        Vector3f rotation = getRotation(ID);
+//        modelViewMatrix.identity().translate(getPositionWithHover(ID)).
+//                rotateX((float)Math.toRadians(-rotation.x)).
+//                rotateY((float)Math.toRadians(-rotation.y)).
+//                rotateZ((float)Math.toRadians(-rotation.z)).
+//                scale(getScale(ID));
+//        Matrix4f viewCurr = new Matrix4f(viewMatrix);
+//        return viewCurr.mul(modelViewMatrix);
+//    }
 
     public static Matrix4f getTNTModelViewMatrix(int ID, Matrix4f viewMatrix){
         modelViewMatrix.identity().translate(getTNTPosition(ID)).
@@ -69,11 +69,21 @@ public class Transformation {
         return viewCurr.mul(modelViewMatrix);
     }
 
-    public static  Matrix4f updateGenericViewMatrix(Vector3f position, Vector3f rotation, Matrix4f matrix) {
+    public static Matrix4f updateGenericViewMatrix(Vector3f position, Vector3f rotation, Matrix4f matrix) {
         // First do the rotation so camera rotates over its position
         return matrix.rotationX((float)Math.toRadians(rotation.x))
                 .rotateY((float)Math.toRadians(rotation.y))
                 .translate(-position.x, -position.y, -position.z);
+    }
+
+    public static  Matrix4f updateModelViewMatrix(Vector3f position, Vector3f rotation, Matrix4f matrix) {
+        // First do the rotation so camera rotates over its position
+        modelViewMatrix.identity().identity().translate(position).
+                rotateX((float)Math.toRadians(-rotation.x)).
+                rotateY((float)Math.toRadians(-rotation.y)).
+                rotateZ((float)Math.toRadians(-rotation.z)).
+                scale(1f);
+        return new Matrix4f(matrix).mul(modelViewMatrix);
     }
 
     public static Matrix4f getWorldSelectionViewMatrix(Vector3f position, Matrix4f matrix){

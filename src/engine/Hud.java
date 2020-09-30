@@ -2,6 +2,7 @@ package engine;
 
 import engine.graph.Mesh;
 import engine.graph.Texture;
+import game.item.Item;
 import org.joml.Matrix4f;
 import org.joml.Vector2d;
 import org.joml.Vector3f;
@@ -2570,7 +2571,7 @@ public class Hud {
         return invSelection;
     }
 
-    private static int oldSelection;
+    private static String oldSelection;
 
     private static boolean mouseButtonPushed = false;
 
@@ -2589,9 +2590,9 @@ public class Hud {
     //todo: redo this mess
     public static void hudOnStepTest(){
 
-        if (getItemInInventorySlot(getCurrentInventorySelection(), 0) != oldSelection) {
+        if (!getItemInInventorySlotName(getCurrentInventorySelection(), 0).equals(oldSelection)) {
             resetWieldHandSetupTrigger();
-            oldSelection = getItemInInventorySlot(getCurrentInventorySelection(), 0);
+            oldSelection = getItemInInventorySlotName(getCurrentInventorySelection(), 0);
         }
 
         if (isPlayerInventoryOpen()) {
@@ -2605,15 +2606,16 @@ public class Hud {
                     if (!mouseButtonPushed) {
                         mouseButtonPushed = true;
 
-                        if (getMouseInventorySlot() == 0) {
-                            setMouseInventorySlot(getItemInInventorySlot(invSelection[0], invSelection[1]));
+                        if (getMouseInventory() == null) {
+                            setMouseInventory(getItemInInventorySlot(invSelection[0], invSelection[1]));
                             removeItemFromInventory(invSelection[0], invSelection[1]);
                         } else {
-                            int bufferItemMouse = getMouseInventorySlot();
-                            int bufferItemInv  = getItemInInventorySlot(invSelection[0], invSelection[1]);
-                            setItemInInventory(invSelection[0], invSelection[1], bufferItemMouse);
+                            Item bufferItemMouse = getMouseInventory();
+                            Item bufferItemInv  = getItemInInventorySlot(invSelection[0], invSelection[1]);
 
-                            setMouseInventorySlot(bufferItemInv);
+                            setItemInInventory(invSelection[0], invSelection[1], bufferItemMouse.name, bufferItemMouse.stack);
+
+                            setMouseInventory(bufferItemInv);
                         }
 
                     }
@@ -2638,7 +2640,6 @@ public class Hud {
                             mousePos.x > ((x - 5) * (getWindowScale() / 9.5f)) - ((getWindowScale()/10.5f) / 2f) && mousePos.x < ((x - 5) * (getWindowScale() / 9.5f)) + ((getWindowScale()/10.5f) / 2f) && //x axis
                             mousePos.y > ((y+0.3f) * (getWindowScale() / 9.5f)) - ((getWindowScale()/10.5f) / 2f) && mousePos.y < ((y+0.3f) * (getWindowScale() / 9.5f)) + ((getWindowScale()/10.5f) / 2f) //y axis
                     ){
-//                        System.out.println("mouse colliding with " + (x-1) + " " + ((y*-1) - 1));
                         invSelection[0] = (x-1);
                         invSelection[1] = ((y*-1) - 1);
                         return;
@@ -2652,7 +2653,6 @@ public class Hud {
                         mousePos.x > ((x - 5) * (getWindowScale() / 9.5f)) - ((getWindowScale()/10.5f) / 2f) && mousePos.x < ((x - 5) * (getWindowScale() / 9.5f)) + ((getWindowScale()/10.5f) / 2f) && //x axis
                         mousePos.y > (-0.5f * (getWindowScale() / 9.5f)) - ((getWindowScale()/10.5f) / 2f) && mousePos.y < (-0.5f * (getWindowScale() / 9.5f)) + ((getWindowScale()/10.5f) / 2f) //y axis
                 ){
-//                    System.out.println("mouse colliding with " + (x-1) + " 0");
                     invSelection[0] = (x-1);
                     invSelection[1] = 0;
                     return;

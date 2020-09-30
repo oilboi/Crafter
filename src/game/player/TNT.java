@@ -1,7 +1,10 @@
 package game.player;
 
+import game.blocks.BlockDefinition;
+import jdk.nashorn.internal.ir.Block;
 import org.joml.Vector3f;
 
+import static game.blocks.BlockDefinition.getBlockDefinition;
 import static game.chunk.Chunk.getBlock;
 import static game.chunk.Chunk.setBlock;
 import static engine.FancyMath.getDistance;
@@ -43,7 +46,7 @@ public class TNT {
                             setBlock(currentPosX, y, currentPosZ, currentChunkX, currentChunkZ, (short) 0);
                             //todo: make this an API callback!!
                             if (currentBlock != 0 && currentBlock != 6 && Math.random() > 0.98) {
-                                createItem(currentBlock, new Vector3f(currentPosX+(currentChunkX*16), y, currentPosZ+(currentChunkZ*16)));
+                                createItem(getBlockDefinition(currentBlock).name, new Vector3f(currentPosX+(currentChunkX*16), y, currentPosZ+(currentChunkZ*16)), 1);
                             } else if (currentBlock == 6){
                                 createTNT(new Vector3f(x, y, z), (float)(1f+Math.random()), false);
                             }

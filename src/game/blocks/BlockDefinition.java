@@ -7,7 +7,6 @@ import java.util.Map;
 
 import static game.chunk.Chunk.setBlock;
 import static game.item.ItemDefinition.registerItem;
-import static game.item.ItemEntity.createBlockObjectMesh;
 import static game.item.ItemEntity.createItem;
 import static engine.TNTEntity.createTNT;
 import static engine.sound.SoundAPI.playSound;
@@ -22,24 +21,24 @@ public class BlockDefinition {
     private static final byte atlasSizeY = 32;
 
     //actual block object fields
-    private final int     ID;
-    private final String  name;
-    private final boolean dropsItem;
-    private final float[] frontTexture;  //front
-    private final float[] backTexture;   //back
-    private final float[] rightTexture;  //right
-    private final float[] leftTexture;   //left
-    private final float[] topTexture;    //top
-    private final float[] bottomTexture; //bottom
-    private final boolean walkable;
-    private final boolean steppable;
-    private final boolean isLiquid;
-    private final String drawType;
-    private final String placeSound;
-    private final String digSound;
-    private final BlockModifier blockModifier;
+    public int     ID;
+    public String  name;
+    public boolean dropsItem;
+    public float[] frontTexture;  //front
+    public float[] backTexture;   //back
+    public float[] rightTexture;  //right
+    public float[] leftTexture;   //left
+    public float[] topTexture;    //top
+    public float[] bottomTexture; //bottom
+    public boolean walkable;
+    public boolean steppable;
+    public boolean isLiquid;
+    public String drawType;
+    public String placeSound;
+    public String digSound;
+    public BlockModifier blockModifier;
 
-    private BlockDefinition(
+    public BlockDefinition(
             int ID,String name,
             boolean dropsItem,
             int[] front,
@@ -55,7 +54,7 @@ public class BlockDefinition {
             BlockModifier blockModifier,
             String placeSound,
             String digSound
-    ) throws Exception {
+    ){
 
         this.ID   = ID;
         this.name = name;
@@ -74,8 +73,6 @@ public class BlockDefinition {
         this.placeSound = placeSound;
         this.digSound = digSound;
         blockIDs[ID] = this;
-        //TODO: INITIALIZE NEW OBJECT MESH FOR THIS BLOCK
-        createBlockObjectMesh(ID);
 
         registerItem(name, ID);
     }
@@ -83,7 +80,7 @@ public class BlockDefinition {
     public static void onDigCall(int ID, Vector3f pos) {
         if(blockIDs[ID] != null){
             if(blockIDs[ID].dropsItem){
-                createItem(ID, pos.add(0.5f,0.5f,0.5f));
+                createItem(blockIDs[ID].name, pos.add(0.5f,0.5f,0.5f), 1);
             }
             if(blockIDs[ID].blockModifier != null){
                 try {
@@ -696,8 +693,17 @@ public class BlockDefinition {
         );
     }
 
-    public static BlockDefinition getID(int ID){
+    public static BlockDefinition getBlockDefinition(int ID){
         return blockIDs[ID];
+    }
+
+    public static BlockDefinition getBlockDefinition(String name){
+        for(BlockDefinition thisBlockDefinition : blockIDs){
+            if (thisBlockDefinition.name.equals(name)){
+                return thisBlockDefinition;
+            }
+        }
+        return null;
     }
 
     public static float[] getFrontTexturePoints(int ID){

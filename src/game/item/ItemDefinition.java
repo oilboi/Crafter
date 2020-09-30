@@ -14,15 +14,13 @@ public class ItemDefinition {
     private final static float itemSize   = 0.4f;
     private final static Map<String, ItemDefinition> definitions = new HashMap<>();
 
-    private final String name;
-    private final boolean block;
-    private final int blockID;
-    private final Mesh mesh;
+    public final String name;
+    public final int blockID;
+    public final Mesh mesh;
 
     public ItemDefinition(String name, int blockID){
         this.name = name;
         this.blockID = blockID;
-        this.block = true;
         this.mesh = createBlockObjectMesh(blockID);
     }
 
@@ -30,6 +28,9 @@ public class ItemDefinition {
         definitions.put(name, new ItemDefinition(name, blockID));
     }
 
+    public static ItemDefinition getItemDefinition(String name){
+        return definitions.get(name);
+    }
 
     public static Mesh createBlockObjectMesh(int blockID) {
         int indicesCount = 0;
@@ -363,4 +364,21 @@ public class ItemDefinition {
        return new Mesh(positionsArray, lightArray, indicesArray, textureCoordArray, getTextureAtlas());
     }
 
+    public static ItemDefinition getRandomItemDefinition(){
+        Object[] definitionsArray = definitions.values().toArray();
+
+        int thisItem = (int)Math.floor(Math.random() * definitionsArray.length);
+        if (thisItem == 0) {
+            thisItem = 2;
+        }
+        return (ItemDefinition)definitionsArray[thisItem];
+    }
+
+    public static void cleanUp(){
+        for (ItemDefinition thisDefinition : definitions.values()){
+            if (thisDefinition.mesh != null){
+                thisDefinition.mesh.cleanUp(true);
+            }
+        }
+    }
 }

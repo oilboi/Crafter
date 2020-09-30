@@ -3,6 +3,7 @@ package game;
 import engine.*;
 import engine.sound.SoundListener;
 import game.chunk.Chunk;
+import game.item.ItemDefinition;
 import game.item.ItemEntity;
 import org.joml.Vector3f;
 import org.lwjgl.openal.AL11;
@@ -297,7 +298,7 @@ public class Crafter {
     private static void cleanup(){
         Chunk.cleanUp();
         cleanupSoundManager();
-        ItemEntity.cleanUp();
+        ItemDefinition.cleanUp();
         cleanupRenderer();
     }
 }

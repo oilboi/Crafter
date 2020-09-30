@@ -143,7 +143,7 @@ public class Player {
             handSetUp = true;
         }
 
-        if (getItemInInventorySlot(getPlayerInventorySelection(),0) == 0) {
+        if (getItemInInventorySlot(getPlayerInventorySelection(),0) == null) {
             wieldHandAnimationPos.x = (float) (-5f * Math.sin(Math.pow(diggingAnimation, 0.8f) * Math.PI)) + wieldHandAnimationPosBaseEmpty.x;
             wieldHandAnimationPos.y = (float) (5f * Math.sin(diggingAnimation * 2f * Math.PI)) + wieldHandAnimationPosBaseEmpty.y;
             wieldHandAnimationPos.z = wieldHandAnimationPosBaseEmpty.z;

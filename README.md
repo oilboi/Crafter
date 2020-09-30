@@ -6,10 +6,11 @@ Discord: https://discord.gg/ZfCNFhD
 
 # Todo List:
 1. Make inventory actually work
-2. Break up chunks into 4 chunk sections
-3. Make it so you can drag items around the inventory
-4. Implement crafting with basic craft recipe handling
-5. Re-implement basic lighting
-6. Implement torches
-7. Implement day/night 
+2. Implement crafting with basic craft recipe handling
+3. Re-implement basic lighting
+4. Implement torches
+5. Implement day/night
+6. Implement mobs
+7. Save map to disk
+8. Begin infdev 
 

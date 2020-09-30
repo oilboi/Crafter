@@ -303,6 +303,24 @@ public class Renderer {
                             hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
                             Mesh thisMesh = getItemInInventorySlot(x - 1, ((y * -1) - 1)).definition.mesh;
                             thisMesh.render();
+
+
+
+                            //draw stack numbers
+                            glClear(GL_DEPTH_BUFFER_BIT);
+                            modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f((x - 4.98f) * (windowScale / 9.5f), ((y + 0.28f) * (windowScale / 9.5f)) - (windowScale / 55f), 0), new Vector3f(0, 0, 0), new Vector3f(windowScale / 48, windowScale / 48, windowScale / 48));
+                            hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+                            Mesh thisStackInfo = createCustomHudText(Integer.toString(getItemInInventorySlot(x - 1, ((y * -1) - 1)).stack), 0f, 0f, 0f);
+                            thisStackInfo.render();
+                            thisStackInfo.cleanUp(false);
+
+                            glClear(GL_DEPTH_BUFFER_BIT);
+                            modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f((x - 5) * (windowScale / 9.5f), ((y + 0.3f) * (windowScale / 9.5f)) - (windowScale / 55f), 0), new Vector3f(0, 0, 0), new Vector3f(windowScale / 48, windowScale / 48, windowScale / 48));
+                            hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+                            thisStackInfo = createCustomHudText(Integer.toString(getItemInInventorySlot(x - 1, ((y * -1) - 1)).stack), 1f, 1f, 1f);
+                            thisStackInfo.render();
+                            thisStackInfo.cleanUp(false);
+
                         }
                     }
                 }
@@ -324,6 +342,21 @@ public class Renderer {
                         hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
                         Mesh thisMesh = getItemInInventorySlot(x - 1, 0).definition.mesh;
                         thisMesh.render();
+
+                        glClear(GL_DEPTH_BUFFER_BIT);
+
+                        modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f((x - 4.98f) * (windowScale / 9.5f), ((-0.52f) * (windowScale / 9.5f)) - (windowScale / 55f), 0), new Vector3f(0, 0, 0), new Vector3f(windowScale / 48, windowScale / 48, windowScale / 48));
+                        hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+                        Mesh thisStackInfo = createCustomHudText(Integer.toString(getItemInInventorySlot(x - 1, 0).stack), 0f, 0f, 0f);
+                        thisStackInfo.render();
+                        thisStackInfo.cleanUp(false);
+
+                        glClear(GL_DEPTH_BUFFER_BIT);
+                        modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f((x - 5) * (windowScale / 9.5f), ((-0.5f) * (windowScale / 9.5f)) - (windowScale / 55f), 0), new Vector3f(0, 0, 0), new Vector3f(windowScale / 48, windowScale / 48, windowScale / 48));
+                        hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+                        thisStackInfo = createCustomHudText(Integer.toString(getItemInInventorySlot(x - 1, 0).stack), 1f, 1f, 1f);
+                        thisStackInfo.render();
+                        thisStackInfo.cleanUp(false);
                     }
                 }
                 if (!itemSelected) {
@@ -350,6 +383,21 @@ public class Renderer {
                         Matrix4f modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f((float) mousePos.x, (float) mousePos.y - (windowScale / 55f), 0), new Vector3f(45, 45, 0), new Vector3f(windowScale / 8f, windowScale / 8f, windowScale / 8f));
                         hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
                         thisMesh.render();
+
+                        glClear(GL_DEPTH_BUFFER_BIT);
+
+                        modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f((float) mousePos.x + (windowScale/400f), (float) mousePos.y - (windowScale / 55f) - (windowScale/400f), 0), new Vector3f(0, 0, 0), new Vector3f(windowScale / 48, windowScale / 48, windowScale / 48));
+                        hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+                        Mesh thisStackInfo = createCustomHudText(Integer.toString(getMouseInventory().stack), 0f, 0f, 0f);
+                        thisStackInfo.render();
+                        thisStackInfo.cleanUp(false);
+
+                        glClear(GL_DEPTH_BUFFER_BIT);
+                        modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f((float) mousePos.x, (float) mousePos.y - (windowScale / 55f), 0), new Vector3f(0, 0, 0), new Vector3f(windowScale / 48, windowScale / 48, windowScale / 48));
+                        hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+                        thisStackInfo = createCustomHudText(Integer.toString(getMouseInventory().stack), 1f, 1f, 1f);
+                        thisStackInfo.render();
+                        thisStackInfo.cleanUp(false);
                     }
                 }
             } else {
@@ -398,6 +446,22 @@ public class Renderer {
                         Matrix4f modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f(((x - 5f) * (windowScale / 9.1f)), (float) (-windowSize.y / 2f) + (windowScale / 24f), 0), new Vector3f(45, 45, 0), new Vector3f(windowScale / 8f, windowScale / 8f, windowScale / 8f));
                         hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
                         thisMesh.render();
+
+
+                        glClear(GL_DEPTH_BUFFER_BIT);
+
+                        modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f(((x - 4.98f) * (windowScale / 9.1f)), (float) (-windowSize.y / 2f) + (windowScale / 26f), 0), new Vector3f(0, 0, 0), new Vector3f(windowScale / 48, windowScale / 48, windowScale / 48));
+                        hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+                        Mesh thisStackInfo = createCustomHudText(Integer.toString(getItemInInventorySlot(x - 1, 0).stack), 0f, 0f, 0f);
+                        thisStackInfo.render();
+                        thisStackInfo.cleanUp(false);
+
+                        glClear(GL_DEPTH_BUFFER_BIT);
+                        modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f(((x - 5f) * (windowScale / 9.1f)), (float) (-windowSize.y / 2f) + (windowScale / 24f), 0), new Vector3f(0, 0, 0), new Vector3f(windowScale / 48, windowScale / 48, windowScale / 48));
+                        hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+                        thisStackInfo = createCustomHudText(Integer.toString(getItemInInventorySlot(x - 1, 0).stack), 1f, 1f, 1f);
+                        thisStackInfo.render();
+                        thisStackInfo.cleanUp(false);
                     }
                 }
 

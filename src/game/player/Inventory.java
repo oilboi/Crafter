@@ -78,7 +78,10 @@ public class Inventory {
     }
 
     public static void removeItemFromInventory(int x, int y){
-        inventory[y][x] = null;
+        inventory[y][x].stack--;
+        if (inventory[y][x].stack == 0){
+            inventory[y][x] = null;
+        }
     }
 
     public static Item getItemInInventorySlot(int x, int y){

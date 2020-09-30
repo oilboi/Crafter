@@ -22,7 +22,11 @@ public class Inventory {
                 if (thisItem.equals("air")){
                     inventory[y][x] = null;
                 } else {
-                    inventory[y][x] = new Item(thisItem, (int) Math.floor(Math.random() * 65));
+                    int thisAmount = (int) Math.floor(Math.random() * 65);
+                    if (thisAmount == 0){
+                        thisAmount = 1;
+                    }
+                    inventory[y][x] = new Item(thisItem, thisAmount);
                 }
             }
         }
@@ -84,7 +88,7 @@ public class Inventory {
 
     public static void removeItemFromInventory(int x, int y){
         inventory[y][x].stack--;
-        if (inventory[y][x].stack == 0){
+        if (inventory[y][x].stack <= 0){
             inventory[y][x] = null;
         }
     }
@@ -121,7 +125,7 @@ public class Inventory {
             if (layer2 != null) {
                 String name = layer2.name;
                 if (name != null) {
-                    createItem(name, getPlayerPosWithEyeHeight(), getCameraRotationVector().mul(10f), 1);
+                    createItem(name, getPlayerPosWithEyeHeight(), getCameraRotationVector().mul(10f), test.stack);
                     setMouseInventory(null);
                 }
             }

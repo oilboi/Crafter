@@ -39,7 +39,7 @@ public class Ray {
 
                 setBlockBox((int)lastPos.x,(int)lastPos.y,(int)lastPos.z, getBlockShape(1)[0]);
 
-                if (!wouldCollidePlacing() && getItemInInventorySlot(getPlayerInventorySelection(),0) != null) {
+                if (!wouldCollidePlacing() && getItemInInventorySlot(getPlayerInventorySelection(),0) != null && !getItemInInventorySlot(getPlayerInventorySelection(),0).definition.isTool) {
                     placeBlock(lastPos, getItemInInventorySlot(getPlayerInventorySelection(),0).definition.blockID);
                 }
             }

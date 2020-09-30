@@ -22,17 +22,20 @@ public class ItemDefinition {
     public final String name;
     public final int blockID;
     public final Mesh mesh;
+    public final boolean isTool;
 
     public ItemDefinition(String name, int blockID){
         this.name = name;
         this.blockID = blockID;
         this.mesh = createBlockObjectMesh(blockID);
+        this.isTool = false;
     }
 
     public ItemDefinition(String name, String texturePath){
         this.name = name;
         this.blockID = -1;
         this.mesh = createItemObjectMesh(texturePath);
+        this.isTool = true;
     }
 
     public static void registerItem(String name, int blockID){

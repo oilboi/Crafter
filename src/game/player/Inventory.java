@@ -32,6 +32,15 @@ public class Inventory {
             }
         }
     }
+
+    public static void createToolDebugInventory(){
+        for (int x = 0; x < 9; x++){
+            for (int y = 0; y < 4; y++) {
+                inventory[y][x] = new Item("stone_pickaxe", 5);
+            }
+        }
+    }
+
     public static void resetInventory(){
         for (int x = 0; x < 9; x++){
             for (int y = 0; y < 4; y++){

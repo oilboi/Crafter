@@ -36,31 +36,31 @@ public class ItemEntity {
             thisItem.timer += 0.001f;
 
             //delete items that are too old
-//            if (thisItem.timer > 10f){
-//                items.remove(thisItem.ID);
-//                return;
-//            }
+            if (thisItem.timer > 10f){
+                items.remove(thisItem.ID);
+                return;
+            }
 
-//            if (thisItem.timer > 3){
-//                if (getDistance(thisItem.pos, getPlayerPosWithCollectionHeight()) < 3f){
-//                    if (!thisItem.collecting){
-//                        if (addItemToInventory(thisItem.name)) {
-//                            playSound("pickup");
-//                            thisItem.collecting = true;
-//                        }
-//                    }
-//                    if (thisItem.collecting) {
-//                        Vector3f normalizedPos = new Vector3f(getPlayerPosWithCollectionHeight());
-//                        normalizedPos.sub(thisItem.pos).normalize().mul(15f);
-//                        thisItem.inertia = normalizedPos;
-//                    }
-//                }
-//
-//                if (getDistance(thisItem.pos, getPlayerPosWithCollectionHeight()) < 0.2f){
-//                    items.remove(thisItem.ID);
-//                    return;
-//                }
-//            }
+            if (thisItem.timer > 3){
+                if (getDistance(thisItem.pos, getPlayerPosWithCollectionHeight()) < 3f){
+                    if (!thisItem.collecting){
+                        if (addItemToInventory(thisItem.name)) {
+                            playSound("pickup");
+                            thisItem.collecting = true;
+                        }
+                    }
+                    if (thisItem.collecting) {
+                        Vector3f normalizedPos = new Vector3f(getPlayerPosWithCollectionHeight());
+                        normalizedPos.sub(thisItem.pos).normalize().mul(15f);
+                        thisItem.inertia = normalizedPos;
+                    }
+                }
+
+                if (getDistance(thisItem.pos, getPlayerPosWithCollectionHeight()) < 0.2f){
+                    items.remove(thisItem.ID);
+                    return;
+                }
+            }
 
             if (thisItem.collecting) {
                 applyInertia(thisItem.pos, thisItem.inertia, false, itemSize, itemSize * 2, false, false, false, false);

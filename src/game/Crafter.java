@@ -23,6 +23,7 @@ import static engine.sound.SoundManager.*;
 import static game.chunk.ChunkMesh.generateChunkMesh;
 import static engine.Renderer.*;
 import static game.blocks.BlockDefinition.initializeBlocks;
+import static game.item.ItemRegistration.registerTools;
 import static game.player.Inventory.*;
 import static game.player.Player.*;
 import static org.lwjgl.glfw.GLFW.*;
@@ -139,6 +140,8 @@ public class Crafter {
         setAttenuationModel(AL11.AL_LINEAR_DISTANCE);
         setListener(new SoundListener(new Vector3f()));
         createHud();
+
+        registerTools();
 
         //create the initial map in memory
         int x;

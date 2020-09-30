@@ -2,6 +2,7 @@ package game.player;
 
 import game.blocks.BlockDefinition;
 import game.item.Item;
+import game.item.ItemDefinition;
 
 import static game.blocks.BlockDefinition.getBlockDefinition;
 import static game.item.ItemDefinition.getRandomItemDefinition;
@@ -72,7 +73,7 @@ public class Inventory {
     public static void throwItem(){
         Item test = getItemInInventorySlot(getPlayerInventorySelection(), 0);
         if (test != null) {
-            BlockDefinition layer2 = getBlockDefinition(test.name);
+            ItemDefinition layer2 = test.definition;
             if (layer2 != null) {
                 String name = layer2.name;
                 if (name != null) {

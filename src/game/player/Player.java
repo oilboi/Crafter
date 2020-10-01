@@ -13,27 +13,21 @@ import static game.player.Ray.rayCast;
 
 
 public class Player {
-    private static int renderDistance            = getChunkRenderDistance();
     private static Vector3f pos                  = new Vector3f(0,53,0);
-    private static int[] blockPos                = {0,50,0};
-    private static int[] oldBlockPos             = {0,50,0};
-    private static float eyeHeight               = 1.5f;
-    private static float collectionHeight        = 0.7f;
-    private static Vector3f inertia              = new Vector3f(0,0,0);
-    private static float height                  = 1.9f;
-    private static float width                   = 0.3f;
-    private static int[] currentChunk            = {0,0};
+    private static final float eyeHeight               = 1.5f;
+    private static final float collectionHeight        = 0.7f;
+    private static final Vector3f inertia              = new Vector3f(0,0,0);
+    private static final float height                  = 1.9f;
+    private static final float width                   = 0.3f;
     private static boolean onGround              =  false;
-    private static boolean jumpBuffer            = false;
     private static boolean mining                = false;
     private static float mineTimer               = 0;
     private static boolean placing               = false;
     private static float placeTimer              = 0;
-    private static Vector3f oldPos               = new Vector3f(0,0,0);
-    private static float accelerationMultiplier  = 0.07f;
-    private static String name                   = "singleplayer";
+    private static final float accelerationMultiplier  = 0.07f;
+    private static final String name                   = "singleplayer";
     private static boolean sneaking              = false;
-    private static Vector3f viewBobbing          = new Vector3f(0,0,0);
+    private static final Vector3f viewBobbing          = new Vector3f(0,0,0);
     private static int currentInventorySelection = 0;
     private static boolean inventoryOpen         = false;
     private static Vector3f worldSelectionPos    = null;
@@ -416,7 +410,7 @@ public class Player {
             rayCast(getCameraPosition(), getCameraRotationVector(), 4f,  false, false);
         }
 
-        oldPos = new Vector3f(pos);
+        Vector3f oldPos = new Vector3f(pos);
 
         if(playerIsMoving() && !sneaking){
             applyViewBobbing();

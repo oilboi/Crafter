@@ -11,7 +11,6 @@ import org.lwjgl.openal.AL11;
 import java.awt.*;
 
 import static game.chunk.Chunk.genBiome;
-import static game.chunk.Chunk.initializeChunkHandler;
 import static game.chunk.ChunkUpdateHandler.chunkUpdater;
 import static engine.Hud.*;
 import static engine.MouseInput.*;
@@ -43,44 +42,33 @@ public class Crafter {
 
     //core game engine elements
     private static final int TARGET_FPS = 75;
-    private static final int TARGET_UPS = 60; //TODO: IMPLEMENT THIS PROPERLY
 
     public static void main(String[] args){
         try{
             boolean vSync = true;
             Toolkit tk = Toolkit.getDefaultToolkit();
             Dimension d = tk.getScreenSize();
-
-            runGameEngine("Crafter Pre-Alpha 0.01", d.width/2,d.height/2,vSync);
-
-        } catch ( Exception excp ){
-            excp.printStackTrace();
-            System.exit(-1);
-        }
-    }
-
-    //the game engine elements //todo ------------------------------------------------------------------------------------ START
-
-    public static void runGameEngine(String windowTitle, int width, int height, boolean vSync){
-        try{
-            initWindow(windowTitle, width, height, vSync);
+            
+            initWindow("Crafter Pre-Alpha 0.01", d.width/2,d.height/2,vSync);
             initRenderer();
             initMouseInput();
             initSoundManager();
             initGame();
             gameLoop();
 
-        } catch (Exception excp){
+        } catch ( Exception excp ){
             excp.printStackTrace();
+            System.exit(-1);
         } finally {
             cleanup();
         }
     }
 
+    //the game engine elements //todo ------------------------------------------------------------------------------------ START
+
     private static void gameLoop() throws Exception {
         double elapsedTime;
         double accumulator = 0d;
-//        float interval = 1f / TARGET_UPS;
 
         boolean running = true;
 
@@ -130,9 +118,6 @@ public class Crafter {
 
         //this initializes the block definitions
         initializeBlocks();
-
-        //this creates arrays for the engine to handle the objects
-        initializeChunkHandler(chunkRenderDistance);
 
         //this creates a TNT mesh (here for now)
         createTNTEntityMesh();

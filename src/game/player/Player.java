@@ -31,6 +31,7 @@ public class Player {
     private static boolean inventoryOpen         = false;
     private static Vector3f worldSelectionPos    = null;
     private static final int[] currentChunk = {0,0};
+    private static int sneakOffset = 0;
 
     public static void resetPlayerInputs(){
         setPlayerForward(false);
@@ -41,6 +42,10 @@ public class Player {
         setPlayerJump(false);
         mining = false;
         placing = false;
+    }
+
+    public static float getSneakOffset(){
+        return sneakOffset / 900f;
     }
 
     public static void setPlayerWorldSelectionPos(Vector3f thePos){
@@ -384,8 +389,6 @@ public class Player {
 
         onGround = applyInertia(pos, inertia, true, width, height,true, sneaking, true, true);
 
-
-
         if(mining && mineTimer <= 0) {
             rayCast(getCameraPosition(), getCameraRotationVector(), 4f,  true, false);
             mineTimer = 0.5f;
@@ -403,6 +406,15 @@ public class Player {
             returnPlayerViewBobbing();
         }
 
+        if (sneaking){
+            if (sneakOffset > -100) {
+                sneakOffset -= 1;
+            }
+        } else {
+            if (sneakOffset < 0) {
+                sneakOffset += 1;
+            }
+        }
     }
     private static boolean xPositive = true;
     private static boolean yPositive = true;

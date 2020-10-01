@@ -64,11 +64,7 @@ public class Camera {
     }
 
     public static void updateCamera(){
-        if (isPlayerSneaking()) {
-            setCameraPosition(getPlayerPosWithEyeHeight().x, getPlayerPosWithEyeHeight().y - 0.125f, getPlayerPosWithEyeHeight().z);
-        } else {
-            setCameraPosition(getPlayerPosWithEyeHeight().x, getPlayerPosWithEyeHeight().y, getPlayerPosWithEyeHeight().z);
-        }
+        setCameraPosition(getPlayerPosWithEyeHeight().x, getPlayerPosWithEyeHeight().y + getSneakOffset(), getPlayerPosWithEyeHeight().z);
         moveCameraPosition(getPlayerViewBobbing().x,getPlayerViewBobbing().y, getPlayerViewBobbing().z);
 
 //        update camera based on mouse

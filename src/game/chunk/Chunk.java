@@ -39,6 +39,23 @@ public class Chunk {
         thisChunk.mesh[yHeight] = newMesh;
     }
 
+    public static boolean chunkStackContainsBlock(int chunkX, int chunkZ, int yHeight){
+        ChunkObject thisChunk = map.get(chunkX + " " + chunkZ);
+        if (thisChunk.block == null){
+            return false;
+        }
+        for (int y = yHeight * 16; y < (yHeight+1) * 16; y++) {
+            for (int x = 0; x < 16; x++) {
+                for (int z = 0; z < 16; z++) {
+                    if (thisChunk.block[y][x][z] != 0){
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
     public static void setChunkLiquidMesh(int chunkX, int chunkZ, int yHeight, Mesh newMesh){
         ChunkObject thisChunk = map.get(chunkX + " " + chunkZ);
         if (thisChunk == null){

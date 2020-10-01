@@ -2,14 +2,11 @@ package engine;
 
 import engine.graph.*;
 import game.item.Item;
-import game.item.ItemEntity;
 import org.joml.Matrix4f;
 import org.joml.Vector2d;
 import org.joml.Vector3f;
 
 import java.util.Collection;
-import java.util.Iterator;
-import java.util.Map;
 
 import static engine.MouseInput.getMousePos;
 import static engine.graph.Transformation.*;
@@ -17,7 +14,7 @@ import static engine.graph.Transformation.buildOrthoProjModelMatrix;
 import static engine.Hud.*;
 import static game.item.ItemDefinition.getItemDefinition;
 import static game.item.ItemEntity.*;
-import static engine.TNTEntity.*;
+import static game.tnt.TNTEntity.*;
 import static engine.Window.*;
 import static game.chunk.Chunk.*;
 import static game.player.Inventory.*;

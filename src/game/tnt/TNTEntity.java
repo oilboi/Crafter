@@ -75,7 +75,7 @@ public class TNTEntity {
 
             if (tntTimer[i] > 2.6f){
 
-                boom((int)tntPos[i].x, (int)tntPos[i].y, (int)tntPos[i].z, 5);
+                boom(tntPos[i], 5);
 
 //                soundMgr.playSoundSource(Crafter.Sounds.TNT.toString());
                 playSound("tnt_explode", tntPos[i]);

@@ -3,10 +3,9 @@ package engine.graph;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
-import static game.item.ItemEntity.*;
 import static engine.Renderer.getWindowSize;
-import static engine.TNTEntity.getTNTPosition;
-import static engine.TNTEntity.getTNTScale;
+import static game.tnt.TNTEntity.getTNTPosition;
+import static game.tnt.TNTEntity.getTNTScale;
 import static engine.graph.Camera.getCameraPosition;
 import static engine.graph.Camera.getCameraRotation;
 

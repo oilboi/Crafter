@@ -6,6 +6,7 @@ import java.lang.Math;
 
 import static engine.graph.Camera.*;
 import static engine.sound.SoundAPI.playSound;
+import static game.chunk.Chunk.generateNewChunks;
 import static game.collision.Collision.applyInertia;
 import static game.player.Inventory.getItemInInventorySlot;
 import static game.player.Ray.rayCast;
@@ -30,8 +31,8 @@ public class Player {
     private static int currentInventorySelection = 0;
     private static boolean inventoryOpen         = false;
     private static Vector3f worldSelectionPos    = null;
-    private static final int[] currentChunk = {0,0};
     private static int sneakOffset = 0;
+    private static final int[] currentChunk = {0,0};
 
     public static void resetPlayerInputs(){
         setPlayerForward(false);
@@ -414,6 +415,30 @@ public class Player {
             if (sneakOffset < 0) {
                 sneakOffset += 1;
             }
+        }
+
+        int newChunkX = (int)Math.floor(pos.x / 16f);
+        int newChunkZ = (int)Math.floor(pos.z / 16f);
+
+        if (newChunkX != currentChunk[0] || newChunkZ != currentChunk[1]) {
+            if (newChunkX < currentChunk[0]) {
+                System.out.println("chunk update -x");
+                generateNewChunks(currentChunk[0], currentChunk[1], -1, 0);
+            }
+            if (newChunkX > currentChunk[0]) {
+                System.out.println("chunk update +x");
+                generateNewChunks(currentChunk[0], currentChunk[1], 1, 0);
+            }
+            if (newChunkZ < currentChunk[1]) {
+                System.out.println("chunk update -z");
+                generateNewChunks(currentChunk[0], currentChunk[1], 0, -1);
+            }
+            if (newChunkZ > currentChunk[1]) {
+                System.out.println("chunk update +z");
+                generateNewChunks(currentChunk[0], currentChunk[1], 0, 1);
+            }
+            currentChunk[0] = newChunkX;
+            currentChunk[1] = newChunkZ;
         }
     }
     private static boolean xPositive = true;

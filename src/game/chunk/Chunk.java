@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import static game.Crafter.getChunkRenderDistance;
 import static game.chunk.ChunkUpdateHandler.chunkUpdate;
 
 public class Chunk {
@@ -178,6 +179,64 @@ public class Chunk {
         }
         if (z == 0){
             chunkUpdate(chunkX, chunkZ-1, yPillar);
+        }
+    }
+
+    private static void fullNeighborUpdate(int chunkX, int chunkZ){
+        for (int y = 0; y < 8; y++){
+            chunkUpdate(chunkX+1, chunkZ, y);
+            chunkUpdate(chunkX-1, chunkZ, y);
+            chunkUpdate(chunkX, chunkZ+1, y);
+            chunkUpdate(chunkX, chunkZ-1, y);
+        }
+    }
+
+
+    public static void generateNewChunks(int currentChunkX, int currentChunkZ, int dirX, int dirZ){
+
+        if (dirX != 0){
+            for (int z = -getChunkRenderDistance() + currentChunkZ; z < getChunkRenderDistance() + currentChunkZ; z++){
+                if (map.get((currentChunkX + (getChunkRenderDistance() * dirX)) + " " + z) == null) {
+                    genBiome(currentChunkX + (getChunkRenderDistance() * dirX), z);
+                    for (int y = 0; y < 8; y++) {
+                        chunkUpdate(currentChunkX + (getChunkRenderDistance() * dirX), z, y);
+                    }
+                    fullNeighborUpdate(currentChunkX + (getChunkRenderDistance() * dirX), z);
+                }
+            }
+        } else if (dirZ != 0){
+            for (int x = -getChunkRenderDistance() + currentChunkX; x < getChunkRenderDistance() + currentChunkX; x++){
+                if (map.get( x + " " + (currentChunkZ + (getChunkRenderDistance() * dirZ))) == null) {
+                    genBiome(x, currentChunkZ + (getChunkRenderDistance() * dirZ));
+                    for (int y = 0; y < 8; y++) {
+                        chunkUpdate(x, currentChunkZ + (getChunkRenderDistance() * dirZ), y);
+                    }
+                    fullNeighborUpdate(x, currentChunkZ + (getChunkRenderDistance() * dirZ));
+                }
+            }
+        }
+
+        deleteOldChunks(currentChunkX+dirX, currentChunkZ+dirZ);
+    }
+
+    private static void deleteOldChunks(int chunkX, int chunkZ){
+        HashMap<Integer, String> deletionQueue = new HashMap<>();
+        int queueCounter = 0;
+        for (ChunkObject thisChunk : map.values()){
+            if (Math.abs(thisChunk.z - chunkZ) > getChunkRenderDistance() || Math.abs(thisChunk.x - chunkX) > getChunkRenderDistance()){
+                if (thisChunk.mesh != null){
+                    for (int y = 0; y < 8; y++) {
+                        if (thisChunk.mesh[y] != null){
+                            thisChunk.mesh[y].cleanUp(false);
+                        }
+                    }
+                }
+                deletionQueue.put(queueCounter, thisChunk.x + " " + thisChunk.z);
+                queueCounter++;
+            }
+        }
+        for (String thisString : deletionQueue.values()){
+            map.remove(thisString);
         }
     }
 

@@ -35,7 +35,7 @@ public class Ray {
                 setAABB(getPlayerPos().x, getPlayerPos().y, getPlayerPos().z, getPlayerWidth(), getPlayerHeight());
                 setBlockBox((int)lastPos.x,(int)lastPos.y,(int)lastPos.z, getBlockShape(1)[0]); //TODO: make this check the actual block shapes
                 if (!wouldCollidePlacing() && getItemInInventorySlot(getPlayerInventorySelection(),0) != null && !getItemInInventorySlot(getPlayerInventorySelection(),0).definition.isTool) {
-                    placeBlock(lastPos, getItemInInventorySlot(getPlayerInventorySelection(),0).definition.blockID);
+                    rayPlaceBlock(lastPos, getItemInInventorySlot(getPlayerInventorySelection(),0).definition.blockID);
                 }
             }
             else {
@@ -52,11 +52,11 @@ public class Ray {
         if (thisBlock < 0){
             return;
         }
-        setBlock((int)flooredPos.x, (int)flooredPos.y, (int)flooredPos.z, 0);
+        digBlock((int)flooredPos.x, (int)flooredPos.y, (int)flooredPos.z);
         onDigCall(thisBlock, flooredPos);
     }
-    private static void placeBlock(Vector3f flooredPos, int ID) {
-        setBlock((int)flooredPos.x, (int)flooredPos.y, (int)flooredPos.z, ID);
+    private static void rayPlaceBlock(Vector3f flooredPos, int ID) {
+        placeBlock((int)flooredPos.x, (int)flooredPos.y, (int)flooredPos.z, ID);
         onPlaceCall(ID, flooredPos);
         removeItemFromInventory(getCurrentInventorySelection(), 0);
     }

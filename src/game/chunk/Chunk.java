@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static game.Crafter.getChunkRenderDistance;
+import static game.chunk.ChunkMesh.generateChunkMesh;
 import static game.chunk.ChunkUpdateHandler.chunkUpdate;
 
 public class Chunk {
@@ -124,6 +125,52 @@ public class Chunk {
         updateNeighbor(chunkX, chunkZ,blockX,y,blockZ);
     }
 
+    public static void digBlock(int x,int y,int z){
+        if (y > 127 || y < 0){
+            return;
+        }
+        int yPillar = (int)Math.floor(y/16f);
+        int chunkX = (int)Math.floor(x/16f);
+        int chunkZ = (int)Math.floor(z/16f);
+        int blockX = (int)(x - (16f*chunkX));
+        int blockZ = (int)(z - (16f*chunkZ));
+        String key = chunkX + " " + chunkZ;
+        ChunkObject thisChunk = map.get(key);
+
+        if (thisChunk == null){
+            return;
+        }
+        if (thisChunk.block == null){
+            return;
+        }
+        thisChunk.block[y][blockX][blockZ] = 0;
+        generateChunkMesh(chunkX,chunkZ,yPillar);//instant update
+        instantUpdateNeighbor(chunkX, chunkZ,blockX,y,blockZ);//instant update
+    }
+
+    public static void placeBlock(int x,int y,int z, int ID){
+        if (y > 127 || y < 0){
+            return;
+        }
+        int yPillar = (int)Math.floor(y/16f);
+        int chunkX = (int)Math.floor(x/16f);
+        int chunkZ = (int)Math.floor(z/16f);
+        int blockX = (int)(x - (16f*chunkX));
+        int blockZ = (int)(z - (16f*chunkZ));
+        String key = chunkX + " " + chunkZ;
+        ChunkObject thisChunk = map.get(key);
+
+        if (thisChunk == null){
+            return;
+        }
+        if (thisChunk.block == null){
+            return;
+        }
+        thisChunk.block[y][blockX][blockZ] = ID;
+        generateChunkMesh(chunkX,chunkZ,yPillar);//instant update
+        instantUpdateNeighbor(chunkX, chunkZ,blockX,y,blockZ);//instant update
+    }
+
     public static byte getLight(int x,int y,int z){
         if (y > 127 || y < 0){
             return 0;
@@ -141,6 +188,45 @@ public class Chunk {
             return 0;
         }
         return thisChunk.light[y][blockX][blockZ];
+    }
+
+    private static void instantUpdateNeighbor(int chunkX, int chunkZ, int x, int y, int z){
+        if (y > 127 || y < 0){
+            return;
+        }
+        int yPillar = (int)Math.floor(y/16f);
+        switch (y){
+            case 112:
+            case 96:
+            case 80:
+            case 64:
+            case 48:
+            case 32:
+            case 16:
+                generateChunkMesh(chunkX, chunkZ, yPillar-1);
+                break;
+            case 111:
+            case 95:
+            case 79:
+            case 63:
+            case 47:
+            case 31:
+            case 15:
+                generateChunkMesh(chunkX, chunkZ, yPillar+1);
+                break;
+        }
+        if (x == 15){ //update neighbor
+            generateChunkMesh(chunkX+1, chunkZ, yPillar);
+        }
+        if (x == 0){
+            generateChunkMesh(chunkX-1, chunkZ, yPillar);
+        }
+        if (z == 15){
+            generateChunkMesh(chunkX, chunkZ+1, yPillar);
+        }
+        if (z == 0){
+            generateChunkMesh(chunkX, chunkZ-1, yPillar);
+        }
     }
 
     private static void updateNeighbor(int chunkX, int chunkZ, int x, int y, int z){

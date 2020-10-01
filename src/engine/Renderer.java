@@ -437,6 +437,59 @@ public class Renderer {
                     thisMesh.render();
                 }
 
+
+
+                //x info
+                {
+                    glClear(GL_DEPTH_BUFFER_BIT);
+                    Matrix4f modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f((float) ((-windowSize.x / 2f) + (windowSize.x / 600f)), (float) ((windowSize.y / 2.2f) - (windowSize.y / 600f)), 0), new Vector3f(0, 0, 0), new Vector3f(windowScale / 30f, windowScale / 30f, windowScale / 30f));
+                    hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+                    Mesh xDebug = createCustomHudText("X:" + getPlayerPos().x, 0f, 0f, 0f);
+                    xDebug.render();
+                    xDebug.cleanUp(false);
+
+                    glClear(GL_DEPTH_BUFFER_BIT);
+                    modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f((float)(-windowSize.x / 2f), (float) (windowSize.y / 2.2f), 0), new Vector3f(0, 0, 0), new Vector3f(windowScale / 30f, windowScale / 30f, windowScale / 30f));
+                    hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+                    xDebug = createCustomHudText("X:" + getPlayerPos().x, 1f, 1f, 1f);
+                    xDebug.render();
+                    xDebug.cleanUp(false);
+                }
+
+                //y info
+                {
+                    glClear(GL_DEPTH_BUFFER_BIT);
+                    Matrix4f modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f((float) ((-windowSize.x / 2f) + (windowSize.x / 600f)), (float) ((windowSize.y / 2.5f) - (windowSize.y / 600f)), 0), new Vector3f(0, 0, 0), new Vector3f(windowScale / 30f, windowScale / 30f, windowScale / 30f));
+                    hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+                    Mesh xDebug = createCustomHudText("Y:" + getPlayerPos().y, 0f, 0f, 0f);
+                    xDebug.render();
+                    xDebug.cleanUp(false);
+
+                    glClear(GL_DEPTH_BUFFER_BIT);
+                    modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f((float)(-windowSize.x / 2f), (float) (windowSize.y / 2.5f), 0), new Vector3f(0, 0, 0), new Vector3f(windowScale / 30f, windowScale / 30f, windowScale / 30f));
+                    hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+                    xDebug = createCustomHudText("Y:" + getPlayerPos().y, 1f, 1f, 1f);
+                    xDebug.render();
+                    xDebug.cleanUp(false);
+                }
+
+                //z info
+                {
+                    glClear(GL_DEPTH_BUFFER_BIT);
+                    Matrix4f modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f((float) ((-windowSize.x / 2f) + (windowSize.x / 600f)), (float) ((windowSize.y / 2.9f) - (windowSize.y / 600f)), 0), new Vector3f(0, 0, 0), new Vector3f(windowScale / 30f, windowScale / 30f, windowScale / 30f));
+                    hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+                    Mesh xDebug = createCustomHudText("Z:" + getPlayerPos().z, 0f, 0f, 0f);
+                    xDebug.render();
+                    xDebug.cleanUp(false);
+
+                    glClear(GL_DEPTH_BUFFER_BIT);
+                    modelViewMatrix = buildOrthoProjModelMatrix(new Vector3f((float)(-windowSize.x / 2f), (float) (windowSize.y / 2.9f), 0), new Vector3f(0, 0, 0), new Vector3f(windowScale / 30f, windowScale / 30f, windowScale / 30f));
+                    hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+                    xDebug = createCustomHudText("Z:" + getPlayerPos().z, 1f, 1f, 1f);
+                    xDebug.render();
+                    xDebug.cleanUp(false);
+                }
+
                 //render items in hotbar
                 for (int x = 1; x <= 9; x++) {
 
@@ -523,7 +576,6 @@ public class Renderer {
                 hudShaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
                 thisMesh.render();
             }
-
         }
         hudShaderProgram.unbind();
     }

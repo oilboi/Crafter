@@ -79,7 +79,7 @@ public class ChunkMesh {
                     int realZ = (int)Math.floor(chunkZ * 16f) + z;
                     int thisBlock = thisChunk.block[y][x][z];
 
-                    if (thisBlock != 0) {
+                    if (thisBlock > 0) {
                         //todo --------------------------------------- THE LIQUID DRAWTYPE
                         if (getIfLiquid(thisBlock)) {
                             int neighborBlock = getBlock(realX, y, realZ + 1);

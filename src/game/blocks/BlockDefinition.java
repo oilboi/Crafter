@@ -14,7 +14,7 @@ import static engine.sound.SoundAPI.playSound;
 public class BlockDefinition {
 
     private final static BlockDefinition[] blockIDs = new BlockDefinition[256];
-    private static Map<String, BlockShape> blockShapeMap = new HashMap<>();
+    private final static Map<String, BlockShape> blockShapeMap = new HashMap<>();
 
     //fixed fields for the class
     private static final byte atlasSizeX = 32;
@@ -344,14 +344,9 @@ public class BlockDefinition {
         //water thing
         BlockModifier splash = new BlockModifier() {
             @Override
-            public void onPlace(Vector3f pos) throws Exception {
-                int currentChunkX = (int) (Math.floor((float) pos.x / 16f));
-                int currentChunkZ = (int) (Math.floor((float) pos.z / 16f));
-                int currentPosX = (int) (pos.x - (16 * currentChunkX));
-                int currentPosZ = (int) (pos.z - (16 * currentChunkZ));
-
+            public void onPlace(Vector3f pos) {
                 for(int y = 0; y < 128; y++){
-                    setBlock(currentPosX, y, currentPosZ, currentChunkX, currentChunkZ,7);
+                    setBlock((int)Math.floor(pos.x), y, (int)Math.floor(pos.z),7);
                 }
             }
         };
@@ -662,13 +657,8 @@ public class BlockDefinition {
         BlockModifier debug = new BlockModifier() {
             @Override
             public void onPlace(Vector3f pos) throws Exception {
-                int currentChunkX = (int) (Math.floor((float) pos.x / 16f));
-                int currentChunkZ = (int) (Math.floor((float) pos.z / 16f));
-                int currentPosX = (int) (pos.x - (16 * currentChunkX));
-                int currentPosZ = (int) (pos.z - (16 * currentChunkZ));
-
                 for(int y = 0; y < 128; y++){
-                    setBlock(currentPosX, y, currentPosZ, currentChunkX, currentChunkZ,23);
+                    setBlock((int)Math.floor(pos.x), y, (int)Math.floor(pos.z),23);
                 }
             }
         };

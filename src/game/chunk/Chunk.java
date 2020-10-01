@@ -183,17 +183,30 @@ public class Chunk {
     }
 
     private static void fullNeighborUpdate(int chunkX, int chunkZ){
-        for (int y = 0; y < 8; y++){
-            chunkUpdate(chunkX+1, chunkZ, y);
-            chunkUpdate(chunkX-1, chunkZ, y);
-            chunkUpdate(chunkX, chunkZ+1, y);
-            chunkUpdate(chunkX, chunkZ-1, y);
+        if (map.get(chunkX+1 + " " + chunkZ) != null){
+            for (int y = 0; y < 8; y++){
+                chunkUpdate(chunkX+1, chunkZ, y);
+            }
+        }
+        if (map.get(chunkX-1 + " " + chunkZ) != null){
+            for (int y = 0; y < 8; y++){
+                chunkUpdate(chunkX-1, chunkZ, y);
+            }
+        }
+        if (map.get(chunkX + " " + chunkZ+1) != null){
+            for (int y = 0; y < 8; y++){
+                chunkUpdate(chunkX, chunkZ+1, y);
+            }
+        }
+        if (map.get(chunkX + " " + (chunkZ-1)) != null){
+            for (int y = 0; y < 8; y++){
+                chunkUpdate(chunkX, chunkZ-1, y);
+            }
         }
     }
 
 
     public static void generateNewChunks(int currentChunkX, int currentChunkZ, int dirX, int dirZ){
-
         if (dirX != 0){
             for (int z = -getChunkRenderDistance() + currentChunkZ; z < getChunkRenderDistance() + currentChunkZ; z++){
                 if (map.get((currentChunkX + (getChunkRenderDistance() * dirX)) + " " + z) == null) {

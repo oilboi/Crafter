@@ -422,19 +422,15 @@ public class Player {
 
         if (newChunkX != currentChunk[0] || newChunkZ != currentChunk[1]) {
             if (newChunkX < currentChunk[0]) {
-                System.out.println("chunk update -x");
                 generateNewChunks(currentChunk[0], currentChunk[1], -1, 0);
             }
             if (newChunkX > currentChunk[0]) {
-                System.out.println("chunk update +x");
                 generateNewChunks(currentChunk[0], currentChunk[1], 1, 0);
             }
             if (newChunkZ < currentChunk[1]) {
-                System.out.println("chunk update -z");
                 generateNewChunks(currentChunk[0], currentChunk[1], 0, -1);
             }
             if (newChunkZ > currentChunk[1]) {
-                System.out.println("chunk update +z");
                 generateNewChunks(currentChunk[0], currentChunk[1], 0, 1);
             }
             currentChunk[0] = newChunkX;

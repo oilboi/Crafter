@@ -24,14 +24,13 @@ public class ChunkUpdateHandler {
         for (ChunkUpdate thisUpdate : queue.values()) {
             thisUpdate.timer += 1;
             //only one update at a time
-            if (thisUpdate.timer >= 10) {
+            if (thisUpdate.timer >= 20) {
 //                System.out.println("Generating chunk mesh: " + (thisUpdate.x-getChunkRenderDistance()) +
 //                        " " + (thisUpdate.z-getChunkRenderDistance()) +
 //                        " " + thisUpdate.y
 //                );
                 generateChunkMesh(thisUpdate.x, thisUpdate.z,thisUpdate.y);
                 queue.remove(thisUpdate.key);
-                return;
             }
             return;
         }

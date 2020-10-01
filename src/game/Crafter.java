@@ -11,6 +11,7 @@ import org.lwjgl.openal.AL11;
 import java.awt.*;
 
 import static game.chunk.Chunk.genBiome;
+import static game.chunk.ChunkUpdateHandler.chunkUpdate;
 import static game.chunk.ChunkUpdateHandler.chunkUpdater;
 import static engine.Hud.*;
 import static engine.MouseInput.*;
@@ -30,7 +31,7 @@ import static org.lwjgl.glfw.GLFW.*;
 public class Crafter {
 
     //variables
-    private static int     chunkRenderDistance = 5;
+    private static int     chunkRenderDistance = 3;
     private static boolean qButtonPushed       = false;
     private static boolean rButtonPushed       = false;
     private static boolean tButtonPushed       = false;
@@ -124,16 +125,19 @@ public class Crafter {
         for (x = -chunkRenderDistance; x < chunkRenderDistance; x++){
             for (z = -chunkRenderDistance; z< chunkRenderDistance; z++){
                 genBiome(x,z);
-            }
-        }
-        //create chunk meshes
-        for (x = -chunkRenderDistance; x < chunkRenderDistance; x++){
-            for (z = -chunkRenderDistance; z< chunkRenderDistance; z++){
-                for (int y = 0; y < 8; y++) {
-                    generateChunkMesh(x, z, y);
+                for (int y = 0; y < 8; y++){
+                    chunkUpdate(x,z,y);
                 }
             }
         }
+        //create chunk meshes
+//        for (x = -chunkRenderDistance; x < chunkRenderDistance; x++){
+//            for (z = -chunkRenderDistance; z< chunkRenderDistance; z++){
+//                for (int y = 0; y < 8; y++) {
+//                    generateChunkMesh(x, z, y);
+//                }
+//            }
+//        }
 
 //        createToolDebugInventory();
         generateRandomInventory();

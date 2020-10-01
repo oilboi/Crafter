@@ -279,11 +279,12 @@ public class Chunk {
                 chunkUpdate(chunkX-1, chunkZ, y);
             }
         }
-        if (map.get(chunkX + " " + chunkZ+1) != null){
+        if (map.get(chunkX + " " + (chunkZ+1)) != null){
             for (int y = 0; y < 8; y++){
                 chunkUpdate(chunkX, chunkZ+1, y);
             }
         }
+
         if (map.get(chunkX + " " + (chunkZ-1)) != null){
             for (int y = 0; y < 8; y++){
                 chunkUpdate(chunkX, chunkZ-1, y);
@@ -293,26 +294,32 @@ public class Chunk {
 
 
     public static void generateNewChunks(int currentChunkX, int currentChunkZ, int dirX, int dirZ){
+        HashMap<Integer, int[]> neighborQueue = new HashMap<>();
+        int neighborQueueCount = 0;
         if (dirX != 0){
             for (int z = -getChunkRenderDistance() + currentChunkZ; z < getChunkRenderDistance() + currentChunkZ; z++){
                 if (map.get((currentChunkX + (getChunkRenderDistance() * dirX)) + " " + z) == null) {
                     genBiome(currentChunkX + (getChunkRenderDistance() * dirX), z);
-                    for (int y = 0; y < 8; y++) {
-                        chunkUpdate(currentChunkX + (getChunkRenderDistance() * dirX), z, y);
-                    }
-                    fullNeighborUpdate(currentChunkX + (getChunkRenderDistance() * dirX), z);
+                    neighborQueue.put(neighborQueueCount, new int[]{currentChunkX + (getChunkRenderDistance() * dirX), z});
+                    neighborQueueCount++;
                 }
             }
-        } else if (dirZ != 0){
+        }
+        if (dirZ != 0){
             for (int x = -getChunkRenderDistance() + currentChunkX; x < getChunkRenderDistance() + currentChunkX; x++){
                 if (map.get( x + " " + (currentChunkZ + (getChunkRenderDistance() * dirZ))) == null) {
                     genBiome(x, currentChunkZ + (getChunkRenderDistance() * dirZ));
-                    for (int y = 0; y < 8; y++) {
-                        chunkUpdate(x, currentChunkZ + (getChunkRenderDistance() * dirZ), y);
-                    }
-                    fullNeighborUpdate(x, currentChunkZ + (getChunkRenderDistance() * dirZ));
+                    neighborQueue.put(neighborQueueCount, new int[]{x, currentChunkZ + (getChunkRenderDistance() * dirZ)});
+                    neighborQueueCount++;
                 }
             }
+        }
+
+        for (int[] thisArray : neighborQueue.values()){
+            for (int y = 0; y < 8; y++) {
+                chunkUpdate(thisArray[0], thisArray[1], y);
+            }
+            fullNeighborUpdate(thisArray[0], thisArray[1]);
         }
 
         deleteOldChunks(currentChunkX+dirX, currentChunkZ+dirZ);

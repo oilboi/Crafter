@@ -8,11 +8,11 @@ import static game.player.Player.*;
 
 public class Camera {
 
-    private static Vector3f position = new Vector3f();
+    private static final Vector3f position = new Vector3f();
 
-    private static Vector3f rotation = new Vector3f();
+    private static final Vector3f rotation = new Vector3f();
 
-    private static float   MOUSE_SENSITIVITY   = 0.009f;
+    private static final float   MOUSE_SENSITIVITY   = 0.009f;
 
     public static Vector3f getCameraPosition(){
         return position;

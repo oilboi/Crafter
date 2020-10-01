@@ -48,7 +48,7 @@ public class Crafter {
             boolean vSync = true;
             Toolkit tk = Toolkit.getDefaultToolkit();
             Dimension d = tk.getScreenSize();
-            
+
             initWindow("Crafter Pre-Alpha 0.01", d.width/2,d.height/2,vSync);
             initRenderer();
             initMouseInput();
@@ -69,26 +69,18 @@ public class Crafter {
     private static void gameLoop() throws Exception {
         double elapsedTime;
         double accumulator = 0d;
-
         boolean running = true;
-
         while(running && !windowShouldClose()){
             elapsedTime = timerGetElapsedTime();
-
             accumulator += elapsedTime;
             input();
-
             countFPS();
-
             while (accumulator >= 1_000_000){
                 gameUpdate();
-
                 accumulator -= 1_000_000;
             }
-
             renderGame();
             windowUpdate();
-
             if (isvSync()){
                 sync();
             }
@@ -115,10 +107,8 @@ public class Crafter {
 
     public static void initGame() throws Exception{
         initializeHudAtlas();
-
         //this initializes the block definitions
         initializeBlocks();
-
         //this creates a TNT mesh (here for now)
         createTNTEntityMesh();
 

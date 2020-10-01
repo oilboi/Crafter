@@ -403,21 +403,7 @@ public class Player {
 
 
         onGround = applyInertia(pos, inertia, true, width, height,true, sneaking, true, true);
-
-        //map boundary check TODO: ID 1000
-        if (pos.x > ((getChunkRenderDistance() + 1) * 16)-0.5f) {
-            pos.x = oldPos.x;
-        }
-        if (pos.x < (getChunkRenderDistance() * -16) + 0.5f){
-            pos.x = oldPos.x;
-        }
-        if (pos.z > ((getChunkRenderDistance() + 1) * 16)-0.5f) {
-            pos.z = oldPos.z;
-        }
-        if (pos.z < (getChunkRenderDistance() * -16) + 0.5f){
-            pos.z = oldPos.z;
-        }
-        //END TODO: ID 1000
+        
 
 
         if(mining && mineTimer <= 0) {

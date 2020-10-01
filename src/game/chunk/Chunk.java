@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static game.chunk.ChunkUpdateHandler.chunkUpdate;
-import static game.Crafter.getChunkRenderDistance;
 
 public class Chunk {
 

@@ -12,9 +12,7 @@ public class ChunkUpdateHandler {
 
     public static void chunkUpdate( int x, int z , int y){
         String keyName = x + " " + z + " " + y;
-
         ChunkUpdate thisUpdate = queue.get(keyName);
-
         if (thisUpdate == null){
             queue.put(keyName, new ChunkUpdate(x,z,y));
         } else {
@@ -31,8 +29,7 @@ public class ChunkUpdateHandler {
 //                        " " + (thisUpdate.z-getChunkRenderDistance()) +
 //                        " " + thisUpdate.y
 //                );
-                generateChunkMesh(thisUpdate.x-getChunkRenderDistance(), thisUpdate.z-getChunkRenderDistance(),thisUpdate.y);
-
+                generateChunkMesh(thisUpdate.x, thisUpdate.z,thisUpdate.y);
                 queue.remove(thisUpdate.key);
                 return;
             }

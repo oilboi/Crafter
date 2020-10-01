@@ -21,7 +21,7 @@ public class Ray {
         for(float step = 0; step <= length ; step += 0.01f) {
             cachePos = new Vector3f(dir.x * step, dir.y * step, dir.z * step);
             newPos = new Vector3f((float)Math.floor(pos.x + cachePos.x), (float)Math.floor(pos.y + cachePos.y), (float)Math.floor(pos.z + cachePos.z));
-            if (getBlock((int)newPos.x, (int)newPos.y, (int)newPos.z) != 0){
+            if (getBlock((int)newPos.x, (int)newPos.y, (int)newPos.z) > 0){
                 finalPos = newPos;
                 break;
             }
@@ -49,6 +49,9 @@ public class Ray {
 
     private static void destroyBlock(Vector3f flooredPos) {
         int thisBlock = getBlock((int)flooredPos.x, (int)flooredPos.y, (int)flooredPos.z);
+        if (thisBlock < 0){
+            return;
+        }
         setBlock((int)flooredPos.x, (int)flooredPos.y, (int)flooredPos.z, 0);
         onDigCall(thisBlock, flooredPos);
     }

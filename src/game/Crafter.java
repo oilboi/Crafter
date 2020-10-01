@@ -121,15 +121,15 @@ public class Crafter {
         //create the initial map in memory
         int x;
         int z;
-        for (x = -chunkRenderDistance; x <= chunkRenderDistance; x++){
-            for (z = -chunkRenderDistance; z<= chunkRenderDistance; z++){
+        for (x = -chunkRenderDistance; x < chunkRenderDistance; x++){
+            for (z = -chunkRenderDistance; z< chunkRenderDistance; z++){
                 genBiome(x,z);
             }
         }
 
         //create chunk meshes
-        for (x = -chunkRenderDistance; x <= chunkRenderDistance; x++){
-            for (z = -chunkRenderDistance; z<= chunkRenderDistance; z++){
+        for (x = -chunkRenderDistance; x < chunkRenderDistance; x++){
+            for (z = -chunkRenderDistance; z< chunkRenderDistance; z++){
                 for (int y = 0; y < 8; y++) {
                     generateChunkMesh(x, z, y);
                 }

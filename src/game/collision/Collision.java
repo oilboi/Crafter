@@ -99,7 +99,7 @@ public class Collision {
 
                 cachedBlock = detectBlock(cachedPos);
 
-                if (isWalkable(cachedBlock)) {
+                if (cachedBlock > 0 && isWalkable(cachedBlock)) {
                     onGround = sneakCollideYNegative((int) fPos.x + x, (int)fPos.y, (int) fPos.z + z, clonedPos, clonedInertia, width, height, onGround, cachedBlock);
                 }
             }
@@ -131,7 +131,7 @@ public class Collision {
 
                 cachedBlock = detectBlock(cachedPos);
 
-                if (isWalkable(cachedBlock)) {
+                if (cachedBlock > 0 && isWalkable(cachedBlock)) {
                     onGround = sneakCollideYNegative((int) fPos.x + x, (int)fPos.y, (int) fPos.z + z, clonedPos, clonedInertia, width, height, onGround, cachedBlock);
                 }
             }
@@ -204,7 +204,7 @@ public class Collision {
 
                             cachedBlock = detectBlock(cachedPos);
 
-                            if (isWalkable(cachedBlock)) {
+                            if (cachedBlock > 0 && isWalkable(cachedBlock)) {
                                 onGround = collideYNegative((int) fPos.x + x, y, (int) fPos.z + z, pos, inertia, width, height, onGround, cachedBlock);
                             }
                         }
@@ -218,7 +218,7 @@ public class Collision {
                             cachedPos.z = fPos.z + z;
                             cachedBlock = detectBlock(cachedPos);
 
-                            if (isWalkable(cachedBlock)) {
+                            if (cachedBlock > 0 && isWalkable(cachedBlock)) {
                                 collideYPositive((int) fPos.x + x, y, (int) fPos.z + z, pos, inertia, width, height, cachedBlock);
                             }
                         }
@@ -261,7 +261,7 @@ public class Collision {
 
                             cachedBlock = detectBlock(floorPos(cachedPos));
 
-                            if (isWalkable(cachedBlock)) {
+                            if (cachedBlock > 0 && isWalkable(cachedBlock)) {
                                 collideXPositive(x, (int)(yy + pos.y), (int) fPos.z + z, pos, inertia, oldPos, width, height, cachedBlock);
                             }
                         }
@@ -276,7 +276,7 @@ public class Collision {
 
                             cachedBlock = detectBlock(floorPos(cachedPos));
 
-                            if (isWalkable(cachedBlock)) {
+                            if (cachedBlock > 0 && isWalkable(cachedBlock)) {
                                 collideXNegative(x, (int)(yy + pos.y), (int) fPos.z + z, pos, inertia, oldPos, width, height, cachedBlock);
                             }
                         }
@@ -318,7 +318,7 @@ public class Collision {
                             cachedPos.y = yy + pos.y;
                             cachedPos.z = z;
                             cachedBlock = detectBlock(floorPos(cachedPos));
-                            if (isWalkable(cachedBlock)) {
+                            if (cachedBlock > 0 && isWalkable(cachedBlock)) {
                                 collideZPositive((int)fPos.x + x, (int)(yy + pos.y), z, pos, inertia, oldPos, width, height, cachedBlock);
                             }
                         }
@@ -331,7 +331,7 @@ public class Collision {
                             cachedPos.y = yy + pos.y;
                             cachedPos.z = z;
                             cachedBlock = detectBlock(floorPos(cachedPos));
-                            if (isWalkable(cachedBlock)) {
+                            if (cachedBlock > 0 && isWalkable(cachedBlock)) {
                                 collideZNegative((int)fPos.x + x, (int)(yy + pos.y), z, pos, inertia, oldPos, width, height, cachedBlock);
                             }
                         }

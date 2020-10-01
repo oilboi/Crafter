@@ -8,7 +8,7 @@ import java.util.Map;
 import static game.chunk.Chunk.setBlock;
 import static game.item.ItemDefinition.registerItem;
 import static game.item.ItemEntity.createItem;
-import static engine.TNTEntity.createTNT;
+import static game.tnt.TNTEntity.createTNT;
 import static engine.sound.SoundAPI.playSound;
 
 public class BlockDefinition {

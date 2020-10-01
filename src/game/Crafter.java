@@ -1,10 +1,10 @@
 package game;
 
-import engine.*;
 import engine.sound.SoundListener;
 import game.chunk.Chunk;
 import game.item.ItemDefinition;
 import game.item.ItemEntity;
+import game.tnt.TNTEntity;
 import org.joml.Vector3f;
 import org.lwjgl.openal.AL11;
 
@@ -14,7 +14,7 @@ import static game.chunk.Chunk.genBiome;
 import static game.chunk.ChunkUpdateHandler.chunkUpdater;
 import static engine.Hud.*;
 import static engine.MouseInput.*;
-import static engine.TNTEntity.createTNTEntityMesh;
+import static game.tnt.TNTEntity.createTNTEntityMesh;
 import static engine.Timer.*;
 import static engine.Window.*;
 import static engine.graph.Camera.*;

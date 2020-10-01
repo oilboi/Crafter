@@ -1,8 +1,7 @@
-package engine;
+package game.tnt;
 
 import engine.graph.Mesh;
 import engine.graph.Texture;
-import engine.sound.SoundManager;
 import org.joml.Vector3f;
 
 import java.util.ArrayList;
@@ -11,7 +10,7 @@ import static engine.FancyMath.*;
 import static engine.sound.SoundAPI.playSound;
 import static game.blocks.BlockDefinition.*;
 import static game.collision.Collision.applyInertia;
-import static game.player.TNT.boom;
+import static game.tnt.Explosion.boom;
 
 public class TNTEntity {
     private final static float tntSize = 0.5f;

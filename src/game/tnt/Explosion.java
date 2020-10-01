@@ -1,4 +1,4 @@
-package game.player;
+package game.tnt;
 
 import org.joml.Vector3f;
 
@@ -7,9 +7,9 @@ import static game.chunk.Chunk.getBlock;
 import static game.chunk.Chunk.setBlock;
 import static engine.FancyMath.getDistance;
 import static game.item.ItemEntity.createItem;
-import static engine.TNTEntity.createTNT;
+import static game.tnt.TNTEntity.createTNT;
 
-public class TNT {
+public class Explosion {
 
     public static void boom(Vector3f pos, int boomDistance) throws Exception {
         for (int x = (int)Math.floor(pos.x) - boomDistance; x < (int)Math.floor(pos.x) + boomDistance; x++) {

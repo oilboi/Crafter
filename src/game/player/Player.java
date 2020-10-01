@@ -6,7 +6,6 @@ import java.lang.Math;
 
 import static engine.graph.Camera.*;
 import static engine.sound.SoundAPI.playSound;
-import static game.Crafter.getChunkRenderDistance;
 import static game.collision.Collision.applyInertia;
 import static game.player.Inventory.getItemInInventorySlot;
 import static game.player.Ray.rayCast;

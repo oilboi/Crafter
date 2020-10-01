@@ -3,278 +3,124 @@ package game.chunk;
 import engine.FastNoise;
 import engine.graph.Mesh;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static game.chunk.ChunkUpdateHandler.chunkUpdate;
 import static game.Crafter.getChunkRenderDistance;
 
 public class Chunk {
 
-    private static int [][][][][] block;
-    private static byte [][][][][] rotation;
-    private static byte[][][][][] light;
-    private static Mesh[][][]   mesh;
-    private static Mesh[][][]   liquidMesh;
-
-    private static int limit = 0;
-
-    public static void initializeChunkHandler(int chunkRenderDistance){
-        block = new  int[((chunkRenderDistance * 2) + 1)][((chunkRenderDistance * 2) + 1)][128][16][16];
-        light = new byte[((chunkRenderDistance * 2) + 1)][((chunkRenderDistance * 2) + 1)][128][16][16];
-        rotation = new byte[((chunkRenderDistance * 2) + 1)][((chunkRenderDistance * 2) + 1)][128][16][16];
-
-        mesh  = new Mesh[((chunkRenderDistance * 2) + 1)][((chunkRenderDistance * 2) + 1)][8];
-        liquidMesh  = new Mesh[((chunkRenderDistance * 2) + 1)][((chunkRenderDistance * 2) + 1)][8];
-        limit = ((chunkRenderDistance * 2) + 1);
-
-    }
+    private static final Map<String, ChunkObject> map = new HashMap<>();
 
     public static void setChunkMesh(int chunkX, int chunkZ, int yHeight, Mesh newMesh){
-        chunkX += getChunkRenderDistance();
-        chunkZ += getChunkRenderDistance();
-
-        if(chunkX < 0 || chunkZ < 0 || chunkX >= limit || chunkZ >= limit){
+        ChunkObject thisChunk = map.get(chunkX + " " + chunkZ);
+        if (thisChunk == null){
+            newMesh.cleanUp(false);
             return;
         }
-
-        if (mesh[chunkX][chunkZ][yHeight] != null){
-            mesh[chunkX][chunkZ][yHeight].cleanUp(false);
+        if (thisChunk.mesh == null){
+            newMesh.cleanUp(false);
+            return;
         }
-        mesh[chunkX][chunkZ][yHeight] = newMesh;
+        if (thisChunk.mesh[yHeight] != null){
+            thisChunk.mesh[yHeight].cleanUp(false);
+        }
+        thisChunk.mesh[yHeight] = newMesh;
     }
 
     public static void setChunkLiquidMesh(int chunkX, int chunkZ, int yHeight, Mesh newMesh){
-        chunkX += getChunkRenderDistance();
-        chunkZ += getChunkRenderDistance();
-
-        if(chunkX < 0 || chunkZ < 0 || chunkX >= limit || chunkZ >= limit){
+        ChunkObject thisChunk = map.get(chunkX + " " + chunkZ);
+        if (thisChunk == null){
+            newMesh.cleanUp(false);
             return;
         }
-
-        if (liquidMesh[chunkX][chunkZ][yHeight] != null){
-            liquidMesh[chunkX][chunkZ][yHeight].cleanUp(false);
+        if (thisChunk.liquidMesh == null){
+            newMesh.cleanUp(false);
+            return;
         }
-        liquidMesh[chunkX][chunkZ][yHeight] = newMesh;
-    }
-
-    public static int getLimit(){
-        return limit;
+        if (thisChunk.liquidMesh[yHeight] != null){
+            thisChunk.liquidMesh[yHeight].cleanUp(false);
+        }
+        thisChunk.liquidMesh[yHeight] = newMesh;
     }
 
     public static Mesh getChunkMesh(int chunkX, int chunkZ, int yHeight){
-        return mesh[chunkX][chunkZ][yHeight];
+        ChunkObject thisChunk = map.get(chunkX + " " + chunkZ);
+        if (thisChunk == null){
+            return null;
+        }
+        if (thisChunk.mesh == null){
+            return null;
+        }
+        if (thisChunk.mesh[yHeight] != null){
+            return thisChunk.mesh[yHeight];
+        }
+        return null;
     }
 
     public static Mesh getChunkLiquidMesh(int chunkX, int chunkZ, int yHeight){
-        return liquidMesh[chunkX][chunkZ][yHeight];
+        ChunkObject thisChunk = map.get(chunkX + " " + chunkZ);
+        if (thisChunk == null){
+            return null;
+        }
+        if (thisChunk.liquidMesh == null){
+            return null;
+        }
+        if (thisChunk.liquidMesh[yHeight] != null){
+            return thisChunk.liquidMesh[yHeight];
+        }
+        return null;
+    }
+    
+    public static int getBlock(int x,int y,int z){
+        if (y > 127 || y < 0){
+            return -1;
+        }
+        int chunkX = (int)Math.floor(x/16f);
+        int chunkZ = (int)Math.floor(z/16f);
+        int blockX = (int)(x - (16f*chunkX));
+        int blockZ = (int)(z - (16f*chunkZ));
+        String key = chunkX + " " + chunkZ;
+        ChunkObject thisChunk = map.get(key);
+        if (thisChunk == null){
+            return -1;
+        }
+        if (thisChunk.block == null){
+            return -1;
+        }
+        return thisChunk.block[y][blockX][blockZ];
     }
 
-    public static byte getRotation(int x,int y,int z, int chunkX, int chunkZ){
-        chunkX += getChunkRenderDistance();
-        chunkZ += getChunkRenderDistance();
-
-        return getInternalRotation(x,y,z,chunkX,chunkZ);
-    }
-    private static byte getInternalRotation(int x,int y,int z, int chunkX, int chunkZ){
-
-        if(chunkX < 0 || chunkZ < 0 || chunkX >= limit || chunkZ >= limit){
-            return 0;
-        }
-
-        //neighbor checking
-        if (y < 0 || y >= 128) { //Y is caught regardless in the else clause if in bounds
-            return 0;
-        }
-        if(x < 0) {
-            return getInternalRotation(x+16,y,z,chunkX-1,chunkZ);
-        }
-        if (x >= 16) {
-            return getInternalRotation(x-16,y,z,chunkX+1,chunkZ);
-        }
-        if (z < 0) {
-            return getInternalRotation(x,y,z+16,chunkX,chunkZ-1);
-        }
-        if (z >= 16) {
-            return getInternalRotation(x,y,z-16,chunkX,chunkZ+1);
-        }
-
-        //self chunk checking
-        return rotation[chunkX][chunkZ][y][x][z];
-    }
-
-    public static void setRotation(int x,int y,int z, int chunkX, int chunkZ, byte newRotation){
-        chunkX += getChunkRenderDistance();
-        chunkZ += getChunkRenderDistance();
-
-        if(chunkX < 0 || chunkZ < 0 || chunkX >= limit || chunkZ >= limit){
+    public static void setBlock(int x,int y,int z, int newBlock){
+        if (y > 127 || y < 0){
             return;
         }
-        if(z >= 16 || z < 0){
-            return;
-        }
-        if(x >= 16 || x < 0){
-            return;
-        }
-        if(y > 127 || y < 0){
-            return;
-        }
-
-        rotation[chunkX][chunkZ][y][x][z] = newRotation;
-
-//        chunkUpdate(chunkX,chunkZ);
-
-        updateNeighbor(chunkX, chunkZ,x,y,z);
-    }
-
-
-
-    public static int getBlock(int x,int y,int z, int chunkX, int chunkZ){
-        chunkX += getChunkRenderDistance();
-        chunkZ += getChunkRenderDistance();
-
-        return getInternalBlock(x,y,z,chunkX,chunkZ);
-    }
-    private static int getInternalBlock(int x,int y,int z, int chunkX, int chunkZ){
-
-        if(chunkX < 0 || chunkZ < 0 || chunkX >= limit || chunkZ >= limit){
-            return 0;
-        }
-
-        //neighbor checking
-        if (y < 0 || y >= 128) { //Y is caught regardless in the else clause if in bounds
-            return 0;
-        }
-        if(x < 0) {
-            return getInternalBlock(x+16,y,z,chunkX-1,chunkZ);
-        }
-        if (x >= 16) {
-            return getInternalBlock(x-16,y,z,chunkX+1,chunkZ);
-        }
-        if (z < 0) {
-            return getInternalBlock(x,y,z+16,chunkX,chunkZ-1);
-        }
-        if (z >= 16) {
-            return getInternalBlock(x,y,z-16,chunkX,chunkZ+1);
-        }
-
-        //self chunk checking
-        return block[chunkX][chunkZ][y][x][z];
-    }
-
-    public static void setBlock(int x,int y,int z, int chunkX, int chunkZ, int newBlock){
-        chunkX += getChunkRenderDistance();
-        chunkZ += getChunkRenderDistance();
-
         int yPillar = (int)Math.floor(y/16f);
+        int chunkX = (int)Math.floor(x/16f);
+        int chunkZ = (int)Math.floor(z/16f);
+        int blockX = (int)(x - (16f*chunkX));
+        int blockZ = (int)(z - (16f*chunkZ));
+        String key = chunkX + " " + chunkZ;
+        ChunkObject thisChunk = map.get(key);
 
-        if (yPillar > 7 || yPillar < 0){
+        if (thisChunk == null){
             return;
         }
-
-        if(chunkX < 0 || chunkZ < 0 || chunkX >= limit || chunkZ >= limit){
+        if (thisChunk.block == null){
             return;
         }
-        if(z >= 16 || z < 0){
-            return;
-        }
-        if(x >= 16 || x < 0){
-            return;
-        }
-        if(y > 127 || y < 0){
-            return;
-        }
-
-        block[chunkX][chunkZ][y][x][z] = newBlock;
+        thisChunk.block[y][blockX][blockZ] = newBlock;
         chunkUpdate(chunkX,chunkZ,yPillar);
-        updateNeighbor(chunkX, chunkZ,x,y,z);
+        updateNeighbor(chunkX, chunkZ,blockX,y,blockZ);
     }
 
-    public static void setBlock(int x, int y, int z, int newBlock){
-        int currentChunkX = (int) (Math.floor((float) x / 16f));
-        int currentChunkZ = (int) (Math.floor((float) z / 16f));
-        int currentPosX = x - (16 * currentChunkX);
-        int currentPosZ = z - (16 * currentChunkZ);
-
-        currentChunkX += getChunkRenderDistance();
-        currentChunkZ += getChunkRenderDistance();
-        if(currentChunkX < 0 || currentChunkZ < 0 || currentChunkX >= limit || currentChunkZ >= limit){
-            return;
-        }
-        if(y > 127 || y < 0){
-            return;
-        }
-
-        int yPillar = (int)Math.floor(y/16f);
-
-        if (yPillar > 7 || yPillar < 0){
-            return;
-        }
-
-        block[currentChunkX][currentChunkZ][y][currentPosX][currentPosZ] = newBlock;
-
-        chunkUpdate(currentChunkX,currentChunkZ,yPillar);
-
-        updateNeighbor(currentChunkX, currentChunkZ,x,y,z);
-    }
-
-    public static byte getLight(int x,int y,int z, int chunkX, int chunkZ){
-        chunkX += getChunkRenderDistance();
-        chunkZ += getChunkRenderDistance();
-        return getInternalLight(x,y,z,chunkX,chunkZ);
-    }
-
-    private static byte getInternalLight(int x,int y,int z, int chunkX, int chunkZ){
-
-        if(chunkX < 0 || chunkZ < 0 || chunkX >= limit || chunkZ >= limit){
-            return 0;
-        }
-
-        //neighbor checking
-        if (y < 0) { //Y is caught regardless in the else clause if in bounds
-            return 0;
-        }
-        if(y >= 128){
-            return 15;
-        }
-        if(x < 0) {
-            return getInternalLight(x+16,y,z,chunkX-1,chunkZ);
-        }
-        if (x >= 16) {
-            return getInternalLight(x-16,y,z,chunkX+1,chunkZ);
-        }
-        if (z < 0) {
-            return getInternalLight(x,y,z+16,chunkX,chunkZ-1);
-        }
-        if (z >= 16) {
-            return getInternalLight(x,y,z-16,chunkX,chunkZ+1);
-        }
-
-        //self chunk checking
-        return light[chunkX][chunkZ][y][x][z];
-    }
-
-
-    public static void setLight(int x,int y,int z, int chunkX, int chunkZ, byte newLight){
-        chunkX += getChunkRenderDistance();
-        chunkZ += getChunkRenderDistance();
-
-        if(chunkX < 0 || chunkZ < 0 || chunkX >= limit || chunkZ >= limit){
-            return;
-        }
-
-        light[chunkX][chunkZ][y][x][z] = newLight;
-
-//        chunkUpdate(chunkX,chunkZ);
-
-        updateNeighbor(chunkX, chunkZ,x,y,z);
-    }
 
     private static void updateNeighbor(int chunkX, int chunkZ, int x, int y, int z){
-
-        int yPillar = (int)Math.floor(y/16f);
-
-        if (yPillar > 7 || yPillar < 0){
+        if (y > 127 || y < 0){
             return;
         }
-
+        int yPillar = (int)Math.floor(y/16f);
         switch (y){
             case 112:
             case 96:
@@ -285,8 +131,6 @@ public class Chunk {
             case 16:
                 chunkUpdate(chunkX, chunkZ, yPillar-1);
                 break;
-
-
             case 111:
             case 95:
             case 79:
@@ -297,15 +141,12 @@ public class Chunk {
                 chunkUpdate(chunkX, chunkZ, yPillar+1);
                 break;
         }
-
         if (x == 15){ //update neighbor
             chunkUpdate(chunkX+1, chunkZ, yPillar);
         }
-
         if (x == 0){
             chunkUpdate(chunkX-1, chunkZ, yPillar);
         }
-
         if (z == 15){
             chunkUpdate(chunkX, chunkZ+1, yPillar);
         }
@@ -314,25 +155,20 @@ public class Chunk {
         }
     }
 
-    private static FastNoise noise = new FastNoise();
-    private static int heightAdder = 40;
-    private static byte dirtHeight = 4;
-    private static byte waterHeight = 50;
-    //a basic biome test for terrain generation
-    public static void genBiome(int chunkX, int chunkZ){
-        chunkX += getChunkRenderDistance();
-        chunkZ += getChunkRenderDistance();
-        short currBlock;
+    private static final FastNoise noise = new FastNoise();
+    private static final int heightAdder = 40;
+    private static final byte dirtHeight = 4;
+    private static final byte waterHeight = 50;
 
-        byte height = (byte)(Math.abs(noise.GetCubicFractal((chunkX*16),(chunkZ*16)))*127+heightAdder);
+    public static void genBiome(int chunkX, int chunkZ){
+            short currBlock;
+            byte height;
+            ChunkObject thisChunk = map.get(chunkX + " " + chunkZ);
             for (int x = 0; x < 16; x++) {
                 for (int z = 0; z < 16; z++) {
                     float dirtHeightRandom = (float)Math.floor(Math.random() * 2f);
                     height = (byte)(Math.abs(noise.GetCubicFractal((chunkX*16)+x,(chunkZ*16)+z))*127+heightAdder);
-
                     for (int y = 127; y >= 0; y--) {
-
-
                     if (y <= 0 + dirtHeightRandom) {
                         currBlock = 5;
                     } else if (y == height) {
@@ -357,39 +193,24 @@ public class Chunk {
                         }
                     }
 
-                    block[chunkX][chunkZ][y][x][z] = currBlock;
+                    thisChunk.block[y][x][z] = currBlock;
 
-//            if (currBlock == 0) {
-                    light[chunkX][chunkZ][y][x][z] = 15;//0;
-//            }else{
-//                light[chunkX][chunkZ][y][x][z] = 0;
-//            }
+    //            if (currBlock == 0) {
+                    thisChunk.light[y][x][z] = 15;//0;
+    //            }else{
+    //                light[chunkX][chunkZ][y][x][z] = 0;
                 }
             }
         }
     }
-
-    public static boolean underSunlight(int x, int y, int z, int chunkX, int chunkZ){
-
-        chunkX += getChunkRenderDistance();
-        chunkZ += getChunkRenderDistance();
-
-        if(chunkX < 0 || chunkZ < 0 || chunkX >= limit || chunkZ >= limit){
-            return false;
-        }
-        for (int indexY = 127; indexY > y; indexY--) {
-            if (getBlock(x, indexY, z, chunkX, chunkZ) != 0){
-                return false;
-            }
-        }
-        return true;
-    }
-
     public static void cleanUp(){
-        for (Mesh[][] thisMeshArray1 : mesh){
-            for (Mesh[] thisMeshArray : thisMeshArray1) {
-                for (Mesh thisMesh : thisMeshArray) {
-                    if (thisMesh != null) {
+        for (ChunkObject thisChunk : map.values()){
+            if (thisChunk == null){
+                continue;
+            }
+            if (thisChunk.mesh != null){
+                for (Mesh thisMesh : thisChunk.mesh){
+                    if (thisMesh != null){
                         thisMesh.cleanUp(true);
                     }
                 }

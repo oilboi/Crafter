@@ -64,7 +64,11 @@ public class Camera {
     }
 
     public static void updateCamera(){
-        setCameraPosition(getPlayerPosWithEyeHeight().x, getPlayerPosWithEyeHeight().y, getPlayerPosWithEyeHeight().z);
+        if (isPlayerSneaking()) {
+            setCameraPosition(getPlayerPosWithEyeHeight().x, getPlayerPosWithEyeHeight().y - 0.125f, getPlayerPosWithEyeHeight().z);
+        } else {
+            setCameraPosition(getPlayerPosWithEyeHeight().x, getPlayerPosWithEyeHeight().y, getPlayerPosWithEyeHeight().z);
+        }
         moveCameraPosition(getPlayerViewBobbing().x,getPlayerViewBobbing().y, getPlayerViewBobbing().z);
 //        update camera based on mouse
         Vector2f rotVec = getMouseDisplVec();

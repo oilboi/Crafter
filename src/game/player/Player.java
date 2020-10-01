@@ -30,6 +30,7 @@ public class Player {
     private static int currentInventorySelection = 0;
     private static boolean inventoryOpen         = false;
     private static Vector3f worldSelectionPos    = null;
+    private static final int[] currentChunk = {0,0};
 
     public static void resetPlayerInputs(){
         setPlayerForward(false);
@@ -75,10 +76,6 @@ public class Player {
     }
 
     public static void setPlayerMining( boolean isMining){
-//        if (mineTimer == 0) {
-//            mining = true;
-//            mineTimer = 20;
-//        }
         mining = isMining;
     }
 
@@ -88,10 +85,6 @@ public class Player {
 
 
     public static void setPlayerPlacing( boolean isPlacing) {
-//        if (placeTimer == 0) {
-//            placing = true;
-//            placeTimer = 20;
-//        }
         placing = isPlacing;
     }
 
@@ -178,7 +171,6 @@ public class Player {
             wieldHandAnimationPos.x = (float) (-10f * Math.sin(Math.pow(diggingAnimation, 0.6f) * Math.PI)) + wieldHandAnimationPosBaseTool.x;
             wieldHandAnimationPos.y = (float) (5f * Math.sin(diggingAnimation * 2f * Math.PI)) + wieldHandAnimationPosBaseTool.y;
             wieldHandAnimationPos.z = wieldHandAnimationPosBaseTool.z;
-//            wieldHandAnimationRot.x = 180f;
 
 
             Quaternionf quatBegin = new Quaternionf().rotateXYZ(wieldHandAnimationRotBegin.x, wieldHandAnimationRotBegin.y, wieldHandAnimationRotBegin.z);
@@ -190,7 +182,6 @@ public class Player {
             wieldHandAnimationRot.x = (float) Math.toDegrees(wieldHandAnimationRot.x);
             wieldHandAnimationRot.y = (float) Math.toDegrees(wieldHandAnimationRot.y);
             wieldHandAnimationRot.z = (float) Math.toDegrees(wieldHandAnimationRot.z);
-//            wieldHandAnimationRot.x += 180f;
         }
 
     }
@@ -335,10 +326,6 @@ public class Player {
             inertia.z += (float)(Math.cos(yaw)  * accelerationMultiplier) * movementSpeed;
         }
 
-//
-//        if (window.isKeyPressed(GLFW_KEY_LEFT_SHIFT)){
-//            //cameraInc.y = -1;
-//        }
         if (jump && isPlayerOnGround()){
             inertia.y += 10.5f;
         }

@@ -403,7 +403,7 @@ public class Player {
 
 
         onGround = applyInertia(pos, inertia, true, width, height,true, sneaking, true, true);
-        
+
 
 
         if(mining && mineTimer <= 0) {

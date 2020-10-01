@@ -3,6 +3,7 @@ package game.chunk;
 import engine.FastNoise;
 import engine.graph.Mesh;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,6 +13,14 @@ import static game.Crafter.getChunkRenderDistance;
 public class Chunk {
 
     private static final Map<String, ChunkObject> map = new HashMap<>();
+
+    public static Collection<ChunkObject> getMap(){
+        return map.values();
+    }
+
+    public static ChunkObject getChunk(int x, int z){
+        return map.get(x + " " + z);
+    }
 
     public static void setChunkMesh(int chunkX, int chunkZ, int yHeight, Mesh newMesh){
         ChunkObject thisChunk = map.get(chunkX + " " + chunkZ);
@@ -115,6 +124,24 @@ public class Chunk {
         updateNeighbor(chunkX, chunkZ,blockX,y,blockZ);
     }
 
+    public static byte getLight(int x,int y,int z){
+        if (y > 127 || y < 0){
+            return 0;
+        }
+        int chunkX = (int)Math.floor(x/16f);
+        int chunkZ = (int)Math.floor(z/16f);
+        int blockX = (int)(x - (16f*chunkX));
+        int blockZ = (int)(z - (16f*chunkZ));
+        String key = chunkX + " " + chunkZ;
+        ChunkObject thisChunk = map.get(key);
+        if (thisChunk == null){
+            return 0;
+        }
+        if (thisChunk.light == null){
+            return 0;
+        }
+        return thisChunk.light[y][blockX][blockZ];
+    }
 
     private static void updateNeighbor(int chunkX, int chunkZ, int x, int y, int z){
         if (y > 127 || y < 0){
@@ -164,6 +191,10 @@ public class Chunk {
             short currBlock;
             byte height;
             ChunkObject thisChunk = map.get(chunkX + " " + chunkZ);
+            if (thisChunk == null){
+                map.put(chunkX + " " + chunkZ, new ChunkObject(chunkX, chunkZ));
+            }
+            thisChunk = map.get(chunkX + " " + chunkZ);
             for (int x = 0; x < 16; x++) {
                 for (int z = 0; z < 16; z++) {
                     float dirtHeightRandom = (float)Math.floor(Math.random() * 2f);

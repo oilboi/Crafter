@@ -493,10 +493,7 @@ public class Collision {
     }
 
     private static int detectBlock(Vector3f flooredPos){
-        int currentChunkX = (int)(Math.floor(flooredPos.x / 16f));
-        int currentChunkZ = (int)(Math.floor(flooredPos.z / 16f));
-        Vector3f realPos = new Vector3f(flooredPos.x - (16*currentChunkX), flooredPos.y, flooredPos.z - (16*currentChunkZ));
-        return getBlock((int)realPos.x, (int)realPos.y, (int)realPos.z, currentChunkX, currentChunkZ);
+        return getBlock((int)flooredPos.x, (int)flooredPos.y, (int)flooredPos.z);
     }
 
 

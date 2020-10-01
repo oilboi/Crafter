@@ -1,6 +1,7 @@
 package engine;
 
 import engine.graph.*;
+import game.chunk.ChunkObject;
 import game.item.Item;
 import org.joml.Matrix4f;
 import org.joml.Vector2d;
@@ -118,13 +119,15 @@ public class Renderer {
         shaderProgram.setUniform("texture_sampler", 0);
 
         //render each chunk (standard blocks)
-        for(int x = 0; x < getLimit(); x++) {
-            for (int z = 0; z < getLimit(); z++) {
-                for (int y = 0; y < 8; y++) {
-                    Mesh thisMesh = getChunkMesh(x, z, y);
-                    if (thisMesh == null) {
-                        continue;
-                    }
+        for (ChunkObject thisChunk : getMap()){
+            if (thisChunk == null){
+                continue;
+            }
+            if (thisChunk.mesh == null){
+                continue;
+            }
+            for (Mesh thisMesh : thisChunk.mesh){
+                if (thisMesh != null){
                     Matrix4f modelViewMatrix = getModelViewMatrix(viewMatrix);
                     shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
                     thisMesh.render();
@@ -132,14 +135,17 @@ public class Renderer {
             }
         }
 
+
         //render each chunk liquid mesh
-        for(int x = 0; x < getLimit(); x++) {
-            for (int z = 0; z < getLimit(); z++) {
-                for (int y = 0; y < 8; y++) {
-                    Mesh thisMesh = getChunkLiquidMesh(x, z, y);
-                    if (thisMesh == null) {
-                        continue;
-                    }
+        for (ChunkObject thisChunk : getMap()){
+            if (thisChunk == null){
+                continue;
+            }
+            if (thisChunk.liquidMesh == null){
+                continue;
+            }
+            for (Mesh thisMesh : thisChunk.liquidMesh){
+                if (thisMesh != null){
                     Matrix4f modelViewMatrix = getModelViewMatrix(viewMatrix);
                     shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
                     thisMesh.render();

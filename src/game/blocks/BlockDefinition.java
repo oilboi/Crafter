@@ -124,6 +124,9 @@ public class BlockDefinition {
     }
 
     public static String getBlockDrawType(int ID){
+        if (ID < 0){
+            return "";
+        }
         return blockIDs[ID].drawType;
     }
 

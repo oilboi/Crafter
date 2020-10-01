@@ -13,7 +13,6 @@ import static game.player.Player.*;
 
 public class Ray {
     public static void rayCast(Vector3f pos, Vector3f dir, float length, boolean mining, boolean placing) {
-
         Vector3f finalPos = null;
         Vector3f newPos   = null;
         Vector3f lastPos  = null;
@@ -23,7 +22,7 @@ public class Ray {
             cachePos = new Vector3f(dir.x * step, dir.y * step, dir.z * step);
             newPos = new Vector3f((float)Math.floor(pos.x + cachePos.x), (float)Math.floor(pos.y + cachePos.y), (float)Math.floor(pos.z + cachePos.z));
 
-            if (detectBlock(newPos)){
+            if (getBlock((int)newPos.x, (int)newPos.y, (int)newPos.z) != 0){
                 finalPos = newPos;
                 break;
             }
@@ -52,52 +51,14 @@ public class Ray {
         }
     }
 
-    private static boolean detectBlock(Vector3f flooredPos){
-        int[] current = new int[2];
-
-        current[0] = (int)(Math.floor(flooredPos.x / 16f));
-        current[1] = (int)(Math.floor(flooredPos.z / 16f));
-
-        Vector3f realPos = new Vector3f(flooredPos.x - (16*current[0]), flooredPos.y, flooredPos.z - (16*current[1]));
-
-        return getBlock((int)realPos.x, (int)realPos.y, (int)realPos.z, current[0], current[1]) != 0;
-    }
-
     private static void destroyBlock(Vector3f flooredPos) {
-
-        int currentChunkX = (int)(Math.floor(flooredPos.x / 16f));
-        int currentChunkZ = (int)(Math.floor(flooredPos.z / 16f));
-
-
-        int chunkPosX = (int)flooredPos.x - (16*currentChunkX);
-        int chunkPosZ = (int)flooredPos.z - (16*currentChunkZ);
-
-        Vector3f realPos = new Vector3f(chunkPosX, flooredPos.y, chunkPosZ);
-
-//        System.out.println(getRotation((int)realPos.x, (int)realPos.y, (int)realPos.z, currentChunkX,currentChunkZ));
-
-        int thisBlock = getBlock((int)realPos.x, (int)realPos.y, (int)realPos.z, currentChunkX,currentChunkZ);
-
-//        if (thisBlock == 5){
-//            return;
-//        }
-
-        setBlock((int)realPos.x, (int)realPos.y, (int)realPos.z, currentChunkX, currentChunkZ, (short) 0);
-
+        int thisBlock = getBlock((int)flooredPos.x, (int)flooredPos.y, (int)flooredPos.z);
+        setBlock((int)flooredPos.x, (int)flooredPos.y, (int)flooredPos.z, 0);
         onDigCall(thisBlock, flooredPos);
     }
     private static void placeBlock(Vector3f flooredPos, int ID) {
-        int currentChunkX = (int)(Math.floor(flooredPos.x / 16f));
-        int currentChunkZ = (int)(Math.floor(flooredPos.z / 16f));
-        int chunkPosX = (int)flooredPos.x - (16*currentChunkX);
-        int chunkPosZ = (int)flooredPos.z - (16*currentChunkZ);
-
-        Vector3f realPos = new Vector3f(chunkPosX, flooredPos.y, chunkPosZ);
-
-        setBlock((int)realPos.x, (int)realPos.y, (int)realPos.z, currentChunkX, currentChunkZ, ID);
-
+        setBlock((int)flooredPos.x, (int)flooredPos.y, (int)flooredPos.z, ID);
         onPlaceCall(ID, flooredPos);
-
         removeItemFromInventory(getCurrentInventorySelection(), 0);
     }
 }

@@ -20,7 +20,6 @@ import static engine.Timer.*;
 import static engine.Window.*;
 import static engine.graph.Camera.*;
 import static engine.sound.SoundManager.*;
-import static game.chunk.ChunkMesh.generateChunkMesh;
 import static engine.Renderer.*;
 import static game.blocks.BlockDefinition.initializeBlocks;
 import static game.item.ItemRegistration.registerTools;
@@ -31,7 +30,7 @@ import static org.lwjgl.glfw.GLFW.*;
 public class Crafter {
 
     //variables
-    private static int     chunkRenderDistance = 3;
+    private static int     chunkRenderDistance = 8;
     private static boolean qButtonPushed       = false;
     private static boolean rButtonPushed       = false;
     private static boolean tButtonPushed       = false;
@@ -130,14 +129,6 @@ public class Crafter {
                 }
             }
         }
-        //create chunk meshes
-//        for (x = -chunkRenderDistance; x < chunkRenderDistance; x++){
-//            for (z = -chunkRenderDistance; z< chunkRenderDistance; z++){
-//                for (int y = 0; y < 8; y++) {
-//                    generateChunkMesh(x, z, y);
-//                }
-//            }
-//        }
 
 //        createToolDebugInventory();
         generateRandomInventory();

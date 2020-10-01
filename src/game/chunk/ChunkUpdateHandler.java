@@ -21,18 +21,21 @@ public class ChunkUpdateHandler {
     }
 
     public static void chunkUpdater() {
+//        Map<Integer, String> deletionQueue = new HashMap<>();
+//        int queueAmount = 0;
         for (ChunkUpdate thisUpdate : queue.values()) {
-            thisUpdate.timer += 1;
-            //only one update at a time
-            if (thisUpdate.timer >= 10) {
-//                System.out.println("Generating chunk mesh: " + (thisUpdate.x-getChunkRenderDistance()) +
-//                        " " + (thisUpdate.z-getChunkRenderDistance()) +
-//                        " " + thisUpdate.y
-//                );
-                generateChunkMesh(thisUpdate.x, thisUpdate.z,thisUpdate.y);
-                queue.remove(thisUpdate.key);
-            }
+            generateChunkMesh(thisUpdate.x, thisUpdate.z,thisUpdate.y);
+            queue.remove(thisUpdate.key);
             return;
+//            deletionQueue.put(queueAmount, thisUpdate.key);
+//            queueAmount++;
+//            if (queueAmount >= 2) {
+//                break;
+//            }
         }
+
+//        for (String thisKey : deletionQueue.values()) {
+//            queue.remove(thisKey);
+//        }
     }
 }

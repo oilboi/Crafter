@@ -11,6 +11,7 @@ import org.lwjgl.openal.AL11;
 import java.awt.*;
 
 import static game.chunk.Chunk.genBiome;
+import static game.chunk.ChunkMesh.generateChunkMesh;
 import static game.chunk.ChunkUpdateHandler.chunkUpdate;
 import static game.chunk.ChunkUpdateHandler.chunkUpdater;
 import static engine.Hud.*;
@@ -75,12 +76,16 @@ public class Crafter {
             accumulator += elapsedTime;
             input();
             countFPS();
+            chunkUpdater();
+
             while (accumulator >= 1_000_000){
                 gameUpdate();
                 accumulator -= 1_000_000;
             }
+
             renderGame();
             windowUpdate();
+
             if (isvSync()){
                 sync();
             }
@@ -124,8 +129,13 @@ public class Crafter {
         for (x = -chunkRenderDistance; x < chunkRenderDistance; x++){
             for (z = -chunkRenderDistance; z< chunkRenderDistance; z++){
                 genBiome(x,z);
+            }
+        }
+
+        for (x = -chunkRenderDistance; x < chunkRenderDistance; x++){
+            for (z = -chunkRenderDistance; z< chunkRenderDistance; z++){
                 for (int y = 0; y < 8; y++){
-                    chunkUpdate(x,z,y);
+                    generateChunkMesh(x,z,y);
                 }
             }
         }
@@ -261,7 +271,6 @@ public class Crafter {
     }
 
     private static void gameUpdate() throws Exception {
-        chunkUpdater();
         updateCamera();
         testPlayerDiggingAnimation();
         playerOnTick();

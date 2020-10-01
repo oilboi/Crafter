@@ -306,7 +306,7 @@ public class ChunkMesh {
 
                             neighborBlock = getBlock(realX, y + 1, realZ);
 
-                            if (neighborBlock >= 0 && !getBlockDrawType(neighborBlock).equals("normal") || y == 127 && getIfLiquid(neighborBlock)) {
+                            if (y == 127 || (neighborBlock >= 0 && !getBlockDrawType(neighborBlock).equals("normal")  && getIfLiquid(neighborBlock))) {
                                 //top
                                 liquidPositions[liquidPositionsCount + 0] = (0f + x + offsetX);
                                 liquidPositions[liquidPositionsCount + 1] = (1f + y);

@@ -41,7 +41,7 @@ public class Chunk {
 
     public static boolean chunkStackContainsBlock(int chunkX, int chunkZ, int yHeight){
         ChunkObject thisChunk = map.get(chunkX + " " + chunkZ);
-        if (thisChunk.block == null){
+        if (thisChunk == null || thisChunk.block == null){
             return false;
         }
         for (int y = yHeight * 16; y < (yHeight+1) * 16; y++) {

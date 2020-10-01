@@ -21,7 +21,6 @@ public class Ray {
         for(float step = 0; step <= length ; step += 0.01f) {
             cachePos = new Vector3f(dir.x * step, dir.y * step, dir.z * step);
             newPos = new Vector3f((float)Math.floor(pos.x + cachePos.x), (float)Math.floor(pos.y + cachePos.y), (float)Math.floor(pos.z + cachePos.z));
-
             if (getBlock((int)newPos.x, (int)newPos.y, (int)newPos.z) != 0){
                 finalPos = newPos;
                 break;
@@ -33,21 +32,18 @@ public class Ray {
             if(mining) {
                 destroyBlock(finalPos);
             } else if (placing && lastPos != null){
-
                 setAABB(getPlayerPos().x, getPlayerPos().y, getPlayerPos().z, getPlayerWidth(), getPlayerHeight());
-
-                setBlockBox((int)lastPos.x,(int)lastPos.y,(int)lastPos.z, getBlockShape(1)[0]);
-
+                setBlockBox((int)lastPos.x,(int)lastPos.y,(int)lastPos.z, getBlockShape(1)[0]); //TODO: make this check the actual block shapes
                 if (!wouldCollidePlacing() && getItemInInventorySlot(getPlayerInventorySelection(),0) != null && !getItemInInventorySlot(getPlayerInventorySelection(),0).definition.isTool) {
                     placeBlock(lastPos, getItemInInventorySlot(getPlayerInventorySelection(),0).definition.blockID);
                 }
             }
             else {
-                setPlayerWorldSelectionPos(finalPos); //position
+                setPlayerWorldSelectionPos(finalPos);
             }
         }
         else {
-            setPlayerWorldSelectionPos(); //null
+            setPlayerWorldSelectionPos(null);
         }
     }
 

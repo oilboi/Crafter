@@ -13,13 +13,9 @@ public class SoundAPI {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         SoundSource thisSource = new SoundSource(false, false);
-
         thisSource.setBuffer(soundBuffer.getBufferId());
-
         thisSource.setPosition(pos);
-
         playSoundSource(soundBuffer, thisSource);
     }
 

@@ -14,6 +14,7 @@ import static engine.sound.SoundAPI.playSound;
 public class BlockDefinition {
 
     private final static BlockDefinition[] blockIDs = new BlockDefinition[256];
+
     private final static Map<String, BlockShape> blockShapeMap = new HashMap<>();
 
     //fixed fields for the class

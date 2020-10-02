@@ -72,11 +72,12 @@ public class ChunkMesh {
         float[] liquidLight = new float[24_576];
         int liquidLightCount = 0;
 
-        for (int y = yHeight * 16; y < (yHeight+1) * 16; y++) {
-            for (int x = 0; x < 16; x++) {
-                for (int z = 0; z < 16; z++) {
-                    int realX = (int)Math.floor(chunkX * 16f) + x;
-                    int realZ = (int)Math.floor(chunkZ * 16f) + z;
+        for (int x = 0; x < 16; x++) {
+            int realX = (int)Math.floor(chunkX * 16f) + x;
+            for (int z = 0; z < 16; z++) {
+                int realZ = (int)Math.floor(chunkZ * 16f) + z;
+                for (int y = yHeight * 16; y < (yHeight+1) * 16; y++) {
+
                     int thisBlock = thisChunk.block[y][x][z];
 
                     if (thisBlock > 0) {

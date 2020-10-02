@@ -86,6 +86,7 @@ public class Texture {
     public int getHeight() {
         return this.height;
     }
+
     public void bind() {
         glBindTexture(GL_TEXTURE_2D, id);
     }

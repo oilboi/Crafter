@@ -35,6 +35,7 @@ public class Chunk {
         }
         if (thisChunk.mesh[yHeight] != null){
             thisChunk.mesh[yHeight].cleanUp(false);
+            thisChunk.mesh[yHeight] = null;
         }
         thisChunk.mesh[yHeight] = newMesh;
     }
@@ -342,8 +343,9 @@ public class Chunk {
         deleteOldChunks(currentChunkX+dirX, currentChunkZ+dirZ);
     }
 
+    private final static HashMap<Integer, String> deletionQueue = new HashMap<>();
+
     private static void deleteOldChunks(int chunkX, int chunkZ){
-        HashMap<Integer, String> deletionQueue = new HashMap<>();
         int queueCounter = 0;
         for (ChunkObject thisChunk : map.values()){
             if (Math.abs(thisChunk.z - chunkZ) > getChunkRenderDistance() || Math.abs(thisChunk.x - chunkX) > getChunkRenderDistance()){
@@ -351,6 +353,7 @@ public class Chunk {
                     for (int y = 0; y < 8; y++) {
                         if (thisChunk.mesh[y] != null){
                             thisChunk.mesh[y].cleanUp(false);
+                            thisChunk.mesh[y] = null;
                         }
                     }
                 }
@@ -361,6 +364,7 @@ public class Chunk {
         for (String thisString : deletionQueue.values()){
             map.remove(thisString);
         }
+        deletionQueue.clear();
     }
 
     private static final FastNoise noise = new FastNoise();
@@ -387,7 +391,7 @@ public class Chunk {
                         currBlock = 2;
                     } else if (y < height && y >= height - dirtHeight - dirtHeightRandom) {
                         currBlock = 1;
-                    } else if (y < height - dirtHeight) { //TODO: stone level
+                    } else if (y < height - dirtHeight) {
                         if (y <= 30 && y > 0) {
                             if (Math.random() > 0.95) {
                                 currBlock = (short) Math.floor(8 + (Math.random() * 8));

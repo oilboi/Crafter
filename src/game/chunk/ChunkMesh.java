@@ -3,10 +3,6 @@ package game.chunk;
 import engine.graph.Mesh;
 import engine.graph.Texture;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Hashtable;
-
 import static game.chunk.Chunk.*;
 import static game.blocks.BlockDefinition.*;
 
@@ -29,6 +25,37 @@ public class ChunkMesh {
     private final static float maxLight = 15;
 
 
+    //normal block stuff
+    private static float offsetX;
+    private static float offsetZ;
+
+    private static float[] positions = new float[50_824];
+    private static int positionsCount = 0;
+
+    private static float[] textureCoord = new float[10_824];
+    private static int textureCoordCount = 0;
+
+    private static int[] indices = new int[10_824];
+    private static int indicesTableCount = 0;
+    private static int indicesCount = 0;
+
+    private static float[] light = new float[10_824];
+    private static int lightCount = 0;
+
+    //liquid stuff
+    private static float[] liquidPositions = new float[10_824];
+    private static int liquidPositionsCount = 0;
+
+    private static float[] liquidTextureCoord = new float[10_824];
+    private static int liquidTextureCoordCount = 0;
+
+    private static int[] liquidIndices = new int[10_824];
+    private static int liquidIndicesCount = 0;
+    private static int liquidIndicesTableCount = 0;
+
+    private static float[] liquidLight = new float[10_824];
+    private static int liquidLightCount = 0;
+
     public static void generateChunkMesh(int chunkX, int chunkZ, int yHeight) {
 
         ChunkObject thisChunk = getChunk(chunkX, chunkZ);
@@ -40,37 +67,20 @@ public class ChunkMesh {
             return;
         }
 
-        //normal block stuff
-        float offsetX = chunkX * 16;
-        float offsetZ = chunkZ * 16;
+        offsetX = chunkX * 16;
+        offsetZ = chunkZ * 16;
 
-        float[] positions = new float[589_824];
-        int positionsCount = 0;
+        positionsCount = 0;
+        textureCoordCount = 0;
+        indicesTableCount = 0;
+        indicesCount = 0;
+        lightCount = 0;
 
-        float[] textureCoord = new float[589_824];
-        int textureCoordCount = 0;
-
-        int[] indices = new int[589_824];
-        int indicesTableCount = 0;
-        int indicesCount = 0;
-
-        float[] light = new float[589_824];
-        int lightCount = 0;
-
-        //liquid stuff
-        //liquid stuff
-        float[] liquidPositions = new float[24_576];
-        int liquidPositionsCount = 0;
-
-        float[] liquidTextureCoord = new float[24_576];
-        int liquidTextureCoordCount = 0;
-
-        int[] liquidIndices = new int[24_576];
-        int liquidIndicesCount = 0;
-        int liquidIndicesTableCount = 0;
-
-        float[] liquidLight = new float[24_576];
-        int liquidLightCount = 0;
+        liquidPositionsCount = 0;
+        liquidTextureCoordCount = 0;
+        liquidIndicesCount = 0;
+        liquidIndicesTableCount = 0;
+        liquidLightCount = 0;
 
         for (int x = 0; x < 16; x++) {
             int realX = (int)Math.floor(chunkX * 16f) + x;

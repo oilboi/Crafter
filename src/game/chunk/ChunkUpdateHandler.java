@@ -16,7 +16,7 @@ public class ChunkUpdateHandler {
             queue.put(keyName, new ChunkUpdate(x, z, y));
         }
     }
-    private static HashMap<Integer, String> deletionQueue = new HashMap<>();
+    private static final HashMap<Integer, String> deletionQueue = new HashMap<>();
     public static void chunkUpdater() {
         int currentDeletionCount = 0;
         for (ChunkUpdate thisUpdate : queue.values()) {

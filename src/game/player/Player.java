@@ -169,13 +169,13 @@ public class Player {
             wieldHandAnimationRot.z = (float) Math.toDegrees(wieldHandAnimationRot.z);
         } else if (getItemInInventorySlot(getPlayerInventorySelection(),0).definition.isTool){
 
-            Vector3f wieldHandAnimationPosBaseTool = new Vector3f(10f,-7f,-8f);
+            Vector3f wieldHandAnimationPosBaseTool = new Vector3f(10f,-6.5f,-8f);
 
             Vector3f wieldHandAnimationRotBegin = new Vector3f((float)(Math.toRadians(0)),(float)(Math.toRadians(65)),(float)(Math.toRadians(-35)));
             Vector3f wieldHandAnimationRotEnd = new Vector3f((float)(Math.toRadians(50)),(float)(Math.toRadians(65)),(float)(Math.toRadians(-45)));
 
-            wieldHandAnimationPos.x = (float) (-10f * Math.sin(Math.pow(diggingAnimation, 0.6f) * Math.PI)) + wieldHandAnimationPosBaseTool.x;
-            wieldHandAnimationPos.y = (float) (5f * Math.sin(diggingAnimation * 2f * Math.PI)) + wieldHandAnimationPosBaseTool.y;
+            wieldHandAnimationPos.x = (float) (-8f * Math.sin(Math.pow(diggingAnimation, 0.6f) * Math.PI)) + wieldHandAnimationPosBaseTool.x;
+            wieldHandAnimationPos.y = (float) (8f * Math.sin(diggingAnimation * 2f * Math.PI) + (Math.sin(-diggingAnimation  * 2f * Math.PI) * 5f)) + wieldHandAnimationPosBaseTool.y;
             wieldHandAnimationPos.z = wieldHandAnimationPosBaseTool.z;
 
 

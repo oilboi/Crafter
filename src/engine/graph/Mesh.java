@@ -18,6 +18,8 @@ public class Mesh {
 
     private final int colorVboId;
 
+    private final int textureVboId;
+
     private final int idxVboId;
 
     private final int vertexCount;
@@ -45,6 +47,7 @@ public class Mesh {
             posBuffer = MemoryUtil.memAllocFloat(positions.length);
 
             posBuffer.put(positions).flip();
+
             glBindBuffer(GL_ARRAY_BUFFER, posVboId);
             glBufferData(GL_ARRAY_BUFFER, posBuffer, GL_STATIC_DRAW);
             glEnableVertexAttribArray(0);
@@ -55,6 +58,7 @@ public class Mesh {
 
             colorBuffer = MemoryUtil.memAllocFloat(colors.length);
 
+
             colorBuffer.put(colors).flip();
             glBindBuffer(GL_ARRAY_BUFFER, colorVboId);
             glBufferData(GL_ARRAY_BUFFER, colorBuffer, GL_STATIC_DRAW);
@@ -62,15 +66,18 @@ public class Mesh {
             glVertexAttribPointer(1, 3, GL_FLOAT, false, 0, 0);
 
             //texture coordinates vbo
-            int textureVboId = glGenBuffers();
+            textureVboId = glGenBuffers();
 
             textCoordsBuffer = MemoryUtil.memAllocFloat(textCoords.length);
+
+
 
             textCoordsBuffer.put(textCoords).flip();
             glBindBuffer(GL_ARRAY_BUFFER, textureVboId);
             glBufferData(GL_ARRAY_BUFFER, textCoordsBuffer, GL_STATIC_DRAW);
             glEnableVertexAttribArray(2);
             glVertexAttribPointer(2, 2, GL_FLOAT, false, 0, 0);
+
 
             //index vbo
             idxVboId = glGenBuffers();
@@ -83,22 +90,27 @@ public class Mesh {
 
             glBindBuffer(GL_ARRAY_BUFFER, 0);
             glBindVertexArray(0);
+
         } finally {
 
             if (posBuffer != null){
                 MemoryUtil.memFree(posBuffer);
+                posBuffer = null;
             }
 
             if (colorBuffer != null){
                 MemoryUtil.memFree(colorBuffer);
+                colorBuffer = null;
             }
 
             if (textCoordsBuffer != null){
                 MemoryUtil.memFree(textCoordsBuffer);
+                textCoordsBuffer = null;
             }
 
             if (indicesBuffer != null){
                 MemoryUtil.memFree(indicesBuffer);
+                indicesBuffer = null;
             }
         }
     }
@@ -132,22 +144,51 @@ public class Mesh {
     }
 
     public void cleanUp(boolean deleteTexture){
-        glDisableVertexAttribArray(0);
+        //completely scrub the memory clean
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindVertexArray(posVboId);
+        glDeleteVertexArrays(0);
+        glBindVertexArray(colorVboId);
+        glDeleteVertexArrays(0);
+        glBindVertexArray(textureVboId);
+        glDeleteVertexArrays(0);
+        glBindVertexArray(idxVboId);
+        glDeleteVertexArrays(0);
+        glBindVertexArray(vaoId);
+        glDeleteVertexArrays(0);
 
-        //delete the vbos
+        glBindBuffer(GL_ARRAY_BUFFER, posVboId);
+        glDisableVertexAttribArray(0);
+        glDisableVertexAttribArray(1);
+        glDisableVertexAttribArray(2);
+        glBindBuffer(GL_ARRAY_BUFFER, colorVboId);
+        glDisableVertexAttribArray(0);
+        glDisableVertexAttribArray(1);
+        glDisableVertexAttribArray(2);
+        glBindBuffer(GL_ARRAY_BUFFER, textureVboId);
+        glDisableVertexAttribArray(0);
+        glDisableVertexAttribArray(1);
+        glDisableVertexAttribArray(2);
+        glBindBuffer(GL_ARRAY_BUFFER, idxVboId);
+        glDisableVertexAttribArray(0);
+        glDisableVertexAttribArray(1);
+        glDisableVertexAttribArray(2);
+        glBindBuffer(GL_ARRAY_BUFFER, vaoId);
+        glDisableVertexAttribArray(0);
+        glDisableVertexAttribArray(1);
+        glDisableVertexAttribArray(2);
+
         glBindBuffer(GL_ARRAY_BUFFER, 0);
         glDeleteBuffers(posVboId);
         glDeleteBuffers(colorVboId);
+        glDeleteBuffers(textureVboId);
         glDeleteBuffers(idxVboId);
+        glDeleteBuffers(vaoId);
 
 
         //delete the texture
         if (deleteTexture) {
             texture.cleanup();
         }
-
-        //delete the vao
-        glBindVertexArray(0);
-        glDeleteVertexArrays(vaoId);
     }
 }

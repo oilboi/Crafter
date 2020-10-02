@@ -32,24 +32,24 @@ public class ChunkMesh {
     private static float[] positions = new float[50_824];
     private static int positionsCount = 0;
 
-    private static float[] textureCoord = new float[10_824];
+    private static float[] textureCoord = new float[50_824];
     private static int textureCoordCount = 0;
 
-    private static int[] indices = new int[10_824];
+    private static int[] indices = new int[50_824];
     private static int indicesTableCount = 0;
     private static int indicesCount = 0;
 
-    private static float[] light = new float[10_824];
+    private static float[] light = new float[50_824];
     private static int lightCount = 0;
 
     //liquid stuff
-    private static float[] liquidPositions = new float[10_824];
+    private static float[] liquidPositions = new float[50_824];
     private static int liquidPositionsCount = 0;
 
-    private static float[] liquidTextureCoord = new float[10_824];
+    private static float[] liquidTextureCoord = new float[50_824];
     private static int liquidTextureCoordCount = 0;
 
-    private static int[] liquidIndices = new int[10_824];
+    private static int[] liquidIndices = new int[50_824];
     private static int liquidIndicesCount = 0;
     private static int liquidIndicesTableCount = 0;
 

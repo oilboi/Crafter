@@ -363,6 +363,8 @@ public class Chunk {
         }
         for (String thisString : deletionQueue.values()){
             map.remove(thisString);
+            ChunkObject thisChunk = map.get(thisString);
+            thisChunk = null;
         }
         deletionQueue.clear();
     }

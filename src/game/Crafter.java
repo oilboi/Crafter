@@ -31,7 +31,7 @@ import static org.lwjgl.glfw.GLFW.*;
 public class Crafter {
 
     //variables
-    private static int     chunkRenderDistance = 10;
+    private static int     chunkRenderDistance = 5;
     private static boolean qButtonPushed       = false;
     private static boolean rButtonPushed       = false;
     private static boolean tButtonPushed       = false;

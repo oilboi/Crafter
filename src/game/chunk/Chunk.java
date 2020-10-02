@@ -385,28 +385,51 @@ public class Chunk {
             for (int x = 0; x < 16; x++) {
                 for (int z = 0; z < 16; z++) {
                     float dirtHeightRandom = (float)Math.floor(Math.random() * 2f);
+
                     height = (byte)(Math.abs(noise.GetCubicFractal((chunkX*16)+x,(chunkZ*16)+z))*127+heightAdder);
+
                     for (int y = 127; y >= 0; y--) {
+
                     if (y <= 0 + dirtHeightRandom) {
                         currBlock = 5;
-                    } else if (y == height) {
-                        currBlock = 2;
+                    } else if (y == height && y >= waterHeight) {
+                        if (y <= waterHeight + 2){
+                            currBlock = 23;
+                        } else {
+                            currBlock = 2;
+                        }
+
                     } else if (y < height && y >= height - dirtHeight - dirtHeightRandom) {
-                        currBlock = 1;
+
+                        if (y <= waterHeight){
+                            currBlock = 23;
+                        } else {
+                            currBlock = 2;
+                        }
+
                     } else if (y < height - dirtHeight) {
                         if (y <= 30 && y > 0) {
                             if (Math.random() > 0.95) {
+
                                 currBlock = (short) Math.floor(8 + (Math.random() * 8));
+
                             } else {
+
                                 currBlock = 3;
+
                             }
                         } else {
+
                             currBlock = 3;
+
                         }
                     } else {
                         if (y <= waterHeight) {
+
                             currBlock = 7;
+
                         } else {
+
                             currBlock = 0;
                         }
                     }

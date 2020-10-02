@@ -657,33 +657,23 @@ public class BlockDefinition {
                 "wood_2"
         );
 
-        //water thing
-        BlockModifier debug = new BlockModifier() {
-            @Override
-            public void onPlace(Vector3f pos) throws Exception {
-                for(int y = 0; y < 128; y++){
-                    setBlock((int)Math.floor(pos.x), y, (int)Math.floor(pos.z),23);
-                }
-            }
-        };
-
         new BlockDefinition(
                 23,
-                "debug",
+                "sand",
                 true,
-                new int[]{22,0}, //front
-                new int[]{19,0}, //back
-                new int[]{19,0}, //right
-                new int[]{19,0}, //left
-                new int[]{20,0}, //top
-                new int[]{20,0},  //bottom
+                new int[]{23,0}, //front
+                new int[]{23,0}, //back
+                new int[]{23,0}, //right
+                new int[]{23,0}, //left
+                new int[]{23,0}, //top
+                new int[]{23,0},  //bottom
                 "normal",
                 true,
                 false,
-                true,
-                debug,
-                "",
-                ""
+                false,
+                null,
+                "sand_1",
+                "sand_2"
         );
     }
 

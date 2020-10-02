@@ -154,8 +154,7 @@ public class Renderer {
         }
 
 //        render each item entity
-        Collection<Item> items = getAllItems();
-        for (Item thisItem : items){
+        for (Item thisItem : getAllItems()){
             Matrix4f modelViewMatrix = updateModelViewMatrix(thisItem.pos, thisItem.rotation, viewMatrix);
             shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
             thisItem.definition.mesh.render();

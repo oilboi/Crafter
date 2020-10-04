@@ -145,6 +145,8 @@ public class Mesh {
 
     public void cleanUp(boolean deleteTexture){
 
+        //https://openglbook.com/chapter-2-vertices-and-shapes.html
+
         glBindBuffer(GL_ARRAY_BUFFER, 0);
 
         glDisableVertexAttribArray(2);

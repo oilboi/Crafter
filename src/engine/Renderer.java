@@ -179,19 +179,18 @@ public class Renderer {
 
         //render world selection mesh
         if (getPlayerWorldSelectionPos() != null){
-            Mesh selectionMesh = getWorldSelectionMesh();
-            modelViewMatrix = getWorldSelectionViewMatrix(getPlayerWorldSelectionPos(), viewMatrix);
 
+            Mesh selectionMesh = getWorldSelectionMesh();
+            modelViewMatrix = updateModelViewMatrix(getPlayerWorldSelectionPos(), new Vector3f(0,0,0), viewMatrix);
             shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
             selectionMesh.render();
 
-
-//            Mesh crackMesh = getWorldSelectionMesh();
-//
-//            modelViewMatrix = getWorldSelectionViewMatrix(getPlayerWorldSelectionPos(), viewMatrix);
-//
-//            shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
-//            crackMesh.render();
+            if (getDiggingFrame() >= 0) {
+                Mesh crackMesh = getMiningCrackMesh();
+                modelViewMatrix = updateModelViewMatrix(getPlayerWorldSelectionPos(), new Vector3f(0, 0, 0), viewMatrix);
+                shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+                crackMesh.render();
+            }
         }
 
 

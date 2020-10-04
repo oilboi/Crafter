@@ -43,8 +43,7 @@ public class Ray {
             }
         }
         else {
-//            setPlayerWorldSelectionPos(null);
-            setPlayerWorldSelectionPos(lastPos);
+            setPlayerWorldSelectionPos(null);
         }
     }
 

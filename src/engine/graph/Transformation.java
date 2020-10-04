@@ -35,16 +35,6 @@ public class Transformation {
         return projectionMatrix;
     }
 
-//    public static Matrix4f getEntityModelViewMatrix(Matrix4f viewMatrix){
-//        Vector3f rotation = getRotation(ID);
-//        modelViewMatrix.identity().translate(getPositionWithHover(ID)).
-//                rotateX((float)Math.toRadians(-rotation.x)).
-//                rotateY((float)Math.toRadians(-rotation.y)).
-//                rotateZ((float)Math.toRadians(-rotation.z)).
-//                scale(getScale(ID));
-//        Matrix4f viewCurr = new Matrix4f(viewMatrix);
-//        return viewCurr.mul(modelViewMatrix);
-//    }
 
     public static Matrix4f getTNTModelViewMatrix(int ID, Matrix4f viewMatrix){
         modelViewMatrix.identity().translate(getTNTPosition(ID)).
@@ -85,21 +75,6 @@ public class Transformation {
         return new Matrix4f(matrix).mul(modelViewMatrix);
     }
 
-    public static Matrix4f getWorldSelectionViewMatrix(Vector3f position, Matrix4f matrix){
-        return matrix.translate(position.x, position.y, position.z);
-    }
-
-
-    public static Matrix4f getGenericMatrixWithPos(Vector3f position, Matrix4f matrix){
-        return matrix.translate(position.x, position.y, position.z);
-    }
-
-    public static Matrix4f getGenericMatrixWithPosRotation(Vector3f position, Vector3f rotation, Matrix4f matrix){
-        return matrix.translate(position.x, position.y, position.z).
-                rotateX((float)Math.toRadians(-rotation.x)).
-                rotateY((float)Math.toRadians(-rotation.y)).
-                rotateZ((float)Math.toRadians(-rotation.z));
-    }
     public static Matrix4f getGenericMatrixWithPosRotationScale(Vector3f position, Vector3f rotation,Vector3f scale, Matrix4f matrix){
         return matrix.translate(position.x, position.y, position.z).
                 rotateX((float)Math.toRadians(-rotation.x)).

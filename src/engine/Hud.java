@@ -3,18 +3,15 @@ package engine;
 import engine.graph.Mesh;
 import engine.graph.Texture;
 import game.item.Item;
-import org.joml.Matrix4f;
 import org.joml.Vector2d;
 import org.joml.Vector3f;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import static engine.MouseInput.*;
 import static engine.Renderer.getWindowScale;
 import static engine.Renderer.getWindowSize;
 import static engine.Window.*;
-import static engine.graph.Transformation.buildOrthoProjModelMatrix;
 import static engine.sound.SoundAPI.playSound;
 import static game.player.Inventory.*;
 import static game.player.Player.*;
@@ -209,7 +206,7 @@ public class Hud {
         createInventorySlotSelected();
         createMenuBg();
         createButtons();
-        createMiningMesh(8);
+        rebuildMiningMesh(0);
 
         continueMesh = createCustomHudText("CONTINUE", 1,1,1);
         toggleVsyncMesh = createCustomHudText("VSYNC:ON", 1,1,1);
@@ -806,7 +803,7 @@ public class Hud {
         thisInventoryMesh = new Mesh(positionsArray, lightArray, indicesArray, textureCoordArray, mainInventory);
     }
 
-    private static void createMiningMesh(int level) {
+    public static void rebuildMiningMesh(int level) {
 
         float min = -0.0001f;
         float max = 1.0001f;
@@ -816,6 +813,11 @@ public class Hud {
         ArrayList textureCoord = new ArrayList();
         ArrayList indices = new ArrayList();
         ArrayList light = new ArrayList();
+
+        float maxLevels = 9;
+
+        float textureMin = (float)level/maxLevels;
+        float textureMax = (float)(level+1)/maxLevels;
 
         //front
         positions.add(max);
@@ -856,13 +858,13 @@ public class Hud {
         // 0  1   2  3
         //front
         textureCoord.add(1f);//1
-        textureCoord.add(0f);//2
+        textureCoord.add(textureMin);//2
         textureCoord.add(0f);//0
-        textureCoord.add(0f);//2
+        textureCoord.add(textureMin);//2
         textureCoord.add(0f);//0
-        textureCoord.add(1f);//3
+        textureCoord.add(textureMax);//3
         textureCoord.add(1f);//1
-        textureCoord.add(1f);//3
+        textureCoord.add(textureMax);//3
 
 
         //todo///////////////////////////////////////////////////////
@@ -884,7 +886,7 @@ public class Hud {
         positions.add(min);
         positions.add(min);
         //back
-        float backLight = 2f;
+        float backLight = 1f;
         //back
         for (int i = 0; i < 12; i++) {
             light.add(backLight);
@@ -903,13 +905,13 @@ public class Hud {
         // 0  1   2  3
         //back
         textureCoord.add(1f);//1
-        textureCoord.add(0f);//2
+        textureCoord.add(textureMin);//2
         textureCoord.add(0f);//0
-        textureCoord.add(0f);//2
+        textureCoord.add(textureMin);//2
         textureCoord.add(0f);//0
-        textureCoord.add(1f);//3
+        textureCoord.add(textureMax);//3
         textureCoord.add(1f);//1
-        textureCoord.add(1f);//3
+        textureCoord.add(textureMax);//3
 
 
         //todo///////////////////////////////////////////////////////
@@ -951,13 +953,13 @@ public class Hud {
         // 0  1   2  3
         //right
         textureCoord.add(1f);//1
-        textureCoord.add(0f);//2
+        textureCoord.add(textureMin);//2
         textureCoord.add(0f);//0
-        textureCoord.add(0f);//2
+        textureCoord.add(textureMin);//2
         textureCoord.add(0f);//0
-        textureCoord.add(1f);//3
+        textureCoord.add(textureMax);//3
         textureCoord.add(1f);//1
-        textureCoord.add(1f);//3
+        textureCoord.add(textureMax);//3
 
 
         //todo///////////////////////////////////////////////////////
@@ -998,13 +1000,13 @@ public class Hud {
         // 0  1   2  3
         //left
         textureCoord.add(1f);//1
-        textureCoord.add(0f);//2
+        textureCoord.add(textureMin);//2
         textureCoord.add(0f);//0
-        textureCoord.add(0f);//2
+        textureCoord.add(textureMin);//2
         textureCoord.add(0f);//0
-        textureCoord.add(1f);//3
+        textureCoord.add(textureMax);//3
         textureCoord.add(1f);//1
-        textureCoord.add(1f);//3
+        textureCoord.add(textureMax);//3
 
 
         //todo///////////////////////////////////////////////////////
@@ -1045,13 +1047,13 @@ public class Hud {
         // 0  1   2  3
         //top
         textureCoord.add(1f);//1
-        textureCoord.add(0f);//2
+        textureCoord.add(textureMin);//2
         textureCoord.add(0f);//0
-        textureCoord.add(0f);//2
+        textureCoord.add(textureMin);//2
         textureCoord.add(0f);//0
-        textureCoord.add(1f);//3
+        textureCoord.add(textureMax);//3
         textureCoord.add(1f);//1
-        textureCoord.add(1f);//3
+        textureCoord.add(textureMax);//3
 
 
         //todo///////////////////////////////////////////////////////
@@ -1093,13 +1095,13 @@ public class Hud {
         // 0  1   2  3
         //bottom
         textureCoord.add(1f);//1
-        textureCoord.add(0f);//2
+        textureCoord.add(textureMin);//2
         textureCoord.add(0f);//0
-        textureCoord.add(0f);//2
+        textureCoord.add(textureMin);//2
         textureCoord.add(0f);//0
-        textureCoord.add(1f);//3
+        textureCoord.add(textureMax);//3
         textureCoord.add(1f);//1
-        textureCoord.add(1f);//3
+        textureCoord.add(textureMax);//3
 
         //convert the position objects into usable array
         float[] positionsArray = new float[positions.size()];

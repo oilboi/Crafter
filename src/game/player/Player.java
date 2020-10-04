@@ -4,6 +4,7 @@ import org.joml.*;
 
 import java.lang.Math;
 
+import static engine.Hud.rebuildMiningMesh;
 import static engine.graph.Camera.*;
 import static engine.sound.SoundAPI.playSound;
 import static game.chunk.Chunk.generateNewChunks;
@@ -368,8 +369,36 @@ public class Player {
         return onGround;
     }
 
+    private static float animationTest = 0f;
+    private static int diggingFrame = -1;
+    private static boolean hasDug = false;
+
+    public static boolean playerHasDug(){
+        return hasDug;
+    }
+
+    public static int getDiggingFrame(){
+        return diggingFrame;
+    }
 
     public static void playerOnTick() {
+
+        hasDug = false;
+        if (mining && worldSelectionPos != null) {
+            animationTest += 0.01f;
+            if (animationTest >= 1) {
+                diggingFrame++;
+                if (diggingFrame > 8) {
+                    diggingFrame = 0;
+                    hasDug = true;
+                }
+                animationTest = 0;
+                rebuildMiningMesh(diggingFrame);
+            }
+        } else if (diggingFrame != -1){
+            diggingFrame = -1;
+            rebuildMiningMesh(0);
+        }
 
         applyPlayerInertiaBuffer();
 
@@ -390,7 +419,7 @@ public class Player {
 
         onGround = applyInertia(pos, inertia, true, width, height,true, sneaking, true, true);
 
-        if(mining && mineTimer <= 0) {
+        if(mining && hasDug) {
             rayCast(getCameraPosition(), getCameraRotationVector(), 4f,  true, false);
             mineTimer = 0.5f;
         } else if (placing && placeTimer <= 0){

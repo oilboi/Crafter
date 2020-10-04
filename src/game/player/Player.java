@@ -7,7 +7,9 @@ import java.lang.Math;
 import static engine.Hud.rebuildMiningMesh;
 import static engine.graph.Camera.*;
 import static engine.sound.SoundAPI.playSound;
+import static game.blocks.BlockDefinition.getBlockDefinition;
 import static game.chunk.Chunk.generateNewChunks;
+import static game.chunk.Chunk.getBlock;
 import static game.collision.Collision.applyInertia;
 import static game.player.Inventory.getItemInInventorySlot;
 import static game.player.Ray.rayCast;
@@ -117,9 +119,19 @@ public class Player {
         handSetUp = false;
     }
 
+    private static boolean soundTrigger = true;
+
     public static void testPlayerDiggingAnimation(){
         if (!diggingAnimationGo && handSetUp){
             return;
+        }
+
+        if (worldSelectionPos != null && soundTrigger){
+            int block = getBlock((int)worldSelectionPos.x, (int)worldSelectionPos.y, (int)worldSelectionPos.z);
+            if (block > 0){
+                playSound(getBlockDefinition(block).digSound);
+                soundTrigger = false;
+            }
         }
 
         if (handSetUp) {
@@ -129,6 +141,7 @@ public class Player {
         if ((!diggingAnimationBuffer || diggingAnimation >= 1f) && handSetUp){
             diggingAnimationGo = false;
             diggingAnimation = 0f;
+            soundTrigger = true;
             return;
         }
 

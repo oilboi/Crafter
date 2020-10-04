@@ -130,7 +130,7 @@ public class Player {
             int block = getBlock((int)worldSelectionPos.x, (int)worldSelectionPos.y, (int)worldSelectionPos.z);
             if (block > 0){
                 String digSound = getBlockDefinition(block).digSound;
-                if (digSound != null) {
+                if (!digSound.equals("")) {
                     playSound(digSound);
                     soundTrigger = false;
                 }

@@ -8,6 +8,7 @@ import org.joml.Vector2d;
 import org.joml.Vector3f;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static engine.MouseInput.*;
 import static engine.Renderer.getWindowScale;
@@ -61,6 +62,7 @@ public class Hud {
     private static Texture buttonSelected;
     private static Texture buttonPushed;
     private static Texture menuBg;
+    private static Texture miningCrack;
 
 
     private static Mesh thisHotBarMesh;
@@ -79,10 +81,10 @@ public class Hud {
     private static Mesh buttonSelectedMesh;
     private static Mesh buttonPushedMesh;
     private static Mesh menuBgMesh;
-
     private static Mesh continueMesh;
     private static Mesh toggleVsyncMesh;
     private static Mesh quitGameMesh;
+    private static Mesh miningCrackMesh;
 
 
     public static void initializeHudAtlas() throws Exception {
@@ -99,6 +101,7 @@ public class Hud {
         buttonSelected = new Texture("textures/button_selected.png");
         buttonPushed = new Texture("textures/button_pushed.png");
         menuBg = new Texture("textures/menu_bg.png");
+        miningCrack = new Texture("textures/crack_anylength.png");
     }
 
     public static Mesh getHotBarMesh(){
@@ -187,6 +190,10 @@ public class Hud {
         return inventorySlotSelectedMesh;
     }
 
+    public static Mesh getMiningCrackMesh(){
+        return miningCrackMesh;
+    }
+
     public static void createHud(){
         createDebugHotbar();
         createInventory();
@@ -202,6 +209,7 @@ public class Hud {
         createInventorySlotSelected();
         createMenuBg();
         createButtons();
+        createMiningMesh(8);
 
         continueMesh = createCustomHudText("CONTINUE", 1,1,1);
         toggleVsyncMesh = createCustomHudText("VSYNC:ON", 1,1,1);
@@ -798,10 +806,10 @@ public class Hud {
         thisInventoryMesh = new Mesh(positionsArray, lightArray, indicesArray, textureCoordArray, mainInventory);
     }
 
-    private static void createWorldSelectionMesh() {
+    private static void createMiningMesh(int level) {
 
-        float min = -0.01f;
-        float max = 1.01f;
+        float min = -0.0001f;
+        float max = 1.0001f;
         int indicesCount = 0;
 
         ArrayList positions = new ArrayList();
@@ -1092,6 +1100,370 @@ public class Hud {
         textureCoord.add(1f);//3
         textureCoord.add(1f);//1
         textureCoord.add(1f);//3
+
+        //convert the position objects into usable array
+        float[] positionsArray = new float[positions.size()];
+        for (int i = 0; i < positions.size(); i++) {
+            positionsArray[i] = (float) positions.get(i);
+        }
+
+        //convert the light objects into usable array
+        float[] lightArray = new float[light.size()];
+        for (int i = 0; i < light.size(); i++) {
+            lightArray[i] = (float) light.get(i);
+        }
+
+        //convert the indices objects into usable array
+        int[] indicesArray = new int[indices.size()];
+        for (int i = 0; i < indices.size(); i++) {
+            indicesArray[i] = (int) indices.get(i);
+        }
+
+        //convert the textureCoord objects into usable array
+        float[] textureCoordArray = new float[textureCoord.size()];
+        for (int i = 0; i < textureCoord.size(); i++) {
+            textureCoordArray[i] = (float) textureCoord.get(i);
+        }
+
+        miningCrackMesh = new Mesh(positionsArray, lightArray, indicesArray, textureCoordArray, miningCrack);
+    }
+
+    private static void createWorldSelectionMesh() {
+
+        ArrayList positions = new ArrayList();
+        ArrayList textureCoord = new ArrayList();
+        ArrayList indices = new ArrayList();
+        ArrayList light = new ArrayList();
+
+        float min = -0.01f;
+        float max = 1.01f;
+        float width = 0.02f;
+        float overshoot = width*1.5f;
+
+        int indicesCount = 0;
+
+        Vector3f[][] lines = new Vector3f[][]{
+                //lower left
+                {new Vector3f(min-width,min-width,0-overshoot), new Vector3f(min+width,min+width,1+overshoot)},
+                //lower right
+                {new Vector3f(max-width,min-width,0-overshoot), new Vector3f(max+width,min+width,1+overshoot)},
+
+                //upper left
+                {new Vector3f(min-width,max-width,0-overshoot), new Vector3f(min+width,max+width,1+overshoot)},
+                //upper right
+                {new Vector3f(max-width,max-width,0-overshoot), new Vector3f(max+width,max+width,1+overshoot)},
+
+                //lower front
+                {new Vector3f(0-overshoot,min-width,min-width), new Vector3f(1+overshoot,min+width,min+width)},
+                //lower back
+                {new Vector3f(0-overshoot,min-width,max-width), new Vector3f(1+overshoot,min+width,max+width)},
+
+                //upper front
+                {new Vector3f(0-overshoot,max-width,min-width), new Vector3f(1+overshoot,max+width,min+width)},
+                //upper back
+                {new Vector3f(0-overshoot,max-width,max-width), new Vector3f(1+overshoot,max+width,max+width)},
+
+                //front left column
+                {new Vector3f(min-width,0-overshoot,min-width), new Vector3f(min+width,1+overshoot, min+width)},
+                //front right column
+                {new Vector3f(max-width,0-overshoot,min-width), new Vector3f(max+width,1+overshoot, min+width)},
+
+                //back left column
+                {new Vector3f(min-width,0-overshoot,max-width), new Vector3f(min+width,1+overshoot, max+width)},
+                //back right column
+                {new Vector3f(max-width,0-overshoot,max-width), new Vector3f(max+width,1+overshoot, max+width)},
+
+        };
+
+        for (Vector3f[] thisArray : lines) {
+            //front
+            positions.add(thisArray[1].x);
+            positions.add(thisArray[1].y);
+            positions.add(thisArray[1].z);
+
+            positions.add(thisArray[0].x);
+            positions.add(thisArray[1].y);
+            positions.add(thisArray[1].z);
+
+            positions.add(thisArray[0].x);
+            positions.add(thisArray[0].y);
+            positions.add(thisArray[1].z);
+
+            positions.add(thisArray[1].x);
+            positions.add(thisArray[0].y);
+            positions.add(thisArray[1].z);
+
+            //front
+            float frontLight = 1f;
+
+            //front
+            for (int i = 0; i < 12; i++) {
+                light.add(frontLight);
+            }
+            //front
+            indices.add(0 + indicesCount);
+            indices.add(1 + indicesCount);
+            indices.add(2 + indicesCount);
+            indices.add(0 + indicesCount);
+            indices.add(2 + indicesCount);
+            indices.add(3 + indicesCount);
+            indicesCount += 4;
+
+
+            //-x +x  -y +y
+            // 0  1   2  3
+            //front
+            textureCoord.add(1f);//1
+            textureCoord.add(0f);//2
+            textureCoord.add(0f);//0
+            textureCoord.add(0f);//2
+            textureCoord.add(0f);//0
+            textureCoord.add(1f);//3
+            textureCoord.add(1f);//1
+            textureCoord.add(1f);//3
+
+
+            //todo///////////////////////////////////////////////////////
+
+            //back
+            positions.add(thisArray[0].x);
+            positions.add(thisArray[1].y);
+            positions.add(thisArray[0].z);
+
+            positions.add(thisArray[1].x);
+            positions.add(thisArray[1].y);
+            positions.add(thisArray[0].z);
+
+            positions.add(thisArray[1].x);
+            positions.add(thisArray[0].y);
+            positions.add(thisArray[0].z);
+
+            positions.add(thisArray[0].x);
+            positions.add(thisArray[0].y);
+            positions.add(thisArray[0].z);
+            //back
+            float backLight = 2f;
+            //back
+            for (int i = 0; i < 12; i++) {
+                light.add(backLight);
+            }
+            //back
+            indices.add(0 + indicesCount);
+            indices.add(1 + indicesCount);
+            indices.add(2 + indicesCount);
+            indices.add(0 + indicesCount);
+            indices.add(2 + indicesCount);
+            indices.add(3 + indicesCount);
+            indicesCount += 4;
+
+
+            //-x +x  -y +y
+            // 0  1   2  3
+            //back
+            textureCoord.add(1f);//1
+            textureCoord.add(0f);//2
+            textureCoord.add(0f);//0
+            textureCoord.add(0f);//2
+            textureCoord.add(0f);//0
+            textureCoord.add(1f);//3
+            textureCoord.add(1f);//1
+            textureCoord.add(1f);//3
+
+
+            //todo///////////////////////////////////////////////////////
+
+            //right
+            positions.add(thisArray[1].x);
+            positions.add(thisArray[1].y);
+            positions.add(thisArray[0].z);
+
+            positions.add(thisArray[1].x);
+            positions.add(thisArray[1].y);
+            positions.add(thisArray[1].z);
+
+            positions.add(thisArray[1].x);
+            positions.add(thisArray[0].y);
+            positions.add(thisArray[1].z);
+
+            positions.add(thisArray[1].x);
+            positions.add(thisArray[0].y);
+            positions.add(thisArray[0].z);
+            //right
+            float rightLight = 1f;
+
+            //right
+            for (int i = 0; i < 12; i++) {
+                light.add(rightLight);
+            }
+            //right
+            indices.add(0 + indicesCount);
+            indices.add(1 + indicesCount);
+            indices.add(2 + indicesCount);
+            indices.add(0 + indicesCount);
+            indices.add(2 + indicesCount);
+            indices.add(3 + indicesCount);
+            indicesCount += 4;
+
+
+            // 0  1   0  1
+            // 0  1   2  3
+            //right
+            textureCoord.add(1f);//1
+            textureCoord.add(0f);//2
+            textureCoord.add(0f);//0
+            textureCoord.add(0f);//2
+            textureCoord.add(0f);//0
+            textureCoord.add(1f);//3
+            textureCoord.add(1f);//1
+            textureCoord.add(1f);//3
+
+
+            //todo///////////////////////////////////////////////////////
+
+            //left
+            positions.add(thisArray[0].x);
+            positions.add(thisArray[1].y);
+            positions.add(thisArray[1].z);
+
+            positions.add(thisArray[0].x);
+            positions.add(thisArray[1].y);
+            positions.add(thisArray[0].z);
+
+            positions.add(thisArray[0].x);
+            positions.add(thisArray[0].y);
+            positions.add(thisArray[0].z);
+
+            positions.add(thisArray[0].x);
+            positions.add(thisArray[0].y);
+            positions.add(thisArray[1].z);
+            //left
+            float leftLight = 1f;
+            //left
+            for (int i = 0; i < 12; i++) {
+                light.add(leftLight);
+            }
+            //left
+            indices.add(0 + indicesCount);
+            indices.add(1 + indicesCount);
+            indices.add(2 + indicesCount);
+            indices.add(0 + indicesCount);
+            indices.add(2 + indicesCount);
+            indices.add(3 + indicesCount);
+            indicesCount += 4;
+
+
+            //-x +x  -y +y
+            // 0  1   2  3
+            //left
+            textureCoord.add(1f);//1
+            textureCoord.add(0f);//2
+            textureCoord.add(0f);//0
+            textureCoord.add(0f);//2
+            textureCoord.add(0f);//0
+            textureCoord.add(1f);//3
+            textureCoord.add(1f);//1
+            textureCoord.add(1f);//3
+
+
+            //todo///////////////////////////////////////////////////////
+
+            //top
+            positions.add(thisArray[0].x);
+            positions.add(thisArray[1].y);
+            positions.add(thisArray[0].z);
+
+            positions.add(thisArray[0].x);
+            positions.add(thisArray[1].y);
+            positions.add(thisArray[1].z);
+
+            positions.add(thisArray[1].x);
+            positions.add(thisArray[1].y);
+            positions.add(thisArray[1].z);
+
+            positions.add(thisArray[1].x);
+            positions.add(thisArray[1].y);
+            positions.add(thisArray[0].z);
+            //top
+            float topLight = 1f;
+            //top
+            for (int i = 0; i < 12; i++) {
+                light.add(topLight);
+            }
+            //top
+            indices.add(0 + indicesCount);
+            indices.add(1 + indicesCount);
+            indices.add(2 + indicesCount);
+            indices.add(0 + indicesCount);
+            indices.add(2 + indicesCount);
+            indices.add(3 + indicesCount);
+            indicesCount += 4;
+
+
+            //-x +x  -y +y
+            // 0  1   2  3
+            //top
+            textureCoord.add(1f);//1
+            textureCoord.add(0f);//2
+            textureCoord.add(0f);//0
+            textureCoord.add(0f);//2
+            textureCoord.add(0f);//0
+            textureCoord.add(1f);//3
+            textureCoord.add(1f);//1
+            textureCoord.add(1f);//3
+
+
+            //todo///////////////////////////////////////////////////////
+
+            //min = thisArray[0]
+            //max = thisArray[1]
+
+            //bottom
+            positions.add(thisArray[0].x);
+            positions.add(thisArray[0].y);
+            positions.add(thisArray[1].z);
+
+            positions.add(thisArray[0].x);
+            positions.add(thisArray[0].y);
+            positions.add(thisArray[0].z);
+
+            positions.add(thisArray[1].x);
+            positions.add(thisArray[0].y);
+            positions.add(thisArray[0].z);
+
+            positions.add(thisArray[1].x);
+            positions.add(thisArray[0].y);
+            positions.add(thisArray[1].z);
+            //bottom
+            float bottomLight = 1f;
+
+            //bottom
+            for (int i = 0; i < 12; i++) {
+                light.add(bottomLight);
+            }
+            //bottom
+            indices.add(0 + indicesCount);
+            indices.add(1 + indicesCount);
+            indices.add(2 + indicesCount);
+            indices.add(0 + indicesCount);
+            indices.add(2 + indicesCount);
+            indices.add(3 + indicesCount);
+            indicesCount += 4;
+
+
+            //-x +x  -y +y
+            // 0  1   2  3
+            //bottom
+            textureCoord.add(1f);//1
+            textureCoord.add(0f);//2
+            textureCoord.add(0f);//0
+            textureCoord.add(0f);//2
+            textureCoord.add(0f);//0
+            textureCoord.add(1f);//3
+            textureCoord.add(1f);//1
+            textureCoord.add(1f);//3
+
+
+        }
 
         //convert the position objects into usable array
         float[] positionsArray = new float[positions.size()];

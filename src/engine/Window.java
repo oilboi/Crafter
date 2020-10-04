@@ -11,7 +11,6 @@ import java.nio.IntBuffer;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL13.GL_SAMPLE_ALPHA_TO_COVERAGE;
 import static org.lwjgl.stb.STBImage.stbi_load;
 import static org.lwjgl.system.MemoryUtil.NULL;
 

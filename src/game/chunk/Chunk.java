@@ -358,13 +358,12 @@ public class Chunk {
                     }
                 }
                 deletionQueue.put(queueCounter, thisChunk.x + " " + thisChunk.z);
+                thisChunk = null;
                 queueCounter++;
             }
         }
         for (String thisString : deletionQueue.values()){
             map.remove(thisString);
-            ChunkObject thisChunk = map.get(thisString);
-            thisChunk = null;
         }
         deletionQueue.clear();
     }

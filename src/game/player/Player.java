@@ -126,7 +126,7 @@ public class Player {
             return;
         }
 
-        if (worldSelectionPos != null && soundTrigger){
+        if (worldSelectionPos != null && soundTrigger && mining){
             int block = getBlock((int)worldSelectionPos.x, (int)worldSelectionPos.y, (int)worldSelectionPos.z);
             if (block > 0){
                 playSound(getBlockDefinition(block).digSound);
@@ -395,7 +395,7 @@ public class Player {
     }
 
     public static void playerOnTick() {
-
+                
         hasDug = false;
         if (mining && worldSelectionPos != null) {
             animationTest += 0.01f;

@@ -24,7 +24,7 @@ public class Mesh {
 
     private final int vertexCount;
 
-    private final Texture texture;
+    private Texture texture;
 
     private static FloatBuffer posBuffer = null;
     private static FloatBuffer colorBuffer = null;
@@ -144,51 +144,33 @@ public class Mesh {
     }
 
     public void cleanUp(boolean deleteTexture){
-        //completely scrub the memory clean
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        glBindVertexArray(posVboId);
-        glDeleteVertexArrays(0);
-        glBindVertexArray(colorVboId);
-        glDeleteVertexArrays(0);
-        glBindVertexArray(textureVboId);
-        glDeleteVertexArrays(0);
-        glBindVertexArray(idxVboId);
-        glDeleteVertexArrays(0);
-        glBindVertexArray(vaoId);
-        glDeleteVertexArrays(0);
-
-        glBindBuffer(GL_ARRAY_BUFFER, posVboId);
-        glDisableVertexAttribArray(0);
-        glDisableVertexAttribArray(1);
-        glDisableVertexAttribArray(2);
-        glBindBuffer(GL_ARRAY_BUFFER, colorVboId);
-        glDisableVertexAttribArray(0);
-        glDisableVertexAttribArray(1);
-        glDisableVertexAttribArray(2);
-        glBindBuffer(GL_ARRAY_BUFFER, textureVboId);
-        glDisableVertexAttribArray(0);
-        glDisableVertexAttribArray(1);
-        glDisableVertexAttribArray(2);
-        glBindBuffer(GL_ARRAY_BUFFER, idxVboId);
-        glDisableVertexAttribArray(0);
-        glDisableVertexAttribArray(1);
-        glDisableVertexAttribArray(2);
-        glBindBuffer(GL_ARRAY_BUFFER, vaoId);
-        glDisableVertexAttribArray(0);
-        glDisableVertexAttribArray(1);
-        glDisableVertexAttribArray(2);
 
         glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+        glDisableVertexAttribArray(2);
+        glDisableVertexAttribArray(1);
+        glDisableVertexAttribArray(0);
+
         glDeleteBuffers(posVboId);
         glDeleteBuffers(colorVboId);
         glDeleteBuffers(textureVboId);
         glDeleteBuffers(idxVboId);
-        glDeleteBuffers(vaoId);
+
+        glBindVertexArray(0);
+        glDeleteVertexArrays(vaoId);
+
+        int ErrorCheckValue = glGetError();
+
+        if(ErrorCheckValue != GL_NO_ERROR){
+            System.out.println("Error could not destroy the mesh!! Error: " + ErrorCheckValue);
+        }
 
 
         //delete the texture
         if (deleteTexture) {
             texture.cleanup();
         }
+
+        this.texture = null;
     }
 }

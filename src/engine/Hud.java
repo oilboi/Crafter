@@ -1135,28 +1135,29 @@ public class Hud {
         ArrayList indices = new ArrayList();
         ArrayList light = new ArrayList();
 
-        float min = -0.01f;
-        float max = 1.01f;
-        float width = 0.02f;
-        float overshoot = width*1.5f;
+        float sizeOffset = 0.0025f;
+        float min = -sizeOffset;
+        float max = 1.f + sizeOffset;
+        float width = 0.004f;
+        float overshoot = sizeOffset + width;
 
         int indicesCount = 0;
 
         Vector3f[][] lines = new Vector3f[][]{
                 //lower left
-                {new Vector3f(min-width,min-width,0-overshoot), new Vector3f(min+width,min+width,1+overshoot)},
+                {new Vector3f(min-width,min-width,0f-overshoot), new Vector3f(min+width,min+width,1f+overshoot)},
                 //lower right
-                {new Vector3f(max-width,min-width,0-overshoot), new Vector3f(max+width,min+width,1+overshoot)},
+                {new Vector3f(max-width,min-width,0f-overshoot), new Vector3f(max+width,min+width,1f+overshoot)},
 
                 //upper left
-                {new Vector3f(min-width,max-width,0-overshoot), new Vector3f(min+width,max+width,1+overshoot)},
+                {new Vector3f(min-width,max-width,0f-overshoot), new Vector3f(min+width,max+width,1f+overshoot)},
                 //upper right
-                {new Vector3f(max-width,max-width,0-overshoot), new Vector3f(max+width,max+width,1+overshoot)},
+                {new Vector3f(max-width,max-width,0f-overshoot), new Vector3f(max+width,max+width,1f+overshoot)},
 
                 //lower front
-                {new Vector3f(0-overshoot,min-width,min-width), new Vector3f(1+overshoot,min+width,min+width)},
+                {new Vector3f(0f-overshoot,min-width,min-width), new Vector3f(1f+overshoot,min+width,min+width)},
                 //lower back
-                {new Vector3f(0-overshoot,min-width,max-width), new Vector3f(1+overshoot,min+width,max+width)},
+                {new Vector3f(0f-overshoot,min-width,max-width), new Vector3f(1f+overshoot,min+width,max+width)},
 
                 //upper front
                 {new Vector3f(0-overshoot,max-width,min-width), new Vector3f(1+overshoot,max+width,min+width)},

@@ -3,6 +3,7 @@ package engine;
 import engine.graph.*;
 import game.chunk.ChunkObject;
 import game.item.Item;
+import game.particle.ParticleObject;
 import org.joml.Matrix4f;
 import org.joml.Vector2d;
 import org.joml.Vector3f;
@@ -10,11 +11,13 @@ import org.joml.Vector3f;
 import java.util.Collection;
 
 import static engine.MouseInput.getMousePos;
+import static engine.graph.Camera.*;
 import static engine.graph.Transformation.*;
 import static engine.graph.Transformation.buildOrthoProjModelMatrix;
 import static engine.Hud.*;
 import static game.item.ItemDefinition.getItemDefinition;
 import static game.item.ItemEntity.*;
+import static game.particle.Particle.getAllParticles;
 import static game.tnt.TNTEntity.*;
 import static engine.Window.*;
 import static game.chunk.Chunk.*;
@@ -191,6 +194,15 @@ public class Renderer {
                 shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
                 crackMesh.render();
             }
+        }
+
+        //render particles
+        for (ParticleObject thisParticle : getAllParticles()){
+            Mesh thisMesh = thisParticle.mesh;
+
+            modelViewMatrix = updateModelViewMatrix(thisParticle.pos, new Vector3f(0,getCameraRotation().y, 0), viewMatrix);
+            shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+            thisMesh.render();
         }
 
 

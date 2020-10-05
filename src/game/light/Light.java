@@ -9,7 +9,7 @@ public class Light {
     private static final byte maxLightLevel = 15;
     private static final byte blockIndicator = 127;
     private static final byte lightDistance = 15;
-    private static final int max = (lightDistance * 2) + 1;
+    private static final byte max = (lightDistance * 2) + 1;
 
     private static final Deque<LightUpdate> lightSources = new ArrayDeque<>();
 

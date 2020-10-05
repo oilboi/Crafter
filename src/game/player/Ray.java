@@ -7,6 +7,7 @@ import static game.blocks.BlockDefinition.*;
 import static game.collision.Collision.wouldCollidePlacing;
 import static game.collision.CustomAABB.setAABB;
 import static game.collision.CustomBlockBox.setBlockBox;
+import static game.particle.Particle.createParticle;
 import static game.player.Inventory.getItemInInventorySlot;
 import static game.player.Inventory.removeItemFromInventory;
 import static game.player.Player.*;
@@ -54,6 +55,10 @@ public class Ray {
         }
         digBlock((int)flooredPos.x, (int)flooredPos.y, (int)flooredPos.z);
         onDigCall(thisBlock, flooredPos);
+
+        for (int i = 0; i < 20; i++) {
+            createParticle(new Vector3f(flooredPos.x + ((float)Math.random()-0.5f), flooredPos.y + ((float)Math.random()-0.5f), flooredPos.z + ((float)Math.random()-0.5f)), new Vector3f(0, 0, 0), thisBlock);
+        }
     }
     private static void rayPlaceBlock(Vector3f flooredPos, int ID) {
         placeBlock((int)flooredPos.x, (int)flooredPos.y, (int)flooredPos.z, ID);

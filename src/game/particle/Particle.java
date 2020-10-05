@@ -19,13 +19,18 @@ public class Particle {
     private static int currentID = 0;
 
     public static void createParticle(Vector3f pos, Vector3f inertia, int blockID){
-        particles.put(currentID, new ParticleObject(pos, inertia, createParticleMesh(blockID)));
+        particles.put(currentID, new ParticleObject(pos, inertia, createParticleMesh(blockID), currentID));
         currentID++;
     }
 
     public static void particlesOnStep(){
         for (ParticleObject thisParticle : particles.values()){
             applyParticleInertia(thisParticle.pos, thisParticle.inertia, true,true,true);
+            thisParticle.timer += 0.01f;
+            if (thisParticle.timer > 10f){
+                particles.remove(thisParticle.key);
+                return;
+            }
         }
     }
 
@@ -46,9 +51,6 @@ public class Particle {
 
         float pixelYMin = pixelY/16f/32f;
         float pixelYMax = (pixelY+textureScale)/16f/32f;
-
-        System.out.println(textureScale);
-        System.out.println(pixelX + " " + pixelY);
 
 
         ArrayList positions = new ArrayList();

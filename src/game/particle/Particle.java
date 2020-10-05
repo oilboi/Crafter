@@ -11,6 +11,7 @@ import java.util.Map;
 
 import static game.blocks.BlockDefinition.*;
 import static game.chunk.ChunkMesh.getTextureAtlas;
+import static game.collision.ParticleCollision.applyParticleInertia;
 
 public class Particle {
     private final static Map<Integer, ParticleObject> particles = new HashMap<>();
@@ -20,6 +21,12 @@ public class Particle {
     public static void createParticle(Vector3f pos, Vector3f inertia, int blockID){
         particles.put(currentID, new ParticleObject(pos, inertia, createParticleMesh(blockID)));
         currentID++;
+    }
+
+    public static void particlesOnStep(){
+        for (ParticleObject thisParticle : particles.values()){
+            applyParticleInertia(thisParticle.pos, thisParticle.inertia, true,true,true);
+        }
     }
 
     public static Collection<ParticleObject> getAllParticles(){

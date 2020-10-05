@@ -16,6 +16,7 @@ import static game.chunk.ChunkUpdateHandler.chunkUpdate;
 import static game.chunk.ChunkUpdateHandler.chunkUpdater;
 import static engine.Hud.*;
 import static engine.MouseInput.*;
+import static game.particle.Particle.particlesOnStep;
 import static game.tnt.TNTEntity.createTNTEntityMesh;
 import static engine.Timer.*;
 import static engine.Window.*;
@@ -278,6 +279,7 @@ public class Crafter {
         ItemEntity.onStep();
         TNTEntity.onTNTStep();
         hudOnStepTest();
+        particlesOnStep();
     }
 
     private static void cleanup(){

@@ -67,6 +67,29 @@ public class Light {
         while (!lightSources.isEmpty()){
             LightUpdate thisUpdate = lightSources.pop();
 
+            int skipCheck = 0;
+            if (thisUpdate.x - 1 >= 0 && memoryMap[thisUpdate.x - 1][thisUpdate.y][thisUpdate.z ] == maxLightLevel){
+                skipCheck++;
+            }
+            if (thisUpdate.x + 1 < max && memoryMap[thisUpdate.x + 1][thisUpdate.y][thisUpdate.z] == maxLightLevel){
+                skipCheck++;
+            }
+            if (thisUpdate.z - 1 >= 0 && memoryMap[thisUpdate.x][thisUpdate.y][thisUpdate.z - 1]  == maxLightLevel){
+                skipCheck++;
+            }
+            if (thisUpdate.z  + 1 < max && memoryMap[thisUpdate.x][thisUpdate.y][thisUpdate.z + 1]  == maxLightLevel){
+                skipCheck++;
+            }
+            if (thisUpdate.y - 1 >= 0 && memoryMap[thisUpdate.x][thisUpdate.y - 1][thisUpdate.z] == maxLightLevel){
+                skipCheck++;
+            }
+            if (thisUpdate.y  + 1 < max && memoryMap[thisUpdate.x][thisUpdate.y + 1][thisUpdate.z]  == maxLightLevel){
+                skipCheck++;
+            }
+            if (skipCheck == 6){
+                continue;
+            }
+
             Deque<LightUpdate> lightSteps = new ArrayDeque<>();
 
             int[] crawlerPos;

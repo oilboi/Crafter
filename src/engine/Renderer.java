@@ -2,6 +2,7 @@ package engine;
 
 import engine.graph.*;
 import game.chunk.ChunkObject;
+import game.falling.FallingEntityObject;
 import game.item.Item;
 import game.particle.ParticleObject;
 import org.joml.Matrix4f;
@@ -15,6 +16,7 @@ import static engine.graph.Camera.*;
 import static engine.graph.Transformation.*;
 import static engine.graph.Transformation.buildOrthoProjModelMatrix;
 import static engine.Hud.*;
+import static game.falling.FallingEntity.getFallingEntities;
 import static game.item.ItemDefinition.getItemDefinition;
 import static game.item.ItemEntity.*;
 import static game.particle.Particle.getAllParticles;
@@ -178,6 +180,13 @@ public class Renderer {
             modelViewMatrix = getTNTModelViewMatrix(i, viewMatrix);
             shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
             tntMesh.render();
+        }
+
+        //render falling entities
+        for (FallingEntityObject thisObject : getFallingEntities()){
+            modelViewMatrix = getGenericMatrixWithPosRotationScale(thisObject.pos, new Vector3f(0,0,0), new Vector3f(2.5f,2.5f,2.5f), viewMatrix);
+            shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+            thisObject.mesh.render();
         }
 
         //render world selection mesh

@@ -5,7 +5,8 @@ import org.joml.Vector3f;
 import java.util.HashMap;
 import java.util.Map;
 
-import static game.chunk.Chunk.setBlock;
+import static game.chunk.Chunk.*;
+import static game.falling.FallingEntity.addFallingEntity;
 import static game.item.ItemDefinition.registerItem;
 import static game.item.ItemEntity.createItem;
 import static game.tnt.TNTEntity.createTNT;
@@ -657,6 +658,16 @@ public class BlockDefinition {
                 "wood_2"
         );
 
+        //falling sand
+        BlockModifier fallSand = new BlockModifier() {
+            @Override
+            public void onPlace(Vector3f pos) {
+                if (getBlock((int)pos.x, (int)pos.y - 1, (int)pos.z) == 0) {
+                    digBlock((int) pos.x, (int) pos.y, (int) pos.z);
+                    addFallingEntity(new Vector3f(pos.x + 0.5f, pos.y, pos.z + 0.5f), new Vector3f(0, 0, 0), 23);
+                }
+            }
+        };
         new BlockDefinition(
                 23,
                 "sand",
@@ -671,7 +682,7 @@ public class BlockDefinition {
                 true,
                 false,
                 false,
-                null,
+                fallSand,
                 "sand_1",
                 "sand_2"
         );

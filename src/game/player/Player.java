@@ -11,6 +11,7 @@ import static game.blocks.BlockDefinition.getBlockDefinition;
 import static game.chunk.Chunk.generateNewChunks;
 import static game.chunk.Chunk.getBlock;
 import static game.collision.Collision.applyInertia;
+import static game.particle.Particle.createParticle;
 import static game.player.Inventory.getItemInInventorySlot;
 import static game.player.Ray.rayCast;
 
@@ -397,6 +398,9 @@ public class Player {
         return diggingFrame;
     }
 
+
+    private static float particleBufferTimer = 0f;
+
     public static void playerOnTick() {
 
         hasDug = false;
@@ -480,6 +484,114 @@ public class Player {
             }
             currentChunk[0] = newChunkX;
             currentChunk[1] = newChunkZ;
+        }
+
+        if (mining && worldSelectionPos != null){
+            particleBufferTimer += 0.01f;
+            if (particleBufferTimer > 0.2f){
+                int randomDir = (int)Math.floor(Math.random()*6f);
+                int block;
+                int miningBlock = getBlock((int)worldSelectionPos.x, (int)worldSelectionPos.y, (int)worldSelectionPos.z);
+                switch (randomDir){
+                    case 0:
+                        block = getBlock((int)worldSelectionPos.x+1, (int)worldSelectionPos.y, (int)worldSelectionPos.z);
+                        if (block == 0){
+                            Vector3f particlePos = new Vector3f(worldSelectionPos);
+                            particlePos.x += 1.1f;
+                            particlePos.z += Math.random();
+                            particlePos.y += Math.random();
+
+                            Vector3f particleInertia = new Vector3f();
+                            particleInertia.x = (float)Math.random()*2f;
+                            particleInertia.y = (float)Math.random()*2f;
+                            particleInertia.z = (float)(Math.random()-0.5f)*2f;
+
+                            createParticle(particlePos, particleInertia, miningBlock);
+                        }
+                        break;
+                    case 1:
+                        block = getBlock((int)worldSelectionPos.x-1, (int)worldSelectionPos.y, (int)worldSelectionPos.z);
+                        if (block == 0){
+                            Vector3f particlePos = new Vector3f(worldSelectionPos);
+                            particlePos.x -= 0.1f;
+                            particlePos.z += Math.random();
+                            particlePos.y += Math.random();
+
+                            Vector3f particleInertia = new Vector3f();
+                            particleInertia.x = (float)Math.random()*-2f;
+                            particleInertia.y = (float)Math.random()*2f;
+                            particleInertia.z = (float)(Math.random()-0.5f)*2f;
+
+                            createParticle(particlePos, particleInertia, miningBlock);
+                        }
+                        break;
+                    case 2:
+                        block = getBlock((int)worldSelectionPos.x, (int)worldSelectionPos.y+1, (int)worldSelectionPos.z);
+                        if (block == 0){
+                            Vector3f particlePos = new Vector3f(worldSelectionPos);
+                            particlePos.y += 1.1f;
+                            particlePos.z += Math.random();
+                            particlePos.x += Math.random();
+
+                            Vector3f particleInertia = new Vector3f();
+                            particleInertia.x = (float)(Math.random()-0.5f)*2f;
+                            particleInertia.y = (float)Math.random()*2f;
+                            particleInertia.z = (float)(Math.random()-0.5f)*2f;
+
+                            createParticle(particlePos, particleInertia, miningBlock);
+                        }
+                        break;
+                    case 3:
+                        block = getBlock((int)worldSelectionPos.x, (int)worldSelectionPos.y-1, (int)worldSelectionPos.z);
+                        if (block == 0){
+                            Vector3f particlePos = new Vector3f(worldSelectionPos);
+                            particlePos.y -= 0.1f;
+                            particlePos.z += Math.random();
+                            particlePos.x += Math.random();
+
+                            Vector3f particleInertia = new Vector3f();
+                            particleInertia.x = (float)(Math.random()-0.5f)*2f;
+                            particleInertia.y = (float)Math.random()*-1f;
+                            particleInertia.z = (float)(Math.random()-0.5f)*2f;
+
+                            createParticle(particlePos, particleInertia, miningBlock);
+                        }
+                        break;
+                    case 4:
+                        block = getBlock((int)worldSelectionPos.x, (int)worldSelectionPos.y, (int)worldSelectionPos.z+1);
+                        if (block == 0){
+                            Vector3f particlePos = new Vector3f(worldSelectionPos);
+                            particlePos.z += 1.1f;
+                            particlePos.x += Math.random();
+                            particlePos.y += Math.random();
+
+                            Vector3f particleInertia = new Vector3f();
+                            particleInertia.z = (float)Math.random()*2f;
+                            particleInertia.y = (float)Math.random()*2f;
+                            particleInertia.x = (float)(Math.random()-0.5f)*2f;
+
+                            createParticle(particlePos, particleInertia, miningBlock);
+                        }
+                        break;
+                    case 5:
+                        block = getBlock((int)worldSelectionPos.x, (int)worldSelectionPos.y, (int)worldSelectionPos.z-1);
+                        if (block == 0){
+                            Vector3f particlePos = new Vector3f(worldSelectionPos);
+                            particlePos.z -= 0.1f;
+                            particlePos.x += Math.random();
+                            particlePos.y += Math.random();
+
+                            Vector3f particleInertia = new Vector3f();
+                            particleInertia.z = (float)Math.random()*-2f;
+                            particleInertia.y = (float)Math.random()*2f;
+                            particleInertia.x = (float)(Math.random()-0.5f)*2f;
+
+                            createParticle(particlePos, particleInertia, miningBlock);
+                        }
+                        break;
+                }
+                particleBufferTimer = 0f;
+            }
         }
     }
     private static boolean xPositive = true;

@@ -1,242 +1,148 @@
 package game.light;
 
+import java.util.*;
+
+import static game.chunk.Chunk.*;
+
 public class Light {
 
-    private static final byte debugLightLevel = 15;
+    private static final byte maxLightLevel = 15;
+    private static final byte blockIndicator = 127;
+    private static final byte lightDistance = 15;
+    private static final int max = (lightDistance * 2) + 1;
 
-//    public static void floodFill(int chunkX, int chunkZ) {
-//
-//        int x = 0;
-//        int y = 127;
-//        int z = 0;
-//
-//        byte thisLight = (byte) 15;
-//
-//        for ( int i = 0; i < (16 * 128 * 16); i++){
-//
-//            if(thisLight == (byte) 15 && getBlock(x, y, z, chunkX, chunkZ) != 0){
-//                thisLight = (byte) 9;
-//            }
-//            setLight(x, y, z, chunkX, chunkZ, thisLight);
-//
-//            y--;
-//            if( y < 0){
-//                y = 127;
-//                thisLight = (byte) 15;
-//                x++;
-//                if( x > 15 ){
-//                    x = 0;
-//                    z++;
-//                }
-//            }
-//        }
-//    }
+    private static final Deque<LightUpdate> lightSources = new ArrayDeque<>();
 
-////        long startTime = System.nanoTime();
-//
-//        Chunk thisChunk = getChunk(chunkX,chunkZ);
-//
-//        if (thisChunk == null){
-//            return;
-//        }
-//        int[] pseudoChunk = new int[16*128*16];
-//
-//        short[] theseBlocks = thisChunk.getBlocks();
-//        if (theseBlocks == null){
-//            return;
-//        }
-//        byte[]  theseLights = thisChunk.getLights();
-//
-//        for(int i = 0; i < theseLights.length; i++){
-//            theseLights[i] = 0;
-//        }
-//
-//        int x = 0;
-//        int y = 127;
-//        int z = 0;
-//        byte sunLight = debugLightLevel;
-//
-//        for (int i = 0; i < 16*128*16; i++){
-//            short thisBlock = theseBlocks[genHash(x,y,z)];//getBlockInChunk(x,y,z, chunkX,chunkZ);
-//
-//            //lit air
-//            if (thisBlock == 0 && sunLight == 15) {
-//                pseudoChunk[genHash(x,y,z)] = 2;
-//                theseLights[genHash(x,y,z)] = sunLight;
-//                //cave air
-//            } else if (thisBlock == 0){
-//                pseudoChunk[genHash(x,y,z)] = 1;
-//                theseLights[genHash(x,y,z)] = sunLight;
-//                //solid blocks
-//            } else {
-//                pseudoChunk[genHash(x,y,z)] = -1;
-//                theseLights[genHash(x,y,z)] = sunLight;
-//                sunLight = 0;
-//            }
-//            y--;
-//            if( y < 0){
-//                y = 127;
-//                x++;
-//                sunLight = debugLightLevel;
-//                if( x > 15 ){
-//                    x = 0;
-//                    z++;
-//                }
-//            }
-//        }
-//
-////        long endTime = System.nanoTime();
-////        System.out.println("Data Collection Time: " + (endTime - startTime));
-////
-////        //2 is air light source
-////        //1 is cave light
-////        //-1 is any solid block
-////
-//        x = 0;
-//        y = 127;
-//        z = 0;
-//
-//        byte localX = 0;
-//        byte localY = 0;
-//        byte localZ = 0;
-//
-//        for (int i = 0; i < 16*128*16; i++){
-//            //only get if cave light
-//            if(pseudoChunk[genHash(x,y,z)] == 1) {
-//                for (int w = 0; w < 6; w++){
-//                    switch (w){
-//                        case 0:
-//                            localX = -1;
-//                            localY =  0;
-//                            localZ =  0;
-//                            break;
-//                        case 1:
-//                            localX =  0;
-//                            localY = -1;
-//                            localZ =  0;
-//                            break;
-//                        case 2:
-//                            localX =  0;
-//                            localY =  0;
-//                            localZ = -1;
-//                            break;
-//                        case 3:
-//                            localX =  1;
-//                            localY =  0;
-//                            localZ =  0;
-//                            break;
-//                        case 4:
-//                            localX =  0;
-//                            localY =  1;
-//                            localZ =  0;
-//                            break;
-//                        case 5:
-//                            localX =  0;
-//                            localY =  0;
-//                            localZ =  1;
-//                            break;
-//                    }
-//
-//                    int thisIndexX = x + localX;
-//                    int thisIndexY = y + localY;
-//                    int thisIndexZ = z + localZ;
-//
-//                    if (thisIndexX >= 0 && thisIndexX <= 15 && thisIndexY >= 0 && thisIndexY <= 127 && thisIndexZ >= 0 && thisIndexZ <= 15) {
-//                        //get if sunlight
-//                        if (pseudoChunk[genHash(thisIndexX,thisIndexY,thisIndexZ)] == 2){
-//                            pseudoChunk[genHash(thisIndexX,thisIndexY,thisIndexZ)] = -1;
-//                            processLightQueue(thisIndexX, thisIndexY, thisIndexZ,pseudoChunk, theseLights);
-//                        }
-//                    }
-//                }
-//            }
-//            y--;
-//            if( y < 0){
-//                y = 127;
-//                x++;
-//                if( x > 15 ){
-//                    x = 0;
-//                    z++;
-//                }
-//            }
-//        }
-//    }
+    public static void floodFill(int posX, int posY, int posZ) {
 
+        byte[][][] memoryMap = new byte[(lightDistance * 2) + 1][(lightDistance * 2) + 1][(lightDistance * 2) + 1];
 
-//    public static void processLightQueue(int thisIndexX, int thisIndexY, int thisIndexZ,int[] pseudoChunk, byte[] theseLights){
-//        //begin distribution queue
-//
-//        ArrayList queue = new ArrayList();
-//
-//        queue.add(new int[]{thisIndexX,thisIndexY,thisIndexZ, (int) debugLightLevel});
-//
-////        int count = 0;
-//
-//        byte localX = 0;
-//        byte localY = 0;
-//        byte localZ = 0;
-//
-//        while(queue.size() > 0){
-//
-//            //stop infinite loops
-//            if (queue.size() > 256){
-//                break;
-//            }
-//            int[] firstIndex = (int[]) queue.get(0);
-//
-//            int currentLight = firstIndex[3];
-//            //only pass on light if not pitch black
-//            if(currentLight > 1) {
-//                //index surroundings
-//                for (int w = 0; w < 6; w++) {
-//                    switch (w) {
-//                        case 0:
-//                            localX = -1;
-//                            localY = 0;
-//                            localZ = 0;
-//                            break;
-//                        case 1:
-//                            localX = 0;
-//                            localY = -1;
-//                            localZ = 0;
-//                            break;
-//                        case 2:
-//                            localX = 0;
-//                            localY = 0;
-//                            localZ = -1;
-//                            break;
-//                        case 3:
-//                            localX = 1;
-//                            localY = 0;
-//                            localZ = 0;
-//                            break;
-//                        case 4:
-//                            localX = 0;
-//                            localY = 1;
-//                            localZ = 0;
-//                            break;
-//                        case 5:
-//                            localX = 0;
-//                            localY = 0;
-//                            localZ = 1;
-//                            break;
-//                    }
-//
-//                    int thisIndexX2 = firstIndex[0] + localX;
-//                    int thisIndexY2 = firstIndex[1] + localY;
-//                    int thisIndexZ2 = firstIndex[2] + localZ;
-//                    //catch boundaries
-//                    if (thisIndexX2 >= 0 && thisIndexX2 <= 15 && thisIndexY2 >= 0 && thisIndexY2 <= 127 && thisIndexZ2 >= 0 && thisIndexZ2 <= 15) {
-//                        //only spread to cave light that's darker
-//                        if (pseudoChunk[genHash(thisIndexX2, thisIndexY2, thisIndexZ2)] == 1 && theseLights[genHash(thisIndexX2, thisIndexY2, thisIndexZ2)] < currentLight) {
-//                            theseLights[genHash(thisIndexX2, thisIndexY2, thisIndexZ2)] = (byte) (currentLight - 1);
-//                            queue.add(new int[]{thisIndexX2, thisIndexY2, thisIndexZ2, currentLight - 1});
-//                        }
-//                    }
-//                }
-//            }
-//            //NEVER REMOVE THIS
-//            queue.remove(firstIndex);
-//        }
-//    }
+        for (int x = posX - lightDistance; x <= posX + lightDistance; x++){
+            for (int y = posY - lightDistance; y <= posY + lightDistance; y++){
+                for (int z = posZ - lightDistance; z <= posZ + lightDistance; z++){
+                    int theBlock = getBlock(x,y,z);
+                    if (theBlock == 0 && underSunLight(x,y,z)){
+                        memoryMap[x - posX + lightDistance][y - posY + lightDistance][z - posZ + lightDistance] = maxLightLevel;
+                    }
+                    else if (theBlock == 0){
+                        memoryMap[x - posX + lightDistance][y - posY + lightDistance][z - posZ + lightDistance] = 0;
+                    }
+                    else {
+                        memoryMap[x - posX + lightDistance][y - posY + lightDistance][z - posZ + lightDistance] = blockIndicator;
+                    }
+                }
+            }
+        }
+        for (int x = posX - lightDistance; x <= posX + lightDistance; x++) {
+            for (int y = posY - lightDistance; y <= posY + lightDistance; y++) {
+                for (int z = posZ - lightDistance; z <= posZ + lightDistance; z++) {
+                    if (memoryMap[x - posX + lightDistance][y - posY + lightDistance][z - posZ + lightDistance] == maxLightLevel) {
+                        int skipCheck = 0;
+                        if (x - posX + lightDistance - 1 >= 0 && memoryMap[x - posX + lightDistance - 1][y - posY + lightDistance][z - posZ + lightDistance] != 0){
+                            skipCheck++;
+                        }
+                        if (x - posX + lightDistance + 1 < max && memoryMap[x - posX + lightDistance + 1][y - posY + lightDistance][z - posZ + lightDistance] != 0){
+                            skipCheck++;
+                        }
+                        if (z - posZ + lightDistance - 1 >= 0 && memoryMap[x - posX + lightDistance][y - posY + lightDistance][z - posZ + lightDistance - 1] != 0){
+                            skipCheck++;
+                        }
+                        if (z - posZ + lightDistance + 1 < max && memoryMap[x - posX + lightDistance][y - posY + lightDistance][z - posZ + lightDistance+ 1] != 0){
+                            skipCheck++;
+                        }
+                        if (y - posY + lightDistance - 1 >= 0 && memoryMap[x - posX + lightDistance][y - posY + lightDistance - 1][z - posZ + lightDistance] != 0){
+                            skipCheck++;
+                        }
+                        if (y - posY + lightDistance + 1 < max && memoryMap[x - posX + lightDistance][y - posY + lightDistance + 1][z - posZ + lightDistance] != 0){
+                            skipCheck++;
+                        }
+                        if (skipCheck < 6){
+                            lightSources.add(new LightUpdate(x - posX + lightDistance,y - posY + lightDistance,z - posZ + lightDistance));
+                        }
+                    }
+                }
+            }
+        }
+
+        while (!lightSources.isEmpty()){
+            LightUpdate thisUpdate = lightSources.pop();
+
+            Deque<LightUpdate> lightSteps = new ArrayDeque<>();
+
+            int[] crawlerPos;
+
+            lightSteps.push(new LightUpdate(thisUpdate.x, thisUpdate.y, thisUpdate.z, maxLightLevel));
+
+            while (!lightSteps.isEmpty()) {
+                LightUpdate newUpdate = lightSteps.pop();
+
+                if (newUpdate.level <= 1){
+                    continue;
+                }
+                if (newUpdate.x < 0 || newUpdate.x > max || newUpdate.y < 0 || newUpdate.y > max || newUpdate.z < 0 || newUpdate.z > max) {
+                    continue;
+                }
+
+                crawlerPos = new int[]{newUpdate.x, newUpdate.y, newUpdate.z};
+
+                //+x
+                {
+                    if (crawlerPos[0] + 1 < max && memoryMap[crawlerPos[0] + 1][crawlerPos[1]][crawlerPos[2]] < newUpdate.level) {
+                        memoryMap[crawlerPos[0] + 1][crawlerPos[1]][crawlerPos[2]] = (byte) (newUpdate.level-1);
+                        lightSteps.add(new LightUpdate(crawlerPos[0] + 1, crawlerPos[1], crawlerPos[2], (byte) (newUpdate.level-1)));
+                    }
+                }
+
+                //-x
+                {
+                    if (crawlerPos[0] - 1 >= 0 && memoryMap[crawlerPos[0] - 1][crawlerPos[1]][crawlerPos[2]] < newUpdate.level) {
+                        memoryMap[crawlerPos[0] - 1][crawlerPos[1]][crawlerPos[2]] = (byte) (newUpdate.level-1);
+                        lightSteps.add(new LightUpdate(crawlerPos[0] - 1, crawlerPos[1], crawlerPos[2], (byte) (newUpdate.level-1)));
+                    }
+                }
+
+                //+z
+                {
+                    if (crawlerPos[2] + 1 < max && memoryMap[crawlerPos[0]][crawlerPos[1]][crawlerPos[2] + 1] < newUpdate.level) {
+                        memoryMap[crawlerPos[0]][crawlerPos[1]][crawlerPos[2] + 1] = (byte) (newUpdate.level-1);
+                        lightSteps.add(new LightUpdate(crawlerPos[0], crawlerPos[1], crawlerPos[2] + 1, (byte) (newUpdate.level-1)));
+                    }
+                }
+
+                //-z
+                {
+                    if (crawlerPos[2] - 1 >= 0 && memoryMap[crawlerPos[0]][crawlerPos[1]][crawlerPos[2] - 1] < newUpdate.level) {
+                        memoryMap[crawlerPos[0]][crawlerPos[1]][crawlerPos[2] - 1] = (byte) (newUpdate.level-1);
+                        lightSteps.add(new LightUpdate(crawlerPos[0], crawlerPos[1], crawlerPos[2] - 1, (byte) (newUpdate.level-1)));
+                    }
+                }
+
+                //+y
+                {
+                    if (crawlerPos[1] + 1 < max && memoryMap[crawlerPos[0]][crawlerPos[1] + 1][crawlerPos[2]] < newUpdate.level) {
+                        memoryMap[crawlerPos[0]][crawlerPos[1] + 1][crawlerPos[2]] = (byte) (newUpdate.level-1);
+                        lightSteps.add(new LightUpdate(crawlerPos[0], crawlerPos[1] + 1, crawlerPos[2], (byte) (newUpdate.level-1)));
+                    }
+                }
+
+                //-y
+                {
+                    if (crawlerPos[1] - 1 >= 0 && memoryMap[crawlerPos[0]][crawlerPos[1] - 1][crawlerPos[2]] < newUpdate.level) {
+                        memoryMap[crawlerPos[0]][crawlerPos[1] - 1][crawlerPos[2]] = (byte) (newUpdate.level-1);
+                        lightSteps.add(new LightUpdate(crawlerPos[0], crawlerPos[1] - 1, crawlerPos[2], (byte) (newUpdate.level-1)));
+                    }
+                }
+            }
+        }
+
+        for (int x = posX - lightDistance; x <= posX + lightDistance; x++){
+            for (int y = posY - lightDistance; y <= posY + lightDistance; y++){
+                for (int z = posZ - lightDistance; z <= posZ + lightDistance; z++){
+                    if (memoryMap[x - posX + lightDistance][y - posY + lightDistance][z - posZ + lightDistance] != blockIndicator) {
+                        setLight(x, y, z, memoryMap[x - posX + lightDistance][y - posY + lightDistance][z - posZ + lightDistance]);
+                    }
+                }
+            }
+        }
+    }
 }

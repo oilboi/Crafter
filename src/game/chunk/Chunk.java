@@ -10,6 +10,7 @@ import java.util.Map;
 import static game.Crafter.getChunkRenderDistance;
 import static game.chunk.ChunkMesh.generateChunkMesh;
 import static game.chunk.ChunkUpdateHandler.chunkUpdate;
+import static game.light.Light.floodFill;
 
 public class Chunk {
 
@@ -101,6 +102,30 @@ public class Chunk {
         return null;
     }
 
+    public static boolean underSunLight(int x, int y, int z){
+        if (y > 127 || y < 0){
+            return false;
+        }
+        int chunkX = (int)Math.floor(x/16f);
+        int chunkZ = (int)Math.floor(z/16f);
+        int blockX = (int)(x - (16f*chunkX));
+        int blockZ = (int)(z - (16f*chunkZ));
+        String key = chunkX + " " + chunkZ;
+        ChunkObject thisChunk = map.get(key);
+        if (thisChunk == null){
+            return false;
+        }
+        if (thisChunk.block == null){
+            return false;
+        }
+        for (int yCheck = 127; yCheck > y; yCheck--){
+            if (thisChunk.block[yCheck][blockX][blockZ] != 0){
+                return false;
+            }
+        }
+        return true;
+    }
+
     public static int getBlock(int x,int y,int z){
         if (y > 127 || y < 0){
             return -1;
@@ -143,6 +168,30 @@ public class Chunk {
         updateNeighbor(chunkX, chunkZ,blockX,y,blockZ);
     }
 
+    public static void setLight(int x,int y,int z, byte newLight){
+        if (y > 127 || y < 0){
+            return;
+        }
+        int yPillar = (int)Math.floor(y/16f);
+        int chunkX = (int)Math.floor(x/16f);
+        int chunkZ = (int)Math.floor(z/16f);
+        int blockX = (int)(x - (16f*chunkX));
+        int blockZ = (int)(z - (16f*chunkZ));
+        String key = chunkX + " " + chunkZ;
+        ChunkObject thisChunk = map.get(key);
+
+        if (thisChunk == null){
+            return;
+        }
+        if (thisChunk.block == null){
+            return;
+        }
+        thisChunk.light[y][blockX][blockZ] = newLight;
+        chunkUpdate(chunkX,chunkZ,yPillar);
+        updateNeighbor(chunkX, chunkZ,blockX,y,blockZ);
+    }
+
+
     public static void digBlock(int x,int y,int z){
         if (y > 127 || y < 0){
             return;
@@ -162,6 +211,7 @@ public class Chunk {
             return;
         }
         thisChunk.block[y][blockX][blockZ] = 0;
+        floodFill(x,y,z);
         generateChunkMesh(chunkX,chunkZ,yPillar);//instant update
         instantUpdateNeighbor(chunkX, chunkZ,blockX,y,blockZ);//instant update
     }
@@ -185,6 +235,7 @@ public class Chunk {
             return;
         }
         thisChunk.block[y][blockX][blockZ] = ID;
+        floodFill(x,y,z);
         generateChunkMesh(chunkX,chunkZ,yPillar);//instant update
         instantUpdateNeighbor(chunkX, chunkZ,blockX,y,blockZ);//instant update
     }
@@ -385,6 +436,7 @@ public class Chunk {
             for (int z = 0; z < 16; z++) {
                 boolean gennedSand = false;
                 boolean gennedWater = false;
+                boolean gennedGrass = false;
                 float dirtHeightRandom = (float) Math.floor(Math.random() * 2f);
 
                 height = (byte) (Math.abs(noise.GetCubicFractal((chunkX * 16) + x, (chunkZ * 16) + z)) * 127 + heightAdder);
@@ -402,10 +454,12 @@ public class Chunk {
                             gennedSand = true;
                         } else {
                             currBlock = 2;
+                            gennedGrass = true;
                         }
                         //dirt/sand gen
                     } else if (y < height && y >= height - dirtHeight - dirtHeightRandom) {
                         if (gennedSand || gennedWater) {
+                            gennedSand = true;
                             currBlock = 23;
                         } else {
                             currBlock = 1;
@@ -434,10 +488,11 @@ public class Chunk {
 
                     thisChunk.block[y][x][z] = currBlock;
 
-                    //            if (currBlock == 0) {
-                    thisChunk.light[y][x][z] = 15;//0;
-                    //            }else{
-                    //                light[chunkX][chunkZ][y][x][z] = 0;
+                    if (gennedSand || gennedGrass){
+                        thisChunk.light[y][x][z] = 0;
+                    } else {
+                        thisChunk.light[y][x][z] = 15;
+                    }
                 }
             }
         }

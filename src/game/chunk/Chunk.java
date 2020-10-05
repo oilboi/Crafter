@@ -118,12 +118,8 @@ public class Chunk {
         if (thisChunk.block == null){
             return false;
         }
-        for (int yCheck = 127; yCheck > y; yCheck--){
-            if (thisChunk.block[yCheck][blockX][blockZ] != 0){
-                return false;
-            }
-        }
-        return true;
+
+        return thisChunk.heightMap[blockX][blockZ] < y + 1;
     }
 
     public static int getBlock(int x,int y,int z){
@@ -173,11 +169,9 @@ public class Chunk {
                     }
                 }
             }
-            System.out.println("the new heightmap is (removing) : " + thisChunk.heightMap[blockX][blockZ]);
         } else {
             if (thisChunk.heightMap[blockX][blockZ] < y){
                 thisChunk.heightMap[blockX][blockZ] = (byte) y;
-                System.out.println("the new heightmap is (placing) : " + thisChunk.heightMap[blockX][blockZ]);
             }
         }
         chunkUpdate(chunkX,chunkZ,yPillar);

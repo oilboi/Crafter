@@ -164,6 +164,22 @@ public class Chunk {
             return;
         }
         thisChunk.block[y][blockX][blockZ] = newBlock;
+        if (newBlock == 0){
+            if (thisChunk.heightMap[blockX][blockZ] == y){
+                for (int yCheck = thisChunk.heightMap[blockX][blockZ]; yCheck > 0; yCheck--){
+                    if (thisChunk.block[yCheck][blockX][blockZ] != 0){
+                        thisChunk.heightMap[blockX][blockZ] = (byte) yCheck;
+                        break;
+                    }
+                }
+            }
+            System.out.println("the new heightmap is (removing) : " + thisChunk.heightMap[blockX][blockZ]);
+        } else {
+            if (thisChunk.heightMap[blockX][blockZ] < y){
+                thisChunk.heightMap[blockX][blockZ] = (byte) y;
+                System.out.println("the new heightmap is (placing) : " + thisChunk.heightMap[blockX][blockZ]);
+            }
+        }
         chunkUpdate(chunkX,chunkZ,yPillar);
         updateNeighbor(chunkX, chunkZ,blockX,y,blockZ);
     }
@@ -211,6 +227,14 @@ public class Chunk {
             return;
         }
         thisChunk.block[y][blockX][blockZ] = 0;
+        if (thisChunk.heightMap[blockX][blockZ] == y){
+            for (int yCheck = thisChunk.heightMap[blockX][blockZ]; yCheck > 0; yCheck--){
+                if (thisChunk.block[yCheck][blockX][blockZ] != 0){
+                    thisChunk.heightMap[blockX][blockZ] = (byte) yCheck;
+                    break;
+                }
+            }
+        }
         floodFill(x,y,z);
         generateChunkMesh(chunkX,chunkZ,yPillar);//instant update
         instantUpdateNeighbor(chunkX, chunkZ,blockX,y,blockZ);//instant update
@@ -235,6 +259,9 @@ public class Chunk {
             return;
         }
         thisChunk.block[y][blockX][blockZ] = ID;
+        if (thisChunk.heightMap[blockX][blockZ] < y){
+            thisChunk.heightMap[blockX][blockZ] = (byte) y;
+        }
         floodFill(x,y,z);
         generateChunkMesh(chunkX,chunkZ,yPillar);//instant update
         instantUpdateNeighbor(chunkX, chunkZ,blockX,y,blockZ);//instant update
@@ -487,6 +514,12 @@ public class Chunk {
                     }
 
                     thisChunk.block[y][x][z] = currBlock;
+
+                    if (height >= waterHeight) {
+                        thisChunk.heightMap[x][z] = height;
+                    } else {
+                        thisChunk.heightMap[x][z] = waterHeight;
+                    }
 
                     if (gennedSand || gennedGrass){
                         thisChunk.light[y][x][z] = 0;

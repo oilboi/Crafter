@@ -11,6 +11,7 @@ public class ChunkObject {
     public final int [][][] block;
     public final byte[][][] rotation;
     public final byte[][][] light;
+    public final byte[][] heightMap;
 
     public final Mesh[] mesh;
     public final Mesh[] liquidMesh;
@@ -25,6 +26,7 @@ public class ChunkObject {
         this.block    = new int [128][16][16];
         this.rotation = new byte[128][16][16];
         this.light    = new byte[128][16][16];
+        this.heightMap = new byte[16][16];
 
         this.mesh       = new Mesh[8];
         this.liquidMesh = new Mesh[8];

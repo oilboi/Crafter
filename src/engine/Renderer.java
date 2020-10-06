@@ -166,7 +166,7 @@ public class Renderer {
 
 //        render each item entity
         for (Item thisItem : getAllItems()){
-            modelViewMatrix = updateModelViewMatrix(thisItem.pos, thisItem.rotation, viewMatrix);
+            modelViewMatrix = updateModelViewMatrix(new Vector3f(thisItem.pos).add(0,thisItem.hover,0), thisItem.rotation, viewMatrix);
             shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
             thisItem.definition.mesh.render();
         }

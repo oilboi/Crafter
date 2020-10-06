@@ -31,19 +31,19 @@ public class Light {
                         if (getBlock(x-1,y,z) != 0 || underSunLight(x-1,y,z)){
                             skipCheck++;
                         }
-                        if (getBlock(x,y+1,z) != 0 || underSunLight(x,y+1,z)){
-                            skipCheck++;
-                        }
-                        if (getBlock(x,y-1,z) != 0 || underSunLight(x,y-1,z)){
-                            skipCheck++;
-                        }
+//                        if (getBlock(x,y+1,z) != 0 || underSunLight(x,y+1,z)){
+//                            skipCheck++;
+//                        }
+//                        if (getBlock(x,y-1,z) != 0 || underSunLight(x,y-1,z)){
+//                            skipCheck++;
+//                        }
                         if (getBlock(x,y,z+1) != 0 || underSunLight(x,y,z+1)){
                             skipCheck++;
                         }
                         if (getBlock(x,y,z-1) != 0 || underSunLight(x,y,z-1)){
                             skipCheck++;
                         }
-                        if (skipCheck < 6){
+                        if (skipCheck < 4){
                             lightSources.add(new LightUpdate(x - posX + lightDistance,y - posY + lightDistance,z - posZ + lightDistance));
                             memoryMap[x - posX + lightDistance][y - posY + lightDistance][z - posZ + lightDistance] = maxLightLevel;
                             indexedLights++;
@@ -118,21 +118,21 @@ public class Light {
                     }
                 }
 
-                //+y
-                {
-                    if (crawlerPos[1] + 1 < max && memoryMap[crawlerPos[0]][crawlerPos[1] + 1][crawlerPos[2]] < newUpdate.level) {
-                        memoryMap[crawlerPos[0]][crawlerPos[1] + 1][crawlerPos[2]] = (byte) (newUpdate.level-1);
-                        lightSteps.add(new LightUpdate(crawlerPos[0], crawlerPos[1] + 1, crawlerPos[2], (byte) (newUpdate.level-1)));
-                    }
-                }
-
-                //-y
-                {
-                    if (crawlerPos[1] - 1 >= 0 && memoryMap[crawlerPos[0]][crawlerPos[1] - 1][crawlerPos[2]] < newUpdate.level) {
-                        memoryMap[crawlerPos[0]][crawlerPos[1] - 1][crawlerPos[2]] = (byte) (newUpdate.level-1);
-                        lightSteps.add(new LightUpdate(crawlerPos[0], crawlerPos[1] - 1, crawlerPos[2], (byte) (newUpdate.level-1)));
-                    }
-                }
+//                //+y
+//                {
+//                    if (crawlerPos[1] + 1 < max && memoryMap[crawlerPos[0]][crawlerPos[1] + 1][crawlerPos[2]] < newUpdate.level) {
+//                        memoryMap[crawlerPos[0]][crawlerPos[1] + 1][crawlerPos[2]] = (byte) (newUpdate.level-1);
+//                        lightSteps.add(new LightUpdate(crawlerPos[0], crawlerPos[1] + 1, crawlerPos[2], (byte) (newUpdate.level-1)));
+//                    }
+//                }
+//
+//                //-y
+//                {
+//                    if (crawlerPos[1] - 1 >= 0 && memoryMap[crawlerPos[0]][crawlerPos[1] - 1][crawlerPos[2]] < newUpdate.level) {
+//                        memoryMap[crawlerPos[0]][crawlerPos[1] - 1][crawlerPos[2]] = (byte) (newUpdate.level-1);
+//                        lightSteps.add(new LightUpdate(crawlerPos[0], crawlerPos[1] - 1, crawlerPos[2], (byte) (newUpdate.level-1)));
+//                    }
+//                }
             }
         }
 

@@ -7,6 +7,7 @@ import static game.chunk.Chunk.getBlock;
 import static game.chunk.Chunk.setBlock;
 import static engine.FancyMath.getDistance;
 import static game.item.ItemEntity.createItem;
+import static game.light.Light.floodFill;
 import static game.tnt.TNTEntity.createTNT;
 
 public class Explosion {
@@ -30,5 +31,7 @@ public class Explosion {
                 }
             }
         }
+
+        floodFill((int)pos.x,(int)pos.y,(int)pos.z);
     }
 }

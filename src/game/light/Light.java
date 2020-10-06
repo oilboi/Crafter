@@ -63,7 +63,7 @@ public class Light {
             }
         }
 
-        System.out.println("Amount of lights: " + indexedLights);
+//        System.out.println("Amount of lights: " + indexedLights);
 
         while (!lightSources.isEmpty()){
             LightUpdate thisUpdate = lightSources.pop();

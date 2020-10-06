@@ -194,7 +194,7 @@ public class Player {
 
             wieldHandAnimationPos.x = (float) (-8f * Math.sin(Math.pow(diggingAnimation, 0.6f) * Math.PI)) + wieldHandAnimationPosBaseTool.x;
             wieldHandAnimationPos.y = (float) (5f * Math.sin(diggingAnimation * Math.PI)) + wieldHandAnimationPosBaseTool.y;
-            System.out.println(1f * Math.sin(diggingAnimation * 1f * Math.PI));
+//            System.out.println(1f * Math.sin(diggingAnimation * 1f * Math.PI));
             wieldHandAnimationPos.z = wieldHandAnimationPosBaseTool.z;
 
 

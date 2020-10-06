@@ -164,13 +164,6 @@ public class Particle {
             textureCoordArray[i] = (float) textureCoord.get(i);
         }
 
-        Texture test = null;
-        try {
-            test = new Texture("textures/debug.png");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         return new Mesh(positionsArray, lightArray, indicesArray, textureCoordArray,getTextureAtlas());
     }
 }

@@ -8,12 +8,12 @@ import static engine.Hud.rebuildMiningMesh;
 import static engine.graph.Camera.*;
 import static engine.sound.SoundAPI.playSound;
 import static game.blocks.BlockDefinition.getBlockDefinition;
-import static game.chunk.Chunk.generateNewChunks;
-import static game.chunk.Chunk.getBlock;
+import static game.chunk.Chunk.*;
 import static game.collision.Collision.applyInertia;
 import static game.particle.Particle.createParticle;
 import static game.player.Inventory.getItemInInventorySlot;
 import static game.player.Ray.rayCast;
+import static game.weather.Weather.createRainDrop;
 
 
 public class Player {
@@ -402,7 +402,36 @@ public class Player {
 
     private static float particleBufferTimer = 0f;
 
+    private static float rainBuffer = 0f;
+
     public static void playerOnTick() {
+
+
+        rainBuffer += 0.001f;
+        if (rainBuffer >= 0.1f) {
+            rainBuffer = 0f;
+
+            for (int x = -10; x <= 10; x++) {
+                for (int z = -10; z <= 10; z++) {
+                    int heightMap = getHeightMap((int) Math.floor(pos.x)+x, (int) Math.floor(pos.z)+z);
+                    if (127 - heightMap > 0) {
+                        for (int y = heightMap + 1; y < 127; y++) {
+                            if (Math.abs(pos.y - y) < 8) {
+                                if (Math.random() > 0.8f) {
+                                    createRainDrop(
+                                            new Vector3f((int) Math.floor(pos.x) + x, y, (int) Math.floor(pos.z) + z)
+                                                    .add((float) Math.random(), (float) Math.random(), (float) Math.random()),
+                                            new Vector3f(0, -30f, 0)
+                                    );
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+
 
         hasDug = false;
         if (mining && worldSelectionPos != null) {

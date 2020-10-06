@@ -102,6 +102,23 @@ public class Chunk {
         return null;
     }
 
+    public static int getHeightMap(int x, int z){
+        int chunkX = (int)Math.floor(x/16f);
+        int chunkZ = (int)Math.floor(z/16f);
+        int blockX = (int)(x - (16f*chunkX));
+        int blockZ = (int)(z - (16f*chunkZ));
+        String key = chunkX + " " + chunkZ;
+        ChunkObject thisChunk = map.get(key);
+        if (thisChunk == null){
+            return 555;
+        }
+        if (thisChunk.block == null){
+            return 555;
+        }
+
+        return thisChunk.heightMap[blockX][blockZ];
+    }
+
     public static boolean underSunLight(int x, int y, int z){
         if (y > 127 || y < 0){
             return false;

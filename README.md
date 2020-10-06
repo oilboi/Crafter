@@ -10,6 +10,7 @@ Discord: https://discord.gg/ZfCNFhD
 - hold chunks in better flexible thing
 - make everything dynamic
 
+1.5 add deletion queue implementation like raindrops to other entities
 
 2 - Re-implement basic lighting
 

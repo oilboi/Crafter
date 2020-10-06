@@ -11,6 +11,7 @@ import static game.particle.Particle.createParticle;
 import static game.player.Inventory.getItemInInventorySlot;
 import static game.player.Inventory.removeItemFromInventory;
 import static game.player.Player.*;
+import static game.weather.Weather.createRainDrop;
 
 public class Ray {
     public static void rayCast(Vector3f pos, Vector3f dir, float length, boolean mining, boolean placing) {

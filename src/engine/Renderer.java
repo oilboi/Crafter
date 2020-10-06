@@ -5,6 +5,7 @@ import game.chunk.ChunkObject;
 import game.falling.FallingEntityObject;
 import game.item.Item;
 import game.particle.ParticleObject;
+import game.weather.RainDropEntity;
 import org.joml.Matrix4f;
 import org.joml.Vector2d;
 import org.joml.Vector3f;
@@ -25,6 +26,8 @@ import static engine.Window.*;
 import static game.chunk.Chunk.*;
 import static game.player.Inventory.*;
 import static game.player.Player.*;
+import static game.weather.Weather.getRainDropMesh;
+import static game.weather.Weather.getRainDrops;
 import static org.lwjgl.opengl.GL11.*;
 
 public class Renderer {
@@ -212,6 +215,14 @@ public class Renderer {
             modelViewMatrix = updateParticleViewMatrix(thisParticle.pos, new Vector3f(getCameraRotation()), viewMatrix);
             shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
             thisMesh.render();
+        }
+
+        //render rain drops
+        Mesh rainDrop = getRainDropMesh();
+        for (RainDropEntity thisRainDrop : getRainDrops()){
+            modelViewMatrix = updateParticleViewMatrix(thisRainDrop.pos, new Vector3f(0,getCameraRotation().y,0), viewMatrix);
+            shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+            rainDrop.render();
         }
 
 

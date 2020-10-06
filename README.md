@@ -8,7 +8,7 @@ Discord: https://discord.gg/ZfCNFhD
 1 - Begin infdev
 - create chunk objects
 - hold chunks in better flexible thing
-- make eveerything dynamic
+- make everything dynamic
 
 
 2 - Re-implement basic lighting

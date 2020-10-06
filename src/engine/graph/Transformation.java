@@ -68,9 +68,20 @@ public class Transformation {
     public static  Matrix4f updateModelViewMatrix(Vector3f position, Vector3f rotation, Matrix4f matrix) {
         // First do the rotation so camera rotates over its position
         modelViewMatrix.identity().identity().translate(position).
-                rotateX((float)Math.toRadians(-rotation.x)).
+
                 rotateY((float)Math.toRadians(-rotation.y)).
                 rotateZ((float)Math.toRadians(-rotation.z)).
+                rotateX((float)Math.toRadians(-rotation.x)).
+                scale(1f);
+        return new Matrix4f(matrix).mul(modelViewMatrix);
+    }
+
+    public static  Matrix4f updateParticleViewMatrix(Vector3f position, Vector3f rotation, Matrix4f matrix) {
+        // First do the rotation so camera rotates over its position
+        modelViewMatrix.identity().identity().translate(position).
+                rotateY((float)Math.toRadians(-rotation.y)).
+                rotateZ((float)Math.toRadians(-rotation.z)).
+                rotateX((float)Math.toRadians(-rotation.x)).
                 scale(1f);
         return new Matrix4f(matrix).mul(modelViewMatrix);
     }

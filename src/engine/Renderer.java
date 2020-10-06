@@ -209,7 +209,7 @@ public class Renderer {
         for (ParticleObject thisParticle : getAllParticles()){
             Mesh thisMesh = thisParticle.mesh;
 
-            modelViewMatrix = updateModelViewMatrix(thisParticle.pos, new Vector3f(0,getCameraRotation().y, 0), viewMatrix);
+            modelViewMatrix = updateParticleViewMatrix(thisParticle.pos, new Vector3f(getCameraRotation()), viewMatrix);
             shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
             thisMesh.render();
         }

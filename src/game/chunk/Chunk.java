@@ -10,7 +10,7 @@ import java.util.Map;
 import static game.Crafter.getChunkRenderDistance;
 import static game.chunk.ChunkMesh.generateChunkMesh;
 import static game.chunk.ChunkUpdateHandler.chunkUpdate;
-import static game.light.Light.floodFill;
+import static game.light.Light.lightFloodFill;
 
 public class Chunk {
 
@@ -246,7 +246,7 @@ public class Chunk {
                 }
             }
         }
-        floodFill(x,y,z);
+        lightFloodFill(chunkX, yPillar, chunkZ);
         generateChunkMesh(chunkX,chunkZ,yPillar);//instant update
         instantUpdateNeighbor(chunkX, chunkZ,blockX,y,blockZ);//instant update
     }
@@ -273,7 +273,7 @@ public class Chunk {
         if (thisChunk.heightMap[blockX][blockZ] < y){
             thisChunk.heightMap[blockX][blockZ] = (byte) y;
         }
-        floodFill(x,y,z);
+        lightFloodFill(chunkX, yPillar, chunkZ);
         generateChunkMesh(chunkX,chunkZ,yPillar);//instant update
         instantUpdateNeighbor(chunkX, chunkZ,blockX,y,blockZ);//instant update
     }

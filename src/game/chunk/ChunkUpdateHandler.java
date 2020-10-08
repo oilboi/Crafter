@@ -5,6 +5,7 @@ import java.util.Map;
 
 import static game.chunk.Chunk.chunkStackContainsBlock;
 import static game.chunk.ChunkMesh.generateChunkMesh;
+import static game.light.Light.lightFloodFill;
 
 public class ChunkUpdateHandler {
 
@@ -24,6 +25,7 @@ public class ChunkUpdateHandler {
                 deletionQueue.put(currentDeletionCount, thisUpdate.key);
                 currentDeletionCount++;
             } else {
+                lightFloodFill(thisUpdate.x, thisUpdate.y, thisUpdate.z);
                 generateChunkMesh(thisUpdate.x, thisUpdate.z, thisUpdate.y);
                 queue.remove(thisUpdate.key);
                 break;

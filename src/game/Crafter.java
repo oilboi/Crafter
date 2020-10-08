@@ -283,7 +283,7 @@ public class Crafter {
         hudOnStepTest();
         particlesOnStep();
         fallingEntityOnStep();
-        rainDropsOnTick();
+//        rainDropsOnTick();
     }
 
     private static void cleanup(){

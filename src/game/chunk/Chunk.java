@@ -246,7 +246,7 @@ public class Chunk {
                 }
             }
         }
-        lightFloodFill(chunkX, yPillar, chunkZ);
+        lightFloodFill(x, y, z);
         generateChunkMesh(chunkX,chunkZ,yPillar);//instant update
         instantUpdateNeighbor(chunkX, chunkZ,blockX,y,blockZ);//instant update
     }
@@ -273,7 +273,7 @@ public class Chunk {
         if (thisChunk.heightMap[blockX][blockZ] < y){
             thisChunk.heightMap[blockX][blockZ] = (byte) y;
         }
-        lightFloodFill(chunkX, yPillar, chunkZ);
+        lightFloodFill(x, y, z);
         generateChunkMesh(chunkX,chunkZ,yPillar);//instant update
         instantUpdateNeighbor(chunkX, chunkZ,blockX,y,blockZ);//instant update
     }

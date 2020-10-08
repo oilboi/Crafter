@@ -25,7 +25,6 @@ public class ChunkUpdateHandler {
                 deletionQueue.put(currentDeletionCount, thisUpdate.key);
                 currentDeletionCount++;
             } else {
-                lightFloodFill(thisUpdate.x, thisUpdate.y, thisUpdate.z);
                 generateChunkMesh(thisUpdate.x, thisUpdate.z, thisUpdate.y);
                 queue.remove(thisUpdate.key);
                 break;

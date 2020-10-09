@@ -15,6 +15,7 @@ public class ChunkObject {
 
     public final Mesh[] mesh;
     public final Mesh[] liquidMesh;
+    public final Mesh[] blockBoxMesh;
 
 
     public ChunkObject(int x, int z){
@@ -30,5 +31,6 @@ public class ChunkObject {
 
         this.mesh       = new Mesh[8];
         this.liquidMesh = new Mesh[8];
+        this.blockBoxMesh = new Mesh[8];
     }
 }

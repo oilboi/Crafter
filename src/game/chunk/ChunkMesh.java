@@ -56,6 +56,21 @@ public class ChunkMesh {
     private static float[] liquidLight = new float[10_824];
     private static int liquidLightCount = 0;
 
+
+    //blockBox stuff
+    private static float[] blockBoxPositions = new float[50_824];
+    private static int blockBoxPositionsCount = 0;
+
+    private static float[] blockBoxTextureCoord = new float[50_824];
+    private static int blockBoxTextureCoordCount = 0;
+
+    private static int[] blockBoxIndices = new int[50_824];
+    private static int blockBoxIndicesTableCount = 0;
+    private static int blockBoxIndicesCount = 0;
+
+    private static float[] blockBoxLight = new float[50_824];
+    private static int blockBoxLightCount = 0;
+
     public static void generateChunkMesh(int chunkX, int chunkZ, int yHeight) {
 
         ChunkObject thisChunk = getChunk(chunkX, chunkZ);
@@ -81,6 +96,12 @@ public class ChunkMesh {
         liquidIndicesCount = 0;
         liquidIndicesTableCount = 0;
         liquidLightCount = 0;
+
+        blockBoxPositionsCount = 0;
+        blockBoxTextureCoordCount = 0;
+        blockBoxIndicesTableCount = 0;
+        blockBoxIndicesCount = 0;
+        blockBoxLightCount = 0;
 
         for (int x = 0; x < 16; x++) {
             int realX = (int)Math.floor(chunkX * 16f) + x;
@@ -766,23 +787,23 @@ public class ChunkMesh {
                                 // 0, 0, 0, 1, 1, 1
 
                                 //front
-                                positions[positionsCount + 0] = (thisBlockBox[3] + x + offsetX);
-                                positions[positionsCount + 1] = (thisBlockBox[4] + y);
-                                positions[positionsCount + 2] = (thisBlockBox[5] + z + offsetZ);
+                                blockBoxPositions[blockBoxPositionsCount + 0] = (thisBlockBox[3] + x + offsetX);
+                                blockBoxPositions[blockBoxPositionsCount + 1] = (thisBlockBox[4] + y);
+                                blockBoxPositions[blockBoxPositionsCount + 2] = (thisBlockBox[5] + z + offsetZ);
 
-                                positions[positionsCount + 3] = (thisBlockBox[0] + x + offsetX);
-                                positions[positionsCount + 4] = (thisBlockBox[4] + y);
-                                positions[positionsCount + 5] = (thisBlockBox[5] + z + offsetZ);
+                                blockBoxPositions[blockBoxPositionsCount + 3] = (thisBlockBox[0] + x + offsetX);
+                                blockBoxPositions[blockBoxPositionsCount + 4] = (thisBlockBox[4] + y);
+                                blockBoxPositions[blockBoxPositionsCount + 5] = (thisBlockBox[5] + z + offsetZ);
 
-                                positions[positionsCount + 6] = (thisBlockBox[0] + x + offsetX);
-                                positions[positionsCount + 7] = (thisBlockBox[1] + y);
-                                positions[positionsCount + 8] = (thisBlockBox[5] + z + offsetZ);
+                                blockBoxPositions[blockBoxPositionsCount + 6] = (thisBlockBox[0] + x + offsetX);
+                                blockBoxPositions[blockBoxPositionsCount + 7] = (thisBlockBox[1] + y);
+                                blockBoxPositions[blockBoxPositionsCount + 8] = (thisBlockBox[5] + z + offsetZ);
 
-                                positions[positionsCount + 9] = (thisBlockBox[3] + x + offsetX);
-                                positions[positionsCount + 10] = (thisBlockBox[1] + y);
-                                positions[positionsCount + 11] = (thisBlockBox[5] + z + offsetZ);
+                                blockBoxPositions[blockBoxPositionsCount + 9] = (thisBlockBox[3] + x + offsetX);
+                                blockBoxPositions[blockBoxPositionsCount + 10] = (thisBlockBox[1] + y);
+                                blockBoxPositions[blockBoxPositionsCount + 11] = (thisBlockBox[5] + z + offsetZ);
 
-                                positionsCount += 12;
+                                blockBoxPositionsCount += 12;
 
                                 //front
                                 float frontLight = getLight(realX, y, realZ + 1) / maxLight;
@@ -791,20 +812,20 @@ public class ChunkMesh {
 
                                 //front
                                 for (int i = 0; i < 12; i++) {
-                                    light[lightCount + i] = (frontLight);
+                                    blockBoxLight[blockBoxLightCount + i] = (frontLight);
                                 }
 
-                                lightCount += 12;
+                                blockBoxLightCount += 12;
 
                                 //front
-                                indices[indicesTableCount + 0] = (0 + indicesCount);
-                                indices[indicesTableCount + 1] = (1 + indicesCount);
-                                indices[indicesTableCount + 2] = (2 + indicesCount);
-                                indices[indicesTableCount + 3] = (0 + indicesCount);
-                                indices[indicesTableCount + 4] = (2 + indicesCount);
-                                indices[indicesTableCount + 5] = (3 + indicesCount);
-                                indicesCount += 4;
-                                indicesTableCount += 6;
+                                blockBoxIndices[blockBoxIndicesTableCount + 0] = (0 + blockBoxIndicesCount);
+                                blockBoxIndices[blockBoxIndicesTableCount + 1] = (1 + blockBoxIndicesCount);
+                                blockBoxIndices[blockBoxIndicesTableCount + 2] = (2 + blockBoxIndicesCount);
+                                blockBoxIndices[blockBoxIndicesTableCount + 3] = (0 + blockBoxIndicesCount);
+                                blockBoxIndices[blockBoxIndicesTableCount + 4] = (2 + blockBoxIndicesCount);
+                                blockBoxIndices[blockBoxIndicesTableCount + 5] = (3 + blockBoxIndicesCount);
+                                blockBoxIndicesCount += 4;
+                                blockBoxIndicesTableCount += 6;
 
                                 // 0, 1,  2, 3
                                 //-x,+x, -y,+y
@@ -812,37 +833,37 @@ public class ChunkMesh {
                                 float[] textureFront = getFrontTexturePoints(thisBlock);
 
                                 //front
-                                textureCoord[textureCoordCount + 0] = (textureFront[1] - ((1 - thisBlockBox[3]) / 32f)); //x positive
-                                textureCoord[textureCoordCount + 1] = (textureFront[2] + ((1 - thisBlockBox[4]) / 32f)); //y positive
-                                textureCoord[textureCoordCount + 2] = (textureFront[0] - ((0 - thisBlockBox[0]) / 32f)); //x negative
-                                textureCoord[textureCoordCount + 3] = (textureFront[2] + ((1 - thisBlockBox[4]) / 32f)); //y positive
+                                blockBoxTextureCoord[blockBoxTextureCoordCount + 0] = (textureFront[1] - ((1 - thisBlockBox[3]) / 32f)); //x positive
+                                blockBoxTextureCoord[blockBoxTextureCoordCount + 1] = (textureFront[2] + ((1 - thisBlockBox[4]) / 32f)); //y positive
+                                blockBoxTextureCoord[blockBoxTextureCoordCount + 2] = (textureFront[0] - ((0 - thisBlockBox[0]) / 32f)); //x negative
+                                blockBoxTextureCoord[blockBoxTextureCoordCount + 3] = (textureFront[2] + ((1 - thisBlockBox[4]) / 32f)); //y positive
 
-                                textureCoord[textureCoordCount + 4] = (textureFront[0] - ((0 - thisBlockBox[0]) / 32f)); //x negative
-                                textureCoord[textureCoordCount + 5] = (textureFront[3] - ((thisBlockBox[1]) / 32f));   //y negative
-                                textureCoord[textureCoordCount + 6] = (textureFront[1] - ((1 - thisBlockBox[3]) / 32f)); //x positive
-                                textureCoord[textureCoordCount + 7] = (textureFront[3] - ((thisBlockBox[1]) / 32f));   //y negative
+                                blockBoxTextureCoord[blockBoxTextureCoordCount + 4] = (textureFront[0] - ((0 - thisBlockBox[0]) / 32f)); //x negative
+                                blockBoxTextureCoord[blockBoxTextureCoordCount + 5] = (textureFront[3] - ((thisBlockBox[1]) / 32f));   //y negative
+                                blockBoxTextureCoord[blockBoxTextureCoordCount + 6] = (textureFront[1] - ((1 - thisBlockBox[3]) / 32f)); //x positive
+                                blockBoxTextureCoord[blockBoxTextureCoordCount + 7] = (textureFront[3] - ((thisBlockBox[1]) / 32f));   //y negative
 
-                                textureCoordCount += 8;
+                                blockBoxTextureCoordCount += 8;
 
 
                                 //back
-                                positions[positionsCount + 0] = (thisBlockBox[0] + x + offsetX);
-                                positions[positionsCount + 1] = (thisBlockBox[4] + y);
-                                positions[positionsCount + 2] = (thisBlockBox[2] + z + offsetZ);
+                                blockBoxPositions[blockBoxPositionsCount + 0] = (thisBlockBox[0] + x + offsetX);
+                                blockBoxPositions[blockBoxPositionsCount + 1] = (thisBlockBox[4] + y);
+                                blockBoxPositions[blockBoxPositionsCount + 2] = (thisBlockBox[2] + z + offsetZ);
 
-                                positions[positionsCount + 3] = (thisBlockBox[3] + x + offsetX);
-                                positions[positionsCount + 4] = (thisBlockBox[4] + y);
-                                positions[positionsCount + 5] = (thisBlockBox[2] + z + offsetZ);
+                                blockBoxPositions[blockBoxPositionsCount + 3] = (thisBlockBox[3] + x + offsetX);
+                                blockBoxPositions[blockBoxPositionsCount + 4] = (thisBlockBox[4] + y);
+                                blockBoxPositions[blockBoxPositionsCount + 5] = (thisBlockBox[2] + z + offsetZ);
 
-                                positions[positionsCount + 6] = (thisBlockBox[3] + x + offsetX);
-                                positions[positionsCount + 7] = (thisBlockBox[1] + y);
-                                positions[positionsCount + 8] = (thisBlockBox[2] + z + offsetZ);
+                                blockBoxPositions[blockBoxPositionsCount + 6] = (thisBlockBox[3] + x + offsetX);
+                                blockBoxPositions[blockBoxPositionsCount + 7] = (thisBlockBox[1] + y);
+                                blockBoxPositions[blockBoxPositionsCount + 8] = (thisBlockBox[2] + z + offsetZ);
 
-                                positions[positionsCount + 9] = (thisBlockBox[0] + x + offsetX);
-                                positions[positionsCount + 10] = (thisBlockBox[1] + y);
-                                positions[positionsCount + 11] = (thisBlockBox[2] + z + offsetZ);
+                                blockBoxPositions[blockBoxPositionsCount + 9] = (thisBlockBox[0] + x + offsetX);
+                                blockBoxPositions[blockBoxPositionsCount + 10] = (thisBlockBox[1] + y);
+                                blockBoxPositions[blockBoxPositionsCount + 11] = (thisBlockBox[2] + z + offsetZ);
 
-                                positionsCount += 12;
+                                blockBoxPositionsCount += 12;
 
 
                                 //back
@@ -850,20 +871,20 @@ public class ChunkMesh {
                                 backLight = convertLight(backLight);
                                 //back
                                 for (int i = 0; i < 12; i++) {
-                                    light[lightCount + i] = (backLight);
+                                    blockBoxLight[blockBoxLightCount + i] = (backLight);
                                 }
 
-                                lightCount += 12;
+                                blockBoxLightCount += 12;
 
                                 //back
-                                indices[indicesTableCount + 0] = (0 + indicesCount);
-                                indices[indicesTableCount + 1] = (1 + indicesCount);
-                                indices[indicesTableCount + 2] = (2 + indicesCount);
-                                indices[indicesTableCount + 3] = (0 + indicesCount);
-                                indices[indicesTableCount + 4] = (2 + indicesCount);
-                                indices[indicesTableCount + 5] = (3 + indicesCount);
-                                indicesCount += 4;
-                                indicesTableCount += 6;
+                                blockBoxIndices[blockBoxIndicesTableCount + 0] = (0 + blockBoxIndicesCount);
+                                blockBoxIndices[blockBoxIndicesTableCount + 1] = (1 + blockBoxIndicesCount);
+                                blockBoxIndices[blockBoxIndicesTableCount + 2] = (2 + blockBoxIndicesCount);
+                                blockBoxIndices[blockBoxIndicesTableCount + 3] = (0 + blockBoxIndicesCount);
+                                blockBoxIndices[blockBoxIndicesTableCount + 4] = (2 + blockBoxIndicesCount);
+                                blockBoxIndices[blockBoxIndicesTableCount + 5] = (3 + blockBoxIndicesCount);
+                                blockBoxIndicesCount += 4;
+                                blockBoxIndicesTableCount += 6;
 
                                 float[] textureBack = getBackTexturePoints(thisBlock);
 
@@ -876,56 +897,56 @@ public class ChunkMesh {
 
 
                                 //back
-                                textureCoord[textureCoordCount + 0] = (textureBack[1] - ((1 - thisBlockBox[0]) / 32f));
-                                textureCoord[textureCoordCount + 1] = (textureBack[2] + ((1 - thisBlockBox[4]) / 32f));
-                                textureCoord[textureCoordCount + 2] = (textureBack[0] - ((0 - thisBlockBox[3]) / 32f));
-                                textureCoord[textureCoordCount + 3] = (textureBack[2] + ((1 - thisBlockBox[4]) / 32f));
+                                blockBoxTextureCoord[blockBoxTextureCoordCount + 0] = (textureBack[1] - ((1 - thisBlockBox[0]) / 32f));
+                                blockBoxTextureCoord[blockBoxTextureCoordCount + 1] = (textureBack[2] + ((1 - thisBlockBox[4]) / 32f));
+                                blockBoxTextureCoord[blockBoxTextureCoordCount + 2] = (textureBack[0] - ((0 - thisBlockBox[3]) / 32f));
+                                blockBoxTextureCoord[blockBoxTextureCoordCount + 3] = (textureBack[2] + ((1 - thisBlockBox[4]) / 32f));
 
-                                textureCoord[textureCoordCount + 4] = (textureBack[0] - ((0 - thisBlockBox[3]) / 32f));
-                                textureCoord[textureCoordCount + 5] = (textureBack[3] - ((thisBlockBox[1]) / 32f));
-                                textureCoord[textureCoordCount + 6] = (textureBack[1] - ((1 - thisBlockBox[0]) / 32f));
-                                textureCoord[textureCoordCount + 7] = (textureBack[3] - ((thisBlockBox[1]) / 32f));
-                                textureCoordCount += 8;
+                                blockBoxTextureCoord[blockBoxTextureCoordCount + 4] = (textureBack[0] - ((0 - thisBlockBox[3]) / 32f));
+                                blockBoxTextureCoord[blockBoxTextureCoordCount + 5] = (textureBack[3] - ((thisBlockBox[1]) / 32f));
+                                blockBoxTextureCoord[blockBoxTextureCoordCount + 6] = (textureBack[1] - ((1 - thisBlockBox[0]) / 32f));
+                                blockBoxTextureCoord[blockBoxTextureCoordCount + 7] = (textureBack[3] - ((thisBlockBox[1]) / 32f));
+                                blockBoxTextureCoordCount += 8;
 
 
                                 //right
-                                positions[positionsCount + 0] = (thisBlockBox[3] + x + offsetX);
-                                positions[positionsCount + 1] = (thisBlockBox[4] + y);
-                                positions[positionsCount + 2] = (thisBlockBox[2] + z + offsetZ);
+                                blockBoxPositions[blockBoxPositionsCount + 0] = (thisBlockBox[3] + x + offsetX);
+                                blockBoxPositions[blockBoxPositionsCount + 1] = (thisBlockBox[4] + y);
+                                blockBoxPositions[blockBoxPositionsCount + 2] = (thisBlockBox[2] + z + offsetZ);
 
-                                positions[positionsCount + 3] = (thisBlockBox[3] + x + offsetX);
-                                positions[positionsCount + 4] = (thisBlockBox[4] + y);
-                                positions[positionsCount + 5] = (thisBlockBox[5] + z + offsetZ);
+                                blockBoxPositions[blockBoxPositionsCount + 3] = (thisBlockBox[3] + x + offsetX);
+                                blockBoxPositions[blockBoxPositionsCount + 4] = (thisBlockBox[4] + y);
+                                blockBoxPositions[blockBoxPositionsCount + 5] = (thisBlockBox[5] + z + offsetZ);
 
-                                positions[positionsCount + 6] = (thisBlockBox[3] + x + offsetX);
-                                positions[positionsCount + 7] = (thisBlockBox[1] + y);
-                                positions[positionsCount + 8] = (thisBlockBox[5] + z + offsetZ);
+                                blockBoxPositions[blockBoxPositionsCount + 6] = (thisBlockBox[3] + x + offsetX);
+                                blockBoxPositions[blockBoxPositionsCount + 7] = (thisBlockBox[1] + y);
+                                blockBoxPositions[blockBoxPositionsCount + 8] = (thisBlockBox[5] + z + offsetZ);
 
-                                positions[positionsCount + 9] = (thisBlockBox[3] + x + offsetX);
-                                positions[positionsCount + 10] = (thisBlockBox[1] + y);
-                                positions[positionsCount + 11] = (thisBlockBox[2] + z + offsetZ);
+                                blockBoxPositions[blockBoxPositionsCount + 9] = (thisBlockBox[3] + x + offsetX);
+                                blockBoxPositions[blockBoxPositionsCount + 10] = (thisBlockBox[1] + y);
+                                blockBoxPositions[blockBoxPositionsCount + 11] = (thisBlockBox[2] + z + offsetZ);
 
-                                positionsCount += 12;
+                                blockBoxPositionsCount += 12;
 
                                 //right
                                 float rightLight = getLight(realX + 1, y, realZ) / maxLight;
                                 rightLight = convertLight(rightLight);
                                 //right
                                 for (int i = 0; i < 12; i++) {
-                                    light[lightCount + i] = (rightLight);
+                                    blockBoxLight[blockBoxLightCount + i] = (rightLight);
                                 }
 
-                                lightCount += 12;
+                                blockBoxLightCount += 12;
 
                                 //right
-                                indices[indicesTableCount + 0] = (0 + indicesCount);
-                                indices[indicesTableCount + 1] = (1 + indicesCount);
-                                indices[indicesTableCount + 2] = (2 + indicesCount);
-                                indices[indicesTableCount + 3] = (0 + indicesCount);
-                                indices[indicesTableCount + 4] = (2 + indicesCount);
-                                indices[indicesTableCount + 5] = (3 + indicesCount);
-                                indicesCount += 4;
-                                indicesTableCount += 6;
+                                blockBoxIndices[blockBoxIndicesTableCount + 0] = (0 + blockBoxIndicesCount);
+                                blockBoxIndices[blockBoxIndicesTableCount + 1] = (1 + blockBoxIndicesCount);
+                                blockBoxIndices[blockBoxIndicesTableCount + 2] = (2 + blockBoxIndicesCount);
+                                blockBoxIndices[blockBoxIndicesTableCount + 3] = (0 + blockBoxIndicesCount);
+                                blockBoxIndices[blockBoxIndicesTableCount + 4] = (2 + blockBoxIndicesCount);
+                                blockBoxIndices[blockBoxIndicesTableCount + 5] = (3 + blockBoxIndicesCount);
+                                blockBoxIndicesCount += 4;
+                                blockBoxIndicesTableCount += 6;
 
 
                                 // 0, 1, 2, 3, 4, 5
@@ -938,109 +959,109 @@ public class ChunkMesh {
 
                                 float[] textureRight = getRightTexturePoints(thisBlock);
                                 //right
-                                textureCoord[textureCoordCount + 0] = (textureRight[1] - ((1 - thisBlockBox[2]) / 32f));
-                                textureCoord[textureCoordCount + 1] = (textureRight[2] + ((1 - thisBlockBox[4]) / 32f));
-                                textureCoord[textureCoordCount + 2] = (textureRight[0] - ((0 - thisBlockBox[5]) / 32f));
-                                textureCoord[textureCoordCount + 3] = (textureRight[2] + ((1 - thisBlockBox[4]) / 32f));
+                                blockBoxTextureCoord[blockBoxTextureCoordCount + 0] = (textureRight[1] - ((1 - thisBlockBox[2]) / 32f));
+                                blockBoxTextureCoord[blockBoxTextureCoordCount + 1] = (textureRight[2] + ((1 - thisBlockBox[4]) / 32f));
+                                blockBoxTextureCoord[blockBoxTextureCoordCount + 2] = (textureRight[0] - ((0 - thisBlockBox[5]) / 32f));
+                                blockBoxTextureCoord[blockBoxTextureCoordCount + 3] = (textureRight[2] + ((1 - thisBlockBox[4]) / 32f));
 
-                                textureCoord[textureCoordCount + 4] = (textureRight[0] - ((0 - thisBlockBox[5]) / 32f));
-                                textureCoord[textureCoordCount + 5] = (textureRight[3] - ((thisBlockBox[1]) / 32f));
-                                textureCoord[textureCoordCount + 6] = (textureRight[1] - ((1 - thisBlockBox[2]) / 32f));
-                                textureCoord[textureCoordCount + 7] = (textureRight[3] - ((thisBlockBox[1]) / 32f));
-                                textureCoordCount += 8;
+                                blockBoxTextureCoord[blockBoxTextureCoordCount + 4] = (textureRight[0] - ((0 - thisBlockBox[5]) / 32f));
+                                blockBoxTextureCoord[blockBoxTextureCoordCount + 5] = (textureRight[3] - ((thisBlockBox[1]) / 32f));
+                                blockBoxTextureCoord[blockBoxTextureCoordCount + 6] = (textureRight[1] - ((1 - thisBlockBox[2]) / 32f));
+                                blockBoxTextureCoord[blockBoxTextureCoordCount + 7] = (textureRight[3] - ((thisBlockBox[1]) / 32f));
+                                blockBoxTextureCoordCount += 8;
 
 
                                 //left
-                                positions[positionsCount + 0] = (thisBlockBox[0] + x + offsetX);
-                                positions[positionsCount + 1] = (thisBlockBox[4] + y);
-                                positions[positionsCount + 2] = (thisBlockBox[5] + z + offsetZ);
+                                blockBoxPositions[blockBoxPositionsCount + 0] = (thisBlockBox[0] + x + offsetX);
+                                blockBoxPositions[blockBoxPositionsCount + 1] = (thisBlockBox[4] + y);
+                                blockBoxPositions[blockBoxPositionsCount + 2] = (thisBlockBox[5] + z + offsetZ);
 
-                                positions[positionsCount + 3] = (thisBlockBox[0] + x + offsetX);
-                                positions[positionsCount + 4] = (thisBlockBox[4] + y);
-                                positions[positionsCount + 5] = (thisBlockBox[2] + z + offsetZ);
+                                blockBoxPositions[blockBoxPositionsCount + 3] = (thisBlockBox[0] + x + offsetX);
+                                blockBoxPositions[blockBoxPositionsCount + 4] = (thisBlockBox[4] + y);
+                                blockBoxPositions[blockBoxPositionsCount + 5] = (thisBlockBox[2] + z + offsetZ);
 
-                                positions[positionsCount + 6] = (thisBlockBox[0] + x + offsetX);
-                                positions[positionsCount + 7] = (thisBlockBox[1] + y);
-                                positions[positionsCount + 8] = (thisBlockBox[2] + z + offsetZ);
+                                blockBoxPositions[blockBoxPositionsCount + 6] = (thisBlockBox[0] + x + offsetX);
+                                blockBoxPositions[blockBoxPositionsCount + 7] = (thisBlockBox[1] + y);
+                                blockBoxPositions[blockBoxPositionsCount + 8] = (thisBlockBox[2] + z + offsetZ);
 
-                                positions[positionsCount + 9] = (thisBlockBox[0] + x + offsetX);
-                                positions[positionsCount + 10] = (thisBlockBox[1] + y);
-                                positions[positionsCount + 11] = (thisBlockBox[5] + z + offsetZ);
+                                blockBoxPositions[blockBoxPositionsCount + 9] = (thisBlockBox[0] + x + offsetX);
+                                blockBoxPositions[blockBoxPositionsCount + 10] = (thisBlockBox[1] + y);
+                                blockBoxPositions[blockBoxPositionsCount + 11] = (thisBlockBox[5] + z + offsetZ);
 
-                                positionsCount += 12;
+                                blockBoxPositionsCount += 12;
 
                                 //left
                                 float leftLight = getLight(realX - 1, y, realZ) / maxLight;
                                 leftLight = convertLight(leftLight);
                                 //left
                                 for (int i = 0; i < 12; i++) {
-                                    light[lightCount + i] = (leftLight);
+                                    blockBoxLight[blockBoxLightCount + i] = (leftLight);
                                 }
 
-                                lightCount += 12;
+                                blockBoxLightCount += 12;
 
                                 //left
-                                indices[indicesTableCount + 0] = (0 + indicesCount);
-                                indices[indicesTableCount + 1] = (1 + indicesCount);
-                                indices[indicesTableCount + 2] = (2 + indicesCount);
-                                indices[indicesTableCount + 3] = (0 + indicesCount);
-                                indices[indicesTableCount + 4] = (2 + indicesCount);
-                                indices[indicesTableCount + 5] = (3 + indicesCount);
-                                indicesCount += 4;
-                                indicesTableCount += 6;
+                                blockBoxIndices[blockBoxIndicesTableCount + 0] = (0 + blockBoxIndicesCount);
+                                blockBoxIndices[blockBoxIndicesTableCount + 1] = (1 + blockBoxIndicesCount);
+                                blockBoxIndices[blockBoxIndicesTableCount + 2] = (2 + blockBoxIndicesCount);
+                                blockBoxIndices[blockBoxIndicesTableCount + 3] = (0 + blockBoxIndicesCount);
+                                blockBoxIndices[blockBoxIndicesTableCount + 4] = (2 + blockBoxIndicesCount);
+                                blockBoxIndices[blockBoxIndicesTableCount + 5] = (3 + blockBoxIndicesCount);
+                                blockBoxIndicesCount += 4;
+                                blockBoxIndicesTableCount += 6;
 
                                 float[] textureLeft = getLeftTexturePoints(thisBlock);
                                 //left
-                                textureCoord[textureCoordCount + 0] = (textureLeft[1] - ((1 - thisBlockBox[5]) / 32f));
-                                textureCoord[textureCoordCount + 1] = (textureLeft[2] + ((1 - thisBlockBox[4]) / 32f));
-                                textureCoord[textureCoordCount + 2] = (textureLeft[0] - ((0 - thisBlockBox[2]) / 32f));
-                                textureCoord[textureCoordCount + 3] = (textureLeft[2] + ((1 - thisBlockBox[4]) / 32f));
+                                blockBoxTextureCoord[blockBoxTextureCoordCount + 0] = (textureLeft[1] - ((1 - thisBlockBox[5]) / 32f));
+                                blockBoxTextureCoord[blockBoxTextureCoordCount + 1] = (textureLeft[2] + ((1 - thisBlockBox[4]) / 32f));
+                                blockBoxTextureCoord[blockBoxTextureCoordCount + 2] = (textureLeft[0] - ((0 - thisBlockBox[2]) / 32f));
+                                blockBoxTextureCoord[blockBoxTextureCoordCount + 3] = (textureLeft[2] + ((1 - thisBlockBox[4]) / 32f));
 
-                                textureCoord[textureCoordCount + 4] = (textureLeft[0] - ((0 - thisBlockBox[2]) / 32f));
-                                textureCoord[textureCoordCount + 5] = (textureLeft[3] - ((thisBlockBox[1]) / 32f));
-                                textureCoord[textureCoordCount + 6] = (textureLeft[1] - ((1 - thisBlockBox[5]) / 32f));
-                                textureCoord[textureCoordCount + 7] = (textureLeft[3] - ((thisBlockBox[1]) / 32f));
-                                textureCoordCount += 8;
+                                blockBoxTextureCoord[blockBoxTextureCoordCount + 4] = (textureLeft[0] - ((0 - thisBlockBox[2]) / 32f));
+                                blockBoxTextureCoord[blockBoxTextureCoordCount + 5] = (textureLeft[3] - ((thisBlockBox[1]) / 32f));
+                                blockBoxTextureCoord[blockBoxTextureCoordCount + 6] = (textureLeft[1] - ((1 - thisBlockBox[5]) / 32f));
+                                blockBoxTextureCoord[blockBoxTextureCoordCount + 7] = (textureLeft[3] - ((thisBlockBox[1]) / 32f));
+                                blockBoxTextureCoordCount += 8;
 
 
                                 //top
-                                positions[positionsCount + 0] = (thisBlockBox[0] + x + offsetX);
-                                positions[positionsCount + 1] = (thisBlockBox[4] + y);
-                                positions[positionsCount + 2] = (thisBlockBox[2] + z + offsetZ);
+                                blockBoxPositions[blockBoxPositionsCount + 0] = (thisBlockBox[0] + x + offsetX);
+                                blockBoxPositions[blockBoxPositionsCount + 1] = (thisBlockBox[4] + y);
+                                blockBoxPositions[blockBoxPositionsCount + 2] = (thisBlockBox[2] + z + offsetZ);
 
-                                positions[positionsCount + 3] = (thisBlockBox[0] + x + offsetX);
-                                positions[positionsCount + 4] = (thisBlockBox[4] + y);
-                                positions[positionsCount + 5] = (thisBlockBox[5] + z + offsetZ);
+                                blockBoxPositions[blockBoxPositionsCount + 3] = (thisBlockBox[0] + x + offsetX);
+                                blockBoxPositions[blockBoxPositionsCount + 4] = (thisBlockBox[4] + y);
+                                blockBoxPositions[blockBoxPositionsCount + 5] = (thisBlockBox[5] + z + offsetZ);
 
-                                positions[positionsCount + 6] = (thisBlockBox[3] + x + offsetX);
-                                positions[positionsCount + 7] = (thisBlockBox[4] + y);
-                                positions[positionsCount + 8] = (thisBlockBox[5] + z + offsetZ);
+                                blockBoxPositions[blockBoxPositionsCount + 6] = (thisBlockBox[3] + x + offsetX);
+                                blockBoxPositions[blockBoxPositionsCount + 7] = (thisBlockBox[4] + y);
+                                blockBoxPositions[blockBoxPositionsCount + 8] = (thisBlockBox[5] + z + offsetZ);
 
-                                positions[positionsCount + 9] = (thisBlockBox[3] + x + offsetX);
-                                positions[positionsCount + 10] = (thisBlockBox[4] + y);
-                                positions[positionsCount + 11] = (thisBlockBox[2] + z + offsetZ);
+                                blockBoxPositions[blockBoxPositionsCount + 9] = (thisBlockBox[3] + x + offsetX);
+                                blockBoxPositions[blockBoxPositionsCount + 10]= (thisBlockBox[4] + y);
+                                blockBoxPositions[blockBoxPositionsCount + 11]= (thisBlockBox[2] + z + offsetZ);
 
-                                positionsCount += 12;
+                                blockBoxPositionsCount += 12;
 
                                 //top
                                 float topLight = getLight(realX, y + 1, realZ) / maxLight;
                                 topLight = convertLight(topLight);
                                 //top
                                 for (int i = 0; i < 12; i++) {
-                                    light[lightCount + i] = (topLight);
+                                    blockBoxLight[blockBoxLightCount + i] = (topLight);
                                 }
 
-                                lightCount += 12;
+                                blockBoxLightCount += 12;
 
                                 //top
-                                indices[indicesTableCount + 0] = (0 + indicesCount);
-                                indices[indicesTableCount + 1] = (1 + indicesCount);
-                                indices[indicesTableCount + 2] = (2 + indicesCount);
-                                indices[indicesTableCount + 3] = (0 + indicesCount);
-                                indices[indicesTableCount + 4] = (2 + indicesCount);
-                                indices[indicesTableCount + 5] = (3 + indicesCount);
-                                indicesCount += 4;
-                                indicesTableCount += 6;
+                                blockBoxIndices[blockBoxIndicesTableCount + 0] = (0 + blockBoxIndicesCount);
+                                blockBoxIndices[blockBoxIndicesTableCount + 1] = (1 + blockBoxIndicesCount);
+                                blockBoxIndices[blockBoxIndicesTableCount + 2] = (2 + blockBoxIndicesCount);
+                                blockBoxIndices[blockBoxIndicesTableCount + 3] = (0 + blockBoxIndicesCount);
+                                blockBoxIndices[blockBoxIndicesTableCount + 4] = (2 + blockBoxIndicesCount);
+                                blockBoxIndices[blockBoxIndicesTableCount + 5] = (3 + blockBoxIndicesCount);
+                                blockBoxIndicesCount += 4;
+                                blockBoxIndicesTableCount += 6;
 
                                 // 0, 1, 2, 3, 4, 5
                                 //-x,-y,-z, x, y, z
@@ -1051,56 +1072,56 @@ public class ChunkMesh {
 
                                 float[] textureTop = getTopTexturePoints(thisBlock);
                                 //top
-                                textureCoord[textureCoordCount + 0] = (textureTop[1] - ((1 - thisBlockBox[5]) / 32f));
-                                textureCoord[textureCoordCount + 1] = (textureTop[2] + ((1 - thisBlockBox[0]) / 32f));
-                                textureCoord[textureCoordCount + 2] = (textureTop[0] - ((0 - thisBlockBox[2]) / 32f));
-                                textureCoord[textureCoordCount + 3] = (textureTop[2] + ((1 - thisBlockBox[0]) / 32f));
+                                blockBoxTextureCoord[blockBoxTextureCoordCount + 0] = (textureTop[1] - ((1 - thisBlockBox[5]) / 32f));
+                                blockBoxTextureCoord[blockBoxTextureCoordCount + 1] = (textureTop[2] + ((1 - thisBlockBox[0]) / 32f));
+                                blockBoxTextureCoord[blockBoxTextureCoordCount + 2] = (textureTop[0] - ((0 - thisBlockBox[2]) / 32f));
+                                blockBoxTextureCoord[blockBoxTextureCoordCount + 3] = (textureTop[2] + ((1 - thisBlockBox[0]) / 32f));
 
-                                textureCoord[textureCoordCount + 4] = (textureTop[0] - ((0 - thisBlockBox[2]) / 32f));
-                                textureCoord[textureCoordCount + 5] = (textureTop[3] - ((thisBlockBox[3]) / 32f));
-                                textureCoord[textureCoordCount + 6] = (textureTop[1] - ((1 - thisBlockBox[5]) / 32f));
-                                textureCoord[textureCoordCount + 7] = (textureTop[3] - ((thisBlockBox[3]) / 32f));
-                                textureCoordCount += 8;
+                                blockBoxTextureCoord[blockBoxTextureCoordCount + 4] = (textureTop[0] - ((0 - thisBlockBox[2]) / 32f));
+                                blockBoxTextureCoord[blockBoxTextureCoordCount + 5] = (textureTop[3] - ((thisBlockBox[3]) / 32f));
+                                blockBoxTextureCoord[blockBoxTextureCoordCount + 6] = (textureTop[1] - ((1 - thisBlockBox[5]) / 32f));
+                                blockBoxTextureCoord[blockBoxTextureCoordCount + 7] = (textureTop[3] - ((thisBlockBox[3]) / 32f));
+                                blockBoxTextureCoordCount += 8;
 
 
                                 //bottom
-                                positions[positionsCount + 0] = (thisBlockBox[0] + x + offsetX);
-                                positions[positionsCount + 1] = (thisBlockBox[1] + y);
-                                positions[positionsCount + 2] = (thisBlockBox[5] + z + offsetZ);
+                                blockBoxPositions[blockBoxPositionsCount + 0] = (thisBlockBox[0] + x + offsetX);
+                                blockBoxPositions[blockBoxPositionsCount + 1] = (thisBlockBox[1] + y);
+                                blockBoxPositions[blockBoxPositionsCount + 2] = (thisBlockBox[5] + z + offsetZ);
 
-                                positions[positionsCount + 3] = (thisBlockBox[0] + x + offsetX);
-                                positions[positionsCount + 4] = (thisBlockBox[1] + y);
-                                positions[positionsCount + 5] = (thisBlockBox[2] + z + offsetZ);
+                                blockBoxPositions[blockBoxPositionsCount + 3] = (thisBlockBox[0] + x + offsetX);
+                                blockBoxPositions[blockBoxPositionsCount + 4] = (thisBlockBox[1] + y);
+                                blockBoxPositions[blockBoxPositionsCount + 5] = (thisBlockBox[2] + z + offsetZ);
 
-                                positions[positionsCount + 6] = (thisBlockBox[3] + x + offsetX);
-                                positions[positionsCount + 7] = (thisBlockBox[1] + y);
-                                positions[positionsCount + 8] = (thisBlockBox[2] + z + offsetZ);
+                                blockBoxPositions[blockBoxPositionsCount + 6] = (thisBlockBox[3] + x + offsetX);
+                                blockBoxPositions[blockBoxPositionsCount + 7] = (thisBlockBox[1] + y);
+                                blockBoxPositions[blockBoxPositionsCount + 8] = (thisBlockBox[2] + z + offsetZ);
 
-                                positions[positionsCount + 9] = (thisBlockBox[3] + x + offsetX);
-                                positions[positionsCount + 10] = (thisBlockBox[1] + y);
-                                positions[positionsCount + 11] = (thisBlockBox[5] + z + offsetZ);
+                                blockBoxPositions[blockBoxPositionsCount + 9] = (thisBlockBox[3] + x + offsetX);
+                                blockBoxPositions[blockBoxPositionsCount + 10]= (thisBlockBox[1] + y);
+                                blockBoxPositions[blockBoxPositionsCount + 11]= (thisBlockBox[5] + z + offsetZ);
 
-                                positionsCount += 12;
+                                blockBoxPositionsCount += 12;
 
                                 //bottom
                                 float bottomLight = getLight(realX, y - 1, realZ) / maxLight;
                                 bottomLight = convertLight(bottomLight);
                                 //bottom
                                 for (int i = 0; i < 12; i++) {
-                                    light[lightCount + i] = (bottomLight);
+                                    blockBoxLight[blockBoxLightCount + i] = (bottomLight);
                                 }
 
-                                lightCount += 12;
+                                blockBoxLightCount += 12;
 
                                 //bottom
-                                indices[indicesTableCount + 0] = (0 + indicesCount);
-                                indices[indicesTableCount + 1] = (1 + indicesCount);
-                                indices[indicesTableCount + 2] = (2 + indicesCount);
-                                indices[indicesTableCount + 3] = (0 + indicesCount);
-                                indices[indicesTableCount + 4] = (2 + indicesCount);
-                                indices[indicesTableCount + 5] = (3 + indicesCount);
-                                indicesCount += 4;
-                                indicesTableCount += 6;
+                                blockBoxIndices[blockBoxIndicesTableCount + 0] = (0 + blockBoxIndicesCount);
+                                blockBoxIndices[blockBoxIndicesTableCount + 1] = (1 + blockBoxIndicesCount);
+                                blockBoxIndices[blockBoxIndicesTableCount + 2] = (2 + blockBoxIndicesCount);
+                                blockBoxIndices[blockBoxIndicesTableCount + 3] = (0 + blockBoxIndicesCount);
+                                blockBoxIndices[blockBoxIndicesTableCount + 4] = (2 + blockBoxIndicesCount);
+                                blockBoxIndices[blockBoxIndicesTableCount + 5] = (3 + blockBoxIndicesCount);
+                                blockBoxIndicesCount += 4;
+                                blockBoxIndicesTableCount += 6;
 
 
                                 // 0, 1, 2, 3, 4, 5
@@ -1112,16 +1133,16 @@ public class ChunkMesh {
 
                                 float[] textureBottom = getBottomTexturePoints(thisBlock);
                                 //bottom
-                                textureCoord[textureCoordCount + 0] = (textureBottom[1] - ((1 - thisBlockBox[5]) / 32f));
-                                textureCoord[textureCoordCount + 1] = (textureBottom[2] + ((1 - thisBlockBox[0]) / 32f));
-                                textureCoord[textureCoordCount + 2] = (textureBottom[0] - ((0 - thisBlockBox[2]) / 32f));
-                                textureCoord[textureCoordCount + 3] = (textureBottom[2] + ((1 - thisBlockBox[0]) / 32f));
+                                blockBoxTextureCoord[blockBoxTextureCoordCount + 0] = (textureBottom[1] - ((1 - thisBlockBox[5]) / 32f));
+                                blockBoxTextureCoord[blockBoxTextureCoordCount + 1] = (textureBottom[2] + ((1 - thisBlockBox[0]) / 32f));
+                                blockBoxTextureCoord[blockBoxTextureCoordCount + 2] = (textureBottom[0] - ((0 - thisBlockBox[2]) / 32f));
+                                blockBoxTextureCoord[blockBoxTextureCoordCount + 3] = (textureBottom[2] + ((1 - thisBlockBox[0]) / 32f));
 
-                                textureCoord[textureCoordCount + 4] = (textureBottom[0] - ((0 - thisBlockBox[2]) / 32f));
-                                textureCoord[textureCoordCount + 5] = (textureBottom[3] - ((thisBlockBox[3]) / 32f));
-                                textureCoord[textureCoordCount + 6] = (textureBottom[1] - ((1 - thisBlockBox[5]) / 32f));
-                                textureCoord[textureCoordCount + 7] = (textureBottom[3] - ((thisBlockBox[3]) / 32f));
-                                textureCoordCount += 8;
+                                blockBoxTextureCoord[blockBoxTextureCoordCount + 4] = (textureBottom[0] - ((0 - thisBlockBox[2]) / 32f));
+                                blockBoxTextureCoord[blockBoxTextureCoordCount + 5] = (textureBottom[3] - ((thisBlockBox[3]) / 32f));
+                                blockBoxTextureCoord[blockBoxTextureCoordCount + 6] = (textureBottom[1] - ((1 - thisBlockBox[5]) / 32f));
+                                blockBoxTextureCoord[blockBoxTextureCoordCount + 7] = (textureBottom[3] - ((thisBlockBox[3]) / 32f));
+                                blockBoxTextureCoordCount += 8;
                             }
                         }
                     }
@@ -1177,6 +1198,29 @@ public class ChunkMesh {
         }
         else {
             setChunkLiquidMesh(chunkX, chunkZ, yHeight, null);
+        }
+
+        //do the same thing for blockboxes
+        if (blockBoxPositionsCount > 0) {
+//          convert the position objects into usable array
+            float[] positionsArray = new float[blockBoxPositionsCount];
+            if (blockBoxPositionsCount >= 0) System.arraycopy(blockBoxPositions, 0, positionsArray, 0, blockBoxPositionsCount);
+
+            //convert the light objects into usable array
+            float[] lightArray = new float[blockBoxLightCount];
+            if (blockBoxLightCount >= 0) System.arraycopy(blockBoxLight, 0, lightArray, 0, blockBoxLightCount);
+
+            //convert the indices objects into usable array
+            int[] indicesArray = new int[blockBoxIndicesTableCount];
+            if (blockBoxIndicesTableCount >= 0) System.arraycopy(blockBoxIndices, 0, indicesArray, 0, blockBoxIndicesTableCount);
+
+            //convert the textureCoord objects into usable array
+            float[] textureCoordArray = new float[blockBoxTextureCoordCount];
+            if (blockBoxTextureCoordCount >= 0) System.arraycopy(blockBoxTextureCoord, 0, textureCoordArray, 0, blockBoxTextureCoordCount);
+
+            setChunkBlockBoxMesh(chunkX, chunkZ, yHeight, new Mesh(positionsArray, lightArray, indicesArray, textureCoordArray, textureAtlas));
+        } else {
+            setChunkBlockBoxMesh(chunkX, chunkZ, yHeight, null);
         }
     }
 

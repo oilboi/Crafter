@@ -686,6 +686,52 @@ public class BlockDefinition {
                 "sand_1",
                 "sand_2"
         );
+
+        blockShapeMap.put("door_open",
+                new BlockShape(
+                        new float[][]{
+                                {0f,0f,0f,2f/16f,1f,1f}
+                        }
+                )
+        );
+
+        new BlockDefinition(
+                24,
+                "doorOpenTop",
+                false,
+                new int[]{24,0}, //front
+                new int[]{24,0}, //back
+                new int[]{24,0}, //right
+                new int[]{24,0}, //left
+                new int[]{24,0}, //top
+                new int[]{24,0},  //bottom
+                "door_open",
+                true,
+                false,
+                false,
+                null,
+                "wood_1",
+                "wood_1"
+        );
+
+        new BlockDefinition(
+                25,
+                "doorOpenBottom",
+                false,
+                new int[]{25,0}, //front
+                new int[]{25,0}, //back
+                new int[]{25,0}, //right
+                new int[]{25,0}, //left
+                new int[]{25,0}, //top
+                new int[]{25,0},  //bottom
+                "door_open",
+                true,
+                false,
+                false,
+                null,
+                "wood_1",
+                "wood_1"
+        );
     }
 
     public static BlockDefinition getBlockDefinition(int ID){

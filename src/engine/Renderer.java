@@ -129,9 +129,7 @@ public class Renderer {
         shaderProgram.setUniform("texture_sampler", 0);
 
         Matrix4f modelViewMatrix;
-
-
-
+        
         //render each chunk (standard blocks)
         for (ChunkObject thisChunk : getMap()){
             if (thisChunk == null){
@@ -149,7 +147,6 @@ public class Renderer {
             }
         }
 
-
         //render each chunk liquid mesh
         for (ChunkObject thisChunk : getMap()){
             if (thisChunk == null){
@@ -159,6 +156,23 @@ public class Renderer {
                 continue;
             }
             for (Mesh thisMesh : thisChunk.liquidMesh){
+                if (thisMesh != null){
+                    modelViewMatrix = getModelViewMatrix(viewMatrix);
+                    shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+                    thisMesh.render();
+                }
+            }
+        }
+
+        //render each blockbox mesh
+        for (ChunkObject thisChunk : getMap()){
+            if (thisChunk == null){
+                continue;
+            }
+            if (thisChunk.blockBoxMesh == null){
+                continue;
+            }
+            for (Mesh thisMesh : thisChunk.blockBoxMesh){
                 if (thisMesh != null){
                     modelViewMatrix = getModelViewMatrix(viewMatrix);
                     shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);

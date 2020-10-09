@@ -430,19 +430,19 @@ public class ItemDefinition {
             pixelCount++;
             //front
             positions.add((thisBlockBox[3] - 0.5f) * itemSize);
-            positions.add((thisBlockBox[4] - 0.5f) * itemSize + (itemSize/2));
+            positions.add(Math.abs(1f - ((thisBlockBox[1] - 0.5f) * itemSize + (itemSize/2))) - (itemSize*1.5f));
             positions.add((thisBlockBox[5]) * itemSize);
 
             positions.add((thisBlockBox[0] - 0.5f) * itemSize);
-            positions.add((thisBlockBox[4] - 0.5f) * itemSize+ (itemSize/2));
+            positions.add(Math.abs(1f - ((thisBlockBox[1] - 0.5f) * itemSize + (itemSize/2))) - (itemSize*1.5f));
             positions.add((thisBlockBox[5]) * itemSize);
 
             positions.add((thisBlockBox[0] - 0.5f) * itemSize);
-            positions.add((thisBlockBox[1] - 0.5f) * itemSize+ (itemSize/2));
+            positions.add(Math.abs(1f - ((thisBlockBox[4] - 0.5f) * itemSize + (itemSize/2))) - (itemSize*1.5f));
             positions.add((thisBlockBox[5]) * itemSize);
 
             positions.add((thisBlockBox[3] - 0.5f) * itemSize);
-            positions.add((thisBlockBox[1] - 0.5f) * itemSize+ (itemSize/2));
+            positions.add(Math.abs(1f - ((thisBlockBox[4] - 0.5f) * itemSize + (itemSize/2))) - (itemSize*1.5f));
             positions.add((thisBlockBox[5] ) * itemSize);
 
             //front
@@ -464,19 +464,12 @@ public class ItemDefinition {
             // 0, 0, 0, 1, 1, 1
             //front
             textureCoord.add(thisBlockBox[0]); //x positive
-
             textureCoord.add(thisBlockBox[1]); //y positive
-
             textureCoord.add(thisBlockBox[3]); //x negative
-
             textureCoord.add(thisBlockBox[1]); //y positive
-
             textureCoord.add(thisBlockBox[3]); //x negative
-
             textureCoord.add(thisBlockBox[4]); //y negative
-
             textureCoord.add(thisBlockBox[0]); //x positive
-
             textureCoord.add(thisBlockBox[4]); //y negative
 
 
@@ -484,19 +477,19 @@ public class ItemDefinition {
 
             //back
             positions.add((thisBlockBox[0] - 0.5f) * itemSize);
-            positions.add((thisBlockBox[4] - 0.5f) * itemSize+ (itemSize/2));
+            positions.add(Math.abs( 1f - ((thisBlockBox[1] - 0.5f) * itemSize+ (itemSize/2))) - (itemSize*1.5f));
             positions.add((thisBlockBox[2]) * itemSize);
 
             positions.add((thisBlockBox[3] - 0.5f) * itemSize);
-            positions.add((thisBlockBox[4] - 0.5f) * itemSize+ (itemSize/2));
+            positions.add(Math.abs( 1f - ((thisBlockBox[1] - 0.5f) * itemSize+ (itemSize/2))) - (itemSize*1.5f));
             positions.add((thisBlockBox[2]) * itemSize);
 
             positions.add((thisBlockBox[3] - 0.5f) * itemSize);
-            positions.add((thisBlockBox[1] - 0.5f) * itemSize+ (itemSize/2));
+            positions.add(Math.abs( 1f - ((thisBlockBox[4] - 0.5f) * itemSize+ (itemSize/2))) - (itemSize*1.5f));
             positions.add((thisBlockBox[2]) * itemSize);
 
             positions.add((thisBlockBox[0] - 0.5f) * itemSize);
-            positions.add((thisBlockBox[1] - 0.5f) * itemSize+ (itemSize/2));
+            positions.add(Math.abs( 1f - ((thisBlockBox[4] - 0.5f) * itemSize+ (itemSize/2))) - (itemSize*1.5f));
             positions.add((thisBlockBox[2]) * itemSize);
 
 
@@ -515,19 +508,12 @@ public class ItemDefinition {
 
             //back
             textureCoord.add(thisBlockBox[0]); //x positive
-
             textureCoord.add(thisBlockBox[1]); //y positive
-
             textureCoord.add(thisBlockBox[3]); //x negative
-
             textureCoord.add(thisBlockBox[1]); //y positive
-
             textureCoord.add(thisBlockBox[3]); //x negative
-
             textureCoord.add(thisBlockBox[4]); //y negative
-
             textureCoord.add(thisBlockBox[0]); //x positive
-
             textureCoord.add(thisBlockBox[4]); //y negative
 
 
@@ -536,19 +522,19 @@ public class ItemDefinition {
 
             //right
             positions.add((thisBlockBox[3] - 0.5f) * itemSize);
-            positions.add((thisBlockBox[4] - 0.5f) * itemSize+ (itemSize/2));
+            positions.add(Math.abs(1f - ((thisBlockBox[1] - 0.5f) * itemSize+ (itemSize/2))) - (itemSize*1.5f));
             positions.add((thisBlockBox[2] ) * itemSize);
 
             positions.add((thisBlockBox[3] - 0.5f) * itemSize);
-            positions.add((thisBlockBox[4] - 0.5f) * itemSize+ (itemSize/2));
+            positions.add(Math.abs(1f - ((thisBlockBox[1] - 0.5f) * itemSize+ (itemSize/2))) - (itemSize*1.5f));
             positions.add((thisBlockBox[5]) * itemSize);
 
             positions.add((thisBlockBox[3] - 0.5f) * itemSize);
-            positions.add((thisBlockBox[1] - 0.5f) * itemSize+ (itemSize/2));
+            positions.add(Math.abs(1f - ((thisBlockBox[4] - 0.5f) * itemSize+ (itemSize/2))) - (itemSize*1.5f));
             positions.add((thisBlockBox[5] ) * itemSize);
 
             positions.add((thisBlockBox[3] - 0.5f) * itemSize);
-            positions.add((thisBlockBox[1] - 0.5f) * itemSize+ (itemSize/2));
+            positions.add(Math.abs(1f - ((thisBlockBox[4] - 0.5f) * itemSize+ (itemSize/2))) - (itemSize*1.5f));
             positions.add((thisBlockBox[2] ) * itemSize);
 
             //right
@@ -567,19 +553,12 @@ public class ItemDefinition {
 
             //right
             textureCoord.add(thisBlockBox[0]); //x positive
-
             textureCoord.add(thisBlockBox[1]); //y positive
-
             textureCoord.add(thisBlockBox[3]); //x negative
-
             textureCoord.add(thisBlockBox[1]); //y positive
-
             textureCoord.add(thisBlockBox[3]); //x negative
-
             textureCoord.add(thisBlockBox[4]); //y negative
-
             textureCoord.add(thisBlockBox[0]); //x positive
-
             textureCoord.add(thisBlockBox[4]); //y negative
 
 
@@ -588,19 +567,19 @@ public class ItemDefinition {
 
             //left
             positions.add((thisBlockBox[0] - 0.5f) * itemSize);
-            positions.add((thisBlockBox[4] - 0.5f) * itemSize+ (itemSize/2));
+            positions.add(Math.abs( 1f - ((thisBlockBox[1] - 0.5f) * itemSize+ (itemSize/2))) - (itemSize*1.5f));
             positions.add((thisBlockBox[5]) * itemSize);
 
             positions.add((thisBlockBox[0] - 0.5f) * itemSize);
-            positions.add((thisBlockBox[4] - 0.5f) * itemSize+ (itemSize/2));
+            positions.add(Math.abs( 1f - ((thisBlockBox[1] - 0.5f) * itemSize+ (itemSize/2))) - (itemSize*1.5f));
             positions.add((thisBlockBox[2] ) * itemSize);
 
             positions.add((thisBlockBox[0] - 0.5f) * itemSize);
-            positions.add((thisBlockBox[1] - 0.5f) * itemSize+ (itemSize/2));
+            positions.add(Math.abs( 1f - ((thisBlockBox[4] - 0.5f) * itemSize+ (itemSize/2))) - (itemSize*1.5f));
             positions.add((thisBlockBox[2]) * itemSize);
 
             positions.add((thisBlockBox[0] - 0.5f) * itemSize);
-            positions.add((thisBlockBox[1] - 0.5f) * itemSize+ (itemSize/2));
+            positions.add(Math.abs( 1f - ((thisBlockBox[4] - 0.5f) * itemSize+ (itemSize/2))) - (itemSize*1.5f));
             positions.add((thisBlockBox[5] ) * itemSize);
 
 
@@ -634,26 +613,24 @@ public class ItemDefinition {
             textureCoord.add(thisBlockBox[4]); //y+
             textureCoord.add(thisBlockBox[3]); //x+
             textureCoord.add(thisBlockBox[4]); //y+
-
-
 
 
 
             //top
             positions.add((thisBlockBox[0] - 0.5f) * itemSize);
-            positions.add((thisBlockBox[4] - 0.5f) * itemSize+ (itemSize/2));
+            positions.add(Math.abs( 1f - ((thisBlockBox[1] - 0.5f) * itemSize+ (itemSize/2))) - (itemSize*1.5f));
             positions.add((thisBlockBox[2] ) * itemSize);
 
             positions.add((thisBlockBox[0] - 0.5f) * itemSize);
-            positions.add((thisBlockBox[4] - 0.5f) * itemSize+ (itemSize/2));
+            positions.add(Math.abs( 1f - ((thisBlockBox[1] - 0.5f) * itemSize+ (itemSize/2))) - (itemSize*1.5f));
             positions.add((thisBlockBox[5]) * itemSize);
 
             positions.add((thisBlockBox[3] - 0.5f) * itemSize);
-            positions.add((thisBlockBox[4] - 0.5f) * itemSize+ (itemSize/2));
+            positions.add(Math.abs( 1f - ((thisBlockBox[1] - 0.5f) * itemSize+ (itemSize/2))) - (itemSize*1.5f));
             positions.add((thisBlockBox[5]) * itemSize);
 
             positions.add((thisBlockBox[3] - 0.5f) * itemSize);
-            positions.add((thisBlockBox[4] - 0.5f) * itemSize+ (itemSize/2));
+            positions.add(Math.abs( 1f - ((thisBlockBox[1] - 0.5f) * itemSize+ (itemSize/2))) - (itemSize*1.5f));
             positions.add((thisBlockBox[2]) * itemSize);
 
             //top
@@ -690,19 +667,19 @@ public class ItemDefinition {
 
             //bottom
             positions.add((thisBlockBox[0] - 0.5f) * itemSize);
-            positions.add((thisBlockBox[1] - 0.5f) * itemSize+ (itemSize/2));
+            positions.add(Math.abs( 1f - ((thisBlockBox[4] - 0.5f) * itemSize+ (itemSize/2))) - (itemSize*1.5f));
             positions.add((thisBlockBox[5] ) * itemSize);
 
             positions.add((thisBlockBox[0] - 0.5f) * itemSize);
-            positions.add((thisBlockBox[1] - 0.5f) * itemSize+ (itemSize/2));
+            positions.add(Math.abs( 1f - ((thisBlockBox[4] - 0.5f) * itemSize+ (itemSize/2))) - (itemSize*1.5f));
             positions.add((thisBlockBox[2] ) * itemSize);
 
             positions.add((thisBlockBox[3] - 0.5f) * itemSize);
-            positions.add((thisBlockBox[1] - 0.5f) * itemSize+ (itemSize/2));
+            positions.add(Math.abs( 1f - ((thisBlockBox[4] - 0.5f) * itemSize+ (itemSize/2))) - (itemSize*1.5f));
             positions.add((thisBlockBox[2] ) * itemSize);
 
             positions.add((thisBlockBox[3] - 0.5f) * itemSize);
-            positions.add((thisBlockBox[1] - 0.5f) * itemSize+ (itemSize/2));
+            positions.add(Math.abs( 1f - ((thisBlockBox[4] - 0.5f) * itemSize+ (itemSize/2))) - (itemSize*1.5f));
             positions.add((thisBlockBox[5]) * itemSize);
 
             //bottom

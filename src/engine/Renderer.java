@@ -129,7 +129,7 @@ public class Renderer {
         shaderProgram.setUniform("texture_sampler", 0);
 
         Matrix4f modelViewMatrix;
-        
+
         //render each chunk (standard blocks)
         for (ChunkObject thisChunk : getMap()){
             if (thisChunk == null){

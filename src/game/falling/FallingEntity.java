@@ -26,7 +26,7 @@ public class FallingEntity {
         for (FallingEntityObject thisObject : objects.values()){
             applyInertia(thisObject.pos, thisObject.inertia, false, 0.45f, 1f, true, false, true, false);
             if (thisObject.inertia.y == 0){
-                placeBlock((int)Math.floor(thisObject.pos.x), (int)Math.floor(thisObject.pos.y), (int)Math.floor(thisObject.pos.z), 23);
+                placeBlock((int)Math.floor(thisObject.pos.x), (int)Math.floor(thisObject.pos.y), (int)Math.floor(thisObject.pos.z), 23, 0);
                 objects.remove(thisObject.key);
                 return;
             }

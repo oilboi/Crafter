@@ -14,8 +14,8 @@ public class ItemRegistration {
         ItemModifier test = new ItemModifier() {
             @Override
             public void onPlace(Vector3f pos) {
-                setBlock((int)pos.x,(int)pos.y,(int)pos.z, 25);
-                setBlock((int)pos.x,(int)pos.y+1,(int)pos.z, 24);
+                setBlock((int)pos.x,(int)pos.y+1,(int)pos.z, 21, 0);
+                setBlock((int)pos.x,(int)pos.y,(int)pos.z, 22, 0);
             }
         };
 

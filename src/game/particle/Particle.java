@@ -105,16 +105,16 @@ public class Particle {
 
         switch (selection){
             case 0:
-                texturePoints = getFrontTexturePoints(blockID);
+                texturePoints = getFrontTexturePoints(blockID,(byte) 0);
                 break;
             case 1:
-                texturePoints = getBackTexturePoints(blockID);
+                texturePoints = getBackTexturePoints(blockID,(byte) 0);
                 break;
             case 2:
-                texturePoints = getRightTexturePoints(blockID);
+                texturePoints = getRightTexturePoints(blockID,(byte) 0);
                 break;
             case 3:
-                texturePoints = getLeftTexturePoints(blockID);
+                texturePoints = getLeftTexturePoints(blockID,(byte) 0);
                 break;
             case 4:
                 texturePoints = getTopTexturePoints(blockID);
@@ -123,7 +123,7 @@ public class Particle {
                 texturePoints = getBottomTexturePoints(blockID);
                 break;
             default:
-                texturePoints = getFrontTexturePoints(blockID);
+                texturePoints = getFrontTexturePoints(blockID,(byte) 0);
         }
 
         // 0, 1,  2, 3

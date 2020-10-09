@@ -174,7 +174,26 @@ public class Chunk {
         return thisChunk.block[y][blockX][blockZ];
     }
 
-    public static void setBlock(int x,int y,int z, int newBlock){
+    public static byte getBlockRotation(int x, int y, int z){
+        if (y > 127 || y < 0){
+            return -1;
+        }
+        int chunkX = (int)Math.floor(x/16f);
+        int chunkZ = (int)Math.floor(z/16f);
+        int blockX = (int)(x - (16f*chunkX));
+        int blockZ = (int)(z - (16f*chunkZ));
+        String key = chunkX + " " + chunkZ;
+        ChunkObject thisChunk = map.get(key);
+        if (thisChunk == null){
+            return 0;
+        }
+        if (thisChunk.block == null){
+            return 0;
+        }
+        return thisChunk.rotation[y][blockX][blockZ];
+    }
+
+    public static void setBlock(int x,int y,int z, int newBlock, int rot){
         if (y > 127 || y < 0){
             return;
         }
@@ -193,6 +212,7 @@ public class Chunk {
             return;
         }
         thisChunk.block[y][blockX][blockZ] = newBlock;
+        thisChunk.rotation[y][blockX][blockZ] = (byte)rot;
         if (newBlock == 0){
             if (thisChunk.heightMap[blockX][blockZ] == y){
                 for (int yCheck = thisChunk.heightMap[blockX][blockZ]; yCheck > 0; yCheck--){
@@ -254,6 +274,8 @@ public class Chunk {
             return;
         }
         thisChunk.block[y][blockX][blockZ] = 0;
+        thisChunk.rotation[y][blockX][blockZ] = 0;
+
         if (thisChunk.heightMap[blockX][blockZ] == y){
             for (int yCheck = thisChunk.heightMap[blockX][blockZ]; yCheck > 0; yCheck--){
                 if (thisChunk.block[yCheck][blockX][blockZ] != 0){
@@ -267,7 +289,7 @@ public class Chunk {
         instantUpdateNeighbor(chunkX, chunkZ,blockX,y,blockZ);//instant update
     }
 
-    public static void placeBlock(int x,int y,int z, int ID){
+    public static void placeBlock(int x,int y,int z, int ID, int rot){
         if (y > 127 || y < 0){
             return;
         }
@@ -286,6 +308,9 @@ public class Chunk {
             return;
         }
         thisChunk.block[y][blockX][blockZ] = ID;
+        thisChunk.rotation[y][blockX][blockZ] = (byte) rot;
+        System.out.println(rot);
+
         if (thisChunk.heightMap[blockX][blockZ] < y){
             thisChunk.heightMap[blockX][blockZ] = (byte) y;
         }
@@ -504,7 +529,7 @@ public class Chunk {
                     } else if (y == height && y >= waterHeight) {
 
                         if (y <= waterHeight + 1) {
-                            currBlock = 23;
+                            currBlock = 20;
                             gennedSand = true;
                         } else {
                             currBlock = 2;
@@ -514,7 +539,7 @@ public class Chunk {
                     } else if (y < height && y >= height - dirtHeight - dirtHeightRandom) {
                         if (gennedSand || gennedWater) {
                             gennedSand = true;
-                            currBlock = 23;
+                            currBlock = 20;
                         } else {
                             currBlock = 1;
                         }

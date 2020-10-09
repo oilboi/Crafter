@@ -4,6 +4,7 @@ import org.joml.Vector3f;
 
 import static game.chunk.Chunk.getBlock;
 import static game.blocks.BlockDefinition.*;
+import static game.chunk.Chunk.getBlockRotation;
 import static game.collision.CollisionMath.floorPos;
 import static game.collision.CustomAABB.*;
 import static game.collision.CustomBlockBox.*;
@@ -99,8 +100,10 @@ public class Collision {
 
                 cachedBlock = detectBlock(cachedPos);
 
+                byte rot =  detectRot(cachedPos);
+
                 if (cachedBlock > 0 && isWalkable(cachedBlock)) {
-                    onGround = sneakCollideYNegative((int) fPos.x + x, (int)fPos.y, (int) fPos.z + z, clonedPos, clonedInertia, width, height, onGround, cachedBlock);
+                    onGround = sneakCollideYNegative((int) fPos.x + x, (int)fPos.y, (int) fPos.z + z, rot, clonedPos, clonedInertia, width, height, onGround, cachedBlock);
                 }
             }
         }
@@ -131,8 +134,10 @@ public class Collision {
 
                 cachedBlock = detectBlock(cachedPos);
 
+                byte rot =  detectRot(cachedPos);
+
                 if (cachedBlock > 0 && isWalkable(cachedBlock)) {
-                    onGround = sneakCollideYNegative((int) fPos.x + x, (int)fPos.y, (int) fPos.z + z, clonedPos, clonedInertia, width, height, onGround, cachedBlock);
+                    onGround = sneakCollideYNegative((int) fPos.x + x, (int)fPos.y, (int) fPos.z + z, rot, clonedPos, clonedInertia, width, height, onGround, cachedBlock);
                 }
             }
         }
@@ -146,8 +151,8 @@ public class Collision {
         return binaryReturn;
     }
 
-    public static boolean sneakCollideYNegative(int blockPosX, int blockPosY, int blockPosz, Vector3f pos, Vector3f inertia, float width, float height, boolean onGround, int blockID){
-        for (float[] thisBlockBox : getBlockShape(blockID)) {
+    private static boolean sneakCollideYNegative(int blockPosX, int blockPosY, int blockPosz, byte rot, Vector3f pos, Vector3f inertia, float width, float height, boolean onGround, int blockID){
+        for (float[] thisBlockBox : getBlockShape(blockID, rot)) {
             setAABB(pos.x, pos.y, pos.z, width, height);
             setBlockBox(blockPosX,blockPosY,blockPosz,thisBlockBox);
 
@@ -204,8 +209,10 @@ public class Collision {
 
                             cachedBlock = detectBlock(cachedPos);
 
+                            byte rot =  detectRot(cachedPos);
+
                             if (cachedBlock > 0 && isWalkable(cachedBlock)) {
-                                onGround = collideYNegative((int) fPos.x + x, y, (int) fPos.z + z, pos, inertia, width, height, onGround, cachedBlock);
+                                onGround = collideYNegative((int) fPos.x + x, y, (int) fPos.z + z, rot, pos, inertia, width, height, onGround, cachedBlock);
                             }
                         }
                     }
@@ -216,10 +223,13 @@ public class Collision {
                             cachedPos.x = fPos.x + x;
                             cachedPos.y = y;
                             cachedPos.z = fPos.z + z;
+
                             cachedBlock = detectBlock(cachedPos);
 
+                            byte rot =  detectRot(cachedPos);
+
                             if (cachedBlock > 0 && isWalkable(cachedBlock)) {
-                                collideYPositive((int) fPos.x + x, y, (int) fPos.z + z, pos, inertia, width, height, cachedBlock);
+                                collideYPositive((int) fPos.x + x, y, (int) fPos.z + z, rot, pos, inertia, width, height, cachedBlock);
                             }
                         }
                     }
@@ -261,8 +271,10 @@ public class Collision {
 
                             cachedBlock = detectBlock(floorPos(cachedPos));
 
+                            byte rot =  detectRot(cachedPos);
+
                             if (cachedBlock > 0 && isWalkable(cachedBlock)) {
-                                collideXPositive(x, (int)(yy + pos.y), (int) fPos.z + z, pos, inertia, oldPos, width, height, cachedBlock);
+                                collideXPositive(x, (int)(yy + pos.y), (int) fPos.z + z, rot, pos, inertia, oldPos, width, height, cachedBlock);
                             }
                         }
                     }
@@ -276,8 +288,10 @@ public class Collision {
 
                             cachedBlock = detectBlock(floorPos(cachedPos));
 
+                            byte rot =  detectRot(cachedPos);
+
                             if (cachedBlock > 0 && isWalkable(cachedBlock)) {
-                                collideXNegative(x, (int)(yy + pos.y), (int) fPos.z + z, pos, inertia, oldPos, width, height, cachedBlock);
+                                collideXNegative(x, (int)(yy + pos.y), (int) fPos.z + z, rot, pos, inertia, oldPos, width, height, cachedBlock);
                             }
                         }
                     }
@@ -318,8 +332,11 @@ public class Collision {
                             cachedPos.y = yy + pos.y;
                             cachedPos.z = z;
                             cachedBlock = detectBlock(floorPos(cachedPos));
+
+                            byte rot =  detectRot(cachedPos);
+
                             if (cachedBlock > 0 && isWalkable(cachedBlock)) {
-                                collideZPositive((int)fPos.x + x, (int)(yy + pos.y), z, pos, inertia, oldPos, width, height, cachedBlock);
+                                collideZPositive((int)fPos.x + x, (int)(yy + pos.y), z, rot, pos, inertia, oldPos, width, height, cachedBlock);
                             }
                         }
                     }
@@ -331,8 +348,11 @@ public class Collision {
                             cachedPos.y = yy + pos.y;
                             cachedPos.z = z;
                             cachedBlock = detectBlock(floorPos(cachedPos));
+
+                            byte rot =  detectRot(cachedPos);
+
                             if (cachedBlock > 0 && isWalkable(cachedBlock)) {
-                                collideZNegative((int)fPos.x + x, (int)(yy + pos.y), z, pos, inertia, oldPos, width, height, cachedBlock);
+                                collideZNegative((int)fPos.x + x, (int)(yy + pos.y), z, rot, pos, inertia, oldPos, width, height, cachedBlock);
                             }
                         }
                     }
@@ -342,8 +362,8 @@ public class Collision {
         return onGround;
     }
 
-    public static boolean collideYNegative(int blockPosX, int blockPosY, int blockPosz, Vector3f pos, Vector3f inertia, float width, float height, boolean onGround, int blockID){
-        for (float[] thisBlockBox : getBlockShape(blockID)) {
+    private static boolean collideYNegative(int blockPosX, int blockPosY, int blockPosz, byte rot, Vector3f pos, Vector3f inertia, float width, float height, boolean onGround, int blockID){
+        for (float[] thisBlockBox : getBlockShape(blockID, rot)) {
             setAABB(pos.x, pos.y, pos.z, width, height);
             setBlockBox(blockPosX,blockPosY,blockPosz,thisBlockBox);
 
@@ -356,8 +376,8 @@ public class Collision {
         return onGround;
     }
 
-    public static void collideYPositive(int blockPosX, int blockPosY, int blockPosz, Vector3f pos, Vector3f inertia, float width, float height, int blockID){
-        for (float[] thisBlockBox : getBlockShape(blockID)) {
+    private static void collideYPositive(int blockPosX, int blockPosY, int blockPosz, byte rot, Vector3f pos, Vector3f inertia, float width, float height, int blockID){
+        for (float[] thisBlockBox : getBlockShape(blockID, rot)) {
             setAABB(pos.x, pos.y, pos.z, width, height);
             setBlockBox(blockPosX, blockPosY, blockPosz,thisBlockBox);
             //head detection
@@ -368,9 +388,9 @@ public class Collision {
         }
     }
 
-    public static void collideXPositive(int blockPosX, int blockPosY, int blockPosz, Vector3f pos, Vector3f inertia, Vector3f oldPos, float width, float height, int blockID){
+    private static void collideXPositive(int blockPosX, int blockPosY, int blockPosz, byte rot, Vector3f pos, Vector3f inertia, Vector3f oldPos, float width, float height, int blockID){
 
-        for (float[] thisBlockBox : getBlockShape(blockID)) {
+        for (float[] thisBlockBox : getBlockShape(blockID, rot)) {
             setAABB(pos.x, pos.y, pos.z, width, height);
             setBlockBox(blockPosX, blockPosY, blockPosz, thisBlockBox);
             if (isWithin() && BlockBoxGetLeft() < AABBGetRight() && BlockBoxGetLeft() - AABBGetRight() > -0.1f) {
@@ -386,7 +406,7 @@ public class Collision {
         //correction for the sides of stairs
         if (pos.y - oldPos.y > 0.51) {
             pos.y = oldPos.y;
-            for (float[] thisBlockBox : getBlockShape(blockID)) {
+            for (float[] thisBlockBox : getBlockShape(blockID, rot)) {
                 setAABB(pos.x, pos.y, pos.z, width, height);
                 setBlockBox(blockPosX, blockPosY, blockPosz, thisBlockBox);
                 if (isWithin() && BlockBoxGetLeft() < AABBGetRight() && BlockBoxGetLeft() - AABBGetRight() > -0.1f) {
@@ -397,8 +417,8 @@ public class Collision {
         }
     }
 
-    public static void collideXNegative(int blockPosX, int blockPosY, int blockPosz, Vector3f pos, Vector3f inertia, Vector3f oldPos, float width, float height, int blockID){
-        for (float[] thisBlockBox : getBlockShape(blockID)) {
+    private static void collideXNegative(int blockPosX, int blockPosY, int blockPosz, byte rot, Vector3f pos, Vector3f inertia, Vector3f oldPos, float width, float height, int blockID){
+        for (float[] thisBlockBox : getBlockShape(blockID, rot)) {
             setAABB(pos.x, pos.y, pos.z, width, height);
             setBlockBox(blockPosX, blockPosY, blockPosz, thisBlockBox);
             if (isWithin() && BlockBoxGetRight() > AABBGetLeft() && BlockBoxGetRight() - AABBGetLeft() < 0.1f) {
@@ -414,7 +434,7 @@ public class Collision {
         //correction for the sides of stairs
         if (pos.y - oldPos.y > 0.51) {
             pos.y = oldPos.y;
-            for (float[] thisBlockBox : getBlockShape(blockID)) {
+            for (float[] thisBlockBox : getBlockShape(blockID, rot)) {
                 setAABB(pos.x, pos.y, pos.z, width, height);
                 setBlockBox(blockPosX, blockPosY, blockPosz, thisBlockBox);
                 if (isWithin() && BlockBoxGetRight() > AABBGetLeft() && BlockBoxGetRight() - AABBGetLeft() < 0.1f) {
@@ -426,8 +446,8 @@ public class Collision {
     }
 
 
-    public static void collideZPositive(int blockPosX, int blockPosY, int blockPosz, Vector3f pos, Vector3f inertia, Vector3f oldPos, float width, float height, int blockID){
-        for (float[] thisBlockBox : getBlockShape(blockID)) {
+    private static void collideZPositive(int blockPosX, int blockPosY, int blockPosz, byte rot, Vector3f pos, Vector3f inertia, Vector3f oldPos, float width, float height, int blockID){
+        for (float[] thisBlockBox : getBlockShape(blockID, rot)) {
             setAABB(pos.x, pos.y, pos.z, width, height);
             setBlockBox(blockPosX, blockPosY, blockPosz, thisBlockBox);
             if (isWithin() && BlockBoxGetFront() < AABBGetBack() && BlockBoxGetFront() - AABBGetBack() > -0.1f) {
@@ -443,7 +463,7 @@ public class Collision {
         //correction for the sides of stairs
         if (pos.y - oldPos.y > 0.51) {
             pos.y = oldPos.y;
-            for (float[] thisBlockBox : getBlockShape(blockID)) {
+            for (float[] thisBlockBox : getBlockShape(blockID, rot)) {
                 setAABB(pos.x, pos.y, pos.z, width, height);
                 setBlockBox(blockPosX, blockPosY, blockPosz, thisBlockBox);
                 if (isWithin() && BlockBoxGetFront() < AABBGetBack() && BlockBoxGetFront() - AABBGetBack() > -0.1f) {
@@ -454,8 +474,8 @@ public class Collision {
         }
     }
 
-    public static void collideZNegative(int blockPosX, int blockPosY, int blockPosz, Vector3f pos, Vector3f inertia, Vector3f oldPos, float width, float height, int blockID){
-        for (float[] thisBlockBox : getBlockShape(blockID)) {
+    private static void collideZNegative(int blockPosX, int blockPosY, int blockPosz, byte rot, Vector3f pos, Vector3f inertia, Vector3f oldPos, float width, float height, int blockID){
+        for (float[] thisBlockBox : getBlockShape(blockID, rot)) {
             setAABB(pos.x, pos.y, pos.z, width, height);
             setBlockBox(blockPosX, blockPosY, blockPosz, thisBlockBox);
             if (isWithin() && BlockBoxGetBack() > AABBGetFront() && BlockBoxGetBack() - AABBGetFront() < 0.1f) {
@@ -471,7 +491,7 @@ public class Collision {
         //correction for the sides of stairs
         if (pos.y - oldPos.y > 0.51) {
             pos.y = oldPos.y;
-            for (float[] thisBlockBox : getBlockShape(blockID)) {
+            for (float[] thisBlockBox : getBlockShape(blockID, rot)) {
                 setAABB(pos.x, pos.y, pos.z, width, height);
                 setBlockBox(blockPosX, blockPosY, blockPosz, thisBlockBox);
                 if (isWithin() && BlockBoxGetBack() > AABBGetFront() && BlockBoxGetBack() - AABBGetFront() < 0.1f) {
@@ -494,6 +514,10 @@ public class Collision {
 
     private static int detectBlock(Vector3f flooredPos){
         return getBlock((int)flooredPos.x, (int)flooredPos.y, (int)flooredPos.z);
+    }
+
+    private static byte detectRot(Vector3f flooredPos){
+        return getBlockRotation((int)flooredPos.x, (int)flooredPos.y, (int)flooredPos.z);
     }
 
 

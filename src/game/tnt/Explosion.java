@@ -20,7 +20,7 @@ public class Explosion {
                         int currentBlock = getBlock(x, y, z);
                         //don't destroy bedrock
                         if(currentBlock != 5) {
-                            setBlock(x, y, z, 0);
+                            setBlock(x, y, z, 0, 0);
                             if (currentBlock > 0 && currentBlock != 6 && Math.random() > 0.98) {
                                 createItem(getBlockDefinition(currentBlock).name, new Vector3f(x,y,z), 1);
                             } else if (currentBlock == 6){

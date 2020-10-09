@@ -110,6 +110,7 @@ public class ChunkMesh {
                 for (int y = yHeight * 16; y < (yHeight+1) * 16; y++) {
 
                     int thisBlock = thisChunk.block[y][x][z];
+                    byte thisRotation = thisChunk.rotation[y][x][z];
 
                     if (thisBlock > 0) {
                         //todo --------------------------------------- THE LIQUID DRAWTYPE
@@ -158,7 +159,7 @@ public class ChunkMesh {
                                 liquidIndicesCount += 4;
                                 liquidIndicesTableCount += 6;
 
-                                float[] textureFront = getFrontTexturePoints(thisBlock);
+                                float[] textureFront = getFrontTexturePoints(thisBlock,thisRotation);
                                 //front
                                 liquidTextureCoord[liquidTextureCoordCount + 0] = (textureFront[1]);
                                 liquidTextureCoord[liquidTextureCoordCount + 1] = (textureFront[2]);
@@ -213,7 +214,7 @@ public class ChunkMesh {
                                 liquidIndicesCount += 4;
                                 liquidIndicesTableCount += 6;
 
-                                float[] textureBack = getBackTexturePoints(thisBlock);
+                                float[] textureBack = getBackTexturePoints(thisBlock,thisRotation);
                                 //back
                                 liquidTextureCoord[liquidTextureCoordCount + 0] = (textureBack[1]);
                                 liquidTextureCoord[liquidTextureCoordCount + 1] = (textureBack[2]);
@@ -268,7 +269,7 @@ public class ChunkMesh {
                                 liquidIndicesCount += 4;
                                 liquidIndicesTableCount += 6;
 
-                                float[] textureRight = getRightTexturePoints(thisBlock);
+                                float[] textureRight = getRightTexturePoints(thisBlock,thisRotation);
                                 //right
                                 liquidTextureCoord[liquidTextureCoordCount + 0] = (textureRight[1]);
                                 liquidTextureCoord[liquidTextureCoordCount + 1] = (textureRight[2]);
@@ -323,7 +324,7 @@ public class ChunkMesh {
                                 liquidIndicesCount += 4;
                                 liquidIndicesTableCount += 6;
 
-                                float[] textureLeft = getLeftTexturePoints(thisBlock);
+                                float[] textureLeft = getLeftTexturePoints(thisBlock,thisRotation);
                                 //left
                                 liquidTextureCoord[liquidTextureCoordCount + 0] = (textureLeft[1]);
                                 liquidTextureCoord[liquidTextureCoordCount + 1] = (textureLeft[2]);
@@ -496,7 +497,7 @@ public class ChunkMesh {
                                 indicesCount += 4;
                                 indicesTableCount += 6;
 
-                                float[] textureFront = getFrontTexturePoints(thisBlock);
+                                float[] textureFront = getFrontTexturePoints(thisBlock,thisRotation);
                                 //front
                                 textureCoord[textureCoordCount + 0] = (textureFront[1]);
                                 textureCoord[textureCoordCount + 1] = (textureFront[2]);
@@ -551,7 +552,7 @@ public class ChunkMesh {
                                 indicesCount += 4;
                                 indicesTableCount += 6;
 
-                                float[] textureBack = getBackTexturePoints(thisBlock);
+                                float[] textureBack = getBackTexturePoints(thisBlock,thisRotation);
                                 //back
                                 textureCoord[textureCoordCount + 0] = (textureBack[1]);
                                 textureCoord[textureCoordCount + 1] = (textureBack[2]);
@@ -605,7 +606,7 @@ public class ChunkMesh {
                                 indicesCount += 4;
                                 indicesTableCount += 6;
 
-                                float[] textureRight = getRightTexturePoints(thisBlock);
+                                float[] textureRight = getRightTexturePoints(thisBlock,thisRotation);
                                 //right
                                 textureCoord[textureCoordCount + 0] = (textureRight[1]);
                                 textureCoord[textureCoordCount + 1] = (textureRight[2]);
@@ -659,7 +660,7 @@ public class ChunkMesh {
                                 indicesCount += 4;
                                 indicesTableCount += 6;
 
-                                float[] textureLeft = getLeftTexturePoints(thisBlock);
+                                float[] textureLeft = getLeftTexturePoints(thisBlock,thisRotation);
                                 //left
                                 textureCoord[textureCoordCount + 0] = (textureLeft[1]);
                                 textureCoord[textureCoordCount + 1] = (textureLeft[2]);
@@ -781,7 +782,7 @@ public class ChunkMesh {
                             }
                             //todo: ---------------------------------------------------------- the block box draw type
                         } else {
-                            for (float[] thisBlockBox : getBlockShape(thisBlock)) {
+                            for (float[] thisBlockBox : getBlockShape(thisBlock, thisRotation)) {
                                 // 0, 1, 2, 3, 4, 5
                                 //-x,-y,-z, x, y, z
                                 // 0, 0, 0, 1, 1, 1
@@ -830,7 +831,7 @@ public class ChunkMesh {
                                 // 0, 1,  2, 3
                                 //-x,+x, -y,+y
 
-                                float[] textureFront = getFrontTexturePoints(thisBlock);
+                                float[] textureFront = getFrontTexturePoints(thisBlock,thisRotation);
 
                                 //front
                                 blockBoxTextureCoord[blockBoxTextureCoordCount + 0] = (textureFront[1] - ((1 - thisBlockBox[3]) / 32f)); //x positive
@@ -886,7 +887,7 @@ public class ChunkMesh {
                                 blockBoxIndicesCount += 4;
                                 blockBoxIndicesTableCount += 6;
 
-                                float[] textureBack = getBackTexturePoints(thisBlock);
+                                float[] textureBack = getBackTexturePoints(thisBlock,thisRotation);
 
                                 // 0, 1, 2, 3, 4, 5
                                 //-x,-y,-z, x, y, z
@@ -957,7 +958,7 @@ public class ChunkMesh {
                                 //-x,+x, -y,+y
 
 
-                                float[] textureRight = getRightTexturePoints(thisBlock);
+                                float[] textureRight = getRightTexturePoints(thisBlock,thisRotation);
                                 //right
                                 blockBoxTextureCoord[blockBoxTextureCoordCount + 0] = (textureRight[1] - ((1 - thisBlockBox[2]) / 32f));
                                 blockBoxTextureCoord[blockBoxTextureCoordCount + 1] = (textureRight[2] + ((1 - thisBlockBox[4]) / 32f));
@@ -1010,7 +1011,7 @@ public class ChunkMesh {
                                 blockBoxIndicesCount += 4;
                                 blockBoxIndicesTableCount += 6;
 
-                                float[] textureLeft = getLeftTexturePoints(thisBlock);
+                                float[] textureLeft = getLeftTexturePoints(thisBlock,thisRotation);
                                 //left
                                 blockBoxTextureCoord[blockBoxTextureCoordCount + 0] = (textureLeft[1] - ((1 - thisBlockBox[5]) / 32f));
                                 blockBoxTextureCoord[blockBoxTextureCoordCount + 1] = (textureLeft[2] + ((1 - thisBlockBox[4]) / 32f));

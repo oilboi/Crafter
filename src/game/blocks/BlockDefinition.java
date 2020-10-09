@@ -2,6 +2,7 @@ package game.blocks;
 
 import org.joml.Vector3f;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -136,8 +137,95 @@ public class BlockDefinition {
         return blockIDs[ID].isLiquid;
     }
 
-    public static float[][] getBlockShape(int ID){
-        return blockShapeMap.get(blockIDs[ID].drawType).getBoxes();
+    public static float[][] getBlockShape(int ID, byte rot){
+
+
+
+
+        float[][] newBoxes = new float[blockShapeMap.get(blockIDs[ID].drawType).getBoxes().length][6];
+
+
+        int index = 0;
+
+        //automated as base, since it's the same
+        if (rot == 0) {
+            for (float[] thisShape : blockShapeMap.get(blockIDs[ID].drawType).getBoxes()) {
+                for (int i = 0; i < 6; i++) {
+                    newBoxes[index][i] = thisShape[i];
+                }
+                index++;
+            }
+        }
+
+
+        blockShapeMap.put("stair",
+                new BlockShape(
+                        new float[][]{
+
+                                {0f,0f,0f,0.5f,0.5f,1f},
+                                {0f,0f,0f,1f,1f,0.5f},
+                        }
+                )
+        );
+
+
+
+        if (rot == 2){
+            for (float[] thisShape : blockShapeMap.get(blockIDs[ID].drawType).getBoxes()) {
+
+                float blockDiffZ =  1f - thisShape[5];
+                float widthZ = thisShape[5] - thisShape[2];
+
+                float blockDiffX =  1f - thisShape[3];
+                float widthX = thisShape[3] - thisShape[0];
+
+                newBoxes[index][0] = blockDiffX;
+                newBoxes[index][1] = thisShape[1];//-y
+                newBoxes[index][2] = blockDiffZ; // -z
+
+                newBoxes[index][3] = blockDiffX + widthX;
+                newBoxes[index][4] = thisShape[4];//+y
+                newBoxes[index][5] = blockDiffZ + widthZ; //+z
+                index++;
+            }
+        }
+
+
+        if (rot == 1){
+            for (float[] thisShape : blockShapeMap.get(blockIDs[ID].drawType).getBoxes()) {
+
+                float blockDiffZ =  1f - thisShape[5];
+                float widthZ = thisShape[5] - thisShape[2];
+                
+                newBoxes[index][0] = blockDiffZ;
+                newBoxes[index][1] = thisShape[1];//-y
+                newBoxes[index][2] = thisShape[0]; // -z
+
+                newBoxes[index][3] = blockDiffZ + widthZ;
+                newBoxes[index][4] = thisShape[4];//+y
+                newBoxes[index][5] = thisShape[3]; //+z
+                index++;
+            }
+        }
+
+
+        if (rot == 3){
+            for (float[] thisShape : blockShapeMap.get(blockIDs[ID].drawType).getBoxes()) {
+                float blockDiffX =  1f - thisShape[3];
+                float widthX = thisShape[3] - thisShape[0];
+
+                newBoxes[index][0] = thisShape[2];
+                newBoxes[index][1] = thisShape[1];//-y
+                newBoxes[index][2] = blockDiffX; // -z
+
+                newBoxes[index][3] = thisShape[5];
+                newBoxes[index][4] = thisShape[4];//+y
+                newBoxes[index][5] = blockDiffX + widthX; //+z
+                index++;
+            }
+        }
+
+        return newBoxes/*blockShapeMap.get(blockIDs[ID].drawType).getBoxes()*/;
     }
 
     public static boolean isWalkable(int ID){
@@ -158,7 +246,7 @@ public class BlockDefinition {
                 new BlockShape(new float[][]{{0f,0f,0f,1f,1f,1f}})
         );
 
-        blockShapeMap.put("stair 1",
+        blockShapeMap.put("stair",
                 new BlockShape(
                         new float[][]{
                                 {0f,0f,0f,1f,0.5f,1f},
@@ -166,34 +254,6 @@ public class BlockDefinition {
                         }
                         )
         );
-
-        blockShapeMap.put("stair 2",
-                new BlockShape(
-                        new float[][]{
-                                {0f,0f,0f,1f,0.5f,1f},
-                                {0f,0f,0.5f,1f,1f,1f}
-                        }
-                )
-        );
-
-        blockShapeMap.put("stair 3",
-                new BlockShape(
-                        new float[][]{
-                                {0f,0f,0f,1f,0.5f,1f},
-                                {0f,0f,0f,0.5f,1f,1f}
-                        }
-                )
-        );
-
-        blockShapeMap.put("stair 4",
-                new BlockShape(
-                        new float[][]{
-                                {0f,0f,0f,1f,0.5f,1f},
-                                {0.5f,0f,0f,1f,1f,1f}
-                        }
-                )
-        );
-
 
         blockShapeMap.put("slab",
                 new BlockShape(
@@ -351,7 +411,7 @@ public class BlockDefinition {
             @Override
             public void onPlace(Vector3f pos) {
                 for(int y = 0; y < 128; y++){
-                    setBlock((int)Math.floor(pos.x), y, (int)Math.floor(pos.z),7);
+                    setBlock((int)Math.floor(pos.x), y, (int)Math.floor(pos.z),7, 0);
                 }
             }
         };
@@ -529,7 +589,7 @@ public class BlockDefinition {
 
         new BlockDefinition(
                 16,
-                "cobblestone stair 1",
+                "cobblestone stair",
                 true,
                 new int[]{2,0}, //front
                 new int[]{2,0}, //back
@@ -537,7 +597,7 @@ public class BlockDefinition {
                 new int[]{2,0}, //left
                 new int[]{2,0}, //top
                 new int[]{2,0},  //bottom
-                "stair 1",
+                "stair",
                 true,
                 true,
                 false,
@@ -545,66 +605,10 @@ public class BlockDefinition {
                 "stone_3",
                 "stone_2"
         );
+
 
         new BlockDefinition(
                 17,
-                "cobblestone stair 2",
-                true,
-                new int[]{2,0}, //front
-                new int[]{2,0}, //back
-                new int[]{2,0}, //right
-                new int[]{2,0}, //left
-                new int[]{2,0}, //top
-                new int[]{2,0},  //bottom
-                "stair 2",
-                true,
-                true,
-                false,
-                null,
-                "stone_3",
-                "stone_2"
-        );
-
-        new BlockDefinition(
-                18,
-                "cobblestone stair 3",
-                true,
-                new int[]{2,0}, //front
-                new int[]{2,0}, //back
-                new int[]{2,0}, //right
-                new int[]{2,0}, //left
-                new int[]{2,0}, //top
-                new int[]{2,0},  //bottom
-                "stair 3",
-                true,
-                true,
-                false,
-                null,
-                "stone_3",
-                "stone_2"
-        );
-
-        new BlockDefinition(
-                19,
-                "cobblestone stair 4",
-                true,
-                new int[]{2,0}, //front
-                new int[]{2,0}, //back
-                new int[]{2,0}, //right
-                new int[]{2,0}, //left
-                new int[]{2,0}, //top
-                new int[]{2,0},  //bottom
-                "stair 4",
-                true,
-                true,
-                false,
-                null,
-                "stone_3",
-                "stone_2"
-        );
-
-        new BlockDefinition(
-                20,
                 "pumpkin",
                 true,
                 new int[]{19,0}, //front
@@ -622,7 +626,7 @@ public class BlockDefinition {
                 "wood_2"
         );
         new BlockDefinition(
-                21,
+                18,
                 "jack 'o lantern unlit",
                 true,
                 new int[]{21,0}, //front
@@ -640,7 +644,7 @@ public class BlockDefinition {
                 "wood_2"
         );
         new BlockDefinition(
-                22,
+                19,
                 "jack 'o lantern lit",
                 true,
                 new int[]{22,0}, //front
@@ -669,7 +673,7 @@ public class BlockDefinition {
             }
         };
         new BlockDefinition(
-                23,
+                20,
                 "sand",
                 true,
                 new int[]{23,0}, //front
@@ -696,7 +700,7 @@ public class BlockDefinition {
         );
 
         new BlockDefinition(
-                24,
+                21,
                 "doorOpenTop",
                 false,
                 new int[]{24,0}, //front
@@ -715,7 +719,7 @@ public class BlockDefinition {
         );
 
         new BlockDefinition(
-                25,
+                22,
                 "doorOpenBottom",
                 false,
                 new int[]{25,0}, //front
@@ -747,16 +751,57 @@ public class BlockDefinition {
         return null;
     }
 
-    public static float[] getFrontTexturePoints(int ID){
+    public static float[] getFrontTexturePoints(int ID, byte rotation){
+        switch (rotation){
+            case 0:
+                return blockIDs[ID].frontTexture;
+            case 1:
+                return blockIDs[ID].rightTexture;
+            case 2:
+                return blockIDs[ID].backTexture;
+            case 3:
+                return blockIDs[ID].leftTexture;
+        }
         return blockIDs[ID].frontTexture;
     }
-    public static float[] getBackTexturePoints(int ID){
+    public static float[] getBackTexturePoints(int ID, byte rotation){
+        switch (rotation){
+            case 0:
+                return blockIDs[ID].backTexture;
+            case 1:
+                return blockIDs[ID].leftTexture;
+            case 2:
+                return blockIDs[ID].frontTexture;
+            case 3:
+                return blockIDs[ID].rightTexture;
+        }
+
         return blockIDs[ID].backTexture;
     }
-    public static float[] getRightTexturePoints(int ID){
+    public static float[] getRightTexturePoints(int ID, byte rotation){
+        switch (rotation){
+            case 0:
+                return blockIDs[ID].rightTexture;
+            case 1:
+                return blockIDs[ID].backTexture;
+            case 2:
+                return blockIDs[ID].leftTexture;
+            case 3:
+                return blockIDs[ID].frontTexture;
+        }
         return blockIDs[ID].rightTexture;
     }
-    public static float[] getLeftTexturePoints(int ID){
+    public static float[] getLeftTexturePoints(int ID, byte rotation){
+        switch (rotation){
+            case 0:
+                return blockIDs[ID].leftTexture;
+            case 1:
+                return blockIDs[ID].frontTexture;
+            case 2:
+                return blockIDs[ID].rightTexture;
+            case 3:
+                return blockIDs[ID].backTexture;
+        }
         return blockIDs[ID].leftTexture;
     }
     public static float[] getTopTexturePoints(int ID){

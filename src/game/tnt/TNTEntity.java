@@ -172,7 +172,7 @@ public class TNTEntity {
         indices.add(0+indicesCount); indices.add(1+indicesCount); indices.add(2+indicesCount); indices.add(0+indicesCount); indices.add(2+indicesCount); indices.add(3+indicesCount);
         indicesCount += 4;
 
-        float[] textureFront = getFrontTexturePoints(6);
+        float[] textureFront = getFrontTexturePoints(6,(byte) 0);
         //front
         textureCoord.add(textureFront[1]);textureCoord.add(textureFront[2]);
         textureCoord.add(textureFront[0]);textureCoord.add(textureFront[2]);
@@ -194,7 +194,7 @@ public class TNTEntity {
         indices.add(0+indicesCount); indices.add(1+indicesCount); indices.add(2+indicesCount); indices.add(0+indicesCount); indices.add(2+indicesCount); indices.add(3+indicesCount);
         indicesCount += 4;
 
-        float[] textureBack = getBackTexturePoints(6);
+        float[] textureBack = getBackTexturePoints(6,(byte) 0);
         //back
         textureCoord.add(textureBack[1]);textureCoord.add(textureBack[2]);
         textureCoord.add(textureBack[0]);textureCoord.add(textureBack[2]);
@@ -215,7 +215,7 @@ public class TNTEntity {
         indices.add(0+indicesCount); indices.add(1+indicesCount); indices.add(2+indicesCount); indices.add(0+indicesCount); indices.add(2+indicesCount); indices.add(3+indicesCount);
         indicesCount += 4;
 
-        float[] textureRight = getRightTexturePoints(6);
+        float[] textureRight = getRightTexturePoints(6,(byte) 0);
         //right
         textureCoord.add(textureRight[1]);textureCoord.add(textureRight[2]);
         textureCoord.add(textureRight[0]);textureCoord.add(textureRight[2]);
@@ -236,7 +236,7 @@ public class TNTEntity {
         indices.add(0+indicesCount); indices.add(1+indicesCount); indices.add(2+indicesCount); indices.add(0+indicesCount); indices.add(2+indicesCount); indices.add(3+indicesCount);
         indicesCount += 4;
 
-        float[] textureLeft = getLeftTexturePoints(6);
+        float[] textureLeft = getLeftTexturePoints(6,(byte) 0);
         //left
         textureCoord.add(textureLeft[1]);textureCoord.add(textureLeft[2]);
         textureCoord.add(textureLeft[0]);textureCoord.add(textureLeft[2]);

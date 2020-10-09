@@ -404,8 +404,28 @@ public class Player {
 
     private static float rainBuffer = 0f;
 
-    public static void playerOnTick() {
+    private static int currentRotDir = 0;
 
+    public static int getPlayerDir(){
+        return currentRotDir;
+    }
+
+    public static void playerOnTick() {
+        float camRot = getCameraRotation().y + 180f;
+
+        if(camRot >= 315f || camRot < 45f){
+//            System.out.println(2);
+            currentRotDir = 2;
+        } else if (camRot >= 45f && camRot < 135f){
+//            System.out.println(3);
+            currentRotDir = 3;
+        } else if (camRot >= 135f && camRot < 225f){
+//            System.out.println(0);
+            currentRotDir = 0;
+        } else if (camRot >= 225f && camRot < 315f){
+//            System.out.println(1);
+            currentRotDir = 1;
+        }
 
 //        rainBuffer += 0.001f;
 //        if (rainBuffer >= 0.1f) {

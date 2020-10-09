@@ -35,13 +35,19 @@ public class Ray {
             if(mining) {
                 destroyBlock(finalPos);
             } else if (placing && lastPos != null){
-                setAABB(getPlayerPos().x, getPlayerPos().y, getPlayerPos().z, getPlayerWidth(), getPlayerHeight());
-                setBlockBox((int)lastPos.x,(int)lastPos.y,(int)lastPos.z, getBlockShape(1, (byte)0)[0]); //TODO: make this check the actual block shapes
-                if (!wouldCollidePlacing() && getItemInInventorySlot(getPlayerInventorySelection(),0) != null && !getItemInInventorySlot(getPlayerInventorySelection(),0).definition.isTool) {
-                    rayPlaceBlock(lastPos, getItemInInventorySlot(getPlayerInventorySelection(),0).definition.blockID);
-                } else if (getItemInInventorySlot(getPlayerInventorySelection(),0) != null  && getItemInInventorySlot(getPlayerInventorySelection(),0).definition.isTool){
-                    if (getItemModifier(getItemInInventorySlot(getPlayerInventorySelection(),0).name) != null){
-                        getItemModifier(getItemInInventorySlot(getPlayerInventorySelection(),0).name).onPlace(lastPos);
+                //todo: make this call on punched
+                if (!isPlayerSneaking() && blockHasOnRightClickCall(getBlock((int)finalPos.x,(int)finalPos.y,(int)finalPos.z))) {
+                    getBlockDefinition(getBlock((int) finalPos.x, (int) finalPos.y, (int) finalPos.z)).blockModifier.onRightClick(finalPos);
+                } else {
+                    setAABB(getPlayerPos().x, getPlayerPos().y, getPlayerPos().z, getPlayerWidth(), getPlayerHeight());
+                    setBlockBox((int) lastPos.x, (int) lastPos.y, (int) lastPos.z, getBlockShape(1, (byte) 0)[0]); //TODO: make this check the actual block shapes
+
+                    if (!wouldCollidePlacing() && getItemInInventorySlot(getPlayerInventorySelection(), 0) != null && !getItemInInventorySlot(getPlayerInventorySelection(), 0).definition.isTool) {
+                        rayPlaceBlock(lastPos, getItemInInventorySlot(getPlayerInventorySelection(), 0).definition.blockID);
+                    } else if (getItemInInventorySlot(getPlayerInventorySelection(), 0) != null && getItemInInventorySlot(getPlayerInventorySelection(), 0).definition.isTool) {
+                        if (getItemModifier(getItemInInventorySlot(getPlayerInventorySelection(), 0).name) != null) {
+                            getItemModifier(getItemInInventorySlot(getPlayerInventorySelection(), 0).name).onPlace(lastPos);
+                        }
                     }
                 }
             }
@@ -67,7 +73,7 @@ public class Ray {
         }
     }
     private static void rayPlaceBlock(Vector3f flooredPos, int ID) {
-        placeBlock((int)flooredPos.x, (int)flooredPos.y, (int)flooredPos.z, ID, getPlayerDir());
+        placeBlock((int) flooredPos.x, (int) flooredPos.y, (int) flooredPos.z, ID, getPlayerDir());
         onPlaceCall(ID, flooredPos);
         removeItemFromInventory(getCurrentInventorySelection(), 0);
     }

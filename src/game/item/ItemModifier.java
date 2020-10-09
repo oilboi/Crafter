@@ -6,4 +6,5 @@ public interface ItemModifier {
     default public void onPlace(Vector3f pos) {
         System.out.println("placing interface worked");
     }
+
 }

@@ -404,9 +404,9 @@ public class Player {
 
     private static float rainBuffer = 0f;
 
-    private static int currentRotDir = 0;
+    private static byte currentRotDir = 0;
 
-    public static int getPlayerDir(){
+    public static byte getPlayerDir(){
         return currentRotDir;
     }
 

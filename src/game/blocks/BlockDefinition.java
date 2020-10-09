@@ -1,5 +1,6 @@
 package game.blocks;
 
+import game.item.Item;
 import org.joml.Vector3f;
 
 import java.util.Arrays;
@@ -8,6 +9,7 @@ import java.util.Map;
 
 import static game.chunk.Chunk.*;
 import static game.falling.FallingEntity.addFallingEntity;
+import static game.item.Item.getCurrentID;
 import static game.item.ItemDefinition.registerItem;
 import static game.item.ItemEntity.createItem;
 import static game.tnt.TNTEntity.createTNT;
@@ -686,6 +688,8 @@ public class BlockDefinition {
                 )
         );
 
+
+
         new BlockDefinition(
                 21,
                 "doorOpenTop",
@@ -700,7 +704,25 @@ public class BlockDefinition {
                 true,
                 false,
                 false,
-                null,
+                new BlockModifier() {
+                    @Override
+                    public void onDig(Vector3f pos) throws Exception {
+                        if (getBlock((int)pos.x, (int)pos.y - 1, (int)pos.z) == 22) {
+                            setBlock((int)pos.x, (int)pos.y - 1, (int)pos.z, 0, 0);
+                            createItem("door", pos.add(0.5f,0.5f,0.5f), 1);
+                        }
+                    }
+
+                    @Override
+                    public void onRightClick(Vector3f pos) {
+                        if (getBlock((int)pos.x, (int)pos.y - 1, (int)pos.z) == 22) {
+                            byte rot = getBlockRotation((int)pos.x, (int)pos.y, (int)pos.z);
+                            setBlock((int)pos.x, (int)pos.y, (int)pos.z, 23,rot);
+                            setBlock((int)pos.x, (int)pos.y - 1, (int)pos.z, 24,rot);
+                            playSound("door_close", pos);
+                        }
+                    }
+                },
                 "wood_1",
                 "wood_1"
         );
@@ -719,7 +741,110 @@ public class BlockDefinition {
                 true,
                 false,
                 false,
-                null,
+                new BlockModifier() {
+
+                    @Override
+                    public void onDig(Vector3f pos) throws Exception {
+                        if (getBlock((int)pos.x, (int)pos.y + 1, (int)pos.z) == 21) {
+                            setBlock((int)pos.x, (int)pos.y + 1, (int)pos.z, 0, 0);
+                            createItem("door", pos.add(0.5f,0.5f,0.5f), 1);
+                        }
+                    }
+
+                    @Override
+                    public void onRightClick(Vector3f pos) {
+                        if (getBlock((int)pos.x, (int)pos.y + 1, (int)pos.z) == 21) {
+                            byte rot = getBlockRotation((int)pos.x, (int)pos.y, (int)pos.z);
+                            setBlock((int)pos.x, (int)pos.y + 1, (int)pos.z, 23,rot);
+                            setBlock((int)pos.x, (int)pos.y, (int)pos.z, 24,rot);
+                            playSound("door_close", pos);
+                        }
+                    }
+                },
+                "wood_1",
+                "wood_1"
+        );
+
+        blockShapeMap.put("door_closed",
+                new BlockShape(
+                        new float[][]{
+                                {0f,0f,14f/16f,1f,1f,1f}
+                        }
+                )
+        );
+
+        new BlockDefinition(
+                23,
+                "doorClosedTop",
+                false,
+                new int[]{24,0}, //front
+                new int[]{24,0}, //back
+                new int[]{24,0}, //right
+                new int[]{24,0}, //left
+                new int[]{24,0}, //top
+                new int[]{24,0},  //bottom
+                "door_closed",
+                true,
+                false,
+                false,
+                new BlockModifier() {
+
+                    @Override
+                    public void onDig(Vector3f pos) throws Exception {
+                        if (getBlock((int)pos.x, (int)pos.y - 1, (int)pos.z) == 24) {
+                            setBlock((int)pos.x, (int)pos.y - 1, (int)pos.z, 0, 0);
+                            createItem("door", pos.add(0.5f,0.5f,0.5f), 1);
+                        }
+                    }
+
+                    @Override
+                    public void onRightClick(Vector3f pos) {
+                        if (getBlock((int)pos.x, (int)pos.y - 1, (int)pos.z) == 24) {
+                            byte rot = getBlockRotation((int)pos.x, (int)pos.y, (int)pos.z);
+                            setBlock((int)pos.x, (int)pos.y, (int)pos.z, 21,rot);
+                            setBlock((int)pos.x, (int)pos.y - 1, (int)pos.z, 22,rot);
+                            playSound("door_open", pos);
+                        }
+                    }
+                },
+                "wood_1",
+                "wood_1"
+        );
+
+        new BlockDefinition(
+                24,
+                "doorClosedBottom",
+                false,
+                new int[]{25,0}, //front
+                new int[]{25,0}, //back
+                new int[]{25,0}, //right
+                new int[]{25,0}, //left
+                new int[]{25,0}, //top
+                new int[]{25,0},  //bottom
+                "door_closed",
+                true,
+                false,
+                false,
+                new BlockModifier() {
+
+                    @Override
+                    public void onDig(Vector3f pos) throws Exception {
+                        if (getBlock((int)pos.x, (int)pos.y + 1, (int)pos.z) == 23) {
+                            setBlock((int)pos.x, (int)pos.y + 1, (int)pos.z, 0, 0);
+                            createItem("door", pos.add(0.5f,0.5f,0.5f), 1);
+                        }
+                    }
+
+                    @Override
+                    public void onRightClick(Vector3f pos) {
+                        if (getBlock((int)pos.x, (int)pos.y + 1, (int)pos.z) == 23) {
+                            byte rot = getBlockRotation((int)pos.x, (int)pos.y, (int)pos.z);
+                            setBlock((int)pos.x, (int)pos.y + 1, (int)pos.z, 21,rot);
+                            setBlock((int)pos.x, (int)pos.y, (int)pos.z, 22,rot);
+                            playSound("door_open", pos);
+                        }
+                    }
+                },
                 "wood_1",
                 "wood_1"
         );
@@ -736,6 +861,10 @@ public class BlockDefinition {
             }
         }
         return null;
+    }
+
+    public static boolean blockHasOnRightClickCall(int ID){
+        return blockIDs[ID].blockModifier != null;
     }
 
     public static float[] getFrontTexturePoints(int ID, byte rotation){

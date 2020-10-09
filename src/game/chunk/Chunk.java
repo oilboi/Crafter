@@ -309,7 +309,6 @@ public class Chunk {
         }
         thisChunk.block[y][blockX][blockZ] = ID;
         thisChunk.rotation[y][blockX][blockZ] = (byte) rot;
-        System.out.println(rot);
 
         if (thisChunk.heightMap[blockX][blockZ] < y){
             thisChunk.heightMap[blockX][blockZ] = (byte) y;

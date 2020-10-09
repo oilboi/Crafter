@@ -157,19 +157,6 @@ public class BlockDefinition {
             }
         }
 
-
-        blockShapeMap.put("stair",
-                new BlockShape(
-                        new float[][]{
-
-                                {0f,0f,0f,0.5f,0.5f,1f},
-                                {0f,0f,0f,1f,1f,0.5f},
-                        }
-                )
-        );
-
-
-
         if (rot == 2){
             for (float[] thisShape : blockShapeMap.get(blockIDs[ID].drawType).getBoxes()) {
 
@@ -196,7 +183,7 @@ public class BlockDefinition {
 
                 float blockDiffZ =  1f - thisShape[5];
                 float widthZ = thisShape[5] - thisShape[2];
-                
+
                 newBoxes[index][0] = blockDiffZ;
                 newBoxes[index][1] = thisShape[1];//-y
                 newBoxes[index][2] = thisShape[0]; // -z

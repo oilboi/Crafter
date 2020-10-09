@@ -7,6 +7,7 @@ import static game.blocks.BlockDefinition.*;
 import static game.collision.Collision.wouldCollidePlacing;
 import static game.collision.CustomAABB.setAABB;
 import static game.collision.CustomBlockBox.setBlockBox;
+import static game.item.ItemDefinition.getItemModifier;
 import static game.particle.Particle.createParticle;
 import static game.player.Inventory.getItemInInventorySlot;
 import static game.player.Inventory.removeItemFromInventory;
@@ -38,6 +39,10 @@ public class Ray {
                 setBlockBox((int)lastPos.x,(int)lastPos.y,(int)lastPos.z, getBlockShape(1)[0]); //TODO: make this check the actual block shapes
                 if (!wouldCollidePlacing() && getItemInInventorySlot(getPlayerInventorySelection(),0) != null && !getItemInInventorySlot(getPlayerInventorySelection(),0).definition.isTool) {
                     rayPlaceBlock(lastPos, getItemInInventorySlot(getPlayerInventorySelection(),0).definition.blockID);
+                } else if (getItemInInventorySlot(getPlayerInventorySelection(),0) != null  && getItemInInventorySlot(getPlayerInventorySelection(),0).definition.isTool){
+                    if (getItemModifier(getItemInInventorySlot(getPlayerInventorySelection(),0).name) != null){
+                        getItemModifier(getItemInInventorySlot(getPlayerInventorySelection(),0).name).onPlace(lastPos);
+                    }
                 }
             }
             else {

@@ -23,27 +23,34 @@ public class ItemDefinition {
     public final int blockID;
     public final Mesh mesh;
     public final boolean isTool;
+    public final ItemModifier itemModifier;
 
     public ItemDefinition(String name, int blockID){
         this.name = name;
         this.blockID = blockID;
         this.mesh = createBlockObjectMesh(blockID);
         this.isTool = false;
+        this.itemModifier = null;
     }
 
-    public ItemDefinition(String name, String texturePath){
+    public ItemDefinition(String name, String texturePath, ItemModifier itemModifier){
         this.name = name;
         this.blockID = -1;
         this.mesh = createItemObjectMesh(texturePath);
         this.isTool = true;
+        this.itemModifier = itemModifier;
+    }
+
+    public static ItemModifier getItemModifier(String name){
+        return definitions.get(name).itemModifier;
     }
 
     public static void registerItem(String name, int blockID){
         definitions.put(name, new ItemDefinition(name, blockID));
     }
 
-    public static void registerItem(String name, String texturePath){
-        definitions.put(name, new ItemDefinition(name, texturePath));
+    public static void registerItem(String name, String texturePath, ItemModifier itemModifier){
+        definitions.put(name, new ItemDefinition(name, texturePath, itemModifier));
     }
 
     public static ItemDefinition getItemDefinition(String name){

@@ -188,7 +188,7 @@ public class Renderer {
         for (Item thisItem : getAllItems()){
             modelViewMatrix = updateModelViewMatrix(new Vector3f(thisItem.pos).add(0,thisItem.hover,0), thisItem.rotation, viewMatrix);
             shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
-            thisItem.definition.mesh.render();
+            thisItem.mesh.render();
         }
 
         //render each TNT entity

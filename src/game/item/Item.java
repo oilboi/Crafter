@@ -1,5 +1,6 @@
 package game.item;
 
+import engine.graph.Mesh;
 import org.joml.Vector3f;
 
 import static engine.FancyMath.randomForceValue;
@@ -21,12 +22,14 @@ public class Item {
     public Vector3f rotation;
     public Vector3f inertia;
     public int ID;
+    public final Mesh mesh;
 
     //inventory item
     public Item(String name, int stack){
         this.name = name;
         this.definition = getItemDefinition(name);
         this.stack = stack;
+        this.mesh = getItemDefinition(name).mesh;
     }
 
     //item being mined
@@ -44,6 +47,7 @@ public class Item {
         this.scale = 1f;
         this.timer = 0f;
         this.ID = currentID;
+        this.mesh = getItemDefinition(name).mesh;
         currentID++;
     }
 
@@ -62,6 +66,7 @@ public class Item {
         this.scale = 1f;
         this.timer = 0f;
         this.ID = currentID;
+        this.mesh = getItemDefinition(name).mesh;
         currentID++;
     }
 

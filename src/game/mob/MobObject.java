@@ -1,5 +1,6 @@
 package game.mob;
 
+import engine.graph.Mesh;
 import org.joml.Vector3f;
 
 import static game.mob.Mob.getMobDefinition;
@@ -18,6 +19,7 @@ public class MobObject {
     public final Vector3f[] bodyOffsets;
     public Vector3f[] bodyRotations;
     public float animationTimer = 0f;
+    public final Mesh[] meshes;
 
 
     public MobObject(Vector3f pos, Vector3f inertia, String mobDefinitionKey, int mobTableKey){
@@ -34,6 +36,7 @@ public class MobObject {
         this.smoothRotation = 0f;
         this.bodyOffsets = getMobDefinition(mobDefinitionKey).bodyOffsets;
         this.bodyRotations = getMobDefinition(mobDefinitionKey).bodyRotations;
+        this.meshes = getMobDefinition(mobDefinitionKey).bodyMeshes;
     }
 
 }

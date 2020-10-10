@@ -2,7 +2,9 @@ package game.mob;
 
 import org.joml.Vector3f;
 
+import java.util.ArrayDeque;
 import java.util.Collection;
+import java.util.Deque;
 import java.util.Hashtable;
 
 import static game.mob.Human.registerHumanMob;
@@ -39,9 +41,21 @@ public class Mob {
         return mobs.values();
     }
 
+    private static final Deque<Integer> deletionQueue = new ArrayDeque<>();
+
     public static void mobsOnTick(){
         for (MobObject thisMob : mobs.values()){
             mobDefinitions.get(thisMob.mobDefinitionKey).mobInterface.onTick(thisMob);
+
+            if (thisMob.pos.y < 0){
+                deletionQueue.add(thisMob.mobTableKey);
+            }
+        }
+
+        while (!deletionQueue.isEmpty()){
+            int deleter = deletionQueue.pop();
+            mobs.remove(deleter);
+            System.out.println("mob " + deleter + " was deleted!");
         }
     }
 }

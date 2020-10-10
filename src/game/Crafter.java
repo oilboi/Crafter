@@ -251,13 +251,8 @@ public class Crafter {
 
 
         //spawn human mob
-        if (isKeyPressed(GLFW_KEY_T) && !isPaused()) {
-            if (!tButtonPushed) {
-                tButtonPushed = true;
-                spawnMob("human", new Vector3f(getPlayerPos()), new Vector3f(0,0,0));
-            }
-        } else if (!isKeyPressed(GLFW_KEY_T)){
-            tButtonPushed = false;
+        if (isKeyPressed(GLFW_KEY_T)) {
+            spawnMob("human", new Vector3f(getPlayerPos()), new Vector3f(0,0,0));
         }
 
 

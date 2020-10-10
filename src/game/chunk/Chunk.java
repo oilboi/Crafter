@@ -58,6 +58,13 @@ public class Chunk {
         }
     }
 
+    public static void globalFinalChunkSaveToDisk(){
+        for (ChunkObject thisChunk : map.values()){
+            saveChunk(thisChunk);
+            thisChunk.modified = false;
+        }
+    }
+
     public static boolean chunkStackContainsBlock(int chunkX, int chunkZ, int yHeight){
         ChunkObject thisChunk = map.get(chunkX + " " + chunkZ);
         if (thisChunk == null || thisChunk.block == null){
@@ -532,7 +539,6 @@ public class Chunk {
         byte height;
 
 
-
         ChunkObject loadedChunk = loadChunkFromDisk(chunkX, chunkZ);
 
         if (loadedChunk != null){
@@ -547,6 +553,7 @@ public class Chunk {
 
             thisChunk = map.get(chunkX + " " + chunkZ);
 
+            thisChunk.modified = true;
 
             for (int x = 0; x < 16; x++) {
                 for (int z = 0; z < 16; z++) {

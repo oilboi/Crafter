@@ -11,8 +11,7 @@ import org.lwjgl.openal.AL11;
 import java.awt.*;
 
 import static engine.disk.Disk.initializeWorldHandling;
-import static game.chunk.Chunk.genBiome;
-import static game.chunk.Chunk.globalChunkSaveToDisk;
+import static game.chunk.Chunk.*;
 import static game.chunk.ChunkMesh.generateChunkMesh;
 import static game.chunk.ChunkUpdateHandler.chunkUpdater;
 import static engine.Hud.*;
@@ -65,7 +64,7 @@ public class Crafter {
             excp.printStackTrace();
             System.exit(-1);
         } finally {
-            globalChunkSaveToDisk();
+            globalFinalChunkSaveToDisk();
             cleanup();
         }
     }
@@ -82,6 +81,7 @@ public class Crafter {
             input();
             countFPS();
             chunkUpdater();
+            globalChunkSaveToDisk();
 
             while (accumulator >= 1_000_000){
                 gameUpdate();
@@ -297,7 +297,6 @@ public class Crafter {
         fallingEntityOnStep();
 //        rainDropsOnTick();
         mobsOnTick();
-        globalChunkSaveToDisk();
     }
 
     private static void cleanup(){

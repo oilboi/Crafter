@@ -11,8 +11,6 @@ import java.nio.file.Paths;
 
 public class Disk {
 
-
-
     public static void initializeWorldHandling(){
         createWorldsDir();
         createAlphaWorldFolder();
@@ -34,11 +32,10 @@ public class Disk {
         }
     }
 
+    private static final ObjectMapper objectMapper = new ObjectMapper();
     public static void saveChunk(ChunkObject thisChunk){
-        ObjectMapper objectMapper = new ObjectMapper();
-
         try {
-            objectMapper.writeValue(new File("Worlds/world1/" + thisChunk.ID + ".json"), thisChunk);
+            objectMapper.writeValue(new File("Worlds/world1/" + thisChunk.ID + ".chunk"), thisChunk);
 //            System.out.println("saved chunk: " + thisChunk.x + " " + thisChunk.z);
         } catch (IOException e) {
             e.printStackTrace();
@@ -47,13 +44,11 @@ public class Disk {
     }
 
     public static ChunkObject loadChunkFromDisk(int x, int z){
-        ObjectMapper objectMapper = new ObjectMapper();
-
         String key = x + " " + z;
 
         ChunkObject thisChunk = null;
 
-        File test = new File("Worlds/world1/" + key + ".json");
+        File test = new File("Worlds/world1/" + key + ".chunk");
 
         if (!test.canRead()){
             return null;

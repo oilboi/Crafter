@@ -103,8 +103,8 @@ public class Transformation {
                 rotateZ((float)Math.toRadians(-bodyYaw.z)).scale(scale)
                 //animation translation
                 .translate(offsetPos).
-                rotateX((float)Math.toRadians(-bodyPartRotation.x)).
                 rotateY((float)Math.toRadians(-bodyPartRotation.y)).
+                rotateX((float)Math.toRadians(-bodyPartRotation.x)).
                 rotateZ((float)Math.toRadians(-bodyPartRotation.z));
         return new Matrix4f(matrix).mul(modelViewMatrix);
     }

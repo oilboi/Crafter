@@ -7,7 +7,6 @@ import org.joml.Vector3f;
 import java.util.ArrayList;
 
 import static engine.FancyMath.randomDirFloat;
-import static engine.graph.Camera.getCameraRotation;
 import static game.collision.Collision.applyInertia;
 import static game.mob.Mob.registerMob;
 
@@ -29,7 +28,7 @@ public class Human {
 
 
             //head test
-//            thisObject.bodyRotations[0] = new Vector3f((float)Math.toDegrees(Math.sin(thisObject.animationTimer * Math.PI * 2f) * 1.65f),0,0);
+//            thisObject.bodyRotations[0] = new Vector3f((float)Math.toDegrees(Math.sin(thisObject.animationTimer * Math.PI * 2f) * 1.65f),(float)Math.toDegrees(Math.sin(thisObject.animationTimer * Math.PI * 2f) * 1.65f),0);
             thisObject.bodyRotations[2] = new Vector3f((float)Math.toDegrees(Math.sin(thisObject.animationTimer * Math.PI * 2f)),0,0);
             thisObject.bodyRotations[3] = new Vector3f((float)Math.toDegrees(Math.sin(thisObject.animationTimer * Math.PI * -2f)),0,0);
 

@@ -94,6 +94,15 @@ public class Transformation {
         return new Matrix4f(matrix).mul(modelViewMatrix);
     }
 
+    public static Matrix4f getMobMatrix(Vector3f basePos, Vector3f offsetPos, Vector3f rotation,Vector3f scale, Matrix4f matrix){
+        modelViewMatrix.identity().identity().translate(basePos.x, basePos.y, basePos.z).
+                rotateX((float)Math.toRadians(-rotation.x)).
+                rotateY((float)Math.toRadians(-rotation.y)).
+                rotateZ((float)Math.toRadians(-rotation.z)).scale(scale)
+        .translate(offsetPos);
+        return new Matrix4f(matrix).mul(modelViewMatrix);
+    }
+
 
 
     //TODO--begin ortho creation

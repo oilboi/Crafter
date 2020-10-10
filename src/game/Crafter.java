@@ -10,9 +10,9 @@ import org.lwjgl.openal.AL11;
 
 import java.awt.*;
 
+import static engine.disk.Disk.initializeWorldHandling;
 import static game.chunk.Chunk.genBiome;
 import static game.chunk.ChunkMesh.generateChunkMesh;
-import static game.chunk.ChunkUpdateHandler.chunkUpdate;
 import static game.chunk.ChunkUpdateHandler.chunkUpdater;
 import static engine.Hud.*;
 import static engine.MouseInput.*;
@@ -29,7 +29,6 @@ import static game.blocks.BlockDefinition.initializeBlocks;
 import static game.item.ItemRegistration.registerTools;
 import static game.player.Inventory.*;
 import static game.player.Player.*;
-import static game.weather.Weather.rainDropsOnTick;
 import static org.lwjgl.glfw.GLFW.*;
 
 public class Crafter {
@@ -128,6 +127,8 @@ public class Crafter {
         registerTools();
 
         initializeMobRegister();
+
+        initializeWorldHandling();
 
         //create the initial map in memory
         int x;

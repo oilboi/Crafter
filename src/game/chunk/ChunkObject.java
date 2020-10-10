@@ -3,20 +3,23 @@ package game.chunk;
 import engine.graph.Mesh;
 
 public class ChunkObject {
-    public final String ID;
+    public String ID;
 
-    public final int x;
-    public final int z;
+    public int x;
+    public int z;
 
-    public final int [][][] block;
-    public final byte[][][] rotation;
-    public final byte[][][] light;
-    public final byte[][] heightMap;
+    public int [][][] block;
+    public byte[][][] rotation;
+    public byte[][][] light;
+    public byte[][] heightMap;
 
-    public final Mesh[] mesh;
-    public final Mesh[] liquidMesh;
-    public final Mesh[] blockBoxMesh;
+    public Mesh[] mesh;
+    public Mesh[] liquidMesh;
+    public Mesh[] blockBoxMesh;
 
+    public ChunkObject(){
+
+    }
 
     public ChunkObject(int x, int z){
         this.ID = x + " " + z;

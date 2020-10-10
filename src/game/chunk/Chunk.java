@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import static engine.disk.Disk.saveChunk;
 import static game.Crafter.getChunkRenderDistance;
 import static game.chunk.ChunkMesh.generateChunkMesh;
 import static game.chunk.ChunkUpdateHandler.chunkUpdate;
@@ -580,6 +581,7 @@ public class Chunk {
                 }
             }
         }
+        saveChunk(thisChunk);
     }
 
     public static void cleanUp(){

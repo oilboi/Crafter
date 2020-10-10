@@ -16,6 +16,7 @@ public class ChunkObject {
     public Mesh[] mesh;
     public Mesh[] liquidMesh;
     public Mesh[] blockBoxMesh;
+    public boolean modified = false;
 
     public ChunkObject(){
 

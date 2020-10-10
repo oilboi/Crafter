@@ -49,7 +49,10 @@ public class Chunk {
 
         if (saveTimer >= 10f){
             for (ChunkObject thisChunk : map.values()){
-                saveChunk(thisChunk);
+                if (thisChunk.modified) {
+                    saveChunk(thisChunk);
+                    thisChunk.modified = false;
+                }
             }
             saveTimer = 0f;
         }
@@ -241,6 +244,7 @@ public class Chunk {
                 thisChunk.heightMap[blockX][blockZ] = (byte) y;
             }
         }
+        thisChunk.modified = true;
         chunkUpdate(chunkX,chunkZ,yPillar);
         updateNeighbor(chunkX, chunkZ,blockX,y,blockZ);
     }
@@ -299,6 +303,7 @@ public class Chunk {
             }
         }
         lightFloodFill(x, y, z);
+        thisChunk.modified = true;
         generateChunkMesh(chunkX,chunkZ,yPillar);//instant update
         instantUpdateNeighbor(chunkX, chunkZ,blockX,y,blockZ);//instant update
     }
@@ -328,6 +333,7 @@ public class Chunk {
             thisChunk.heightMap[blockX][blockZ] = (byte) y;
         }
         lightFloodFill(x, y, z);
+        thisChunk.modified = true;
         generateChunkMesh(chunkX,chunkZ,yPillar);//instant update
         instantUpdateNeighbor(chunkX, chunkZ,blockX,y,blockZ);//instant update
     }
@@ -501,7 +507,9 @@ public class Chunk {
                     }
                 }
 
-                saveChunk(thisChunk);
+                if (thisChunk.modified) {
+                    saveChunk(thisChunk);
+                }
 
                 deletionQueue.put(queueCounter, thisChunk.x + " " + thisChunk.z);
                 thisChunk = null;
@@ -533,6 +541,8 @@ public class Chunk {
             ChunkObject thisChunk = map.get(chunkX + " " + chunkZ);
             if (thisChunk == null) {
                 map.put(chunkX + " " + chunkZ, new ChunkObject(chunkX, chunkZ));
+            } else {
+                return;
             }
 
             thisChunk = map.get(chunkX + " " + chunkZ);

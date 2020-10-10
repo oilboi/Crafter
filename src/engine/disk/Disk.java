@@ -39,6 +39,7 @@ public class Disk {
 
         try {
             objectMapper.writeValue(new File("Worlds/world1/" + thisChunk.ID + ".json"), thisChunk);
+//            System.out.println("saved chunk: " + thisChunk.x + " " + thisChunk.z);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -67,6 +68,7 @@ public class Disk {
         thisChunk.blockBoxMesh = new Mesh[8];
         thisChunk.liquidMesh = new Mesh[8];
         thisChunk.mesh = new Mesh[8];
+        thisChunk.modified = false;
 
         return thisChunk;
     }

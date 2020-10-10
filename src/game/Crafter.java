@@ -65,6 +65,7 @@ public class Crafter {
             excp.printStackTrace();
             System.exit(-1);
         } finally {
+            globalChunkSaveToDisk();
             cleanup();
         }
     }

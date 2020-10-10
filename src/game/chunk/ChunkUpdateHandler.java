@@ -5,7 +5,6 @@ import java.util.Map;
 
 import static game.chunk.Chunk.chunkStackContainsBlock;
 import static game.chunk.ChunkMesh.generateChunkMesh;
-import static game.light.Light.lightFloodFill;
 
 public class ChunkUpdateHandler {
 

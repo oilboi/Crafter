@@ -12,17 +12,17 @@ import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.glDeleteVertexArrays;
 
 public class Mesh {
-    private final int vaoId;
+    private int vaoId;
 
-    private final int posVboId;
+    private int posVboId;
 
-    private final int colorVboId;
+    private int colorVboId;
 
-    private final int textureVboId;
+    private int textureVboId;
 
-    private final int idxVboId;
+    private int idxVboId;
 
-    private final int vertexCount;
+    private int vertexCount;
 
     private Texture texture;
 
@@ -30,6 +30,10 @@ public class Mesh {
     private static FloatBuffer colorBuffer = null;
     private static IntBuffer indicesBuffer = null;
     private static FloatBuffer textCoordsBuffer = null;
+
+    public Mesh(){
+
+    }
 
     public Mesh(float[] positions, float[] colors, int[] indices, float[] textCoords, Texture texture) {
 

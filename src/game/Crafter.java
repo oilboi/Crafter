@@ -12,6 +12,7 @@ import java.awt.*;
 
 import static engine.disk.Disk.initializeWorldHandling;
 import static game.chunk.Chunk.genBiome;
+import static game.chunk.Chunk.globalChunkSaveToDisk;
 import static game.chunk.ChunkMesh.generateChunkMesh;
 import static game.chunk.ChunkUpdateHandler.chunkUpdater;
 import static engine.Hud.*;
@@ -295,6 +296,7 @@ public class Crafter {
         fallingEntityOnStep();
 //        rainDropsOnTick();
         mobsOnTick();
+        globalChunkSaveToDisk();
     }
 
     private static void cleanup(){

@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import static engine.disk.Disk.loadChunkFromDisk;
 import static engine.disk.Disk.saveChunk;
 import static game.Crafter.getChunkRenderDistance;
 import static game.chunk.ChunkMesh.generateChunkMesh;
@@ -40,6 +41,18 @@ public class Chunk {
             thisChunk.mesh[yHeight] = null;
         }
         thisChunk.mesh[yHeight] = newMesh;
+    }
+
+    private static float saveTimer = 0f;
+    public static void globalChunkSaveToDisk(){
+        saveTimer += 0.001f;
+
+        if (saveTimer >= 10f){
+            for (ChunkObject thisChunk : map.values()){
+                saveChunk(thisChunk);
+            }
+            saveTimer = 0f;
+        }
     }
 
     public static boolean chunkStackContainsBlock(int chunkX, int chunkZ, int yHeight){
@@ -487,6 +500,9 @@ public class Chunk {
                         }
                     }
                 }
+
+                saveChunk(thisChunk);
+
                 deletionQueue.put(queueCounter, thisChunk.x + " " + thisChunk.z);
                 thisChunk = null;
                 queueCounter++;
@@ -506,82 +522,93 @@ public class Chunk {
     public static void genBiome(int chunkX, int chunkZ) {
         short currBlock;
         byte height;
-        ChunkObject thisChunk = map.get(chunkX + " " + chunkZ);
-        if (thisChunk == null) {
-            map.put(chunkX + " " + chunkZ, new ChunkObject(chunkX, chunkZ));
-        }
-        thisChunk = map.get(chunkX + " " + chunkZ);
-        for (int x = 0; x < 16; x++) {
-            for (int z = 0; z < 16; z++) {
-                boolean gennedSand = false;
-                boolean gennedWater = false;
-                boolean gennedGrass = false;
-                float dirtHeightRandom = (float) Math.floor(Math.random() * 2f);
 
-                height = (byte) (Math.abs(noise.GetCubicFractal((chunkX * 16) + x, (chunkZ * 16) + z)) * 127 + heightAdder);
 
-                for (int y = 127; y >= 0; y--) {
 
-                    //bedrock
-                    if (y <= 0 + dirtHeightRandom) {
-                        currBlock = 5;
-                        //grass gen
-                    } else if (y == height && y >= waterHeight) {
+        ChunkObject loadedChunk = loadChunkFromDisk(chunkX, chunkZ);
 
-                        if (y <= waterHeight + 1) {
-                            currBlock = 20;
-                            gennedSand = true;
-                        } else {
-                            currBlock = 2;
-                            gennedGrass = true;
-                        }
-                        //dirt/sand gen
-                    } else if (y < height && y >= height - dirtHeight - dirtHeightRandom) {
-                        if (gennedSand || gennedWater) {
-                            gennedSand = true;
-                            currBlock = 20;
-                        } else {
-                            currBlock = 1;
-                        }
+        if (loadedChunk != null){
+            map.put(chunkX + " " + chunkZ, loadedChunk);
+        }else {
+            ChunkObject thisChunk = map.get(chunkX + " " + chunkZ);
+            if (thisChunk == null) {
+                map.put(chunkX + " " + chunkZ, new ChunkObject(chunkX, chunkZ));
+            }
 
-                        //stone gen
-                    } else if (y < height - dirtHeight) {
-                        if (y <= 30 && y > 0) {
-                            if (Math.random() > 0.95) {
-                                currBlock = (short) Math.floor(8 + (Math.random() * 8));
+            thisChunk = map.get(chunkX + " " + chunkZ);
+
+
+            for (int x = 0; x < 16; x++) {
+                for (int z = 0; z < 16; z++) {
+                    boolean gennedSand = false;
+                    boolean gennedWater = false;
+                    boolean gennedGrass = false;
+                    float dirtHeightRandom = (float) Math.floor(Math.random() * 2f);
+
+                    height = (byte) (Math.abs(noise.GetCubicFractal((chunkX * 16) + x, (chunkZ * 16) + z)) * 127 + heightAdder);
+
+                    for (int y = 127; y >= 0; y--) {
+
+                        //bedrock
+                        if (y <= 0 + dirtHeightRandom) {
+                            currBlock = 5;
+                            //grass gen
+                        } else if (y == height && y >= waterHeight) {
+
+                            if (y <= waterHeight + 1) {
+                                currBlock = 20;
+                                gennedSand = true;
+                            } else {
+                                currBlock = 2;
+                                gennedGrass = true;
+                            }
+                            //dirt/sand gen
+                        } else if (y < height && y >= height - dirtHeight - dirtHeightRandom) {
+                            if (gennedSand || gennedWater) {
+                                gennedSand = true;
+                                currBlock = 20;
+                            } else {
+                                currBlock = 1;
+                            }
+
+                            //stone gen
+                        } else if (y < height - dirtHeight) {
+                            if (y <= 30 && y > 0) {
+                                if (Math.random() > 0.95) {
+                                    currBlock = (short) Math.floor(8 + (Math.random() * 8));
+                                } else {
+                                    currBlock = 3;
+                                }
                             } else {
                                 currBlock = 3;
                             }
+                            //water gen
                         } else {
-                            currBlock = 3;
+                            if (y <= waterHeight) {
+                                currBlock = 7;
+                                gennedWater = true;
+                            } else {
+                                currBlock = 0;
+                            }
                         }
-                        //water gen
-                    } else {
-                        if (y <= waterHeight) {
-                            currBlock = 7;
-                            gennedWater = true;
+
+                        thisChunk.block[y][x][z] = currBlock;
+
+                        if (height >= waterHeight) {
+                            thisChunk.heightMap[x][z] = height;
                         } else {
-                            currBlock = 0;
+                            thisChunk.heightMap[x][z] = waterHeight;
                         }
-                    }
 
-                    thisChunk.block[y][x][z] = currBlock;
-
-                    if (height >= waterHeight) {
-                        thisChunk.heightMap[x][z] = height;
-                    } else {
-                        thisChunk.heightMap[x][z] = waterHeight;
-                    }
-
-                    if (gennedSand || gennedGrass){
-                        thisChunk.light[y][x][z] = 0;
-                    } else {
-                        thisChunk.light[y][x][z] = 15;
+                        if (gennedSand || gennedGrass) {
+                            thisChunk.light[y][x][z] = 0;
+                        } else {
+                            thisChunk.light[y][x][z] = 15;
+                        }
                     }
                 }
             }
         }
-        saveChunk(thisChunk);
     }
 
     public static void cleanUp(){

@@ -1,6 +1,7 @@
 package engine.disk;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import engine.graph.Mesh;
 import game.chunk.ChunkObject;
 
 import java.io.File;
@@ -14,7 +15,7 @@ public class Disk {
 
     public static void initializeWorldHandling(){
         createWorldsDir();
-//        createAlphaWorldFolder();
+        createAlphaWorldFolder();
     }
 
     private static void createWorldsDir(){
@@ -37,23 +38,36 @@ public class Disk {
         ObjectMapper objectMapper = new ObjectMapper();
 
         try {
-            objectMapper.writeValue(new File("Worlds/" + thisChunk.ID + ".json"), thisChunk);
+            objectMapper.writeValue(new File("Worlds/world1/" + thisChunk.ID + ".json"), thisChunk);
         } catch (IOException e) {
             e.printStackTrace();
         }
-//        ChunkObject example = null;
-//
-//        File test = new File("Worlds/test.json");
-//
-//        try {
-//            example = objectMapper.readValue(test, ChunkObject.class);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
 
+    }
 
-//        if (example != null){
-//            System.out.println(example.heightMap[0][0]);
-//        }
+    public static ChunkObject loadChunkFromDisk(int x, int z){
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        String key = x + " " + z;
+
+        ChunkObject thisChunk = null;
+
+        File test = new File("Worlds/world1/" + key + ".json");
+
+        if (!test.canRead()){
+            return null;
+        }
+
+        try {
+            thisChunk = objectMapper.readValue(test, ChunkObject.class);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        thisChunk.blockBoxMesh = new Mesh[8];
+        thisChunk.liquidMesh = new Mesh[8];
+        thisChunk.mesh = new Mesh[8];
+
+        return thisChunk;
     }
 }

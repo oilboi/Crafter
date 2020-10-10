@@ -5,10 +5,6 @@ A blocky game written in java with LWJGL 3
 Discord: https://discord.gg/ZfCNFhD
 
 # Todo List:
-1 - Begin infdev
-- create chunk objects
-- hold chunks in better flexible thing
-- make everything dynamic
 
 1.5 add deletion queue implementation like raindrops to other entities
 

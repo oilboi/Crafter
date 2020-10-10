@@ -2,9 +2,7 @@ package game.item;
 
 import org.joml.Vector3f;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static engine.FancyMath.*;
 import static engine.sound.SoundAPI.playSound;
@@ -30,6 +28,7 @@ public class ItemEntity {
         return items.values();
     }
 
+    private static final Deque<Integer> deletionQueue = new ArrayDeque<>();
 
     public static void onStep(){
         for (Item thisItem : items.values()){
@@ -37,8 +36,8 @@ public class ItemEntity {
 
             //delete items that are too old
             if (thisItem.timer > 10f){
-                items.remove(thisItem.ID);
-                return;
+                deletionQueue.add(thisItem.ID);
+                continue;
             }
 
             if (thisItem.timer > 3){
@@ -57,8 +56,8 @@ public class ItemEntity {
                 }
 
                 if (getDistance(thisItem.pos, getPlayerPosWithCollectionHeight()) < 0.2f){
-                    items.remove(thisItem.ID);
-                    return;
+                    deletionQueue.add(thisItem.ID);
+                    continue;
                 }
             }
 
@@ -84,9 +83,13 @@ public class ItemEntity {
 
 
             if (thisItem.pos.y < 0){
-                items.remove(thisItem.ID);
-                return;
+                deletionQueue.add(thisItem.ID);
             }
+        }
+
+        while (!deletionQueue.isEmpty()){
+            int thisItemKey = deletionQueue.pop();
+            items.remove(thisItemKey);
         }
     }
 

@@ -214,7 +214,7 @@ public class Renderer {
         for (MobObject thisMob : getAllMobs()){
             int offsetIndex = 0;
             for (Mesh thisMesh : getMobDefinition(thisMob.mobDefinitionKey).bodyMeshes) {
-                modelViewMatrix = getMobMatrix(new Vector3f(thisMob.pos), thisMob.bodyOffsets[offsetIndex], new Vector3f(0, thisMob.rotation, 0), new Vector3f(1f, 1f, 1f), viewMatrix);
+                modelViewMatrix = getMobMatrix(new Vector3f(thisMob.pos), thisMob.bodyOffsets[offsetIndex], new Vector3f(0, thisMob.smoothRotation, 0), new Vector3f(thisMob.bodyRotations[offsetIndex]), new Vector3f(1f, 1f, 1f), viewMatrix);
                 shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
                 thisMesh.render();
                 offsetIndex++;

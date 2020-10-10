@@ -94,12 +94,18 @@ public class Transformation {
         return new Matrix4f(matrix).mul(modelViewMatrix);
     }
 
-    public static Matrix4f getMobMatrix(Vector3f basePos, Vector3f offsetPos, Vector3f rotation,Vector3f scale, Matrix4f matrix){
-        modelViewMatrix.identity().identity().translate(basePos.x, basePos.y, basePos.z).
-                rotateX((float)Math.toRadians(-rotation.x)).
-                rotateY((float)Math.toRadians(-rotation.y)).
-                rotateZ((float)Math.toRadians(-rotation.z)).scale(scale)
-        .translate(offsetPos);
+    public static Matrix4f getMobMatrix(Vector3f basePos, Vector3f offsetPos, Vector3f bodyYaw,Vector3f bodyPartRotation,Vector3f scale, Matrix4f matrix){
+        modelViewMatrix.identity().identity().
+                //main rotation (positioning)
+                translate(basePos.x, basePos.y, basePos.z).
+                rotateX((float)Math.toRadians(-bodyYaw.x)).
+                rotateY((float)Math.toRadians(-bodyYaw.y)).
+                rotateZ((float)Math.toRadians(-bodyYaw.z)).scale(scale)
+                //animation translation
+                .translate(offsetPos).
+                rotateX((float)Math.toRadians(-bodyPartRotation.x)).
+                rotateY((float)Math.toRadians(-bodyPartRotation.y)).
+                rotateZ((float)Math.toRadians(-bodyPartRotation.z));
         return new Matrix4f(matrix).mul(modelViewMatrix);
     }
 

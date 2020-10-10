@@ -17,8 +17,7 @@ import static game.chunk.ChunkUpdateHandler.chunkUpdater;
 import static engine.Hud.*;
 import static engine.MouseInput.*;
 import static game.falling.FallingEntity.fallingEntityOnStep;
-import static game.mob.Mob.initializeMobRegister;
-import static game.mob.Mob.mobsOnTick;
+import static game.mob.Mob.*;
 import static game.particle.Particle.particlesOnStep;
 import static game.tnt.TNTEntity.createTNTEntityMesh;
 import static engine.Timer.*;
@@ -248,6 +247,17 @@ public class Crafter {
             }
         } else if (!isKeyPressed(GLFW_KEY_E)){
             eButtonPushed = false;
+        }
+
+
+        //spawn human mob
+        if (isKeyPressed(GLFW_KEY_T) && !isPaused()) {
+            if (!tButtonPushed) {
+                tButtonPushed = true;
+                spawnMob("human", new Vector3f(getPlayerPos()), new Vector3f(0,0,0));
+            }
+        } else if (!isKeyPressed(GLFW_KEY_T)){
+            tButtonPushed = false;
         }
 
 

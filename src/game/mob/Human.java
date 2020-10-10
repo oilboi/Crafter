@@ -15,7 +15,7 @@ public class Human {
 
     private final static Mesh[] bodyMeshes = createPlayerMesh();
 
-    private static final float accelerationMultiplier  = 0.03f; // i had no idea you could inherit like this
+    private static final float accelerationMultiplier  = 0.02f; // i had no idea you could inherit like this
     private static final float movementSpeed = 1.5f;
 
     private static final MobInterface mobInterface = new MobInterface() {
@@ -24,11 +24,19 @@ public class Human {
             thisObject.timer += 0.001f;
             if (thisObject.timer > 1.5f){
                 thisObject.timer = 0f;
-
                 thisObject.rotation = (float)(Math.toDegrees(Math.PI * Math.random() * randomDirFloat()));
-                System.out.println(thisObject.rotation);
-//                System.out.println(randomDirFloat());
             }
+
+
+            //head test
+            thisObject.bodyRotations[0] = new Vector3f((float)Math.toDegrees(Math.sin(thisObject.animationTimer * Math.PI * 2f) * 1.65f),0,0);
+            thisObject.bodyRotations[2] = new Vector3f((float)Math.toDegrees(Math.sin(thisObject.animationTimer * Math.PI * 2f)),0,0);
+            thisObject.bodyRotations[3] = new Vector3f((float)Math.toDegrees(Math.sin(thisObject.animationTimer * Math.PI * -2f)),0,0);
+
+            thisObject.bodyRotations[4] = new Vector3f((float)Math.toDegrees(Math.sin(thisObject.animationTimer * Math.PI * -2f)),0,0);
+            thisObject.bodyRotations[5] = new Vector3f((float)Math.toDegrees(Math.sin(thisObject.animationTimer * Math.PI * 2f)),0,0);
+
+
 
             float yaw = (float)Math.toRadians(thisObject.rotation) + (float)Math.PI;
             thisObject.inertia.x += (float)(Math.sin(-yaw) * accelerationMultiplier) * movementSpeed;
@@ -43,8 +51,21 @@ public class Human {
                 thisObject.inertia.z = inertia2D.z;
             }
 
+            thisObject.animationTimer += 0.0025f * (inertia2D.length()/maxSpeed);
 
-            applyInertia(thisObject.pos, thisObject.inertia, false, thisObject.width, thisObject.height, true, false, true, false);
+            if (thisObject.animationTimer >= 1f){
+                thisObject.animationTimer = 0f;
+            }
+
+            boolean onGround = applyInertia(thisObject.pos, thisObject.inertia, false, thisObject.width, thisObject.height, true, false, true, false);
+
+            if (onGround){
+                thisObject.inertia.y += 10f;
+            }
+
+            thisObject.smoothRotation = (float)Math.toDegrees(Math.atan2(thisObject.lastPos.z - thisObject.pos.z, thisObject.lastPos.x - thisObject.pos.x)) - 90f;
+
+            thisObject.lastPos = new Vector3f(thisObject.pos);
         }
     };
 
@@ -59,8 +80,17 @@ public class Human {
             new Vector3f(0.09f,0.17f + yOffsetCorrection,0),
     };
 
+    private static final Vector3f[] bodyRotations = new Vector3f[]{
+            new Vector3f(0,0,0),
+            new Vector3f(0,0,0),
+            new Vector3f(0,0,0),
+            new Vector3f(0,0,0),
+            new Vector3f(0,0,0),
+            new Vector3f(0,0,0),
+    };
+
     public static void registerHumanMob(){
-        registerMob(new MobDefinition("human", bodyMeshes, bodyOffsets,1.9f, 0.25f, mobInterface));
+        registerMob(new MobDefinition("human", bodyMeshes, bodyOffsets, bodyRotations,1.9f, 0.25f, mobInterface));
     }
 
 
@@ -101,14 +131,14 @@ public class Human {
 
         float[][] textureArrayArray = new float[][]{
                 //head
-                //front
-                calculateTexture(8,8,16,16),
-                //back
-                calculateTexture(24,8,32,16),
                 //right
-                calculateTexture(16,8,24,16),
+                calculateTexture(24,8,32,16),
                 //left
+                calculateTexture(8,8,16,16),
+                //front
                 calculateTexture(0,8,8,16),
+                //back
+                calculateTexture(16,8,24,16),
                 //top
                 calculateTexture(8,0,16,8),
                 //bottom
@@ -116,9 +146,9 @@ public class Human {
 
                 //body
                 //front
-                calculateTexture(20,20,28,30),
-                //back
                 calculateTexture(32,20,40,30),
+                //back
+                calculateTexture(20,20,28,30),
                 //right
                 calculateTexture(28,20,32,30),
                 //left
@@ -131,9 +161,9 @@ public class Human {
 
                 //right arm
                 //front
-                calculateTexture(44,20,48,32), //light
-                //back
                 calculateTexture(48,20,52,32), //dark
+                //back
+                calculateTexture(44,20,48,32), //light
                 //right
                 calculateTexture(48,20,52,32), //dark
                 //left
@@ -145,9 +175,9 @@ public class Human {
 
                 //left arm
                 //front
-                calculateTexture(44,20,48,32), //light
-                //back
                 calculateTexture(48,20,52,32), //dark
+                //back
+                calculateTexture(44,20,48,32), //light
                 //right
                 calculateTexture(44,20,48,32), //light
                 //left
@@ -160,9 +190,9 @@ public class Human {
 
                 //right leg
                 //front
-                calculateTexture(4,20,8,32), //light
-                //back
                 calculateTexture(0,20,4,32), //dark
+                //back
+                calculateTexture(4,20,8,32), //light
                 //right
                 calculateTexture(8,20,12,32), //dark
                 //left
@@ -174,9 +204,9 @@ public class Human {
 
                 //left leg
                 //front
-                calculateTexture(4,20,8,32), //light
-                //back
                 calculateTexture(0,20,4,32), //dark
+                //back
+                calculateTexture(4,20,8,32), //light
                 //right
                 calculateTexture(12,20,16,32), //light
                 //left

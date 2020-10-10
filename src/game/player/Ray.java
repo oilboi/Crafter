@@ -72,8 +72,6 @@ public class Ray {
         for (int i = 0; i < 20; i++) {
             createParticle(new Vector3f(flooredPos.x + ((float)Math.random()-0.5f), flooredPos.y + ((float)Math.random()-0.5f), flooredPos.z + ((float)Math.random()-0.5f)), new Vector3f((float)(Math.random()-0.5f) * 2f, (float)Math.ceil(Math.random()*5f), (float)(Math.random()-0.5f) * 2f), thisBlock);
         }
-
-        spawnMob("human", new Vector3f(flooredPos.x, (float)Math.floor(flooredPos.y), flooredPos.z), new Vector3f(0,0,0));
     }
     private static void rayPlaceBlock(Vector3f flooredPos, int ID) {
         placeBlock((int) flooredPos.x, (int) flooredPos.y, (int) flooredPos.z, ID, getPlayerDir());

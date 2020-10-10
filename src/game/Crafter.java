@@ -11,6 +11,7 @@ import org.lwjgl.openal.AL11;
 import java.awt.*;
 
 import static engine.disk.Disk.initializeWorldHandling;
+import static engine.disk.Disk.savePlayerPos;
 import static game.chunk.Chunk.*;
 import static game.chunk.ChunkMesh.generateChunkMesh;
 import static game.chunk.ChunkUpdateHandler.chunkUpdater;
@@ -65,6 +66,7 @@ public class Crafter {
             System.exit(-1);
         } finally {
             globalFinalChunkSaveToDisk();
+            savePlayerPos(getPlayerPos());
             cleanup();
         }
     }

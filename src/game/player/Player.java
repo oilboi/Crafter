@@ -5,6 +5,7 @@ import org.joml.*;
 import java.lang.Math;
 
 import static engine.Hud.rebuildMiningMesh;
+import static engine.disk.Disk.loadPlayerPos;
 import static engine.graph.Camera.*;
 import static engine.sound.SoundAPI.playSound;
 import static game.blocks.BlockDefinition.getBlockDefinition;
@@ -17,7 +18,7 @@ import static game.weather.Weather.createRainDrop;
 
 
 public class Player {
-    private static Vector3f pos                  = new Vector3f(0,53,0);
+    private static Vector3f pos                  = loadPlayerPos();
     private static final float eyeHeight               = 1.5f;
     private static final float collectionHeight        = 0.7f;
     private static final Vector3f inertia              = new Vector3f(0,0,0);

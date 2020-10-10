@@ -7,12 +7,12 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import static engine.disk.Disk.loadChunkFromDisk;
-import static engine.disk.Disk.saveChunk;
+import static engine.disk.Disk.*;
 import static game.Crafter.getChunkRenderDistance;
 import static game.chunk.ChunkMesh.generateChunkMesh;
 import static game.chunk.ChunkUpdateHandler.chunkUpdate;
 import static game.light.Light.lightFloodFill;
+import static game.player.Player.getPlayerPos;
 
 public class Chunk {
 
@@ -48,6 +48,7 @@ public class Chunk {
         saveTimer += 0.001f;
 
         if (saveTimer >= 10f){
+            savePlayerPos(getPlayerPos());
             for (ChunkObject thisChunk : map.values()){
                 if (thisChunk.modified) {
                     saveChunk(thisChunk);

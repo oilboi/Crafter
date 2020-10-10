@@ -197,8 +197,8 @@ public class Hud {
         createSelection();
         createWorldSelectionMesh();
         createCrossHair();
-        versionInfoText = createCustomHudText("Crafter Pre-Alpha 0.001", 1,1,1);
-        versionInfoTextShadow = createCustomHudText("Crafter Pre-Alpha 0.001", 0,0,0);
+        versionInfoText = createCustomHudText("Crafter Pre-Alpha 0.02a", 1,1,1);
+        versionInfoTextShadow = createCustomHudText("Crafter Pre-Alpha 0.02a", 0,0,0);
         createPlayerMesh();
         createInventorySelection();
         createWieldHandMesh();

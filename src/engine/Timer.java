@@ -34,7 +34,7 @@ public class Timer {
         framesPerSecond++;
         if (elapsedTime >= 1_000_000_000) {
 //            System.out.println("framerate :" +  framesPerSecond);
-            updateWindowTitle("Crafter Pre-Alpha 0.01 | FPS: " + framesPerSecond);
+            updateWindowTitle("Crafter Pre-Alpha 0.02 | FPS: " + framesPerSecond);
             framesPerSecond = 0;
             elapsedTime = 0;
         }

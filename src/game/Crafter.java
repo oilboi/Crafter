@@ -54,7 +54,7 @@ public class Crafter {
             Toolkit tk = Toolkit.getDefaultToolkit();
             Dimension d = tk.getScreenSize();
 
-            initWindow("Crafter Pre-Alpha 0.01", d.width/2,d.height/2,vSync);
+            initWindow("Crafter Pre-Alpha 0.02a", d.width/2,d.height/2,vSync);
             initRenderer();
             initMouseInput();
             initSoundManager();

@@ -17,6 +17,8 @@ import static game.chunk.ChunkUpdateHandler.chunkUpdater;
 import static engine.Hud.*;
 import static engine.MouseInput.*;
 import static game.falling.FallingEntity.fallingEntityOnStep;
+import static game.mob.Mob.initializeMobRegister;
+import static game.mob.Mob.mobsOnTick;
 import static game.particle.Particle.particlesOnStep;
 import static game.tnt.TNTEntity.createTNTEntityMesh;
 import static engine.Timer.*;
@@ -125,6 +127,8 @@ public class Crafter {
         createHud();
 
         registerTools();
+
+        initializeMobRegister();
 
         //create the initial map in memory
         int x;
@@ -284,6 +288,7 @@ public class Crafter {
         particlesOnStep();
         fallingEntityOnStep();
 //        rainDropsOnTick();
+        mobsOnTick();
     }
 
     private static void cleanup(){

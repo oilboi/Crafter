@@ -4,6 +4,7 @@ import engine.graph.*;
 import game.chunk.ChunkObject;
 import game.falling.FallingEntityObject;
 import game.item.Item;
+import game.mob.MobObject;
 import game.particle.ParticleObject;
 import game.weather.RainDropEntity;
 import org.joml.Matrix4f;
@@ -20,6 +21,8 @@ import static engine.Hud.*;
 import static game.falling.FallingEntity.getFallingEntities;
 import static game.item.ItemDefinition.getItemDefinition;
 import static game.item.ItemEntity.*;
+import static game.mob.Mob.getAllMobs;
+import static game.mob.Mob.getMobDefinition;
 import static game.particle.Particle.getAllParticles;
 import static game.tnt.TNTEntity.*;
 import static engine.Window.*;
@@ -205,6 +208,19 @@ public class Renderer {
             shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
             thisObject.mesh.render();
         }
+
+
+        //render mobs
+        for (MobObject thisMob : getAllMobs()){
+            int offsetIndex = 0;
+            for (Mesh thisMesh : getMobDefinition(thisMob.mobDefinitionKey).bodyMeshes) {
+                modelViewMatrix = getGenericMatrixWithPosRotationScale(new Vector3f(thisMob.pos).add(getMobDefinition(thisMob.mobDefinitionKey).bodyOffsets[offsetIndex]), new Vector3f(0, 0, 0), new Vector3f(1f, 1f, 1f), viewMatrix);
+                shaderProgram.setUniform("modelViewMatrix", modelViewMatrix);
+                thisMesh.render();
+                offsetIndex++;
+            }
+        }
+
 
         //render world selection mesh
         if (getPlayerWorldSelectionPos() != null){

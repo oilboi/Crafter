@@ -6,17 +6,17 @@ Discord: https://discord.gg/ZfCNFhD
 
 # Todo List:
 
-1.5 add deletion queue implementation like raindrops to other entities
+1. Re-implement basic lighting
 
-2 - Re-implement basic lighting
+2. Implement torches
 
-3 - Implement torches
+3. Rewrite TNT
 
-4 - Implement crafting with basic craft recipe handling
+4. Implement crafting with basic craft recipe handling
 
-5 - Implement day/night
+5. Implement day/night
 
-6 - Implement mobs
+6. Implement mobs
 
-7 - Save map to disk
+7. Save map to disk
 

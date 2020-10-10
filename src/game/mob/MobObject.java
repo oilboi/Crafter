@@ -13,6 +13,7 @@ public class MobObject {
     public final float width;
     public final float height;
     public float rotation;
+    public final Vector3f[] bodyOffsets;
 
 
     public MobObject(Vector3f pos, Vector3f inertia, String mobDefinitionKey, int mobTableKey){
@@ -25,6 +26,7 @@ public class MobObject {
         this.height = getMobDefinition(mobDefinitionKey).height;
         this.width = getMobDefinition(mobDefinitionKey).width;
         this.rotation = 0f;
+        this.bodyOffsets = getMobDefinition(mobDefinitionKey).bodyOffsets;
     }
 
 }

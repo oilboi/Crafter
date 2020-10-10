@@ -37,7 +37,7 @@ public class Player {
     private static boolean inventoryOpen         = false;
     private static Vector3f worldSelectionPos    = null;
     private static int sneakOffset = 0;
-    private static final int[] currentChunk = {0,0};
+    private static final int[] currentChunk = {(int)Math.floor(pos.x / 16f),(int)Math.floor(pos.z / 16f)};
 
     public static void resetPlayerInputs(){
         setPlayerForward(false);
@@ -48,6 +48,10 @@ public class Player {
         setPlayerJump(false);
         mining = false;
         placing = false;
+    }
+
+    public static int[] getPlayerCurrentChunk(){
+        return currentChunk;
     }
 
     public static float getSneakOffset(){

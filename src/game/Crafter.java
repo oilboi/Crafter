@@ -78,8 +78,10 @@ public class Crafter {
         double accumulator = 0d;
         boolean running = true;
         while(running && !windowShouldClose()){
+
             elapsedTime = timerGetElapsedTime();
             accumulator += elapsedTime;
+
             input();
             countFPS();
             chunkUpdater();

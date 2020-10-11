@@ -34,16 +34,19 @@ public class Disk {
             e.printStackTrace();
         }
     }
-
-
-
+    
 
     public static void saveChunk(ChunkObject thisChunk){
-        try {
-            objectMapper.writeValue(new File("Worlds/world1/" + thisChunk.ID + ".chunk"), thisChunk);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        new Thread(() -> {
+            ObjectMapper mapper = new ObjectMapper();
+            try {
+                mapper.writeValue(new File("Worlds/world1/" + thisChunk.ID + ".chunk"), thisChunk);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Thread.currentThread().interrupt();
+        }).start();
+
     }
 
     public static ChunkObject loadChunkFromDisk(int x, int z){

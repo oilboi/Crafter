@@ -158,7 +158,9 @@ public class Crafter {
     }
 
     private static void input(){
+
         mouseInput();
+
         if (!isPlayerInventoryOpen() && !isPaused()) {
             if (isKeyPressed(GLFW_KEY_W)) {
                 setPlayerForward(true);

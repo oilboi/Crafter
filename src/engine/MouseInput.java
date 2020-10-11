@@ -8,27 +8,19 @@ import static org.lwjgl.glfw.GLFW.*;
 
 public class MouseInput {
 
-    private static Vector2d previousPos = new Vector2d(-1,-1);
-
-    private static Vector2d currentPos  = new Vector2d(0,0);
-
-    private static Vector2f displVec    = new Vector2f();
-
+    private static final Vector2d previousPos = new Vector2d(-1,-1);
+    private static final Vector2d currentPos  = new Vector2d(0,0);
+    private static final Vector2f displVec    = new Vector2f();
     private static boolean  inWindow    = false;
-
     private static boolean  leftButtonPressed  = false;
-
     private static boolean  rightButtonPressed = false;
-
     private static boolean  mouseLocked = true;
-
     private static float    scroll      = 0;
 
-
     public static void resetMousePosVector(){
-        glfwSetCursorPos(getWindowHandle(),getWindowWidth() / 2,getWindowHeight() / 2 );
-        currentPos.x = getWindowWidth() / 2;
-        currentPos.y = getWindowHeight() / 2;
+        glfwSetCursorPos(getWindowHandle(),getWindowWidth() / 2f,getWindowHeight() / 2f );
+        currentPos.x = getWindowWidth() / 2f;
+        currentPos.y = getWindowHeight() / 2f;
         previousPos.x = currentPos.x;
         previousPos.y = currentPos.y;
     }
@@ -62,11 +54,11 @@ public class MouseInput {
         displVec.y = 0;
 
         if (mouseLocked) {
-            glfwSetCursorPos(getWindowHandle(), getWindowWidth() / 2, getWindowHeight() / 2);
+            glfwSetCursorPos(getWindowHandle(), getWindowWidth() / 2f, getWindowHeight() / 2f);
 
             if (previousPos.x > 0 && previousPos.y > 0 && inWindow) {
-                double deltax = currentPos.x - getWindowWidth() / 2;
-                double deltay = currentPos.y - getWindowHeight() / 2;
+                double deltax = currentPos.x - getWindowWidth() / 2f;
+                double deltay = currentPos.y - getWindowHeight() / 2f;
 
                 boolean rotateX = deltax != 0;
                 boolean rotateY = deltay != 0;
@@ -121,4 +113,7 @@ public class MouseInput {
         }
         resetMousePosVector();
     }
+
+
+    
 }

@@ -46,17 +46,21 @@ public class Disk {
         saveQueue.add(thisChunk);
     }
 
+    private static float timer = 0f;
     public static void iterateDiskQueues(){
-        if(!saveQueue.isEmpty()){
-            new Thread(() -> {
-            System.out.println("saving chunk!" +  + Math.random());
-                try {
-                    ChunkObject thisChunk = saveQueue.pop();
-                    mapper.writeValue(new File("Worlds/world1/" + thisChunk.ID + ".chunk"), thisChunk);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }).start();
+        timer += 0.01f;
+        if (timer >= 3f) {
+            timer = 0f;
+            if (!saveQueue.isEmpty()) {
+                new Thread(() -> {
+                    try {
+                        ChunkObject thisChunk = saveQueue.pop();
+                        mapper.writeValue(new File("Worlds/world1/" + thisChunk.ID + ".chunk"), thisChunk);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }).start();
+            }
         }
     }
 

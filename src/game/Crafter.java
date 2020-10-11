@@ -81,14 +81,7 @@ public class Crafter {
 
             elapsedTime = timerGetElapsedTime();
             accumulator += elapsedTime;
-
-            iterateDiskQueues();
-            updateWorldChunkLoader();
-
             input();
-            countFPS();
-            chunkUpdater();
-            globalChunkSaveToDisk();
 
             while (accumulator >= 1_000_000){
                 mouseInput();
@@ -96,6 +89,12 @@ public class Crafter {
                 gameUpdate();
                 accumulator -= 1_000_000;
             }
+
+            countFPS();
+            iterateDiskQueues();
+            updateWorldChunkLoader();
+            globalChunkSaveToDisk();
+            chunkUpdater();
 
             renderGame();
             windowUpdate();

@@ -10,8 +10,7 @@ import org.lwjgl.openal.AL11;
 
 import java.awt.*;
 
-import static engine.disk.Disk.initializeWorldHandling;
-import static engine.disk.Disk.savePlayerPos;
+import static engine.disk.Disk.*;
 import static game.chunk.Chunk.*;
 import static game.chunk.ChunkMesh.generateChunkMesh;
 import static game.chunk.ChunkUpdateHandler.chunkUpdater;
@@ -81,6 +80,8 @@ public class Crafter {
 
             elapsedTime = timerGetElapsedTime();
             accumulator += elapsedTime;
+
+            iterateDiskQueues();
 
             input();
             countFPS();

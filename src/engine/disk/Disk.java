@@ -10,9 +10,13 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
 public class Disk {
     private static final ObjectMapper objectMapper = new ObjectMapper();
+
+    private static final Deque<ChunkObject> saveQueue = new ArrayDeque<>();
 
     public static void initializeWorldHandling(){
         createWorldsDir();
@@ -34,27 +38,39 @@ public class Disk {
             e.printStackTrace();
         }
     }
-    
+
+
+    private static final ObjectMapper mapper = new ObjectMapper();
 
     public static void saveChunk(ChunkObject thisChunk){
-        new Thread(() -> {
-            ObjectMapper mapper = new ObjectMapper();
-            try {
-                mapper.writeValue(new File("Worlds/world1/" + thisChunk.ID + ".chunk"), thisChunk);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            Thread.currentThread().interrupt();
-        }).start();
-
+        saveQueue.add(thisChunk);
     }
 
+    public static void iterateDiskQueues(){
+        if(!saveQueue.isEmpty()){
+            new Thread(() -> {
+            System.out.println("saving chunk!" +  + Math.random());
+                try {
+                    ChunkObject thisChunk = saveQueue.pop();
+                    mapper.writeValue(new File("Worlds/world1/" + thisChunk.ID + ".chunk"), thisChunk);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }).start();
+        }
+    }
+
+    private static String key;
+    private static ChunkObject thisChunk;
+    private static File test;
+
     public static ChunkObject loadChunkFromDisk(int x, int z){
-        String key = x + " " + z;
 
-        ChunkObject thisChunk = null;
+        key = x + " " + z;
 
-        File test = new File("Worlds/world1/" + key + ".chunk");
+        thisChunk = null;
+
+        test = new File("Worlds/world1/" + key + ".chunk");
 
         if (!test.canRead()){
             return null;

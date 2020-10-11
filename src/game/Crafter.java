@@ -86,10 +86,11 @@ public class Crafter {
             globalChunkSaveToDisk();
 
             while (accumulator >= 1_000_000){
+                mouseInput();
+                updateCamera();
                 gameUpdate();
                 accumulator -= 1_000_000;
             }
-
             renderGame();
             windowUpdate();
 
@@ -158,9 +159,6 @@ public class Crafter {
     }
 
     private static void input(){
-
-        mouseInput();
-
         if (!isPlayerInventoryOpen() && !isPaused()) {
             if (isKeyPressed(GLFW_KEY_W)) {
                 setPlayerForward(true);
@@ -291,7 +289,6 @@ public class Crafter {
     }
 
     private static void gameUpdate() throws Exception {
-        updateCamera();
         testPlayerDiggingAnimation();
         playerOnTick();
         updateListenerPosition();

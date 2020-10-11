@@ -12,7 +12,7 @@ public class Camera {
 
     private static final Vector3f rotation = new Vector3f();
 
-    private static final float   MOUSE_SENSITIVITY   = 0.009f;
+    private static final float   MOUSE_SENSITIVITY   = 0.01f;
 
     public static Vector3f getCameraPosition(){
         return position;
@@ -64,6 +64,7 @@ public class Camera {
     }
 
     public static void updateCamera(){
+
         setCameraPosition(getPlayerPosWithEyeHeight().x, getPlayerPosWithEyeHeight().y + getSneakOffset(), getPlayerPosWithEyeHeight().z);
         moveCameraPosition(getPlayerViewBobbing().x,getPlayerViewBobbing().y, getPlayerViewBobbing().z);
 

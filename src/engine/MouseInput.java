@@ -50,6 +50,7 @@ public class MouseInput {
     }
 
     public static void mouseInput(){
+
         displVec.x = 0;
         displVec.y = 0;
 

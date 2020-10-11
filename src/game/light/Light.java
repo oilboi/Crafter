@@ -1,20 +1,33 @@
 package game.light;
 
-import game.chunk.ChunkObject;
+import org.joml.Vector3f;
 
 import java.util.*;
 
 import static game.chunk.Chunk.*;
 
 public class Light {
+    private static final byte maxLightLevel = 15;
+    private static final byte blockIndicator = 127;
+    private static final byte lightDistance = 15;
+    private static final byte max = (lightDistance * 2) + 1;
+    private static final Deque<LightUpdate> lightSources = new ArrayDeque<>();
+    private static final byte[][][] memoryMap = new byte[(lightDistance * 2) + 1][(lightDistance * 2) + 1][(lightDistance * 2) + 1];
+
+    private static final Deque<Vector3f> queue = new ArrayDeque<>();
+
     public static void lightFloodFill(int posX, int posY, int posZ) {
-        new Thread(() -> {
-            final byte maxLightLevel = 15;
-            final byte blockIndicator = 127;
-            final byte lightDistance = 15;
-            final byte max = (lightDistance * 2) + 1;
-            final Deque<LightUpdate> lightSources = new ArrayDeque<>();
-            final byte[][][] memoryMap = new byte[(lightDistance * 2) + 1][(lightDistance * 2) + 1][(lightDistance * 2) + 1];
+        queue.add(new Vector3f(posX, posY, posZ));
+    }
+
+    public static void iterateLightFloodFillQueue(){
+
+        if (!queue.isEmpty()) {
+            Vector3f tempObject = queue.pop();
+            int posX = (int)tempObject.x;
+            int posY = (int)tempObject.y;
+            int posZ = (int)tempObject.z;
+
             for (int x = posX - lightDistance; x <= posX + lightDistance; x++) {
                 for (int y = posY - lightDistance; y <= posY + lightDistance; y++) {
                     for (int z = posZ - lightDistance; z <= posZ + lightDistance; z++) {
@@ -133,6 +146,6 @@ public class Light {
                 }
             }
             lightSources.clear();
-        }).start();
+        }
     }
 }

@@ -522,26 +522,6 @@ public class Player {
             }
         }
 
-        int newChunkX = (int)Math.floor(pos.x / 16f);
-        int newChunkZ = (int)Math.floor(pos.z / 16f);
-
-        if (newChunkX != currentChunk[0] || newChunkZ != currentChunk[1]) {
-            if (newChunkX < currentChunk[0]) {
-                generateNewChunks(currentChunk[0], currentChunk[1], -1, 0);
-            }
-            if (newChunkX > currentChunk[0]) {
-                generateNewChunks(currentChunk[0], currentChunk[1], 1, 0);
-            }
-            if (newChunkZ < currentChunk[1]) {
-                generateNewChunks(currentChunk[0], currentChunk[1], 0, -1);
-            }
-            if (newChunkZ > currentChunk[1]) {
-                generateNewChunks(currentChunk[0], currentChunk[1], 0, 1);
-            }
-            currentChunk[0] = newChunkX;
-            currentChunk[1] = newChunkZ;
-        }
-
         if (mining && worldSelectionPos != null){
             particleBufferTimer += 0.01f;
             if (particleBufferTimer > 0.2f){
@@ -650,6 +630,29 @@ public class Player {
             }
         }
     }
+
+    public static void updateWorldChunkLoader(){
+        int newChunkX = (int)Math.floor(pos.x / 16f);
+        int newChunkZ = (int)Math.floor(pos.z / 16f);
+
+        if (newChunkX != currentChunk[0] || newChunkZ != currentChunk[1]) {
+            if (newChunkX < currentChunk[0]) {
+                generateNewChunks(currentChunk[0], currentChunk[1], -1, 0);
+            }
+            if (newChunkX > currentChunk[0]) {
+                generateNewChunks(currentChunk[0], currentChunk[1], 1, 0);
+            }
+            if (newChunkZ < currentChunk[1]) {
+                generateNewChunks(currentChunk[0], currentChunk[1], 0, -1);
+            }
+            if (newChunkZ > currentChunk[1]) {
+                generateNewChunks(currentChunk[0], currentChunk[1], 0, 1);
+            }
+            currentChunk[0] = newChunkX;
+            currentChunk[1] = newChunkZ;
+        }
+    }
+
     private static boolean xPositive = true;
     private static boolean yPositive = true;
     private static int xBobPos = 0;

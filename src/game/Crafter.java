@@ -17,6 +17,7 @@ import static game.chunk.ChunkUpdateHandler.chunkUpdater;
 import static engine.Hud.*;
 import static engine.MouseInput.*;
 import static game.falling.FallingEntity.fallingEntityOnStep;
+import static game.light.Light.iterateLightFloodFillQueue;
 import static game.mob.Mob.*;
 import static game.particle.Particle.particlesOnStep;
 import static game.tnt.TNTEntity.createTNTEntityMesh;
@@ -82,6 +83,7 @@ public class Crafter {
             accumulator += elapsedTime;
 
             iterateDiskQueues();
+            updateWorldChunkLoader();
 
             input();
             countFPS();
@@ -94,9 +96,11 @@ public class Crafter {
                 gameUpdate();
                 accumulator -= 1_000_000;
             }
+
             renderGame();
             windowUpdate();
 
+            iterateLightFloodFillQueue();
             if (isvSync()){
                 sync();
             }

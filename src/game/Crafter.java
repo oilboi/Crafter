@@ -44,7 +44,11 @@ public class Crafter {
     private static boolean eButtonPushed       = false;
     private static boolean F11Pushed           = false;
     private static boolean escapePushed        = false;
+    private static final String versionName = "Crafter Pre-Alpha 0.02b";
 
+    public static String getVersionName(){
+        return versionName;
+    }
 
     //core game engine elements
     private static final int TARGET_FPS = 75;
@@ -55,7 +59,7 @@ public class Crafter {
             Toolkit tk = Toolkit.getDefaultToolkit();
             Dimension d = tk.getScreenSize();
 
-            initWindow("Crafter Pre-Alpha 0.02a", d.width/2,d.height/2,vSync);
+            initWindow(versionName, d.width/2,d.height/2,vSync);
             initRenderer();
             initMouseInput();
             initSoundManager();

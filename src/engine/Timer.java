@@ -1,6 +1,7 @@
 package engine;
 
 import static engine.Window.updateWindowTitle;
+import static game.Crafter.getVersionName;
 import static org.lwjgl.glfw.GLFW.glfwGetTime;
 
 public class Timer {
@@ -34,7 +35,7 @@ public class Timer {
         framesPerSecond++;
         if (elapsedTime >= 1_000_000_000) {
 //            System.out.println("framerate :" +  framesPerSecond);
-            updateWindowTitle("Crafter Pre-Alpha 0.02 | FPS: " + framesPerSecond);
+            updateWindowTitle(getVersionName() + " | FPS: " + framesPerSecond);
             framesPerSecond = 0;
             elapsedTime = 0;
         }

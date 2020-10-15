@@ -13,6 +13,7 @@ import static engine.Renderer.getWindowScale;
 import static engine.Renderer.getWindowSize;
 import static engine.Window.*;
 import static engine.sound.SoundAPI.playSound;
+import static game.Crafter.getVersionName;
 import static game.player.Inventory.*;
 import static game.player.Player.*;
 import static org.lwjgl.glfw.GLFW.*;
@@ -197,8 +198,8 @@ public class Hud {
         createSelection();
         createWorldSelectionMesh();
         createCrossHair();
-        versionInfoText = createCustomHudText("Crafter Pre-Alpha 0.02a", 1,1,1);
-        versionInfoTextShadow = createCustomHudText("Crafter Pre-Alpha 0.02a", 0,0,0);
+        versionInfoText = createCustomHudText(getVersionName(), 1,1,1);
+        versionInfoTextShadow = createCustomHudText(getVersionName(), 0,0,0);
         createPlayerMesh();
         createInventorySelection();
         createWieldHandMesh();

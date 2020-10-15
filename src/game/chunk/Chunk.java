@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static engine.disk.Disk.*;
+import static engine.disk.SaveQueue.instantSave;
+import static engine.disk.SaveQueue.saveChunk;
 import static game.Crafter.getChunkRenderDistance;
 import static game.chunk.ChunkMesh.generateChunkMesh;
 import static game.chunk.ChunkUpdateHandler.chunkUpdate;
@@ -61,7 +63,7 @@ public class Chunk {
 
     public static void globalFinalChunkSaveToDisk(){
         for (ChunkObject thisChunk : map.values()){
-            saveChunk(thisChunk);
+            instantSave(thisChunk);
             thisChunk.modified = false;
         }
     }

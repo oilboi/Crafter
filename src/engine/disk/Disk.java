@@ -10,13 +10,9 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayDeque;
-import java.util.Deque;
 
 public class Disk {
     private static final ObjectMapper objectMapper = new ObjectMapper();
-
-    private static final Deque<ChunkObject> saveQueue = new ArrayDeque<>();
 
     public static void initializeWorldHandling(){
         createWorldsDir();
@@ -40,41 +36,13 @@ public class Disk {
     }
 
 
-    private static final ObjectMapper mapper = new ObjectMapper();
-
-    public static void saveChunk(ChunkObject thisChunk){
-        saveQueue.add(thisChunk);
-    }
-
-    private static float timer = 0f;
-    public static void iterateDiskQueues(){
-        timer += 0.01f;
-        if (timer >= 3f) {
-            timer = 0f;
-            if (!saveQueue.isEmpty()) {
-                new Thread(() -> {
-                    try {
-                        ChunkObject thisChunk = saveQueue.pop();
-                        mapper.writeValue(new File("Worlds/world1/" + thisChunk.ID + ".chunk"), thisChunk);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }).start();
-            }
-        }
-    }
-
-    private static String key;
-    private static ChunkObject thisChunk;
-    private static File test;
-
     public static ChunkObject loadChunkFromDisk(int x, int z){
 
-        key = x + " " + z;
+        String key = x + " " + z;
 
-        thisChunk = null;
+        ChunkObject thisChunk = null;
 
-        test = new File("Worlds/world1/" + key + ".chunk");
+        File test = new File("Worlds/world1/" + key + ".chunk");
 
         if (!test.canRead()){
             return null;

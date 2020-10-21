@@ -91,11 +91,10 @@ public class Crafter {
             accumulator += elapsedTime;
 
             globalChunkSaveToDisk();
-
+            input();
+            mouseInput();
+            updateCamera();
             while (accumulator >= 1_000_000){
-                input();
-                mouseInput();
-                updateCamera();
                 gameUpdate();
                 accumulator -= 1_000_000;
             }

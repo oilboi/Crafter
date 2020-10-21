@@ -3,6 +3,9 @@ package engine;
 import org.joml.Vector2d;
 import org.joml.Vector2f;
 
+import java.nio.DoubleBuffer;
+import java.util.Arrays;
+
 import static engine.Window.*;
 import static org.lwjgl.glfw.GLFW.*;
 
@@ -18,14 +21,23 @@ public class MouseInput {
     private static float    scroll      = 0;
 
     public static void resetMousePosVector(){
-        glfwSetCursorPos(getWindowHandle(),getWindowWidth() / 2f,getWindowHeight() / 2f );
+        glfwSetCursorPos(getWindowHandle(),getWindowWidth() / 2,getWindowHeight() / 2 );
+
+        double[] testx = new double[1];
+        double[] testy = new double[1];
+        glfwGetCursorPos(getWindowHandle(), testx, testy);
+        currentPos.x = (float)testx[0];
+        currentPos.y = (float)testy[0];
+
         currentPos.x = getWindowWidth() / 2;
         currentPos.y = getWindowHeight() / 2;
+
         previousPos.x = currentPos.x;
         previousPos.y = currentPos.y;
     }
 
     public static void initMouseInput(){
+
         glfwSetCursorPosCallback(getWindowHandle(), (windowHandle, xpos, ypos) -> {
             currentPos.x = xpos;
             currentPos.y = ypos;
@@ -51,12 +63,18 @@ public class MouseInput {
 
     public static void mouseInput(){
 
-        displVec.x = 0;
-        displVec.y = 0;
+
+//        System.out.println(currentPos.x);
+        double[] testx = new double[1];
+        double[] testy = new double[1];
+        glfwGetCursorPos(getWindowHandle(), testx, testy);
+        currentPos.x = (float)testx[0];
+        currentPos.y = (float)testy[0];
 
         if (mouseLocked) {
-            glfwSetCursorPos(getWindowHandle(), getWindowWidth() / 2, getWindowHeight() / 2);
-
+            displVec.x = 0;
+            displVec.y = 0;
+            glfwSetCursorPos(getWindowHandle(), getWindowWidth() / 2d, getWindowHeight() / 2d);
             if (previousPos.x > 0 && previousPos.y > 0 && inWindow) {
                 double deltax = currentPos.x - getWindowWidth() / 2;
                 double deltay = currentPos.y - getWindowHeight() / 2;
@@ -71,11 +89,17 @@ public class MouseInput {
                 if (rotateY) {
                     displVec.x = (float) deltay;
                 }
-            }
-        }
 
-        previousPos.x = currentPos.x;
-        previousPos.y = currentPos.y;
+                System.out.println("------");
+                System.out.println(currentPos.x);
+                System.out.println(getWindowWidth() / 2);
+            }
+            previousPos.x = currentPos.x;
+            previousPos.y = currentPos.y;
+        } else {
+            displVec.x = 0;
+            displVec.y = 0;
+        }
     }
 
     public static boolean isLeftButtonPressed(){
@@ -112,8 +136,11 @@ public class MouseInput {
 
         if(!isMouseLocked()) {
             glfwSetInputMode(getWindowHandle(), GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+            System.out.println("normal");
         } else{
-            glfwSetInputMode(getWindowHandle(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+            //glfwSetInputMode(getWindowHandle(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+            glfwSetInputMode(getWindowHandle(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+            System.out.println("hidden");
         }
         resetMousePosVector();
     }

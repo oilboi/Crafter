@@ -12,7 +12,7 @@ public class Camera {
 
     private static final Vector3f rotation = new Vector3f();
 
-    private static final float   MOUSE_SENSITIVITY   = 0.01f;
+    private static final float   MOUSE_SENSITIVITY   = 0.09f;
 
     public static Vector3f getCameraPosition(){
         return position;

@@ -71,9 +71,13 @@ public class ChunkMesh {
     private static float[] blockBoxLight = new float[50_824];
     private static int blockBoxLightCount = 0;
 
+    private static ChunkObject thisChunk;
+    private static int thisBlock;
+    private static byte thisRotation;
+
     public static void generateChunkMesh(int chunkX, int chunkZ, int yHeight) {
 
-        ChunkObject thisChunk = getChunk(chunkX, chunkZ);
+        thisChunk = getChunk(chunkX, chunkZ);
 
         if (thisChunk == null){
             return;
@@ -109,8 +113,8 @@ public class ChunkMesh {
                 int realZ = (int)Math.floor(chunkZ * 16f) + z;
                 for (int y = yHeight * 16; y < (yHeight+1) * 16; y++) {
 
-                    int thisBlock = thisChunk.block[y][x][z];
-                    byte thisRotation = thisChunk.rotation[y][x][z];
+                    thisBlock = thisChunk.block[y][x][z];
+                    thisRotation = thisChunk.rotation[y][x][z];
 
                     if (thisBlock > 0) {
                         //todo --------------------------------------- THE LIQUID DRAWTYPE

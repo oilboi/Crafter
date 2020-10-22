@@ -11,6 +11,7 @@ import org.lwjgl.openal.AL11;
 import java.awt.*;
 
 import static engine.disk.Disk.*;
+import static engine.disk.SQLite.databaseConnect;
 import static engine.disk.SaveQueue.startSaveThread;
 import static game.chunk.Chunk.*;
 import static game.chunk.ChunkMesh.generateChunkMesh;
@@ -18,7 +19,7 @@ import static game.chunk.ChunkUpdateHandler.chunkUpdater;
 import static engine.Hud.*;
 import static engine.MouseInput.*;
 import static game.falling.FallingEntity.fallingEntityOnStep;
-import static game.light.Light.startLightThread;
+import static game.light.Light.indexLight;
 import static game.mob.Mob.*;
 import static game.particle.Particle.particlesOnStep;
 import static game.tnt.TNTEntity.createTNTEntityMesh;
@@ -65,7 +66,7 @@ public class Crafter {
             initSoundManager();
             initGame();
             startSaveThread();
-            startLightThread();
+            databaseConnect();
             gameLoop();
 
         } catch ( Exception excp ){
@@ -103,6 +104,7 @@ public class Crafter {
             updateWorldChunkLoader();
             chunkUpdater();
 
+            indexLight();
 
             renderGame();
             windowUpdate();

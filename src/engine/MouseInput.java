@@ -89,10 +89,6 @@ public class MouseInput {
                 if (rotateY) {
                     displVec.x = (float) deltay;
                 }
-
-                System.out.println("------");
-                System.out.println(currentPos.x);
-                System.out.println(getWindowWidth() / 2);
             }
             previousPos.x = currentPos.x;
             previousPos.y = currentPos.y;

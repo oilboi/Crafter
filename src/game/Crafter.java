@@ -167,7 +167,7 @@ public class Crafter {
         }
 
 //        createToolDebugInventory();
-        generateRandomInventory();
+//        generateRandomInventory();
 //        tntFillErUp();
     }
 

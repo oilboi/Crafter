@@ -21,7 +21,7 @@ public class MouseInput {
     private static float    scroll      = 0;
 
     public static void resetMousePosVector(){
-        glfwSetCursorPos(getWindowHandle(),getWindowWidth() / 2,getWindowHeight() / 2 );
+        glfwSetCursorPos(getWindowHandle(),getWindowWidth() / 2f,getWindowHeight() / 2f );
 
         double[] testx = new double[1];
         double[] testy = new double[1];
@@ -29,8 +29,8 @@ public class MouseInput {
         currentPos.x = (float)testx[0];
         currentPos.y = (float)testy[0];
 
-        currentPos.x = getWindowWidth() / 2;
-        currentPos.y = getWindowHeight() / 2;
+        currentPos.x = getWindowWidth() / 2f;
+        currentPos.y = getWindowHeight() / 2f;
 
         previousPos.x = currentPos.x;
         previousPos.y = currentPos.y;
@@ -76,8 +76,8 @@ public class MouseInput {
             displVec.y = 0;
             glfwSetCursorPos(getWindowHandle(), getWindowWidth() / 2d, getWindowHeight() / 2d);
             if (previousPos.x > 0 && previousPos.y > 0 && inWindow) {
-                double deltax = currentPos.x - getWindowWidth() / 2;
-                double deltay = currentPos.y - getWindowHeight() / 2;
+                double deltax = currentPos.x - getWindowWidth() / 2f;
+                double deltay = currentPos.y - getWindowHeight() / 2f;
 
                 boolean rotateX = deltax != 0;
                 boolean rotateY = deltay != 0;
@@ -115,10 +115,8 @@ public class MouseInput {
     }
 
 
-    private static float thisScroll;
-
     public static float getMouseScroll(){
-        thisScroll = scroll;
+        float thisScroll = scroll;
         scroll = 0.0f;
         return thisScroll;
     }

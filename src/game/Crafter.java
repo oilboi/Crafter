@@ -113,16 +113,16 @@ public class Crafter {
         }
     }
 
-    private static void sync() {
-        float loopSlot = 1f / TARGET_FPS;
-        double endTime = timerGetLastLoopTime() + loopSlot;
-        while(timerGetTime() < endTime){
-            try {
-                Thread.sleep(1);
-            } catch (InterruptedException ie){
-            }
-        }
-    }
+//    private static void sync() {
+//        float loopSlot = 1f / TARGET_FPS;
+//        double endTime = timerGetLastLoopTime() + loopSlot;
+//        while(timerGetTime() < endTime){
+//            try {
+//                Thread.sleep(1);
+//            } catch (InterruptedException ignored){
+//            }
+//        }
+//    }
     //todo ---------------------------------------------------------------------------------------------------------------END
 
 

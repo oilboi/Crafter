@@ -1,6 +1,5 @@
 package engine.disk;
 
-import engine.Vector3Nullified;
 import game.chunk.ChunkObject;
 import org.joml.Vector3f;
 
@@ -65,7 +64,7 @@ public class Disk {
     }
 
     public static void savePlayerPos(Vector3f pos){
-        Vector3Nullified tempPos = new Vector3Nullified();
+        Vector3f tempPos = new Vector3f();
         tempPos.x = pos.x;
         tempPos.y = pos.y;
         tempPos.z = pos.z;
